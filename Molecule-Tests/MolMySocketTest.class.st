@@ -1,0 +1,148 @@
+"
+I provide basic tests for parameters.
+Also, I can be used as example to use parameters. My classes are in package Molecule-Examples.
+"
+Class {
+	#name : #MolMySocketTest,
+	#superclass : #TestCase,
+	#category : #'Molecule-Tests'
+}
+
+{ #category : #'setUp-tearDown' }
+MolMySocketTest >> setUp [
+
+	MolComponentManager default.
+]
+
+{ #category : #'setUp-tearDown' }
+MolMySocketTest >> tearDown [
+
+	MolComponentManager cleanUp.
+]
+
+{ #category : #tests }
+MolMySocketTest >> testClientSetParameters [
+
+	| manager socket client |
+	MolComponentManager cleanUp.
+	
+	manager := MolComponentManager default.
+	
+	"Deployment"
+	manager deploymentServices deployComponentImplementation: MolMySocketComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolMyClientComponentImpl.
+	
+	"Instanciation"
+	socket := manager homeServices instanciateComponent: MolMySocketComponentImpl.
+	client := manager homeServices instanciateComponent: MolMyClientComponentImpl.
+	
+	"Activation"
+	manager homeServices activateComponent: MolMySocketComponentImpl.
+	manager homeServices activateComponent: MolMyClientComponentImpl.
+	
+	"Tests"
+	self assert: client getMolMySocketParametersProvider equals: socket.
+	client setIp: '127.0.0.1'.
+	client setPort: 1234.
+	client setProtocol: #tcp.
+	client connect.
+	client send: 'ping'.
+
+	"End of test"
+	manager homeServices removeAllComponents.
+	manager deploymentServices undeployComponentImplementation: MolMySocketComponentImpl.
+	manager deploymentServices undeployComponentImplementation: MolMyClientComponentImpl.
+	manager cleanUp.
+	
+	
+]
+
+{ #category : #tests }
+MolMySocketTest >> testClientSetParametersFromSeveralClient [
+""
+
+	| manager socket client1 client2 |
+	MolComponentManager cleanUp.
+	
+	manager := MolComponentManager default.
+	
+	"Deployment"
+	manager deploymentServices deployComponentImplementation: MolMySocketComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolMyClientComponentImpl.
+	
+	"Instanciation"
+	socket := manager homeServices instanciateComponent: MolMySocketComponentImpl named: #socket.
+	client1 := manager homeServices instanciateComponent: MolMyClientComponentImpl named: #client1.
+	client2 := manager homeServices instanciateComponent: MolMyClientComponentImpl named: #client2.
+	
+	"Subscription : it should be done in SCMMyClientComponentImpl > componentInitialize"
+	client1 forParameters: MolMySocketParameters useProvider: #socket.
+	client2 forParameters: MolMySocketParameters useProvider: #socket.
+	client1 forServices: MolMySocketServices useProvider: #socket.
+	client2 forServices: MolMySocketServices useProvider: #socket.
+	
+	"Activation"
+	manager homeServices activateComponent: MolMySocketComponentImpl named: #socket.
+	manager homeServices activateComponent: MolMyClientComponentImpl named: #client1.
+	manager homeServices activateComponent: MolMyClientComponentImpl named: #client2.
+	
+	"Tests"
+	self assert: client1 getMolMySocketParametersProvider equals: socket.
+	self assert: client2 getMolMySocketParametersProvider equals: socket.
+	client1 setIp: '127.0.0.1'.
+	client2 setPort: 1234.
+	client1 setProtocol: #udp.
+	client1 connect.
+	client1 disconnect.
+	client2 setIp: '10.0.0.2'.
+	client2 connect.
+
+	"End of test"
+	manager homeServices removeAllComponents.
+	manager deploymentServices undeployComponentImplementation: MolMySocketComponentImpl.
+	manager deploymentServices undeployComponentImplementation: MolMyClientComponentImpl.
+	manager cleanUp.
+	
+	
+]
+
+{ #category : #tests }
+MolMySocketTest >> testClientSetParametersNamed [
+
+	| manager socket client |
+	MolComponentManager cleanUp.
+	
+	manager := MolComponentManager default.
+	
+	"Deployment"
+	manager deploymentServices deployComponentImplementation: MolMySocketComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolMyClientComponentImpl.
+	
+	"Instanciation"
+	socket := manager homeServices instanciateComponent: MolMySocketComponentImpl named: #socket.
+	client := manager homeServices instanciateComponent: MolMyClientComponentImpl named: #client.
+	
+	"Subscription : it should be done in SCMMyClientComponentImpl > componentInitialize"
+	client forParameters: MolMySocketParameters useProvider: #socket.
+	client forServices: MolMySocketServices useProvider: #socket.
+	
+	"Activation"
+	manager homeServices activateComponent: MolMySocketComponentImpl named: #socket.
+	manager homeServices activateComponent: MolMyClientComponentImpl named: #client.
+	
+	"Tests"
+	self assert: client getMolMySocketParametersProvider equals: socket.
+	client setIp: '127.0.0.1'.
+	client setPort: 1234.
+	client setProtocol: #tcp.
+	client connect.
+	client send: 'ping'.
+
+	"End of test"
+	manager homeServices removeAllComponents.
+	manager deploymentServices undeployComponentImplementation: MolMySocketComponentImpl.
+	manager deploymentServices undeployComponentImplementation: MolMyClientComponentImpl.
+	manager cleanUp.
+	
+	
+]
