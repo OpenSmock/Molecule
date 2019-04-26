@@ -25,6 +25,5 @@ MolNotFoundServicesProvider >> interface: anInterface name: aName [
 
 { #category : #accessing }
 MolNotFoundServicesProvider >> isNotFoundServices [
-
 	^true
 ]

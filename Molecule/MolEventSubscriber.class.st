@@ -16,7 +16,6 @@ Class {
 
 { #category : #accessing }
 MolEventSubscriber >> addOriginator: aValue [
-
 	(self getOriginators includes: aValue) ifTrue: [ ^self ].
 	self getOriginators add: aValue.
 	aValue when: #removeComponent send: #removeOriginator: to: self
@@ -24,13 +23,11 @@ MolEventSubscriber >> addOriginator: aValue [
 
 { #category : #accessing }
 MolEventSubscriber >> addOriginators: aValue [
-
 	aValue do: [:e | self addOriginator: e]
 ]
 
 { #category : #private }
 MolEventSubscriber >> connectAllOriginatorsTo: anObserver [
-
 	| set |
 	self mutex critical: 
 			[ set := self observersConnection at: anObserver ifAbsent: [nil].
@@ -45,8 +42,7 @@ MolEventSubscriber >> connectAllOriginatorsTo: anObserver [
 
 { #category : #private }
 MolEventSubscriber >> connectOriginator: coriSymbol to: anObserver [
-"private method, do not use directly"
-
+	"private method, do not use directly"
 	| originator |
 	interface allSelectors do: 
 			[:evt |
@@ -57,7 +53,6 @@ MolEventSubscriber >> connectOriginator: coriSymbol to: anObserver [
 
 { #category : #private }
 MolEventSubscriber >> disconnectAllOriginatorsFrom: anObserver [
-
 	| set |
 	self mutex critical: 
 			[set := self observersConnection at: anObserver ifAbsent: [nil].
@@ -71,8 +66,7 @@ MolEventSubscriber >> disconnectAllOriginatorsFrom: anObserver [
 
 { #category : #private }
 MolEventSubscriber >> disconnectOriginator: coriSymbol from: anObserver [
-"private method, do not use directly"
-
+	"private method, do not use directly"
 	interface allSelectors do: 
 			[:evt | | originator |
 			originator := self originatorsLinks at: coriSymbol.
@@ -146,7 +140,6 @@ MolEventSubscriber >> observersConnection [
 
 { #category : #accessing }
 MolEventSubscriber >> originatorsLinks [
-
 	originatorsLinks isNil ifTrue: [originatorsLinks := Dictionary new].
 	^originatorsLinks
 ]
@@ -163,7 +156,6 @@ MolEventSubscriber >> release [
 
 { #category : #'event triggering' }
 MolEventSubscriber >> removeOriginator: aOriginator [
-
 	| observersList |
 	observersList := self getObserversFrom: aOriginator.
 	observersList do: [:e |
@@ -173,19 +165,16 @@ MolEventSubscriber >> removeOriginator: aOriginator [
 
 { #category : #'event configuring' }
 MolEventSubscriber >> subscribe: anObserver [
-
 	self connectAllOriginatorsTo: anObserver
 ]
 
 { #category : #'event configuring' }
 MolEventSubscriber >> subscribeAllWaiting [
-
 	self observersConnection keysDo: [ :comp | self connectAllOriginatorsTo: comp ]
 ]
 
 { #category : #'event configuring' }
 MolEventSubscriber >> unsubscribe: anObserver [
-
 	self disconnectAllOriginatorsFrom: anObserver.
 	self observersConnection removeKey: anObserver ifAbsent:[nil].
 ]

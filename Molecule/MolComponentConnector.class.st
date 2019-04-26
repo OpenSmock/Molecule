@@ -18,9 +18,8 @@ Class {
 
 { #category : #service }
 MolComponentConnector >> activateComponent [
-	
-	eventsNotifiers do: [:e | e activate]
 
+	eventsNotifiers do: [ :e | e activate ]
 ]
 
 { #category : #service }

@@ -18,28 +18,28 @@ Class {
 
 { #category : #'component life cycle' }
 MolHomeServices >> activateAllComponents [
-	
 	| waitingComponents |
+	
 	waitingComponents := waitingForActivation copy.
 	waitingComponents do: [ :component |
-		self activateComponent: component class named: component componentName ]
+		self activateComponent: component class named: component componentName.
+	]
 ]
 
 { #category : #'component life cycle' }
-MolHomeServices >> activateComponent: aClass [
-
-	^self activateComponent: aClass named: #default
+MolHomeServices >> activateComponent: aComponentClass [
+	^self activateComponent: aComponentClass named: #default
 ]
 
 { #category : #'component life cycle' }
-MolHomeServices >> activateComponent: aClass named: aName [
+MolHomeServices >> activateComponent: aComponentClass named: aName [
 	| component |
 	
-	self assert: [aClass isNotNil] description: ['[Molecule] Component class should be not nil.'].
+	self assert: [aComponentClass isNotNil] description: ['[Molecule] Component class should be not nil.'].
 	self assert: [aName isNotNil] description: ['[Molecule] Component name should be not nil.'].
 	
 	"get to be activated component instance"
-	component := self instanceOf: aClass named: aName.
+	component := self instanceOf: aComponentClass named: aName.
 	component isNil ifTrue:[
 		ComponentNotFoundError signal: 'Can not activate a non instanciated component'.
 	].
@@ -51,7 +51,7 @@ MolHomeServices >> activateComponent: aClass named: aName [
 		
 	component componentConnector activateComponent.
 	component componentActivate.
-	MolUtils log: aClass printString , ' named: ' , aName printString , ' is activated.'.
+	MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is activated.'.
 	
 	"manage connexion between components"
 	MolComponentManager default locatorServices resolveWaitingSubscribtions: component.
@@ -61,38 +61,34 @@ MolHomeServices >> activateComponent: aClass named: aName [
 
 { #category : #private }
 MolHomeServices >> addDeployedComponent: aComponentClass [
-
 	deployedComponents at: aComponentClass ifAbsentPut: [Dictionary new]
 ]
 
 { #category : #accessing }
 MolHomeServices >> deployedComponents [
-
 	^deployedComponents
 ]
 
 { #category : #'initialize-release' }
 MolHomeServices >> initialize [
 	super initialize.
+	
 	deployedComponents := Dictionary new.
 	waitingForActivation := Set new
 ]
 
 { #category : #accessing }
 MolHomeServices >> instanceOf: aClass named: aName [
-
 	^(deployedComponents at: aClass ifAbsent: [^nil]) at: aName ifAbsent: [^nil]
 ]
 
 { #category : #'component life cycle' }
 MolHomeServices >> instanciateAllComponents [
-
 	self deployedComponents keysDo: [ :aClass | self instanciateComponent: aClass ]
 ]
 
 { #category : #'component life cycle' }
 MolHomeServices >> instanciateComponent: aClass [
-
 	^self instanciateComponent: aClass named: #default 
 ]
 
@@ -126,14 +122,13 @@ MolHomeServices >> instanciateComponent: aClass named: aName [
 
 { #category : #testing }
 MolHomeServices >> isWaitingForActivation: aComponentClass [
-
 	^ self isWaitingForActivation: aComponentClass named: #default
 ]
 
 { #category : #testing }
 MolHomeServices >> isWaitingForActivation: aComponentClass named: aComponentName [
-
 	| component |
+
 	component := self instanceOf: aComponentClass named: aComponentName.
 	component isNil
 		ifFalse: [^waitingForActivation includes: component]
@@ -142,16 +137,15 @@ MolHomeServices >> isWaitingForActivation: aComponentClass named: aComponentName
 
 { #category : #'component life cycle' }
 MolHomeServices >> passivateAllComponents [
-
 	deployedComponents do: [ :aDictionary | 
 		aDictionary keysAndValuesDo: [ :aName :aComponent | 
-			(waitingForActivation includes: aComponent) 
-				ifFalse: [self passivateComponent: aComponent class named: aName]]]
+			(waitingForActivation includes: aComponent) ifFalse: [self passivateComponent: aComponent class named: aName]
+		]
+	]
 ]
 
 { #category : #'component life cycle' }
 MolHomeServices >> passivateComponent: aClass [
-
 	^self passivateComponent: aClass named: #default
 ]
 
@@ -181,13 +175,14 @@ MolHomeServices >> passivateComponent: aClass named: aName [
 
 { #category : #'initialize-release' }
 MolHomeServices >> release [
-
 	super release.
 	self removeAllComponents.
+
 	deployedComponents := nil.
 	waitingForActivation do: [ :comp |
 		comp componentRemove.
-		comp componentFlush ].
+		comp componentFlush 
+	].
 	waitingForActivation := nil.
 ]
 
@@ -195,14 +190,13 @@ MolHomeServices >> release [
 MolHomeServices >> removeAllComponents [
 	| components |
 	components := deployedComponents.
-	components 
-		keysAndValuesDo:  [:key :values | (values copy) do: 
-			[ :component | self removeComponent: key named: component componentName]]
+	components keysAndValuesDo:  [:key :values | 
+		(values copy) do:[ :component | self removeComponent: key named: component componentName]
+	]
 ]
 
 { #category : #'component life cycle' }
 MolHomeServices >> removeComponent: aClass [ 
-
 	self removeComponent: aClass named: #default
 ]
 
@@ -228,7 +222,7 @@ MolHomeServices >> removeComponent: aClass named: aName [
 		triggerEvent: #removeComponent with: component;
 		componentRemove;
 		componentFlush.
-	waitingForActivation do: [ :waitingComponent | self resetComponentConnexion: waitingComponent instance: component ].
+	waitingForActivation do: [ :waitingComponent | self resetComponentConnection: waitingComponent instance: component ].
 	
 	deployed := deployedComponents at: aClass ifAbsent:[
 		MolUtils log: aClass printString , ' named: ' , aName printString , ' is not a deployed component class.'.
@@ -240,7 +234,7 @@ MolHomeServices >> removeComponent: aClass named: aName [
 		
 	deployedComponents keysAndValuesDo: [ :class :componentDictionary | 
 		componentDictionary keysAndValuesDo: [ :name :value | 
-			self resetComponentConnexion: value instance: component 
+			self resetComponentConnection: value instance: component 
 		] 
 	].
 	
@@ -251,17 +245,16 @@ MolHomeServices >> removeComponent: aClass named: aName [
 
 { #category : #private }
 MolHomeServices >> removeDeployedComponent: aComponentClass [
-
 	deployedComponents isEmpty ifTrue: [^self].
 	deployedComponents removeKey: aComponentClass ifAbsent:[^self]
 ]
 
 { #category : #private }
-MolHomeServices >> resetComponentConnexion: aComponent instance: anUsedComponent [
+MolHomeServices >> resetComponentConnection: aComponent instance: anUsedComponent [
 
 	(aComponent isNil or:[anUsedComponent isNil]) ifTrue:[^self].
 
-	"reset services connexion"
+	"reset services connection"
 	(aComponent servicesProviders includes: anUsedComponent)
 		ifTrue: 
 			[anUsedComponent class providedComponentServices do: 
@@ -269,7 +262,7 @@ MolHomeServices >> resetComponentConnexion: aComponent instance: anUsedComponent
 					aComponent servicesProviders at: e
 						ifPresent: [:i | aComponent servicesProviders at: e put: anUsedComponent componentName]]].
 
-	"reset events connexion"
+	"reset events connection"
 	(aComponent eventsSubscribers includes: anUsedComponent)
 		ifTrue: 
 			[anUsedComponent class producedComponentEvents do: 
@@ -277,7 +270,7 @@ MolHomeServices >> resetComponentConnexion: aComponent instance: anUsedComponent
 					aComponent eventsSubscribers at: e
 						ifPresent: [:i | aComponent eventsSubscribers at: e put: anUsedComponent componentName]]].
 
-	"reset parameters connexion"
+	"reset parameters connection"
 	(aComponent parametersProviders includes: anUsedComponent)
 		ifTrue: 
 			[anUsedComponent class providedComponentParameters do: 

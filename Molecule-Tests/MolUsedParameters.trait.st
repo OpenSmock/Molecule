@@ -5,5 +5,5 @@ Trait {
 	#name : #MolUsedParameters,
 	#traits : 'MolComponentParameters',
 	#classTraits : 'MolComponentParameters classTrait',
-	#category : #'Molecule-Tests'
+	#category : #'Molecule-Tests-Resources'
 }

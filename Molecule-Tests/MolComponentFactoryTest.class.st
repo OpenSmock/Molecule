@@ -4,39 +4,53 @@ A MolComponentFactoryTest is a test class for testing the behavior of MolCompone
 Class {
 	#name : #MolComponentFactoryTest,
 	#superclass : #TestCase,
-	#category : #'Molecule-Tests'
+	#category : #'Molecule-Tests-Cases'
 }
 
 { #category : #tests }
 MolComponentFactoryTest >> generatedClass [
-
 	^ #MolCompleteComponentTestImpl.
 ]
 
-{ #category : #tests }
-MolComponentFactoryTest >> testComponentFactoryBasics [
+{ #category : #'setUp-tearDown' }
+MolComponentFactoryTest >> setUp [
 
+	self class environment at: self generatedClass ifAbsent:[
+		MolComponentFactory
+			createImplementationFor: MolCompleteComponent
+			named: self generatedClass
+			in: 'Molecule-Tests-Resources'.
+	].
+]
+
+{ #category : #tests }
+MolComponentFactoryTest >> testComponentFactoryDefaultClass [
 	self assert: MolComponentFactory default class equals: MolComponentFactory.
+	
 	MolComponentFactory cleanUp.
-	self assert: MolComponentFactory systemIcon class equals: Form.
 ]
 
 { #category : #tests }
 MolComponentFactoryTest >> testCreateImplementationForNamedIn [
-
+	"delete generated class if presents"
 	
-	self generatedClass asClassIfPresent: 
-		[ self generatedClass asClass removeFromSystem ].
+	| class |
+	self class environment
+		at: self generatedClass
+		ifPresent: [ (self class environment at: self generatedClass) removeFromSystem ].
+		
 	MolComponentFactory
 		createImplementationFor: MolCompleteComponent
 		named: self generatedClass
-		in: 'Molecule-Tests'.
-	self generatedClass asClass comment: 'I am added and removed by test: ', self printString.
+		in: 'Molecule-Tests-Resources'.
+
+	class := self class environment at: self generatedClass.
+	self assert: class notNil.
+	class comment: 'I am added and removed by test: ', self printString.
 ]
 
 { #category : #tests }
 MolComponentFactoryTest >> testGenerateConsumedEventComponentAccessorsFor [
-
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsSubscriber.
 	MolComponentFactory default generateConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsSubscriber).
@@ -44,7 +58,6 @@ MolComponentFactoryTest >> testGenerateConsumedEventComponentAccessorsFor [
 
 { #category : #tests }
 MolComponentFactoryTest >> testGenerateProducedEventComponentAccessorsFor [
-
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsNotifier.
 	MolComponentFactory default generateProducedEventsComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsNotifier).
@@ -52,7 +65,6 @@ MolComponentFactoryTest >> testGenerateProducedEventComponentAccessorsFor [
 
 { #category : #tests }
 MolComponentFactoryTest >> testGenerateUsedParametersComponentAccessorsFor [
-
 	MolCompleteComponentImpl removeSelector: #getMolUsedParametersProvider.
 	MolComponentFactory default generateUsedParametersComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedParametersProvider).
@@ -60,7 +72,6 @@ MolComponentFactoryTest >> testGenerateUsedParametersComponentAccessorsFor [
 
 { #category : #tests }
 MolComponentFactoryTest >> testGenerateUsedServicesComponentAccessorsFor [
-
 	MolCompleteComponentImpl removeSelector: #getMolUsedServicesProvider.
 	MolComponentFactory default generateUsedServicesComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedServicesProvider).

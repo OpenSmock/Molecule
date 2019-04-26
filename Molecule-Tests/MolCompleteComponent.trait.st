@@ -10,7 +10,7 @@ Trait {
 	#name : #MolCompleteComponent,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : #'Molecule-Tests'
+	#category : #'Molecule-Tests-Resources'
 }
 
 { #category : #'accessing - events' }

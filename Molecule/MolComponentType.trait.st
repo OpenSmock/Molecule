@@ -20,25 +20,21 @@ Trait {
 
 { #category : #actions }
 MolComponentType classSide >> allConsumedEvents [
-
 	^self consumedComponentEvents.
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allProducedEvents [
-
 	^self producedComponentEvents.
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allRequiredParameters [
-
 	^self usedComponentParameters.
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allRequiredServices [
-
 	^self usedComponentServices.
 ]
 
@@ -50,7 +46,6 @@ MolComponentType classSide >> consumedComponentEvents [
 
 { #category : #actions }
 MolComponentType classSide >> isProduceEvents: anEventsTrait [
-
 	(anEventsTrait traitComposition allTraits includes: MolComponentEvents)
 		ifFalse: [^ false]
 		ifTrue: [^ self allProducedEvents includes: anEventsTrait].
@@ -58,7 +53,6 @@ MolComponentType classSide >> isProduceEvents: anEventsTrait [
 
 { #category : #actions }
 MolComponentType classSide >> isProvideParameters: aParametersTrait [
-
 	(aParametersTrait traitComposition allTraits includes: MolComponentParameters)
 		ifFalse: [^ false]
 		ifTrue: [^ self providedComponentParameters includes: aParametersTrait].
@@ -66,7 +60,6 @@ MolComponentType classSide >> isProvideParameters: aParametersTrait [
 
 { #category : #actions }
 MolComponentType classSide >> isProvideServices: aServicesTrait [
-
 	(aServicesTrait traitComposition allTraits includes: MolComponentServices )
 		ifFalse: [^ false]
 		ifTrue: [^ self providedComponentServices includes: aServicesTrait].

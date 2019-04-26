@@ -4,7 +4,7 @@ A MolUtilsTest is a test class for testing the behavior of MolUtils
 Class {
 	#name : #MolUtilsTest,
 	#superclass : #TestCase,
-	#category : #'Molecule-Tests'
+	#category : #'Molecule-Tests-Cases'
 }
 
 { #category : #tests }

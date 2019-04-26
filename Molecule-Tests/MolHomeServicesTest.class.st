@@ -13,14 +13,8 @@ I do not worry about interactions between components. See:
 Class {
 	#name : #MolHomeServicesTest,
 	#superclass : #TestCase,
-	#category : #'Molecule-Tests'
+	#category : #'Molecule-Tests-Cases'
 }
-
-{ #category : #'setUp-tearDown' }
-MolHomeServicesTest >> setUp [
-
-	MolComponentManager default.
-]
 
 { #category : #'setUp-tearDown' }
 MolHomeServicesTest >> tearDown [
@@ -30,7 +24,7 @@ MolHomeServicesTest >> tearDown [
 
 { #category : #tests }
 MolHomeServicesTest >> testSeveralComponentsLifecycle [
-"Test life cycle of several components"
+	"Test life cycle of several components"
 
 	| manager |
 	MolComponentManager cleanUp.

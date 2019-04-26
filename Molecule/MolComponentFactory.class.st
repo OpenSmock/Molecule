@@ -26,26 +26,26 @@ MolComponentFactory class >> cleanUp [
 ]
 
 { #category : #'componentImpl - creation' }
-MolComponentFactory class >> createImplementationFor: aComponent named: aSymbol in: aPackageName [
-	(aComponent traitComposition allTraits includes: MolComponentType)
-		ifFalse: [ self
-				error: 'Cannot create implementation for non MolComponentType object' ].
+MolComponentFactory class >> createImplementationFor: aComponentType named: aSymbol in: aPackageName [
+
+	(aComponentType traitComposition allTraits includes: MolComponentType)
+		ifFalse: [ self error: 'Cannot create implementation for non MolComponentType object' ].
+		
 	self class environment
 		at: aSymbol
-		ifPresent: [ self
-				error:
-					'Do not redefine component implementation, please remove previous impl if necessary' ].
-	OpalCompiler new
-		evaluate:
+		ifPresent: [ self error:'Do not redefine component implementation, please remove previous impl if necessary' ].
+		
+	OpalCompiler new evaluate:
 			'MolAbstractComponentImpl subclass: ' , aSymbol printString
 				,
 					'
-	uses: ' , aComponent printString
+	uses: ' , aComponentType printString
 				,
 					'
 	instanceVariableNames: ''''
 	classVariableNames: ''''
 	package: ''' , aPackageName , ''''.
+	
 	(self class environment at: aSymbol) defineComponent
 ]
 
@@ -57,9 +57,9 @@ MolComponentFactory class >> default [
 ]
 
 { #category : #accessing }
-MolComponentFactory class >> defineComponent: aComponent [
+MolComponentFactory class >> defineComponent: aComponentType [
 
-	self default defineComponent: aComponent
+	self default defineComponent: aComponentType
  
 
 ]

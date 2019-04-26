@@ -19,11 +19,10 @@ Class {
 
 { #category : #'initialize-release' }
 MolComponentManager class >> cleanUp [
-	"self cleanUp"
+	<script: 'self cleanUp'>
 	| notifiers subscribers |
 
 	Default isNil ifTrue:[^self].
-
 	Default homeServices release.
 	Default locatorServices eventsSubscribers: nil.
 
@@ -38,14 +37,14 @@ MolComponentManager class >> cleanUp [
 
 { #category : #'initialize-release' }
 MolComponentManager class >> deepCleanUp [
-	"self deepCleanUp"
+	<script: 'self deepCleanUp'>
 
 	| i |
 	self cleanUp.
 	
 	i := 0.
 	MolComponentImpl users do: [:impl | impl allInstances do: [:component | component componentFlush. i := i+1]].
-	MolUtils log: 'ComponentManager deepCleanup : ',i printString,' instance(s) found and released.'.
+	MolUtils log: 'ComponentManager deepCleanup: ',i printString,' instance(s) found and released.'.
 ]
 
 { #category : #singleton }

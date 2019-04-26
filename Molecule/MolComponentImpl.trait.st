@@ -36,19 +36,16 @@ MolComponentImpl >> componentActivate [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentConnector [
-
 	^ self explicitRequirement 
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentConnector: aConnector [
-
 	^ self explicitRequirement 
 ]
 
 { #category : #'life cycle' }
 MolComponentImpl >> componentFlush [
-	
 	self componentConnector release.
 ]
 
@@ -59,13 +56,11 @@ MolComponentImpl >> componentInitialize [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentName [
-
 	^ self explicitRequirement 
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentName: aName [
-
 	^ self explicitRequirement 
 ]
 
@@ -81,19 +76,16 @@ MolComponentImpl >> componentRemove [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> eventsNotifiers [
-
 	^ self componentConnector eventsNotifiers
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> eventsSubscribers [
-
 	^ self componentConnector eventsSubscribers
 ]
 
 { #category : #'component connecting' }
 MolComponentImpl >> forEvents: anEventsTrait removeProducer: aProducer [
-
 	| producers |
 	producers := self eventsSubscribers at: anEventsTrait.
 	producers isArray 
@@ -103,13 +95,11 @@ MolComponentImpl >> forEvents: anEventsTrait removeProducer: aProducer [
 
 { #category : #'component connecting' }
 MolComponentImpl >> forEvents: anEventsTrait useAllProducers: aProducerList [
-
 	self eventsSubscribers at: anEventsTrait put: aProducerList
 ]
 
 { #category : #'component connecting' }
 MolComponentImpl >> forEvents: anEventsTrait useProducer: aProducer [
-
 	(anEventsTrait traits includes: MolComponentEvents)
 		ifTrue: [self eventsSubscribers at: anEventsTrait put: aProducer]
 		ifFalse: [ MolUtils log: self printString, '>forEvent:useProducer: try to link a non event trait for an event ' ]
@@ -117,7 +107,6 @@ MolComponentImpl >> forEvents: anEventsTrait useProducer: aProducer [
 
 { #category : #'component connecting' }
 MolComponentImpl >> forParameters: aParametersTrait useProvider: aParametersProvider [
-
 	(aParametersTrait traits includes: MolComponentParameters)
 		ifTrue: [self parametersProviders at: aParametersTrait put: aParametersProvider]
 		ifFalse: [ MolUtils log: self printString, '>forParameters:useProvider: try to link a non parameters trait for parameters ' ]
@@ -125,7 +114,6 @@ MolComponentImpl >> forParameters: aParametersTrait useProvider: aParametersProv
 
 { #category : #'component connecting' }
 MolComponentImpl >> forServices: aServicesTrait useProvider: aServicesProvider [
-
 	(aServicesTrait traits includes: MolComponentServices)
 		ifTrue: [self servicesProviders at: aServicesTrait put: aServicesProvider]
 		ifFalse: [ MolUtils log: self printString, '>forService:useProvider: try to link a non services trait for services ' ]
@@ -133,24 +121,20 @@ MolComponentImpl >> forServices: aServicesTrait useProvider: aServicesProvider [
 
 { #category : #testing }
 MolComponentImpl >> isNotFoundParameters [
-
 	^false
 ]
 
 { #category : #testing }
 MolComponentImpl >> isNotFoundServices [
-
 	^false
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> parametersProviders [
-
 	^ self componentConnector parametersProviders
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> servicesProviders [
-
-	^ self componentConnector servicesProviders
+	^ self componentConnector servicesProviders 
 ]

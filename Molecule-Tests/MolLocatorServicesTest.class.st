@@ -4,37 +4,40 @@ A MolLocatorServicesTest is a test class for testing the behavior of MolLocatorS
 Class {
 	#name : #MolLocatorServicesTest,
 	#superclass : #TestCase,
-	#category : #'Molecule-Tests'
+	#category : #'Molecule-Tests-Cases'
 }
 
 { #category : #tests }
 MolLocatorServicesTest >> testNotFoundParametersProvider [
-
 	| parametersProvider |
 	MolComponentManager cleanUp.
+	
 	parametersProvider := MolComponentManager default locatorServices searchParametersProviderFor: MolUnusedParameters.
 	self assert: parametersProvider isNotFoundParameters.
 	self assert: parametersProvider connect equals: nil.
+	
 	MolComponentManager cleanUp.
 ]
 
 { #category : #tests }
 MolLocatorServicesTest >> testNotFoundServiceProvider [
-
 	| serviceProvider |
 	MolComponentManager cleanUp.
+	
 	serviceProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolUnusedServices.
 	self assert: serviceProvider isNotFoundServices.
 	self assert: serviceProvider connect equals: nil.
+	
 	MolComponentManager cleanUp.
 ]
 
 { #category : #tests }
 MolLocatorServicesTest >> testSearchEventSubscriberFor [
-
 	| eventSubscriber |
 	MolComponentManager cleanUp.
+	
 	eventSubscriber := MolComponentManager default locatorServices searchEventsSubscriberFor: MolUsedEvents.
+	
 	MolComponentManager cleanUp.
 ]
 

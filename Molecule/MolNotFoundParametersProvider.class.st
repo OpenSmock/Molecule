@@ -25,6 +25,5 @@ MolNotFoundParametersProvider >> interface: anInterface name: aName [
 
 { #category : #accessing }
 MolNotFoundParametersProvider >> isNotFoundParameters [
-
 	^true
 ]

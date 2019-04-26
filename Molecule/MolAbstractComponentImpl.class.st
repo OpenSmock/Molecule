@@ -24,7 +24,7 @@ Class {
 
 { #category : #'private component accessing' }
 MolAbstractComponentImpl >> componentConnector [
-^componentConnector 
+	^componentConnector 
 ]
 
 { #category : #'private component accessing' }
@@ -39,68 +39,5 @@ MolAbstractComponentImpl >> componentName [
 
 { #category : #'private component accessing' }
 MolAbstractComponentImpl >> componentName: aName [
-
 	componentName := aName
-]
-
-{ #category : #'private component accessing' }
-MolAbstractComponentImpl >> eventNotifiers [
-
-	^ self componentConnector eventsNotifiers
-]
-
-{ #category : #'private component accessing' }
-MolAbstractComponentImpl >> eventSubscribers [
-
-	^ self componentConnector eventsSubscribers
-]
-
-{ #category : #'private component accessing' }
-MolAbstractComponentImpl >> eventsNotifiers [
-
-	^ self componentConnector eventsNotifiers
-]
-
-{ #category : #'private component accessing' }
-MolAbstractComponentImpl >> eventsSubscribers [
-
-	^ self componentConnector eventsSubscribers
-]
-
-{ #category : #'component connecting' }
-MolAbstractComponentImpl >> forEvents: anEventTrait removeProducer: aProducer [
-
-	| producers |
-	producers := self eventsSubscribers at: anEventTrait.
-	producers isArray 
-		ifTrue: [ (self eventsSubscribers at: anEventTrait) remove: aProducer ]
-		ifFalse: [ (self eventsSubscribers removeKey: anEventTrait ) ]
-]
-
-{ #category : #'component connecting' }
-MolAbstractComponentImpl >> forEvents: anEventTrait useAllProducers: aProducerList [
-
-	self eventsSubscribers at: anEventTrait put: aProducerList
-]
-
-{ #category : #'component connecting' }
-MolAbstractComponentImpl >> forEvents: anEventTrait useProducer: aProducer [
-
-	(anEventTrait traits includes: MolComponentEvents)
-		ifTrue: [self eventsSubscribers at: anEventTrait put: aProducer]
-		ifFalse: [ MolUtils log: self printString, '>forEvent:useProducer: try to link a non event trait for an event ' ]
-]
-
-{ #category : #'component connecting' }
-MolAbstractComponentImpl >> forServices: aServiceTrait useProvider: aServiceProvider [
-
-	(aServiceTrait traits includes: MolComponentServices)
-		ifTrue: [self servicesProviders at: aServiceTrait put: aServiceProvider]
-		ifFalse: [ MolUtils log: self printString, '>forService:useProvider: try to link a non services trait for services ' ]
-]
-
-{ #category : #'private component accessing' }
-MolAbstractComponentImpl >> servicesProviders [
-
-	^ self componentConnector servicesProviders
 ]

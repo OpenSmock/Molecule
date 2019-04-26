@@ -5,5 +5,5 @@ Trait {
 	#name : #MolUsedEvents,
 	#traits : 'MolComponentEvents',
 	#classTraits : 'MolComponentEvents classTrait',
-	#category : #'Molecule-Tests'
+	#category : #'Molecule-Tests-Resources'
 }
