@@ -66,7 +66,6 @@ MolComponentFactory class >> defineComponent: aComponentType [
 
 { #category : #'class initialization' }
 MolComponentFactory class >> initialize [ 
-	super initialize.
 	self default.
 ]
 
