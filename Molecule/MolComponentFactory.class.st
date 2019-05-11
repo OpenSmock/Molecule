@@ -52,7 +52,7 @@ MolComponentFactory class >> createImplementationFor: aComponentType named: aSym
 { #category : #accessing }
 MolComponentFactory class >> default [
 
-	Default ifNil:[ Default := self new initialize ].
+	Default ifNil:[ Default := self new ].
 	^Default
 ]
 
@@ -62,6 +62,12 @@ MolComponentFactory class >> defineComponent: aComponentType [
 	self default defineComponent: aComponentType
  
 
+]
+
+{ #category : #'class initialization' }
+MolComponentFactory class >> initialize [ 
+	super initialize.
+	self default.
 ]
 
 { #category : #'private - code checking' }
