@@ -11,7 +11,7 @@ Class {
 		'myComponentConnectorVariable',
 		'myNameVariable'
 	],
-	#category : #'Molecule-Tests-Resources'
+	#category : #'Molecule-Tests-Services Events Parameters Resources'
 }
 
 { #category : #'private component accessing' }
