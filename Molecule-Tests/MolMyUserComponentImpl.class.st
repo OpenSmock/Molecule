@@ -98,14 +98,14 @@ MolMyUserComponentImpl >> forServices: aServiceTrait useProvider: aServiceProvid
 
 { #category : #'component accessing' }
 MolMyUserComponentImpl >> getMolMyTableServicesProvider [
-	| serviceSymbol serviceProvider itf |
+	| servicesSymbol servicesProvider itf |
 	itf := MolMyTableServices.
-	serviceSymbol := self servicesProviders at: itf ifAbsent: [self error:'service not found'].
-	serviceSymbol isSymbol
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [self error:'Services not found'].
+	servicesSymbol isSymbol
 	 	ifTrue: 
-			[serviceProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolMyTableServices named:  serviceSymbol]. 
-	^serviceProvider
+			[servicesProvider := MolComponentManager default locatorServices 
+						searchServicesProviderFor: MolMyTableServices named:  servicesSymbol]. 
+	^servicesProvider
 ]
 
 { #category : #'private component accessing' }
