@@ -37,8 +37,6 @@ This system provides a global example of the use of components.
 
 ## Credits
 
-Authors: Pierre Laborde, Eric Le Pors, Nolwenn Fournier, Alain Plantec. 
-
 * **Pierre Laborde** - *Initial work* - [labordep](https://github.com/labordep)
 * **Eric Le Pors** - *Initial work*
 * **Nolwenn Fournier** - *Initial work* - [nolwennfournier](https://github.com/nolwennfournier)
