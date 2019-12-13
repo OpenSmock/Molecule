@@ -23,6 +23,11 @@ MolComponentImpl classSide >> defineComponent [
 
 ]
 
+{ #category : #testing }
+MolComponentImpl classSide >> isComponent [
+	^ true
+]
+
 { #category : #'component definition' }
 MolComponentImpl classSide >> protocolForComponentAccess [
 
