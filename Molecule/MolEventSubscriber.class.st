@@ -163,17 +163,17 @@ MolEventSubscriber >> removeOriginator: aOriginator [
 		self observersConnection at: e put: nil].
 ]
 
-{ #category : #'event configuring' }
+{ #category : #API }
 MolEventSubscriber >> subscribe: anObserver [
 	self connectAllOriginatorsTo: anObserver
 ]
 
-{ #category : #'event configuring' }
+{ #category : #API }
 MolEventSubscriber >> subscribeAllWaiting [
 	self observersConnection keysDo: [ :comp | self connectAllOriginatorsTo: comp ]
 ]
 
-{ #category : #'event configuring' }
+{ #category : #API }
 MolEventSubscriber >> unsubscribe: anObserver [
 	self disconnectAllOriginatorsFrom: anObserver.
 	self observersConnection removeKey: anObserver ifAbsent:[nil].

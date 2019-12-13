@@ -25,7 +25,7 @@ MolCompleteComponent classSide >> producedComponentEvents [
 	^{ MolUsedEvents }
 ]
 
-{ #category : #'accessing - events' }
+{ #category : #'accessing - parameters' }
 MolCompleteComponent classSide >> providedComponentParameters [
 <componentContract>		
 	^{ MolUsedParameters }
@@ -37,7 +37,7 @@ MolCompleteComponent classSide >> providedComponentServices [
 	^{ MolUsedServices } 
 ]
 
-{ #category : #'accessing - services' }
+{ #category : #'accessing - parameters' }
 MolCompleteComponent classSide >> usedComponentParameters [
 <componentContract>	
 	^{ MolUsedParameters }

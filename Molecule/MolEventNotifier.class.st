@@ -24,13 +24,11 @@ MolEventNotifier >> deactivate [
 
 { #category : #'reflective operations' }
 MolEventNotifier >> doesNotUnderstand: aMessage [
-	(interface allSelectors includes: aMessage selector) ifFalse: [ 
-		MolUtils log: originator printString , ' send an undefined event: ' , aMessage selector 
-	].
-		
-	activate ifFalse: [ 
-		MolUtils log: originator printString , ' send event when passivate: ' , aMessage selector 
-	].
+	(interface allSelectors includes: aMessage selector) 
+		ifFalse: [ MolUtils log: originator printString , ' send an undefined event: ' , aMessage selector ]
+		ifTrue: [ activate 
+			ifTrue: [ MolUtils log: originator printString , ' send event: ' , aMessage selector ]
+			ifFalse: [ MolUtils log: 'An inactive component: ', originator printString , ' send event: ' , aMessage selector ] ].
 		
 	originator triggerEvent: aMessage selector withArguments: aMessage arguments
 ]

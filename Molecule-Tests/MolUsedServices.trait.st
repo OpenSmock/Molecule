@@ -7,3 +7,8 @@ Trait {
 	#classTraits : 'MolComponentServices classTrait',
 	#category : #'Molecule-Tests-Services Events Parameters Resources'
 }
+
+{ #category : #service }
+MolUsedServices >> service [
+	^ #service
+]

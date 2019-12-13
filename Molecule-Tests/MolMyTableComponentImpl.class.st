@@ -41,7 +41,7 @@ MolMyTableComponentImpl >> componentConnector: aConnector [
 	connector := aConnector
 ]
 
-{ #category : #'life cycle' }
+{ #category : #'component life cycle' }
 MolMyTableComponentImpl >> componentInitialize [
 	"here write the code corresponding to component initialisation phase"
 	

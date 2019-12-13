@@ -34,7 +34,7 @@ MolComponentImpl classSide >> protocolForComponentAccess [
 	^'component accessing'
 ]
 
-{ #category : #'life cycle' }
+{ #category : #'component life cycle' }
 MolComponentImpl >> componentActivate [
 	"here write the code corresponding to component activation phase"
 ]
@@ -49,12 +49,12 @@ MolComponentImpl >> componentConnector: aConnector [
 	^ self explicitRequirement 
 ]
 
-{ #category : #'life cycle' }
+{ #category : #'component life cycle' }
 MolComponentImpl >> componentFlush [
 	self componentConnector release.
 ]
 
-{ #category : #'life cycle' }
+{ #category : #'component life cycle' }
 MolComponentImpl >> componentInitialize [
 	"here write the code corresponding to component initialisation phase"
 ]
@@ -69,12 +69,12 @@ MolComponentImpl >> componentName: aName [
 	^ self explicitRequirement 
 ]
 
-{ #category : #'life cycle' }
+{ #category : #'component life cycle' }
 MolComponentImpl >> componentPassivate [
 	"here write the code corresponding to component passivation phase"
 ]
 
-{ #category : #'life cycle' }
+{ #category : #'component life cycle' }
 MolComponentImpl >> componentRemove [
 	"here write the code corresponding to component remove phase"
 ]

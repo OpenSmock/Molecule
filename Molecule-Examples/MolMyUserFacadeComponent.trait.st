@@ -18,7 +18,7 @@ MolMyUserFacadeComponent classSide >> consumedComponentEvents [
 	^{ MolMyLocalTimeEvents . MolMyAlarmSoundsEvents  } 
 ]
 
-{ #category : #'accessing - services' }
+{ #category : #'accessing - parameters' }
 MolMyUserFacadeComponent classSide >> usedComponentParameters [
 <componentContract>	
 	^{ MolMyClockParameters . MolMyAlarmParameters }

@@ -12,7 +12,7 @@ Trait {
 	#category : #'Molecule-Tests-Parameters Resources'
 }
 
-{ #category : #'accessing - services' }
+{ #category : #'accessing - parameters' }
 MolMyClientComponent classSide >> usedComponentParameters [
 <componentContract>	
 	^{ MolMySocketParameters }

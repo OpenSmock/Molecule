@@ -9,7 +9,7 @@ Class {
 	#classVars : [
 		'isLogActive'
 	],
-	#category : #'Molecule-Core'
+	#category : #'Molecule-Tools'
 }
 
 { #category : #'component creation' }

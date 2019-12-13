@@ -24,7 +24,7 @@ MolMyClockComponent classSide >> producedComponentEvents [
 	^{ MolMyLocalTimeEvents }
 ]
 
-{ #category : #'accessing - events' }
+{ #category : #'accessing - parameters' }
 MolMyClockComponent classSide >> providedComponentParameters [
 <componentContract>		
 	^{ MolMyClockParameters }

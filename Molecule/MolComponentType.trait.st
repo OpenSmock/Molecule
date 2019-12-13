@@ -20,22 +20,68 @@ Trait {
 
 { #category : #actions }
 MolComponentType classSide >> allConsumedEvents [
-	^self consumedComponentEvents.
+	| collection |
+	collection := OrderedCollection withAll: self consumedComponentEvents.
+	self allSuperclassesDo: [ :s | 
+		(s allTraits includes: MolComponentType) ifTrue: [ 
+				collection addAll: s consumedComponentEvents 
+		] ].
+	^ collection
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allProducedEvents [
-	^self producedComponentEvents.
+	| collection |
+	collection := OrderedCollection withAll: self producedComponentEvents.
+	self allSuperclassesDo: [ :s | 
+		(s allTraits includes: MolComponentType) ifTrue: [ 
+				collection addAll: s producedComponentEvents 
+		] ].
+	^ collection
+]
+
+{ #category : #actions }
+MolComponentType classSide >> allProvidedParameters [
+	| collection |
+	collection := OrderedCollection withAll: self providedComponentParameters.
+	self allSuperclassesDo: [ :s | 
+		(s allTraits includes: MolComponentType) ifTrue: [ 
+				collection addAll: s providedComponentParameters 
+		] ].
+	^ collection
+]
+
+{ #category : #actions }
+MolComponentType classSide >> allProvidedServices [
+	| collection |
+	collection := OrderedCollection withAll: self providedComponentServices.
+	self allSuperclassesDo: [ :s | 
+		(s allTraits includes: MolComponentType) ifTrue: [ 
+				collection addAll: s providedComponentServices 
+		] ].
+	^ collection
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allRequiredParameters [
-	^self usedComponentParameters.
+	| collection |
+	collection := OrderedCollection withAll: self usedComponentParameters.
+	self allSuperclassesDo: [ :s | 
+		(s allTraits includes: MolComponentType) ifTrue: [ 
+				collection addAll: s usedComponentParameters 
+		] ].
+	^ collection
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allRequiredServices [
-	^self usedComponentServices.
+	| collection |
+	collection := OrderedCollection withAll: self usedComponentServices.
+	self allSuperclassesDo: [ :s | 
+		(s allTraits includes: MolComponentType) ifTrue: [ 
+				collection addAll: s usedComponentServices 
+		] ].
+	^ collection
 ]
 
 { #category : #'accessing - events' }
@@ -55,14 +101,14 @@ MolComponentType classSide >> isProduceEvents: anEventsTrait [
 MolComponentType classSide >> isProvideParameters: aParametersTrait [
 	(aParametersTrait traitComposition allTraits includes: MolComponentParameters)
 		ifFalse: [^ false]
-		ifTrue: [^ self providedComponentParameters includes: aParametersTrait].
+		ifTrue: [^ self allProvidedParameters includes: aParametersTrait].
 ]
 
 { #category : #actions }
 MolComponentType classSide >> isProvideServices: aServicesTrait [
 	(aServicesTrait traitComposition allTraits includes: MolComponentServices )
 		ifFalse: [^ false]
-		ifTrue: [^ self providedComponentServices includes: aServicesTrait].
+		ifTrue: [^ self allProvidedServices includes: aServicesTrait].
 ]
 
 { #category : #'accessing - events' }
@@ -71,7 +117,7 @@ MolComponentType classSide >> producedComponentEvents [
 	^{ }
 ]
 
-{ #category : #'accessing - events' }
+{ #category : #'accessing - parameters' }
 MolComponentType classSide >> providedComponentParameters [
 <componentContract>		
 	^{ }
@@ -83,7 +129,7 @@ MolComponentType classSide >> providedComponentServices [
 	^{ } 
 ]
 
-{ #category : #'accessing - services' }
+{ #category : #'accessing - parameters' }
 MolComponentType classSide >> usedComponentParameters [
 <componentContract>	
 	^{ }

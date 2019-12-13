@@ -24,7 +24,7 @@ MolMyAlarmComponent classSide >> producedComponentEvents [
 	^{ MolMyAlarmSoundsEvents }
 ]
 
-{ #category : #'accessing - events' }
+{ #category : #'accessing - parameters' }
 MolMyAlarmComponent classSide >> providedComponentParameters [
 <componentContract>		
 	^{ MolMyAlarmParameters }
