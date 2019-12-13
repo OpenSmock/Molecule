@@ -9,7 +9,9 @@ Class {
 	#name : #MolComponentFactory,
 	#superclass : #Object,
 	#instVars : [
-		'pragmaCollector'
+		'pragmaCollector',
+		'codeGeneration',
+		'dirtyComponents'
 	],
 	#classVars : [
 		'Default'
@@ -64,9 +66,21 @@ MolComponentFactory class >> defineComponent: aComponentType [
 
 ]
 
+{ #category : #accessing }
+MolComponentFactory class >> defineDirtyComponents [
+<script>
+	self default defineDirtyComponents
+]
+
 { #category : #'class initialization' }
 MolComponentFactory class >> initialize [ 
 	self default.
+]
+
+{ #category : #changing }
+MolComponentFactory >> activateContractModification [
+	self inform: 'Molecule : Code Generation enabled'.
+	self codeGeneration: true
 ]
 
 { #category : #'private - code checking' }
@@ -92,6 +106,16 @@ MolComponentFactory >> checkUsedTrait: aList in: aComponent [
 		ifTrue: [aComponent browse]
 ]
 
+{ #category : #accessing }
+MolComponentFactory >> codeGeneration [
+	^ codeGeneration
+]
+
+{ #category : #accessing }
+MolComponentFactory >> codeGeneration: anObject [
+	codeGeneration := anObject
+]
+
 { #category : #toolbox }
 MolComponentFactory >> collectComponentConnectionTraits: aComponent [
 
@@ -102,7 +126,8 @@ MolComponentFactory >> collectComponentConnectionTraits: aComponent [
 MolComponentFactory >> contractChanged: aMessage [
 	| modifiedComponent |
 	modifiedComponent := aMessage pragma method methodClass instanceSide.
-	self defineComponent: modifiedComponent
+	self codeGeneration
+		ifTrue: [ dirtyComponents add: modifiedComponent ]
 ]
 
 { #category : #'component definition' }
@@ -138,31 +163,36 @@ MolComponentFactory >> defineComponent: aComponent [
 			ifFalse: [ self error: 'Unknown object defined.' ]]	
 ]
 
+{ #category : #toolbox }
+MolComponentFactory >> defineDirtyComponents [
+	dirtyComponents do: [ :comp | MolComponentFactory defineComponent: comp ].
+	dirtyComponents := Set new.
+]
+
 { #category : #'private - code generation' }
 MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollection in: aComponent suffix: suffix [
-	| selector sourceCode sourceMethod method selectors |
-	
-	aCollection
-		do: [ :trait | 
-			selector := ('get' , trait printString , suffix) asSymbol.
-			sourceCode := self
-				getSourceCodeFor: aSymbol
-				trait: trait
-				selector: selector.
-			((selectors := aComponent allSelectors) includes: selector) not
-				ifTrue: [ aComponent
-						compile: sourceCode contents
-						classified: aComponent protocolForComponentAccess ]
-				ifFalse:
-					[ "if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
+	| selector sourceCode sourceMethod method |
+	aCollection do: [ :trait | 
+		selector := ('get' , trait printString , suffix) asSymbol.
+		sourceCode := self
+			              getSourceCodeFor: aSymbol
+			              trait: trait
+			              selector: selector.
+		(aComponent allSelectors includes: selector) not
+			ifTrue: [ 
+				aComponent
+					compile: sourceCode contents
+					classified: aComponent protocolForComponentAccess ]
+			ifFalse: [ "if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
+				"the selector must not be a parent"
+				(aComponent selectors includes: selector) ifTrue: [ 
 					method := aComponent >> selector.
 					sourceMethod := method sourceCode.
-					sourceMethod
-						ifNotNil: [ sourceMethod ~= sourceCode contents
-								ifTrue: [ "rewrite the method"
-									aComponent
-										compile: sourceCode contents
-										classified: aComponent protocolForComponentAccess ] ] ] ]
+					sourceMethod ifNotNil: [ 
+						sourceMethod ~= sourceCode contents ifTrue: [ "rewrite the method"
+							aComponent
+								compile: sourceCode contents
+								classified: aComponent protocolForComponentAccess ] ] ] ] ]
 ]
 
 { #category : #'code generation' }
@@ -310,13 +340,42 @@ MolComponentFactory >> getUsedServicesSourceCodeFor: aTrait selector: selector [
 	^ writeStream
 ]
 
+{ #category : #changing }
+MolComponentFactory >> inactivateContractModification [
+	self inform: 'Molecule : Code Generation disabled'.
+	self codeGeneration: false
+]
+
 { #category : #'initalize-release' }
 MolComponentFactory >> initialize [
-
 	super initialize.
+	codeGeneration := true.
+	dirtyComponents := Set new.
+	pragmaCollector := (PragmaCollector new
+		filter: [ :prg | prg selector = #componentContract ]) reset.
+	pragmaCollector announcer
+		when: PragmaAnnouncement
+		send: #contractChanged:
+		to: self.
+	self initializeIcebergAnnouncements.
+	
+]
 
-	pragmaCollector := (PragmaCollector new filter: [:prg | prg keyword = #componentContract]) reset.
-	pragmaCollector announcer when: PragmaAnnouncement send: #contractChanged: to: self 
+{ #category : #'initalize-release' }
+MolComponentFactory >> initializeIcebergAnnouncements [
+SystemAnnouncer uniqueInstance weak
+		when: MCVersionLoaderStarted
+		send: #inactivateContractModification
+		to: self.
+	SystemAnnouncer uniqueInstance weak
+		when: MCVersionLoaderStopped
+		send: #activateContractModification
+		to: self
+]
+
+{ #category : #toolbox }
+MolComponentFactory >> isIcebergLoading [
+	^self codeGeneration not
 ]
 
 { #category : #'private - code generation' }
