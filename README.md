@@ -18,7 +18,7 @@ Molecule has no dependencies.
 ```smalltalk
 Metacello new
    baseline: 'Molecule';
-   repository: 'github://labordep/molecule/src';
+   repository: 'github://OpenSmock/Molecule/src';
    load.
 ```
 
