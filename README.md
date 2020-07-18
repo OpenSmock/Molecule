@@ -7,7 +7,7 @@ His Component architecture approach provide an adapted structuration to graphic 
 
 Molecule provide a way to describe a software application as a components group. Components communicate by use of services, parameters and events propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
 
-Molecule is working on Pharo 6 and Pharo 7.
+Molecule is working on Pharo 6 to 8.
 
 ## Getting Started
 
