@@ -44,6 +44,8 @@ This system provides a global example of the use of components.
 * **Nolwenn Fournier** - *Initial work* - [nolwennfournier](https://github.com/nolwennfournier)
 * **Alain Plantec** - *Initial work* - [plantec](https://github.com/plantec)
 
+![Molecule Logo](MoleculeLogotype.svg)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
