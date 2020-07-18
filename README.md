@@ -1,5 +1,7 @@
 # Molecule
 
+![Molecule Logo](MoleculeBanner.jpg)
+
 Molecule is a component oriented framework for Pharo. 
 His Component architecture approach provide an adapted structuration to graphic user interface (GUI) or another software application wich need Component features.
 
