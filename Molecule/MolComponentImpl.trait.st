@@ -41,11 +41,13 @@ MolComponentImpl >> componentActivate [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentConnector [
+	"Waiting for next Pharo traits with own methods to automaticaly propose this implementation"
 	^ self explicitRequirement 
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentConnector: aConnector [
+	"Waiting for next Pharo traits with own methods to automaticaly propose this implementation"
 	^ self explicitRequirement 
 ]
 
@@ -61,11 +63,13 @@ MolComponentImpl >> componentInitialize [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentName [
+	"Waiting for next Pharo traits with own methods to automaticaly propose this implementation"
 	^ self explicitRequirement 
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentName: aName [
+	"Waiting for next Pharo traits with own methods to automaticaly propose this implementation"
 	^ self explicitRequirement 
 ]
 

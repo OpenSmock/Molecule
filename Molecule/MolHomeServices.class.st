@@ -270,6 +270,9 @@ MolHomeServices >> resetComponentConnection: aComponent instance: anUsedComponen
 					aComponent eventsSubscribers at: e
 						ifPresent: [:i | aComponent eventsSubscribers at: e put: anUsedComponent componentName]]].
 
+	self flag:'PLA Patch provisoire pour débrancher et rebrancher à chaud un composant, à rendre robuste'.
+	MolComponentManager default locatorServices waitSubscribtions: aComponent for: anUsedComponent.
+
 	"reset parameters connection"
 	(aComponent parametersProviders includes: anUsedComponent)
 		ifTrue: 

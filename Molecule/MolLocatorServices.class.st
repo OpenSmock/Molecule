@@ -125,3 +125,40 @@ MolLocatorServices >> searchServicesProviderFor: aServicesTrait named: aSymbol [
 				ifTrue: [^(comps at: comp) at: aSymbol]].
 	^MolNotFoundServicesProvider new interface: aServicesTrait name: aSymbol
 ]
+
+{ #category : #accessing }
+MolLocatorServices >> waitSubscribtions: aToBeWaitingComponent for: anUsedComponent [
+	| eventsKey |
+
+	self flag:'PLA Méthode à revoir car patch provisoire pour remplacer à chaud un composant par une autre (autre implémentation) qui émet des évènements que d autres écoutent, à rendre robuste'.
+
+	self eventsSubscribers ifEmpty: [^self].
+	
+	eventsKey := anUsedComponent class allProducedEvents collect: [ :event | event -> anUsedComponent componentName ].
+	
+	eventsKey do: [ :eventKey | | eventsList |
+		
+		eventsList := self eventsSubscribers keys select: [ :key | key key = eventKey key ].
+		eventsList := eventsList select: [ :event | 
+			event value = eventKey value or: [ event value includes: eventKey value ] 
+		].
+	
+		eventsList := eventsList collect: [ :event | self eventsSubscribers at: event ].
+		eventsList do: [ :event |
+			event ifNotNil:[
+				event isWaitingForSubscription ifFalse:[
+						(event getOriginators includes: anUsedComponent) ifTrue:[ | newObserversSet |
+							self flag:'Partie faite à la main : décliner des méthodes et industrialiser tout ça'.
+							event getOriginators remove: anUsedComponent. 
+							event originatorsLinks at: (anUsedComponent componentName) put: nil.
+							newObserversSet := event observersConnection at: aToBeWaitingComponent ifAbsent:[nil].
+							newObserversSet ifNotNil:[
+								newObserversSet remove: (anUsedComponent componentName).
+								event observersConnection at: aToBeWaitingComponent put: (newObserversSet).
+							].
+						].
+				]. 
+			]. 
+		].
+	]
+]
