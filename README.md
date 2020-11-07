@@ -7,7 +7,7 @@ His Component architecture approach provide an adapted structuration to graphic 
 
 Molecule provide a way to describe a software application as a components group. Components communicate by use of services, parameters and events propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
 
-Molecule is working on Pharo 6 to 8.
+Molecule is working from Pharo 6 to 9.
 
 ## Getting Started
 
@@ -24,10 +24,12 @@ Metacello new
    load.
 ```
 
-### Example
+### Examples
 
-An example is available in the package 'Molecule-Examples'.
-Before running the example open the Transcript, the example results is showed on the Transcript window.
+Examples are available in the package 'Molecule-Examples'.
+Before running examples open the Transcript, some results are showed on the Transcript window.
+
+#### Clock System example
 
 ```smalltalk
 MolMyClockSystem startAlarmExample.
@@ -36,6 +38,18 @@ MolMyClockSystem startAlarmExample.
 This system uses 4 components: a server time send global hour to a clock. The clock send local hour to alarms and to final user (which could be an UI). The final user can change the parameters of the system as alarm time or set manual time for the clock. The alarm is subscribed to clock time, and sounds when it is time.
 
 This system provides a global example of the use of components. 
+
+#### GPS example
+
+```smalltalk
+MolGPSDataLauncher start.
+```
+More details about examples in the comment of MolGPSDateLauncher.
+
+First we program a component application that connects to a Global Positioning System (GPS) hardware and displays the GPS data on a view map (just fictitious).
+The GPS data and view map are implemented as Molecule components.
+In a second way, we reuse an existing non-component class in our Molecule application (MolMyExistingGPSHardware).
+To do so, we augment this class with component behavior.
 
 ## Credits
 
