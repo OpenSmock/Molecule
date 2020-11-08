@@ -4,8 +4,6 @@ Class {
 	#traits : 'MolComponentImpl + MolGPSData + MolGPSDataServices',
 	#classTraits : 'MolComponentImpl classTrait + MolGPSData classTrait + MolGPSDataServices classTrait',
 	#instVars : [
-		'componentConnector',
-		'componentName',
 		'sendCurrentPositionThread'
 	],
 	#category : #'Molecule-Examples-GPS Example'

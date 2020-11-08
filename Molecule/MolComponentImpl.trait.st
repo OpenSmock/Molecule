@@ -12,6 +12,10 @@ If the component has only one implementation, it is not necessary to precise som
 "
 Trait {
 	#name : #MolComponentImpl,
+	#instVars : [
+		'componentConnector',
+		'componentName'
+	],
 	#category : #'Molecule-Core-Impl'
 }
 
@@ -41,19 +45,20 @@ MolComponentImpl >> componentActivate [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentConnector [
-	"Waiting for next Pharo traits with own methods to automaticaly propose this implementation"
-	^ self explicitRequirement 
+
+	^ componentConnector
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentConnector: aConnector [
-	"Waiting for next Pharo traits with own methods to automaticaly propose this implementation"
-	^ self explicitRequirement 
+
+	componentConnector := aConnector
 ]
 
 { #category : #'component life cycle' }
 MolComponentImpl >> componentFlush [
-	self componentConnector release.
+
+	self componentConnector release
 ]
 
 { #category : #'component life cycle' }
@@ -63,14 +68,14 @@ MolComponentImpl >> componentInitialize [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentName [
-	"Waiting for next Pharo traits with own methods to automaticaly propose this implementation"
-	^ self explicitRequirement 
+
+	^ componentName
 ]
 
 { #category : #'private component accessing' }
-MolComponentImpl >> componentName: aName [
-	"Waiting for next Pharo traits with own methods to automaticaly propose this implementation"
-	^ self explicitRequirement 
+MolComponentImpl >> componentName: aSymbol [
+
+	componentName := aSymbol
 ]
 
 { #category : #'component life cycle' }

@@ -15,29 +15,5 @@ Class {
 	#superclass : #Object,
 	#traits : 'MolComponentImpl',
 	#classTraits : 'MolComponentImpl classTrait',
-	#instVars : [
-		'componentName',
-		'componentConnector'
-	],
 	#category : #'Molecule-Core-Impl'
 }
-
-{ #category : #'private component accessing' }
-MolAbstractComponentImpl >> componentConnector [
-	^componentConnector 
-]
-
-{ #category : #'private component accessing' }
-MolAbstractComponentImpl >> componentConnector: aConnector [
-	componentConnector := aConnector.
-]
-
-{ #category : #'private component accessing' }
-MolAbstractComponentImpl >> componentName [
-	^componentName
-]
-
-{ #category : #'private component accessing' }
-MolAbstractComponentImpl >> componentName: aName [
-	componentName := aName
-]
