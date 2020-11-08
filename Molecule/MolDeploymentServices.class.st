@@ -17,6 +17,13 @@ MolDeploymentServices >> deployComponentImplementation: aComponentClass [
 ]
 
 { #category : #deployment }
+MolDeploymentServices >> isDeployedComponentImplementation: aComponentClass [
+
+	aComponentClass isTrait ifTrue: [ self error: 'No component type allowed, deploy implementations' ].
+	^MolComponentManager default homeServices isDeployedComponent: aComponentClass
+]
+
+{ #category : #deployment }
 MolDeploymentServices >> undeployComponentImplementation: aComponentClass [ 
 
 	MolComponentManager default homeServices removeDeployedComponent: aComponentClass

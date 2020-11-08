@@ -1,5 +1,5 @@
 Class {
-	#name : #MolMyExistingGPSHardware,
+	#name : #MolGPSHardware,
 	#superclass : #Object,
 	#traits : 'MolComponentImpl + MolGPSData + MolGPSDataServices',
 	#classTraits : 'MolComponentImpl classTrait + MolGPSData classTrait + MolGPSDataServices classTrait',
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : #'component life cycle' }
-MolMyExistingGPSHardware >> componentActivate [ 
+MolGPSHardware >> componentActivate [ 
 
 	"Start a thread to simulate sending of a fixed geo position each 2 seconds"
 	sendCurrentPositionThread := [
@@ -25,49 +25,49 @@ MolMyExistingGPSHardware >> componentActivate [
 ]
 
 { #category : #'private component accessing' }
-MolMyExistingGPSHardware >> componentConnector [
+MolGPSHardware >> componentConnector [
 	^componentConnector 
 ]
 
 { #category : #'private component accessing' }
-MolMyExistingGPSHardware >> componentConnector: aConnector [
+MolGPSHardware >> componentConnector: aConnector [
 	componentConnector := aConnector.
 ]
 
 { #category : #'private component accessing' }
-MolMyExistingGPSHardware >> componentName [
+MolGPSHardware >> componentName [
 	^componentName
 ]
 
 { #category : #'private component accessing' }
-MolMyExistingGPSHardware >> componentName: aName [
+MolGPSHardware >> componentName: aName [
 	componentName := aName
 ]
 
 { #category : #'component life cycle' }
-MolMyExistingGPSHardware >> componentPassivate [ 
+MolGPSHardware >> componentPassivate [ 
 	
 	sendCurrentPositionThread ifNotNil:[ :e | e terminate ].
 	sendCurrentPositionThread := nil.
 ]
 
 { #category : #services }
-MolMyExistingGPSHardware >> getAccuracyRadiusInMeters [
+MolGPSHardware >> getAccuracyRadiusInMeters [
 	"Get and return the accuracy of the GPS depending quality of signal and quantity of connected satellites"
 	
-	"convert feet to meters"
+	"convert precision in feet to meters"
 	^(self precision * 0.3048)
 ]
 
 { #category : #'component accessing' }
-MolMyExistingGPSHardware >> getMolGPSDataEventsNotifier [
+MolGPSHardware >> getMolGPSDataEventsNotifier [
 	^self eventsNotifiers at: MolGPSDataEvents ifAbsent: [nil]
 ]
 
-{ #category : #'my existing GPS hardware API' }
-MolMyExistingGPSHardware >> precision [
+{ #category : #'GPS hardware existing API' }
+MolGPSHardware >> precision [
 
-	"Return GPS hardware precision in feet"
+	"Return GPS hardware precision (in feet)"
 
 	^3
 ]

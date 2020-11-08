@@ -85,15 +85,16 @@ MolUtils class >> log: aString [
 	self isLogActive ifTrue: [ self traceCr: '[Molecule] ', aString ]
 ]
 
-{ #category : #'component easy start' }
+{ #category : #'component easy start and stop' }
 MolUtils class >> startComponent: aComponentClass [
-	"deploy, instanciate and activate quickly a component"
+	"deploy, instanciate and activate quickly a component and return the instance"
+	
 	^ self startComponent: aComponentClass named: #default
 ]
 
-{ #category : #'component easy start' }
+{ #category : #'component easy start and stop' }
 MolUtils class >> startComponent: aComponentClass named: aName [
-	"deploy, instanciate and activate quickly a component"
+	"deploy, instanciate and activate quickly a component and return the instance"
 	| component |
 
 	MolComponentManager default deploymentServices deployComponentImplementation: aComponentClass.
@@ -101,6 +102,22 @@ MolUtils class >> startComponent: aComponentClass named: aName [
 	MolComponentManager default homeServices activateComponent: aComponentClass named: aName.
 	
 	^ component
+]
+
+{ #category : #'component easy start and stop' }
+MolUtils class >> stopComponent: aComponentClass [
+	"passivate, remove and undeploy quickly a component"
+	
+	^ self stopComponent: aComponentClass named: #default
+]
+
+{ #category : #'component easy start and stop' }
+MolUtils class >> stopComponent: aComponentClass named: aName [
+	"passivate, remove and undeploy quickly a component"
+
+	MolComponentManager default homeServices passivateComponent: aComponentClass named: aName.
+	MolComponentManager default homeServices removeComponent: aComponentClass named: aName.
+	MolComponentManager default deploymentServices undeployComponentImplementation: aComponentClass.
 ]
 
 { #category : #actions }

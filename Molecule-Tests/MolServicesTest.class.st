@@ -11,7 +11,7 @@ Class {
 { #category : #'setUp-tearDown' }
 MolServicesTest >> setUp [
 
-	MolComponentManager default.
+	MolComponentManager cleanUp.
 ]
 
 { #category : #'setUp-tearDown' }

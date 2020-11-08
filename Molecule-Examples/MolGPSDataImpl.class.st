@@ -30,10 +30,13 @@ MolGPSDataImpl >> componentActivate [
 	"Start a thread to simulate sending of the geo position each seconds and accuracy precision"
 	sendCurrentPositionThread := [ | random randomizedPosition nextAccuracy |
 	 	[true] whileTrue:[
+
+		self flag:'Factoriser le code pour ne voir que l important'.
 		
 			(Delay forSeconds: 1) wait.
 			random := Random new.
 			randomizedPosition := (random next)@(random next).
+			
 			self getMolGPSDataEventsNotifier currentPositionChanged: randomizedPosition.
 			
 			self accuracy > 1 ifTrue:[

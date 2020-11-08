@@ -120,6 +120,12 @@ MolHomeServices >> instanciateComponent: aClass named: aName [
 	^component
 ]
 
+{ #category : #private }
+MolHomeServices >> isDeployedComponent: aComponentClass [
+
+	^ deployedComponents includesKey: aComponentClass
+]
+
 { #category : #testing }
 MolHomeServices >> isWaitingForActivation: aComponentClass [
 	^ self isWaitingForActivation: aComponentClass named: #default
