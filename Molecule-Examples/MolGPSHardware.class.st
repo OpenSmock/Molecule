@@ -14,32 +14,13 @@ MolGPSHardware >> componentActivate [
 
 	"Start a thread to simulate sending of a fixed geo position each 2 seconds"
 	sendCurrentPositionThread := [
-	 	[true] whileTrue:[
 		
+	 	[true] whileTrue:[
 			(Delay forSeconds: 2) wait.
 			self getMolGPSDataEventsNotifier currentPositionChanged: 1@1.
 		].
+	
 	] forkAt: Processor userBackgroundPriority.
-]
-
-{ #category : #'private component accessing' }
-MolGPSHardware >> componentConnector [
-	^componentConnector 
-]
-
-{ #category : #'private component accessing' }
-MolGPSHardware >> componentConnector: aConnector [
-	componentConnector := aConnector.
-]
-
-{ #category : #'private component accessing' }
-MolGPSHardware >> componentName [
-	^componentName
-]
-
-{ #category : #'private component accessing' }
-MolGPSHardware >> componentName: aName [
-	componentName := aName
 ]
 
 { #category : #'component life cycle' }

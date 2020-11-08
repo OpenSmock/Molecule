@@ -20,11 +20,13 @@ MolGPSMapImpl >> componentPassivate [
 
 { #category : #events }
 MolGPSMapImpl >> currentPositionChanged: aGeoPosition [
+
 	"Display a circle on the map view at the current position"
+
 	| radius |
 	radius := self getMolGPSDataServicesProvider getAccuracyRadiusInMeters.
-	
-	self updatePositionCircleOnMap: aGeoPosition radius: radius.
+
+	self updatePositionCircleOnMap: aGeoPosition radius: radius
 ]
 
 { #category : #'component accessing' }
@@ -55,6 +57,5 @@ MolGPSMapImpl >> getMolGPSDataServicesProvider [
 MolGPSMapImpl >> updatePositionCircleOnMap: aGeoPosition radius: radius [
 	"Update geographic position of the received GPS position circle with a precision radius"
 	
-	Transcript show: ('
-	[Map] Receive new GPS position: ', ((aGeoPosition roundTo: 0.1) printString), ' radius: ', radius rounded printString, ' m').
+	Transcript show: ('[Map] Receive new GPS position: ', ((aGeoPosition roundTo: 0.1) printString), ' radius: ', radius rounded printString, ' m'); cr.
 ]

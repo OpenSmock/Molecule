@@ -24,28 +24,24 @@ MolGPSDataImpl >> accuracy: anObject [
 
 { #category : #'component life cycle' }
 MolGPSDataImpl >> componentActivate [ 
-		
-	self accuracy: 1000. "simulate beginning accuracy"
-	
+			
 	"Start a thread to simulate sending of the geo position each seconds and accuracy precision"
-	sendCurrentPositionThread := [ | random randomizedPosition nextAccuracy |
-	 	[true] whileTrue:[
-
-		self flag:'Factoriser le code pour ne voir que l important'.
+	sendCurrentPositionThread := [
 		
+	 	[true] whileTrue:[
 			(Delay forSeconds: 1) wait.
-			random := Random new.
-			randomizedPosition := (random next)@(random next).
-			
-			self getMolGPSDataEventsNotifier currentPositionChanged: randomizedPosition.
-			
-			self accuracy > 1 ifTrue:[
-				nextAccuracy :=  (self accuracy - (0.1 * self accuracy)). "10% better precision each seconds"
-				nextAccuracy < 1 ifTrue:[nextAccuracy := 1].
-				self accuracy: nextAccuracy.
-			].
+			self getMolGPSDataEventsNotifier currentPositionChanged: (self getRandomizedGPSPosition).
+			self increaseAccuracy.
 		].
+	
 	] forkAt: Processor userBackgroundPriority.
+]
+
+{ #category : #'component life cycle' }
+MolGPSDataImpl >> componentInitialize [
+		
+	"Set starting accuracy"
+	self accuracy: 1000. 
 ]
 
 { #category : #'component life cycle' }
@@ -65,4 +61,23 @@ MolGPSDataImpl >> getAccuracyRadiusInMeters [
 { #category : #'component accessing' }
 MolGPSDataImpl >> getMolGPSDataEventsNotifier [
 	^self eventsNotifiers at: MolGPSDataEvents ifAbsent: [nil]
+]
+
+{ #category : #private }
+MolGPSDataImpl >> getRandomizedGPSPosition [
+
+	| random |
+	random := Random new.
+	^ random next @ random next
+]
+
+{ #category : #private }
+MolGPSDataImpl >> increaseAccuracy [
+
+	| nextAccuracy |
+	self accuracy > 1 ifTrue: [
+		nextAccuracy := self accuracy - (0.1 * self accuracy). "10% better precision at each times"
+		nextAccuracy < 1 ifTrue: [ "stay to 1" nextAccuracy := 1 ].
+		self accuracy: nextAccuracy 
+	]
 ]
