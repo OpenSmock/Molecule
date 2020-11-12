@@ -130,8 +130,8 @@ MolComponentFactory >> contractChanged: aMessage [
 		self error: '[Molecule] Error on contract changed notification.'. ^ self ].
 
 	aComponentType := aMessage pragma method methodClass instanceSide.
-
 	aComponentType ifNil: [self error: '[Molecule] Error on contract changed notification.'. ^ self ].
+	aComponentType isTrait ifFalse:["Only Component Type are supported" ^self].
 
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"need to fork the definition because new traits are not already injected here to the component"
