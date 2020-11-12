@@ -50,6 +50,32 @@ MolComponentFactoryTest >> testCreateImplementationForNamedIn [
 ]
 
 { #category : #tests }
+MolComponentFactoryTest >> testDynamicContractUpdateActivation [
+
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
+	
+	MolComponentFactory default isDynamicContractUpdateActivated: false.
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: false.
+	
+	MolComponentFactory default isDynamicContractUpdateActivated: true.
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
+]
+
+{ #category : #tests }
+MolComponentFactoryTest >> testDynamicContractUpdateActivation2 [
+
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
+	
+	MolComponentFactory default deactivateDynamicContractUpdate.
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: false.
+	
+	MolComponentFactory default activateDynamicContractUpdate.
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
+	
+	
+]
+
+{ #category : #tests }
 MolComponentFactoryTest >> testGenerateConsumedEventComponentAccessorsFor [
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsSubscriber.
 	MolComponentFactory default generateConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.

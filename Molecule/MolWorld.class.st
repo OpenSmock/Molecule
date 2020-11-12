@@ -26,7 +26,7 @@ MolWorld class >> defineAComponent [
 	<script>
 	| component |
 	component := self openDefineComponentDialog.
-	component ifNotNil: [ MolComponentFactory defineComponent: component ]
+	component ifNotNil: [ :e | MolComponentFactory defineComponent: e ]
 ]
 
 { #category : #menu }

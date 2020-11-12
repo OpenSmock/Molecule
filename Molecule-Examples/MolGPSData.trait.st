@@ -12,7 +12,7 @@ Trait {
 { #category : #'accessing - events' }
 MolGPSData classSide >> producedComponentEvents [
 <componentContract>		
-	^{ MolGPSDataEvents  }
+	^{MolGPSDataEvents} 
 ]
 
 { #category : #'accessing - services' }
