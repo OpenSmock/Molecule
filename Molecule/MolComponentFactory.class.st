@@ -21,7 +21,8 @@ Class {
 
 { #category : #accessing }
 MolComponentFactory class >> cleanUp [
-
+	<script: 'self cleanUp'>
+	
 	Default ifNil: [ ^ self ].
 	Default release.
 	Default := nil
