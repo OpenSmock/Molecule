@@ -10,8 +10,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'pragmaCollector',
-		'dirtyComponents',
-		'isDynamicContractUpdateActivated'
+		'isDynamicContractUpdateActivated',
+		'dirtyComponentTypes'
 	],
 	#classVars : [
 		'Default'
@@ -80,7 +80,7 @@ MolComponentFactory class >> initialize [
 	self default
 ]
 
-{ #category : #changing }
+{ #category : #'contract update' }
 MolComponentFactory >> activateDynamicContractUpdate [
 
 	self isDynamicContractUpdateActivated ifTrue: [ ^ self ].
@@ -111,13 +111,13 @@ MolComponentFactory >> checkUsedTrait: aList in: aComponent [
 		ifTrue: [aComponent browse]
 ]
 
-{ #category : #toolbox }
+{ #category : #'dirty components' }
 MolComponentFactory >> collectComponentConnectionTraits: aComponent [
 
 	^aComponent traitComposition allTraits select: [:e | (e traitComposition allTraits includes: MolComponentServices) or: [(e traitComposition allTraits includes: MolComponentEvents) or: [e traitComposition allTraits includes: MolComponentParameters]]].
 ]
 
-{ #category : #changing }
+{ #category : #'contract update' }
 MolComponentFactory >> contractChanged: aMessage [
 
 	| aComponentType |
@@ -137,10 +137,10 @@ MolComponentFactory >> contractChanged: aMessage [
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"need to fork the definition because new traits are not already injected here to the component"
 		[ self defineComponentTypeImplementors: aComponentType ] fork 
-	] ifFalse: [ dirtyComponents add: aComponentType ]
+	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
 ]
 
-{ #category : #changing }
+{ #category : #'contract update' }
 MolComponentFactory >> deactivateDynamicContractUpdate [
 
 	self isDynamicContractUpdateActivated ifFalse: [ ^ self ].
@@ -193,11 +193,18 @@ MolComponentFactory >> defineComponentTypeImplementors: aComponentType [
 	aComponentType users do: [ :user | self defineComponent: user ].
 ]
 
-{ #category : #toolbox }
+{ #category : #'dirty components' }
 MolComponentFactory >> defineDirtyComponents [
+	"get all dirty types and define corresponding component implementors"
+	
+	dirtyComponentTypes do: [ :e | self defineComponentTypeImplementors: e ].
+	dirtyComponentTypes := Set new.
+]
 
-	dirtyComponents do: [ :e | self defineComponent: e ].
-	dirtyComponents := Set new.
+{ #category : #'dirty components' }
+MolComponentFactory >> dirtyComponentTypes [
+
+	^dirtyComponentTypes 
 ]
 
 { #category : #'private - code generation' }
@@ -397,23 +404,26 @@ MolComponentFactory >> initialize [
 
 	super initialize.
 	
-	dirtyComponents := Set new.
+	dirtyComponentTypes := Set new.
 	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = #componentContract ]) reset.
 	pragmaCollector announcer when: PragmaAnnouncement send: #contractChanged: to: self.
 		
 	self initializeIcebergAnnouncements.
 ]
 
-{ #category : #'initalize-release' }
+{ #category : #iceberg }
 MolComponentFactory >> initializeIcebergAnnouncements [
+
 	"activate (or desactivate) component contract update when iceberge is used (or not)"
 
-	SystemAnnouncer uniqueInstance weak
+	| announcer |
+	announcer := SystemAnnouncer uniqueInstance weak.
+	announcer ifNil: [ ^ self ].
+	announcer
 		when: MCVersionLoaderStarted
 		send: #deactivateDynamicContractUpdate
 		to: self.
-		
-	SystemAnnouncer uniqueInstance weak
+	announcer
 		when: MCVersionLoaderStopped
 		send: #activateDynamicContractUpdate
 		to: self
@@ -441,8 +451,21 @@ MolComponentFactory >> rebuildComponent: aComponent traitsAdding: aList [
 { #category : #'initalize-release' }
 MolComponentFactory >> release [
 
-	super release.
+	self releaseIcebergAnnouncements.
 	
+	dirtyComponentTypes := nil.
 	pragmaCollector release.
 	pragmaCollector := nil.
+	
+	super release.
+]
+
+{ #category : #iceberg }
+MolComponentFactory >> releaseIcebergAnnouncements [
+
+	| announcer |
+	announcer := SystemAnnouncer uniqueInstance.
+	announcer ifNil:[^self].
+	announcer unsubscribe: self.
+	announcer unsubscribe: self
 ]

@@ -41,10 +41,13 @@ MolComponentManager class >> deepCleanUp [
 	| i |
 
 	self cleanUp.
-	self flag:'PLA : missing MolComponentFactory cleanUp ? Where is it ?'.
+	MolComponentFactory cleanUp.
 	i := 0.
+	MolAbstractComponentImpl allSubInstancesDo:[ :component | component componentFlush. i := i+1 ].
 	MolComponentImpl users do: [:impl | impl allInstances do: [:component | component componentFlush. i := i+1]].
-	MolUtils log: 'ComponentManager deepCleanup: ',i printString,' instance(s) found and released.'.
+	SmalltalkImage cleanUp.
+	self inform: '[Molecule] Deep Cleanup : ',i printString,' lost component(s) found and released.'.
+	MolUtils log: 'Deep Cleanup: ',i printString,' lost component(s) found and released.'.
 ]
 
 { #category : #singleton }

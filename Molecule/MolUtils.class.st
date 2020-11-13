@@ -69,14 +69,14 @@ MolUtils class >> isInstanciateComponentOf: aClass named: aName [
 
 { #category : #accessing }
 MolUtils class >> isLogActive [
-	<script: 'self inform: ''[Molecule] Is log active: '', self isLogActive printString'>
 
-	isLogActive isNil ifTrue:[isLogActive := false].
+	isLogActive ifNil: [ isLogActive := false ].
 	^ isLogActive
 ]
 
 { #category : #accessing }
 MolUtils class >> isLogActive: aBoolean [
+
 	isLogActive := aBoolean
 ]
 
@@ -122,7 +122,7 @@ MolUtils class >> stopComponent: aComponentClass named: aName [
 
 { #category : #actions }
 MolUtils class >> toggleLog [
-	<script: 'self toggleLog. self inform: ''[Molecule] Log status: '', self isLogActive printString'>
 
 	self isLogActive: self isLogActive not.
+	self isLogActive ifTrue:[self inform: '[Molecule] Logs are active'] ifFalse:[self inform: '[Molecule] Logs are not active'].
 ]

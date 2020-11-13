@@ -71,6 +71,18 @@ MolUtilsTest >> testLog [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testLog2 [
+
+	| activate |
+	activate := MolUtils isLogActive.
+	MolUtils  isLogActive: (activate not).
+	self assert: MolUtils isLogActive equals: activate not.
+	MolUtils  isLogActive: (MolUtils  isLogActive not).
+	self assert: MolUtils isLogActive equals: activate.
+	MolUtils  isLogActive: (activate).
+]
+
+{ #category : #tests }
 MolUtilsTest >> testStartComponent [
 "test method startComponent: of Utils"
 

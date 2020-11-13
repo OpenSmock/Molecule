@@ -25,7 +25,12 @@ MolComponentFactoryTest >> setUp [
 
 { #category : #tests }
 MolComponentFactoryTest >> testComponentFactoryDefaultClass [
+
+	MolComponentFactory cleanUp.
+
 	self assert: MolComponentFactory default class equals: MolComponentFactory.
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
+	self assert: MolComponentFactory default dirtyComponentTypes isEmpty.
 	
 	MolComponentFactory cleanUp.
 ]
