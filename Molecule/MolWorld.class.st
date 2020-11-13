@@ -200,27 +200,25 @@ MolWorld class >> toggleDynamicContractUpdate: aBuilder [
 
 { #category : #menu }
 MolWorld class >> toggleMolLogsOn: aBuilder [
+
 	<worldMenu>
-	
 	MolUtils isLogActive 
-		ifTrue: [ 
-			(aBuilder item: #TurnOffMolLogs)
-				parent: #Molecule;
-				target: World;
-				icon: (self iconNamed: #smallDebug);
-				order: 2.1;
-				action: [ MolUtils isLogActive: false. MenubarMorph reset. ];
-				label: 'Hide logs';
-				withSeparatorAfter 
-		]
 		ifFalse: [ 
-			(aBuilder item: #TurnOnMolLogs)
-				parent: #Molecule;
+			(aBuilder item: #TurnOffMolLogs)
+				parent: #MoleculeDebug;
 				target: World;
 				icon: (self iconNamed: #smallDebug);
-				order: 2.1;
-				action: [ MolUtils isLogActive: true. MenubarMorph reset.  ];
-				label: 'Show logs';
-				withSeparatorAfter 
+				order: 1.1;
+				action: [ MolUtils toggleLog. MenubarMorph reset. ];
+				label: 'Active logs'
+		]
+		ifTrue: [ 
+			(aBuilder item: #TurnOnMolLogs)
+				parent: #MoleculeDebug;
+				target: World;
+				icon: (self iconNamed: #smallDebug);
+				order: 1.1;
+				action: [ MolUtils toggleLog. MenubarMorph reset.  ];
+				label: 'Deactive logs'
 		].
 ]
