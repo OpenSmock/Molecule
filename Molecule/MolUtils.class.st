@@ -115,7 +115,6 @@ MolUtils class >> stopComponent: aComponentClass [
 MolUtils class >> stopComponent: aComponentClass named: aName [
 	"passivate, remove and undeploy quickly a component"
 
-	MolComponentManager default homeServices passivateComponent: aComponentClass named: aName.
 	MolComponentManager default homeServices removeComponent: aComponentClass named: aName.
 	MolComponentManager default deploymentServices undeployComponentImplementation: aComponentClass.
 ]
