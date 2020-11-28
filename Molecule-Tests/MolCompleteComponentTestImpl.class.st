@@ -37,3 +37,15 @@ MolCompleteComponentTestImpl >> getMolUsedParametersProvider [
 						searchParametersProviderFor: MolUsedParameters named:  parametersSymbol]. 
 	^parametersProvider
 ]
+
+{ #category : #'component accessing' }
+MolCompleteComponentTestImpl >> getMolUsedServicesProvider [
+	| servicesSymbol servicesProvider itf |
+	itf := MolUsedServices.
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [self error:'Services not found'].
+	servicesSymbol isSymbol
+	 	ifTrue: 
+			[servicesProvider := MolComponentManager default locatorServices 
+						searchServicesProviderFor: MolUsedServices named:  servicesSymbol]. 
+	^servicesProvider
+]

@@ -260,24 +260,15 @@ MolComponentFactory >> generateProducedEventsComponentAccessorsFor: aComponent [
 
 { #category : #'code generation' }
 MolComponentFactory >> generateUsedParametersComponentAccessorsFor: aComponent [
- 
-	"remove old used parameters but not the existing or used services"
-	| oldSelectors |
-	oldSelectors := aComponent selectors select:[ :s | (aComponent usedComponentParameters includes: s) not and:[(aComponent usedComponentServices includes: s) not and:[  'get*Provider' match: (s asString)] ]].
-	oldSelectors do:[ :s | aComponent removeSelector: s].
 
+	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
 	^self generateComponentAccessorsFor: #usedParameters withList: aComponent usedComponentParameters in: aComponent suffix: 'Provider'
-		
 ]
 
 { #category : #'code generation' }
 MolComponentFactory >> generateUsedServicesComponentAccessorsFor: aComponent [
  
-	"remove old used parameters but not the existing or used services"
-	| oldSelectors |
-	oldSelectors := aComponent selectors select:[ :s | (aComponent usedComponentServices includes: s) not and:[(aComponent usedComponentParameters includes: s) not and:[  'get*Provider' match: (s asString)] ]].
-	oldSelectors do:[ :s | aComponent removeSelector: s].
-
+	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
 	^self generateComponentAccessorsFor: #usedServices withList: aComponent usedComponentServices in: aComponent suffix: 'Provider'
 		
 ]
@@ -468,4 +459,22 @@ MolComponentFactory >> releaseIcebergAnnouncements [
 	announcer ifNil:[^self].
 	announcer unsubscribe: self.
 	announcer unsubscribe: self
+]
+
+{ #category : #'code generation' }
+MolComponentFactory >> removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent [
+ 	"remove old used parameters but not the existing or used services"
+	| toBeRemoveProviderSelectors |
+	toBeRemoveProviderSelectors := (aComponent selectors select:[ :s |  'get*Provider' match: (s asString)]) asOrderedCollection.
+	
+	"check if the selectors are already in the current used parameters or used services, in case don't remove them"
+	aComponent usedComponentParameters do:[ :e | 
+		toBeRemoveProviderSelectors copy do:[ :sel | ('get', e printString, 'Provider' = sel) ifTrue:[toBeRemoveProviderSelectors remove: sel]].
+	].
+
+	aComponent usedComponentServices do:[ :e | 
+		toBeRemoveProviderSelectors copy do:[ :sel | ('get', e printString, 'Provider' = sel) ifTrue:[toBeRemoveProviderSelectors remove: sel]].
+	].
+	
+	toBeRemoveProviderSelectors do:[ :s | aComponent removeSelector: s].
 ]
