@@ -471,7 +471,10 @@ MolComponentFactory >> isDynamicContractUpdateActivated: aBoolean [
 { #category : #'private - code generation' }
 MolComponentFactory >> rebuildComponent: aComponent traitsAdding: aList [
 
-	aList do: [:e | aComponent addToComposition: e].
+	aList do: [:e | 
+		"Cannot add the traits if already present"
+		(aComponent traitComposition includesTrait: e) ifFalse:[aComponent addToComposition: e].
+	].
 ]
 
 { #category : #'initalize-release' }

@@ -13,6 +13,7 @@ MolComponentImplTest >> testAugmentedClassToAComponentConnecting [
 	self assert: component componentName equals: #default.
 	self assert: (component componentConnector isKindOf: MolComponentConnector).
 
+	self flag:'PLA : why this test cannot works ?'.
 	"self assert: component eventNotifiers isEmpty.
 	self assert: component parametersProviders isEmpty.
 	self assert: component servicesProviders isEmpty.
