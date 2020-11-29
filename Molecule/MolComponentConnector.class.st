@@ -60,6 +60,7 @@ MolComponentConnector >> initialize [
 	eventsNotifiers := Dictionary new.
 	eventsSubscribers := Dictionary new.
 	servicesProviders := Dictionary new.
+	parametersProviders := Dictionary new.
 ]
 
 { #category : #accessing }

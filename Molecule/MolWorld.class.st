@@ -63,7 +63,7 @@ MolWorld class >> defineDirtyComponentsOn: aBuilder [
 	(aBuilder item: #MoleculeDefineDirtyComponents)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.4;
+		order: 1.5;
 		action: [ MolComponentFactory defineDirtyComponents ];
 		icon: (self iconNamed: #smallUpdate);
 		label: 'Define dirty Components'
@@ -101,16 +101,29 @@ MolWorld class >> inspectComponents: aBuilder [
 ]
 
 { #category : #menu }
+MolWorld class >> inspectDirtyComponentTypes: aBuilder [
+
+	<worldMenu>
+	(aBuilder item: #InspectDirtyComponentTypes)
+		parent: #MoleculeDebug;
+		target: World;
+		order: 1.3;
+		action: [ MolComponentFactory default dirtyComponentTypes inspect ];
+		icon: (self iconNamed: #tools);
+		label: 'Inspect dirty Component Types'
+]
+
+{ #category : #menu }
 MolWorld class >> inspectDirtyComponents: aBuilder [
 
 	<worldMenu>
 	(aBuilder item: #InspectDirtyComponents)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.3;
-		action: [ MolComponentFactory default dirtyComponentTypes inspect ];
+		order: 1.4;
+		action: [ MolComponentFactory default dirtyComponents inspect ];
 		icon: (self iconNamed: #tools);
-		label: 'Inspect dirty component contracts'
+		label: 'Inspect dirty Components'
 ]
 
 { #category : #menu }

@@ -20,7 +20,7 @@ MolExtensionsTest >> tearDown [
 MolExtensionsTest >> testHaveComponentType [
 
 	self assert: MolAbstractComponentImpl  haveComponentType equals: false.
-	self assert: MolMyAlarmComponentImpl haveComponentType.
+	self assert: MolMyClientComponentImpl haveComponentType.
 	
 ]
 
@@ -30,7 +30,7 @@ MolExtensionsTest >> testIsComponent [
 	self assert: Object isComponent equals: false.
 	self assert: 2 class isComponent equals: false.
 	self assert: MolAbstractComponentImpl  isComponent.
-	self assert: MolMyAlarmComponentImpl isComponent.
+	self assert: MolMyClientComponentImpl isComponent.
 	
 ]
 
@@ -39,5 +39,5 @@ MolExtensionsTest >> testIsComponentType [
 
 	self assert: MolComponentImpl isComponentType equals: false.
 	self assert: MolComponentType isComponentType equals: false.
-	self assert: MolMyAlarmComponent isComponentType.
+	self assert: MolMyClientComponent isComponentType.
 ]

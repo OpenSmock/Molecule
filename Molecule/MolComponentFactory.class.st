@@ -11,7 +11,8 @@ Class {
 	#instVars : [
 		'pragmaCollector',
 		'isDynamicContractUpdateActivated',
-		'dirtyComponentTypes'
+		'dirtyComponentTypes',
+		'dirtyComponents'
 	],
 	#classVars : [
 		'Default'
@@ -29,26 +30,34 @@ MolComponentFactory class >> cleanUp [
 ]
 
 { #category : #'componentImpl - creation' }
-MolComponentFactory class >> createImplementationFor: aComponentType named: aSymbol in: aPackageName [
+MolComponentFactory class >> createComponentForType: aComponentType named: aSymbol in: aPackageName [
 
-	aComponentType isComponentType ifFalse: [ self error: '[Molecule] Cannot create implementation for no component Type object' ].
+	aComponentType notNil ifTrue:[
+		aComponentType isComponentType  ifFalse: [ self error: '[Molecule] Cannot create Component for a no Type object.' ].
+	].
 		
 	self class environment
 		at: aSymbol
-		ifPresent: [ self error:'[Molecule] Do not redefine component implementation, please remove previous component implementation if necessary' ].
-		
+		ifPresent: [self error:'[Molecule] Do not redefine an existing Component, remove it before.' ].
+
 	OpalCompiler new evaluate:
 			'MolAbstractComponentImpl subclass: ' , aSymbol printString
 				,
-					'
-	uses: ' , aComponentType printString
-				,
+	(aComponentType notNil ifTrue:[	(' 
+	uses: ' , aComponentType printString)
+	] ifFalse:[''])			,
 					'
 	instanceVariableNames: ''''
 	classVariableNames: ''''
 	package: ''' , aPackageName , ''''.
 	
 	(self class environment at: aSymbol) defineComponent
+]
+
+{ #category : #'componentImpl - creation' }
+MolComponentFactory class >> createComponentNamed: aSymbol in: aPackageName [
+
+	self createComponentForType: nil named: aSymbol in: aPackageName
 ]
 
 { #category : #accessing }
@@ -114,36 +123,34 @@ MolComponentFactory >> collectComponentConnectionTraits: aComponent [
 ]
 
 { #category : #'system annoucements' }
-MolComponentFactory >> componentChanged: aClassModifiedClassDefinitionAnnouncement [
-	| changedClass |
-	"Check if the modified class is a component"
-	changedClass := aClassModifiedClassDefinitionAnnouncement newClassDefinition.
-	changedClass isClass ifFalse:[^self].
-	((changedClass inheritsFrom: MolAbstractComponentImpl) or:[changedClass traits includes: MolComponentImpl]) ifTrue:[		
+MolComponentFactory >> componentAddedAnnouncement: aClassAddedAnnouncement [
+	
+	| classAdded |
+	classAdded := aClassAddedAnnouncement classAdded.
+	self componentChanged: classAdded.
+]
+
+{ #category : #'system annoucements' }
+MolComponentFactory >> componentChanged: aChangedClass [
+
+	aChangedClass isComponent ifTrue:[		
 		self isDynamicContractUpdateActivated ifTrue: [ 
 			"need to fork the definition because new traits are not already injected here to the component"
-			[self defineComponent: changedClass] fork. 
-		] ifFalse: [ 
-			self flag:'PLA : Need to have a dirtyComponents list.'.
-			"dirtyComponents add: changedClass."
-		]
+			[self defineComponent: aChangedClass] fork. 
+		] ifFalse: [ dirtyComponents add: aChangedClass].
 	].
 ]
 
 { #category : #'system annoucements' }
-MolComponentFactory >> contractChanged: aMessage [
+MolComponentFactory >> componentChangedAnnouncement: aClassModifiedClassDefinitionAnnouncement [
 
-	| aComponentType |
-	aMessage ifNil: [ 
-		self error: '[Molecule] Error on contract changed notification.'. ^ self ].
-	aMessage pragma ifNil: [ 
-		self error: '[Molecule] Error on contract changed notification.'. ^ self ].
-	aMessage pragma method ifNil: [ 
-		self error: '[Molecule] Error on contract changed notification.'. ^ self ].
-	aMessage pragma method methodClass ifNil: [ 
-		self error: '[Molecule] Error on contract changed notification.'. ^ self ].
+	aClassModifiedClassDefinitionAnnouncement ifNil: [self error: '[Molecule] Error on Component changed notification.'. ^ self].
+	self componentChanged: aClassModifiedClassDefinitionAnnouncement newClassDefinition.
+]
 
-	aComponentType := aMessage pragma method methodClass instanceSide.
+{ #category : #'system annoucements' }
+MolComponentFactory >> contractChanged: aComponentType [
+	
 	aComponentType ifNil: [self error: '[Molecule] Error on contract changed notification.'. ^ self ].
 	aComponentType isTrait ifFalse:["Only Component Type are supported" ^self].
 
@@ -151,6 +158,19 @@ MolComponentFactory >> contractChanged: aMessage [
 		"need to fork the definition because new traits are not already injected here to the component"
 		[ self defineComponentTypeImplementors: aComponentType ] fork 
 	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
+]
+
+{ #category : #'system annoucements' }
+MolComponentFactory >> contractChangedAnnouncement: aMessage [
+	| aComponentType |
+	
+	aMessage ifNil: [ self error: '[Molecule] Error on contract changed notification.'. ^ self ].
+	aMessage pragma ifNil: [self error: '[Molecule] Error on contract changed notification.'. ^ self ].
+	aMessage pragma method ifNil: [self error: '[Molecule] Error on contract changed notification.'. ^ self ].
+	aMessage pragma method methodClass ifNil: [self error: '[Molecule] Error on contract changed notification.'. ^ self ].
+
+	aComponentType := aMessage pragma method methodClass instanceSide.
+	self contractChanged: aComponentType.
 ]
 
 { #category : #'dynamic contract update' }
@@ -194,16 +214,25 @@ MolComponentFactory >> defineComponentTypeImplementors: aComponentType [
 
 { #category : #'dirty components' }
 MolComponentFactory >> defineDirtyComponents [
-	"get all dirty types and define corresponding component implementors"
+	"Get all dirty Types and Components for defining them"
 	
 	dirtyComponentTypes do: [ :e | self defineComponentTypeImplementors: e ].
 	dirtyComponentTypes := Set new.
+	
+	dirtyComponents do: [ :e | self defineComponent: e ].
+	dirtyComponents := Set new.
 ]
 
 { #category : #'dirty components' }
 MolComponentFactory >> dirtyComponentTypes [
 
 	^dirtyComponentTypes 
+]
+
+{ #category : #'dirty components' }
+MolComponentFactory >> dirtyComponents [
+
+	^dirtyComponents
 ]
 
 { #category : #'private - code generation' }
@@ -391,6 +420,7 @@ MolComponentFactory >> initialize [
 	super initialize.
 
 	dirtyComponentTypes := Set new.
+	dirtyComponents := Set new.
 	self initializeSystemAnnouncements.
 	self initializeIcebergAnnouncements
 ]
@@ -418,10 +448,11 @@ MolComponentFactory >> initializeSystemAnnouncements [
 
 	"Component Type Observer"
 	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = #componentContract ]) reset.
-	pragmaCollector announcer when: PragmaAnnouncement send: #contractChanged: to: self.
+	pragmaCollector announcer when: PragmaAnnouncement send: #contractChangedAnnouncement: to: self.
 	
 	"Component Implementation Observer"
-	SystemAnnouncer uniqueInstance  when: ClassModifiedClassDefinition send: #componentChanged: to: self.
+	SystemAnnouncer uniqueInstance  when: ClassAdded send: #componentAddedAnnouncement: to: self.
+	SystemAnnouncer uniqueInstance  when: ClassModifiedClassDefinition send: #componentChangedAnnouncement: to: self.
 ]
 
 { #category : #accessing }
@@ -450,6 +481,7 @@ MolComponentFactory >> release [
 	self releaseSystemAnnouncements.
 	isDynamicContractUpdateActivated := false.
 	dirtyComponentTypes := nil.
+	dirtyComponents := nil.
 
 	super release
 ]

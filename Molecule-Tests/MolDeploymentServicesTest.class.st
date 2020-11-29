@@ -8,10 +8,21 @@ Class {
 }
 
 { #category : #tests }
+MolDeploymentServicesTest >> setUp [ 
+	
+	MolComponentManager cleanUp.
+]
+
+{ #category : #tests }
+MolDeploymentServicesTest >> tearDown [  
+	
+	MolComponentManager cleanUp.
+]
+
+{ #category : #tests }
 MolDeploymentServicesTest >> testDeploymentServices [
 	| manager |
 	
-	MolComponentManager cleanUp.
 	manager := MolComponentManager default.
 	
 	self assert: manager homeServices deployedComponents isEmpty.
@@ -30,5 +41,4 @@ MolDeploymentServicesTest >> testDeploymentServices [
 	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl2.
 	self assert: manager homeServices deployedComponents isEmpty.
 	
-	manager cleanUp
 ]

@@ -22,6 +22,10 @@ MolComponentManager class >> cleanUp [
 	<script: 'self cleanUp'>
 	| notifiers subscribers |
 
+	"CleanUp and initialize the ComponentFactory"
+	MolComponentFactory cleanUp.
+	MolComponentFactory initialize.
+	
 	Default ifNil:[^self].
 	Default locatorServices eventsSubscribers: nil.
 
@@ -33,7 +37,7 @@ MolComponentManager class >> cleanUp [
 	notifiers do: [:n | n release].
 	subscribers do: [:n | n release].
 	
-	MolComponentFactory initialize.
+	
 ]
 
 { #category : #'initialize-release' }
@@ -82,6 +86,9 @@ MolComponentManager >> homeServices [
 MolComponentManager >> initialize [
 
 	super initialize.
+
+	MolComponentFactory initialize.
+
 	deploymentServices := MolDeploymentServices new.
 	locatorServices := MolLocatorServices new.
 	homeServices := MolHomeServices new.
@@ -95,8 +102,6 @@ MolComponentManager >> locatorServices [
 
 { #category : #'initialize-release' }
 MolComponentManager >> release [
-
-	MolComponentFactory cleanUp.
 	
 	deploymentServices release.
 	locatorServices release.
