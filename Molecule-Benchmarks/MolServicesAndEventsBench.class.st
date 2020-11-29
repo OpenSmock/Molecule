@@ -10,6 +10,7 @@ Class {
 
 { #category : #benchmarking }
 MolServicesAndEventsBench >> benchCallServices [
+	<script: 'self profile: #benchCallServices'>
 
 	1 to: 100000 do:[ :i |
 		componentB getMolBenchmarkServicesAProvider getVariable.
@@ -18,6 +19,7 @@ MolServicesAndEventsBench >> benchCallServices [
 
 { #category : #benchmarking }
 MolServicesAndEventsBench >> benchSendArgEvents [
+	<script: 'self profile: #benchSendArgEvents'>
 
 	1 to: 100000 do:[ :i |
 		componentA sendAnEventWith.
@@ -26,6 +28,7 @@ MolServicesAndEventsBench >> benchSendArgEvents [
 
 { #category : #benchmarking }
 MolServicesAndEventsBench >> benchSendEvents [
+	<script: 'self profile: #benchSendEvents'>
 
 	1 to: 100000 do:[ :i |
 		componentA sendAnEvent.

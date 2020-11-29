@@ -3,7 +3,7 @@ Class {
 	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolBenchmarkTypeB + MolBenchmarkEventsA',
 	#classTraits : 'MolBenchmarkTypeB classTrait + MolBenchmarkEventsA classTrait',
-	#category : #'Molecule-Benchmarks-Benchs Components'
+	#category : #'Molecule-Benchmarks-Resources'
 }
 
 { #category : #'component accessing' }

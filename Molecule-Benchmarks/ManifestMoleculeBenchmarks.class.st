@@ -4,6 +4,7 @@ Benchmarks are in the 'Benchs' tag.
 
 ""PrintIt on :""
 MolServicesAndEventsBench run.
+MolComponentStartAndStopBench run. 
 
 This package uses SMark project (github://smarr/SMark)
 "

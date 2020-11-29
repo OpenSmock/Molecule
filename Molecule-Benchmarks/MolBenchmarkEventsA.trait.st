@@ -2,7 +2,7 @@ Trait {
 	#name : #MolBenchmarkEventsA,
 	#traits : 'MolComponentEvents',
 	#classTraits : 'MolComponentEvents classTrait',
-	#category : #'Molecule-Benchmarks-Benchs Components'
+	#category : #'Molecule-Benchmarks-Resources'
 }
 
 { #category : #'as yet unclassified' }
