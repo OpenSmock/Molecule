@@ -19,3 +19,8 @@ Metacello new
   baseline: 'Molecule';
   load.
 ```
+
+
+### Test coverage
+
+76,24% of Molecule Pharo9 branch is coverage by unit tests, result with DrTest.
