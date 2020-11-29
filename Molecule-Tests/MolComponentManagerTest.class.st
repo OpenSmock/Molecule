@@ -25,17 +25,31 @@ MolComponentManagerTest >> testCleanUp [
 { #category : #tests }
 MolComponentManagerTest >> testComponentManager [
 	"Test creation of ComponentManager"
-	| manager |
+	| manager factory |
 	MolComponentManager cleanUp.
 	manager := MolComponentManager default.
+	factory := MolComponentFactory default.
 	self assert: manager deploymentServices notNil.
 	self assert: manager homeServices notNil.
 	self assert: manager locatorServices notNil.
-	manager cleanUp.
 	
+	manager cleanUp.
+	self assert: manager deploymentServices isNil.
+	self assert: manager homeServices isNil.
+	self assert: manager locatorServices isNil.
+	self assert: factory == MolComponentFactory default equals: false.
 ]
 
 { #category : #tests }
 MolComponentManagerTest >> testDeepCleanUp [
-	MolComponentManager deepCleanUp
+
+	| manager factory |
+	manager := MolComponentManager default.	
+	factory := MolComponentFactory default.
+	MolComponentManager deepCleanUp.
+	
+	self assert: manager deploymentServices isNil.
+	self assert: manager homeServices isNil.
+	self assert: manager locatorServices isNil.
+	self assert: factory == MolComponentFactory default equals: false.
 ]

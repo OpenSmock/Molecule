@@ -1,0 +1,43 @@
+Class {
+	#name : #MolExtensionsTest,
+	#superclass : #TestCase,
+	#category : #'Molecule-Tests-Cases'
+}
+
+{ #category : #tests }
+MolExtensionsTest >> setUp [
+
+	MolComponentManager cleanUp
+]
+
+{ #category : #tests }
+MolExtensionsTest >> tearDown [
+
+	MolComponentManager cleanUp
+]
+
+{ #category : #tests }
+MolExtensionsTest >> testHaveComponentType [
+
+	self assert: MolAbstractComponentImpl  haveComponentType equals: false.
+	self assert: MolMyAlarmComponentImpl haveComponentType.
+	
+]
+
+{ #category : #tests }
+MolExtensionsTest >> testIsComponent [
+
+	self assert: Object isComponent equals: false.
+	self assert: 2 class isComponent equals: false.
+	self assert: MolAbstractComponentImpl  isComponent.
+	self assert: MolMyAlarmComponentImpl isComponent.
+	
+]
+
+{ #category : #tests }
+MolExtensionsTest >> testIsComponentType [
+
+	self assert: MolComponentImpl isComponentType equals: false.
+	self assert: MolComponentType isComponentType equals: false.
+	self assert: MolMyAlarmComponent isComponentType.
+]

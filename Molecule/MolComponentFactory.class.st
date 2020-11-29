@@ -31,12 +31,11 @@ MolComponentFactory class >> cleanUp [
 { #category : #'componentImpl - creation' }
 MolComponentFactory class >> createImplementationFor: aComponentType named: aSymbol in: aPackageName [
 
-	(aComponentType traitComposition allTraits includes: MolComponentType)
-		ifFalse: [ self error: 'Cannot create implementation for non MolComponentType object' ].
+	aComponentType isComponentType ifFalse: [ self error: '[Molecule] Cannot create implementation for no component Type object' ].
 		
 	self class environment
 		at: aSymbol
-		ifPresent: [ self error:'Do not redefine component implementation, please remove previous impl if necessary' ].
+		ifPresent: [ self error:'[Molecule] Do not redefine component implementation, please remove previous component implementation if necessary' ].
 		
 	OpalCompiler new evaluate:
 			'MolAbstractComponentImpl subclass: ' , aSymbol printString
@@ -54,6 +53,7 @@ MolComponentFactory class >> createImplementationFor: aComponentType named: aSym
 
 { #category : #accessing }
 MolComponentFactory class >> default [
+	<script: 'self default'>
 
 	Default ifNil:[ Default := self new ].
 	^Default
@@ -80,7 +80,7 @@ MolComponentFactory class >> initialize [
 	self default
 ]
 
-{ #category : #'contract update' }
+{ #category : #'dynamic contract update' }
 MolComponentFactory >> activateDynamicContractUpdate [
 
 	self isDynamicContractUpdateActivated ifTrue: [ ^ self ].
@@ -94,21 +94,17 @@ MolComponentFactory >> checkUsedTrait: aList in: aComponent [
 	
 	"check component used traits includes trait list "
 	eventAndServices := self collectComponentConnectionTraits: aComponent.
-	bool := false.
 	missing := aList reject: [:e | eventAndServices includes: e].
-	missing
-		ifNotEmpty: [self rebuildComponent: aComponent traitsAdding: missing].
+	missing ifNotEmpty: [self rebuildComponent: aComponent traitsAdding: missing].
 	eventAndServices := self collectComponentConnectionTraits: aComponent.
-	bool
-		ifFalse: [aList
-				do: [:e | 
-					(eventAndServices includes: e)
-						ifFalse: [bool := UIManager default
+
+	bool := false.
+	aList do: [:e | (eventAndServices includes: e) ifFalse: [
+			bool := UIManager default
 								confirm:
 									'Used trait is not declared (' , e printString
-										, '), do you want to browse class ?']]].
-	bool
-		ifTrue: [aComponent browse]
+										, '), do you want to browse class ?']].
+	bool ifTrue: [aComponent browse]
 ]
 
 { #category : #'dirty components' }
@@ -117,7 +113,24 @@ MolComponentFactory >> collectComponentConnectionTraits: aComponent [
 	^aComponent traitComposition allTraits select: [:e | (e traitComposition allTraits includes: MolComponentServices) or: [(e traitComposition allTraits includes: MolComponentEvents) or: [e traitComposition allTraits includes: MolComponentParameters]]].
 ]
 
-{ #category : #'contract update' }
+{ #category : #'system annoucements' }
+MolComponentFactory >> componentChanged: aClassModifiedClassDefinitionAnnouncement [
+	| changedClass |
+	"Check if the modified class is a component"
+	changedClass := aClassModifiedClassDefinitionAnnouncement newClassDefinition.
+	changedClass isClass ifFalse:[^self].
+	((changedClass inheritsFrom: MolAbstractComponentImpl) or:[changedClass traits includes: MolComponentImpl]) ifTrue:[		
+		self isDynamicContractUpdateActivated ifTrue: [ 
+			"need to fork the definition because new traits are not already injected here to the component"
+			[self defineComponent: changedClass] fork. 
+		] ifFalse: [ 
+			self flag:'PLA : Need to have a dirtyComponents list.'.
+			"dirtyComponents add: changedClass."
+		]
+	].
+]
+
+{ #category : #'system annoucements' }
 MolComponentFactory >> contractChanged: aMessage [
 
 	| aComponentType |
@@ -140,7 +153,7 @@ MolComponentFactory >> contractChanged: aMessage [
 	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
 ]
 
-{ #category : #'contract update' }
+{ #category : #'dynamic contract update' }
 MolComponentFactory >> deactivateDynamicContractUpdate [
 
 	self isDynamicContractUpdateActivated ifFalse: [ ^ self ].
@@ -150,46 +163,32 @@ MolComponentFactory >> deactivateDynamicContractUpdate [
 
 { #category : #'component definition' }
 MolComponentFactory >> defineComponent: aComponent [
-	| toUseTraits traits |
-	
-	traits := Set new.
-	aComponent withAllSuperclassesDo: [ :c | 
-		(c  ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[traits addAll: c traitComposition allTraits].
-	].
-	
-	"Check if the object have a component type"
-	(traits includes: MolComponentType) ifFalse:[self error: 'Define a component with no ComponentType trait.']. 
-	"Check is the object is a component"
-	(aComponent withAllSuperclasses anySatisfy: [ :class | class traits includes: MolComponentImpl ]) ifFalse:[^self].
+	"A component is a Class, define it"
+	 | toUseTraits |
+	aComponent isComponent ifFalse:[^self].
 	
 	self generateConsumedEventsComponentAccessorsFor: aComponent.
 	self generateProducedEventsComponentAccessorsFor: aComponent.
 	self generateUsedServicesComponentAccessorsFor: aComponent.
 	self generateUsedParametersComponentAccessorsFor: aComponent.
-				
-	"check missing traits"
+
+	"Check if the object have a component type, the type should be deleted when work on a component class or not already added"
+	aComponent haveComponentType ifFalse:[^self].
+	
+	"Check missing traits"
 	toUseTraits := OrderedCollection withAll: aComponent consumedComponentEvents.
 	toUseTraits addAll: aComponent providedComponentServices.
 	toUseTraits addAll: aComponent providedComponentParameters.
 	self checkUsedTrait: toUseTraits in: aComponent.
-	
 ]
 
 { #category : #'component definition' }
 MolComponentFactory >> defineComponentTypeImplementors: aComponentType [
-	| traits |
 	
 	"Check if the object is a trait"
 	aComponentType isTrait ifFalse:[self error: '[Molecule] Cannot define ComponentType implementors : This object is not a trait.'. ^self].
-	
-	"Check if the object is a ComponentType trait"
-	self flag:'PLA : is exist a better way to check that ?'.
-	traits := Set new.
-	aComponentType withAllSuperclassesDo: [ :c | 
-		(c  ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[traits addAll: c traitComposition allTraits].
-	].
-	(traits includes: MolComponentType) ifFalse:[self error: '[Molecule] Cannot define a no ComponentType implementors trait.'. ^self]. 
-	
+	aComponentType isComponentType ifFalse:[self error: '[Molecule] Cannot define a no ComponentType implementors trait.'. ^self]. 
+
 	aComponentType users do: [ :user | self defineComponent: user ].
 ]
 
@@ -236,41 +235,37 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 { #category : #'code generation' }
 MolComponentFactory >> generateConsumedEventsComponentAccessorsFor: aComponent [
 
-	 | oldSelectors |
-	"remove old consumed events but not the existing"
-	oldSelectors := aComponent selectors select:[ :s | (aComponent consumedComponentEvents includes: s) not and:['get*Subscriber' match: (s asString)] ].
-	oldSelectors do:[ :s | aComponent removeSelector: s].
-
-	self generateComponentAccessorsFor: #consumedEvents withList: aComponent consumedComponentEvents in: aComponent suffix: 'Subscriber'
+	self removeOldConsumedEventsComponentAccessorsFor: aComponent.
+	aComponent haveComponentType ifTrue:[
+		self generateComponentAccessorsFor: #consumedEvents withList: aComponent consumedComponentEvents in: aComponent suffix: 'Subscriber'.
+	].
 ]
 
 { #category : #'code generation' }
 MolComponentFactory >> generateProducedEventsComponentAccessorsFor: aComponent [
 
-	| oldSelectors |
-	"remove old produced events but not the existing"
-	oldSelectors := aComponent selectors select:[ :s | (aComponent producedComponentEvents includes: s) not and:['get*Notifier' match: (s asString)] ].
-	oldSelectors do:[ :s | aComponent removeSelector: s].
-
-	"generate new consumed events"
-	self generateComponentAccessorsFor: #producedEvents withList: aComponent producedComponentEvents in: aComponent suffix: 'Notifier'
-		
-		
+	self removeOldProducedEventsComponentAccessorsFor: aComponent.
+	aComponent haveComponentType ifTrue:[
+		self generateComponentAccessorsFor: #producedEvents withList: aComponent producedComponentEvents in: aComponent suffix: 'Notifier'.
+	].
 ]
 
 { #category : #'code generation' }
 MolComponentFactory >> generateUsedParametersComponentAccessorsFor: aComponent [
 
 	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
-	^self generateComponentAccessorsFor: #usedParameters withList: aComponent usedComponentParameters in: aComponent suffix: 'Provider'
+	aComponent haveComponentType ifTrue:[
+		self generateComponentAccessorsFor: #usedParameters withList: aComponent usedComponentParameters in: aComponent suffix: 'Provider'.
+	].
 ]
 
 { #category : #'code generation' }
 MolComponentFactory >> generateUsedServicesComponentAccessorsFor: aComponent [
  
 	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
-	^self generateComponentAccessorsFor: #usedServices withList: aComponent usedComponentServices in: aComponent suffix: 'Provider'
-		
+	aComponent haveComponentType ifTrue:[
+		self generateComponentAccessorsFor: #usedServices withList: aComponent usedComponentServices in: aComponent suffix: 'Provider'.
+	].
 ]
 
 { #category : #'private - code generation' }
@@ -325,7 +320,7 @@ MolComponentFactory >> getSourceCodeFor: aSymbol trait: aTrait selector: aSelect
 	aSymbol = #consumedEvents ifTrue:[^self getConsumedEventSourceCodeFor: aTrait selector: aSelector ].
 	aSymbol = #usedServices ifTrue:[^self getUsedServicesSourceCodeFor: aTrait selector: aSelector ].
 	aSymbol = #usedParameters ifTrue:[^self getUsedParametersSourceCodeFor: aTrait selector: aSelector ].
-	self error: 'Component Type contract category not supported'
+	self error: 'Component Type contract category not supported'.
 ]
 
 { #category : #'private - code generation' }
@@ -394,15 +389,13 @@ MolComponentFactory >> getUsedServicesSourceCodeFor: aTrait selector: selector [
 MolComponentFactory >> initialize [
 
 	super initialize.
-	
+
 	dirtyComponentTypes := Set new.
-	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = #componentContract ]) reset.
-	pragmaCollector announcer when: PragmaAnnouncement send: #contractChanged: to: self.
-		
-	self initializeIcebergAnnouncements.
+	self initializeSystemAnnouncements.
+	self initializeIcebergAnnouncements
 ]
 
-{ #category : #iceberg }
+{ #category : #'initalize-release' }
 MolComponentFactory >> initializeIcebergAnnouncements [
 
 	"activate (or desactivate) component contract update when iceberge is used (or not)"
@@ -418,6 +411,17 @@ MolComponentFactory >> initializeIcebergAnnouncements [
 		when: MCVersionLoaderStopped
 		send: #activateDynamicContractUpdate
 		to: self
+]
+
+{ #category : #'initalize-release' }
+MolComponentFactory >> initializeSystemAnnouncements [
+
+	"Component Type Observer"
+	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = #componentContract ]) reset.
+	pragmaCollector announcer when: PragmaAnnouncement send: #contractChanged: to: self.
+	
+	"Component Implementation Observer"
+	SystemAnnouncer uniqueInstance  when: ClassModifiedClassDefinition send: #componentChanged: to: self.
 ]
 
 { #category : #accessing }
@@ -443,22 +447,62 @@ MolComponentFactory >> rebuildComponent: aComponent traitsAdding: aList [
 MolComponentFactory >> release [
 
 	self releaseIcebergAnnouncements.
-	
+	self releaseSystemAnnouncements.
+	isDynamicContractUpdateActivated := false.
 	dirtyComponentTypes := nil.
-	pragmaCollector release.
-	pragmaCollector := nil.
-	
-	super release.
+
+	super release
 ]
 
-{ #category : #iceberg }
+{ #category : #'initalize-release' }
 MolComponentFactory >> releaseIcebergAnnouncements [
 
 	| announcer |
 	announcer := SystemAnnouncer uniqueInstance.
-	announcer ifNil:[^self].
+	announcer ifNil: [ ^ self ].
 	announcer unsubscribe: self.
 	announcer unsubscribe: self
+]
+
+{ #category : #'initalize-release' }
+MolComponentFactory >> releaseSystemAnnouncements [
+
+	pragmaCollector release.
+	pragmaCollector := nil.
+
+	SystemAnnouncer uniqueInstance unsubscribe: self
+]
+
+{ #category : #'code generation' }
+MolComponentFactory >> removeOldConsumedEventsComponentAccessorsFor: aComponent [
+ 	"remove old consumed events but not the existing"
+	| toBeRemoveConsumedSelectors |
+	toBeRemoveConsumedSelectors := (aComponent selectors select:[ :s |  'get*Subscriber' match: (s asString)]) asOrderedCollection.
+	
+	"check if the selectors are already in the current consumed events, in case don't remove them"
+	aComponent haveComponentType ifTrue:[
+		aComponent consumedComponentEvents do:[ :e | 
+			toBeRemoveConsumedSelectors copy do:[ :sel | ('get', e printString, 'Subscriber' = sel) ifTrue:[toBeRemoveConsumedSelectors remove: sel]].
+		].
+	].
+	
+	toBeRemoveConsumedSelectors do:[ :s | aComponent removeSelector: s].
+]
+
+{ #category : #'code generation' }
+MolComponentFactory >> removeOldProducedEventsComponentAccessorsFor: aComponent [
+ 	"remove old produced events but not the existing"
+	| toBeRemoveProducedSelectors |
+	toBeRemoveProducedSelectors := (aComponent selectors select:[ :s |  'get*Notifier' match: (s asString)]) asOrderedCollection.
+	
+	"check if the selectors are already in the current produced events, in case don't remove them"
+	aComponent haveComponentType ifTrue:[
+		aComponent producedComponentEvents do:[ :e | 
+			toBeRemoveProducedSelectors copy do:[ :sel | ('get', e printString, 'Notifier' = sel) ifTrue:[toBeRemoveProducedSelectors remove: sel]].
+		].
+	].
+	
+	toBeRemoveProducedSelectors do:[ :s | aComponent removeSelector: s].
 ]
 
 { #category : #'code generation' }
@@ -468,12 +512,13 @@ MolComponentFactory >> removeOldUsedParametersAndServicesComponentAccessorsFor: 
 	toBeRemoveProviderSelectors := (aComponent selectors select:[ :s |  'get*Provider' match: (s asString)]) asOrderedCollection.
 	
 	"check if the selectors are already in the current used parameters or used services, in case don't remove them"
-	aComponent usedComponentParameters do:[ :e | 
-		toBeRemoveProviderSelectors copy do:[ :sel | ('get', e printString, 'Provider' = sel) ifTrue:[toBeRemoveProviderSelectors remove: sel]].
-	].
-
-	aComponent usedComponentServices do:[ :e | 
-		toBeRemoveProviderSelectors copy do:[ :sel | ('get', e printString, 'Provider' = sel) ifTrue:[toBeRemoveProviderSelectors remove: sel]].
+	aComponent haveComponentType ifTrue:[
+		aComponent usedComponentParameters do:[ :e | 
+			toBeRemoveProviderSelectors copy do:[ :sel | ('get', e printString, 'Provider' = sel) ifTrue:[toBeRemoveProviderSelectors remove: sel]].
+		].
+		aComponent usedComponentServices do:[ :e | 
+			toBeRemoveProviderSelectors copy do:[ :sel | ('get', e printString, 'Provider' = sel) ifTrue:[toBeRemoveProviderSelectors remove: sel]].
+		].
 	].
 	
 	toBeRemoveProviderSelectors do:[ :s | aComponent removeSelector: s].

@@ -28,6 +28,17 @@ MolComponentImpl classSide >> defineComponent [
 ]
 
 { #category : #testing }
+MolComponentImpl classSide >> haveComponentType [
+	| traits |
+
+	traits := Set new.
+	self withAllSuperclassesDo: [ :c | 
+		(c  ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[traits addAll: c traitComposition allTraits].
+	].
+	^(traits includes: MolComponentType). 
+]
+
+{ #category : #testing }
 MolComponentImpl classSide >> isComponent [
 	^ true
 ]

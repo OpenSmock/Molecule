@@ -1,6 +1,3 @@
-"
-I am added and removed by test: MolComponentFactoryTest>>#testCreateImplementationForNamedIn
-"
 Class {
 	#name : #MolCompleteComponentTestImpl,
 	#superclass : #MolAbstractComponentImpl,

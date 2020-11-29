@@ -23,7 +23,6 @@ MolComponentManager class >> cleanUp [
 	| notifiers subscribers |
 
 	Default ifNil:[^self].
-	Default homeServices release.
 	Default locatorServices eventsSubscribers: nil.
 
 	notifiers := MolEventNotifier allInstances.
@@ -33,16 +32,18 @@ MolComponentManager class >> cleanUp [
 	Default := nil.
 	notifiers do: [:n | n release].
 	subscribers do: [:n | n release].
+	
+	MolComponentFactory initialize.
 ]
 
 { #category : #'initialize-release' }
 MolComponentManager class >> deepCleanUp [
 	<script: 'self deepCleanUp'>
 	| i |
-
 	self cleanUp.
-	MolComponentFactory cleanUp.
+	
 	i := 0.
+	MolComponentFactory allInstancesDo: [ :factory | (factory == MolComponentFactory default) ifFalse:[factory release]].
 	MolAbstractComponentImpl allSubInstancesDo:[ :component | component componentFlush. i := i+1 ].
 	MolComponentImpl users do: [:impl | impl allInstances do: [:component | component componentFlush. i := i+1]].
 	SmalltalkImage cleanUp.
@@ -52,8 +53,9 @@ MolComponentManager class >> deepCleanUp [
 
 { #category : #singleton }
 MolComponentManager class >> default [
-
-	Default ifNil: [Default := self new initialize].
+	<script: 'self default'>
+	
+	Default ifNil: [Default := self new].
 	^Default
 ]
 
@@ -61,6 +63,7 @@ MolComponentManager class >> default [
 MolComponentManager >> cleanUp [
 
 	self class cleanUp.
+	
 ]
 
 { #category : #accessing }
@@ -88,4 +91,20 @@ MolComponentManager >> initialize [
 MolComponentManager >> locatorServices [
 
 	^ locatorServices
+]
+
+{ #category : #'initialize-release' }
+MolComponentManager >> release [
+
+	MolComponentFactory cleanUp.
+	
+	deploymentServices release.
+	locatorServices release.
+	homeServices release.
+	
+	deploymentServices := nil.
+	locatorServices := nil.
+	homeServices := nil.
+	
+	super release.
 ]
