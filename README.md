@@ -23,4 +23,4 @@ Metacello new
 
 ## Test coverage
 
-81,68% of Molecule Pharo9 branch is coverage by unit tests, result with DrTest.
+81,86% of Molecule Pharo9 branch is coverage by unit tests, result with DrTest.
