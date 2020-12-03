@@ -22,9 +22,7 @@ MolServicesTest >> tearDown [
 
 { #category : #tests }
 MolServicesTest >> testTableProvideServices [
-
 	| manager table user |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -43,19 +41,11 @@ MolServicesTest >> testTableProvideServices [
 	"Tests"
 	self assert: user getMolMyTableServicesProvider equals: table.
 	user getMolMyTableServicesProvider getContent.
-
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 ]
 
 { #category : #tests }
 MolServicesTest >> testTableProvideServicesNamed [
-
 	| manager table user |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -76,19 +66,11 @@ MolServicesTest >> testTableProvideServicesNamed [
 	
 	"Tests"
 	self assert: user getMolMyTableServicesProvider equals: table.
-
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 ]
 
 { #category : #tests }
 MolServicesTest >> testTableProvideServicesNotActivated [
-
 	| manager table user |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -111,19 +93,11 @@ MolServicesTest >> testTableProvideServicesNotActivated [
 	manager homeServices passivateComponent: MolMyTableComponentImpl.
 	self assert: user getMolMyTableServicesProvider equals: table.
 	user getMolMyTableServicesProvider getContent.
-
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 ]
 
 { #category : #tests }
 MolServicesTest >> testTableProvideServicesNotActivatedNamed [
-
 	| manager table user |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -149,19 +123,11 @@ MolServicesTest >> testTableProvideServicesNotActivatedNamed [
 	manager homeServices passivateComponent: MolMyTableComponentImpl named: #myTable.
 	self assert: user getMolMyTableServicesProvider equals: table.
 	user getMolMyTableServicesProvider getContent.
-
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 ]
 
 { #category : #tests }
 MolServicesTest >> testTableProvideServicesToSeveralUsers [
-
 	| manager table user1 user2 |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -190,10 +156,4 @@ MolServicesTest >> testTableProvideServicesToSeveralUsers [
 	self assert: user2 getMolMyTableServicesProvider equals: table.
 	self assert: user1 getMolMyTableServicesProvider equals: table.
 	user2 getMolMyTableServicesProvider getContent.
-
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 ]

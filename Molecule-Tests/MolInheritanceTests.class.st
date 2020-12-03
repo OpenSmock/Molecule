@@ -38,6 +38,7 @@ MolInheritanceTests >> tearDown [
 { #category : #tests }
 MolInheritanceTests >> testDefineComponent [
 	"Test the definition of the two components."
+	
 	MolComponentFactory defineComponent: MolCompleteComponentImpl.
 	MolComponentFactory defineComponent: MolCompleteComponentChildImpl.
 ]
@@ -45,6 +46,7 @@ MolInheritanceTests >> testDefineComponent [
 { #category : #tests }
 MolInheritanceTests >> testEvents [
 	"Test events behavior"
+	
 	self assert: superComponent event equals: #event.
 	self assert: subComponent event equals: #event.
 	self assert: subComponent subEvent equals: #subEvent.
@@ -54,12 +56,14 @@ MolInheritanceTests >> testEvents [
 { #category : #tests }
 MolInheritanceTests >> testEventsNotifier [
 	"Test call to event notifier"
+	
 	subComponent getMolUsedEventsNotifier event
 ]
 
 { #category : #tests }
 MolInheritanceTests >> testParameters [
 	"Test parameters behavior"
+	
 	self assert: superComponent parameter equals: #parameter.
 	self assert: subComponent parameter equals: #parameter.
 	self assert: subComponent subParameter equals: #subParameter.
@@ -69,6 +73,7 @@ MolInheritanceTests >> testParameters [
 { #category : #tests }
 MolInheritanceTests >> testServices [
 	"Test services behavior"
+	
 	self assert: superComponent service equals: #service.
 	self assert: subComponent service equals: #service.
 	self assert: subComponent subService equals: #subService.

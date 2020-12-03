@@ -17,6 +17,12 @@ Class {
 }
 
 { #category : #'setUp-tearDown' }
+MolHomeServicesTest >> setUp [
+
+	MolComponentManager cleanUp.
+]
+
+{ #category : #'setUp-tearDown' }
 MolHomeServicesTest >> tearDown [
 
 	MolComponentManager cleanUp.
@@ -25,9 +31,8 @@ MolHomeServicesTest >> tearDown [
 { #category : #tests }
 MolHomeServicesTest >> testSeveralComponentsLifecycle [
 	"Test life cycle of several components"
-
 	| manager |
-	MolComponentManager cleanUp.
+
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -61,19 +66,12 @@ MolHomeServicesTest >> testSeveralComponentsLifecycle [
 	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl2) not.
 	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl) not.
 	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl2) not.
-	
-	"End of test"
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl2.
-	manager cleanUp.
 ]
 
 { #category : #tests }
 MolHomeServicesTest >> testSeveralComponentsLifecycleWithName [
 "Test life cycle of several components with names"
-
 	| manager |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -107,19 +105,12 @@ MolHomeServicesTest >> testSeveralComponentsLifecycleWithName [
 	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl named: #component1) not.
 	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl) not.
 	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl2 named: #component2) not.
-	
-	"End of test"
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl2.
-	manager cleanUp.
 ]
 
 { #category : #tests }
 MolHomeServicesTest >> testSubComponentLifecycle [
 "test life cycle of a component using AbstractComponentImpl as super class"
-
 	| manager component |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -148,16 +139,12 @@ MolHomeServicesTest >> testSubComponentLifecycle [
 	"Undeployment"
 	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
 	self assert: manager homeServices deployedComponents isEmpty.
-	
-	MolComponentManager cleanUp.
 ]
 
 { #category : #tests }
 MolHomeServicesTest >> testSubComponentLifecycleWithName [
 "test life cycle of a component using AbstractComponentImpl as super class with a name"
-
 	| manager |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -186,16 +173,12 @@ MolHomeServicesTest >> testSubComponentLifecycleWithName [
 	"Undeployment"
 	manager deploymentServices  undeployComponentImplementation: MolBasicSubComponentImpl.
 	self assert: manager homeServices deployedComponents isEmpty.
-	
-	MolComponentManager cleanUp.
 ]
 
 { #category : #tests }
 MolHomeServicesTest >> testTraitComponentLifecycle [
 "test life cycle of a component using ComponentImpl trait"
-
 	| manager |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -224,16 +207,12 @@ MolHomeServicesTest >> testTraitComponentLifecycle [
 	"Undeployment"
 	manager deploymentServices  undeployComponentImplementation: MolBasicTraitComponentImpl.
 	self assert: manager homeServices deployedComponents isEmpty.
-	
-	MolComponentManager cleanUp.
 ]
 
 { #category : #tests }
 MolHomeServicesTest >> testTraitComponentLifecycleWithName [
 "test life cycle of a component using ComponentImpl trait with a name"
-
 	| manager |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -262,6 +241,4 @@ MolHomeServicesTest >> testTraitComponentLifecycleWithName [
 	"Undeployment"
 	manager deploymentServices  undeployComponentImplementation: MolBasicTraitComponentImpl.
 	self assert: manager homeServices deployedComponents isEmpty.
-	
-	MolComponentManager cleanUp.
 ]

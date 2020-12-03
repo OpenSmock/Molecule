@@ -46,3 +46,13 @@ MolAugmentedClassToAComponent >> getMolUsedServicesProvider [
 						searchServicesProviderFor: MolUsedServices named:  servicesSymbol]. 
 	^servicesProvider
 ]
+
+{ #category : #parameters }
+MolAugmentedClassToAComponent >> parameter [
+	^ #parameter2
+]
+
+{ #category : #service }
+MolAugmentedClassToAComponent >> service [
+	^ #service2
+]

@@ -90,7 +90,6 @@ MolUtilsTest >> testLog2 [
 
 { #category : #tests }
 MolUtilsTest >> testStartComponent [
-"test method startComponent: of Utils"
 
 	| homeServices deploymentServices |
 	MolUtils startComponent: MolBasicSubComponentImpl.
@@ -104,7 +103,6 @@ MolUtilsTest >> testStartComponent [
 
 { #category : #tests }
 MolUtilsTest >> testStartComponentWithName [
-"test method startComponent:named: of Utils"
 
 	| homeServices deploymentServices |
 	MolUtils startComponent: MolBasicSubComponentImpl named: #myComponent.
@@ -117,8 +115,24 @@ MolUtilsTest >> testStartComponentWithName [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testStartComponents [
+
+	| homeServices deploymentServices componentList |
+	componentList := OrderedCollection with: MolBasicSubComponentImpl with: MolCompleteComponentImpl.
+	MolUtils startComponents: componentList.
+
+	homeServices := MolComponentManager default homeServices.	
+	deploymentServices := MolComponentManager default deploymentServices. 
+	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl).
+	self assert: (deploymentServices isDeployedComponentImplementation: MolCompleteComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolCompleteComponentImpl).
+	self assert: (homeServices isWaitingForActivation: MolBasicSubComponentImpl) equals: false.
+	self assert: (homeServices isWaitingForActivation: MolCompleteComponentImpl) equals: false.
+]
+
+{ #category : #tests }
 MolUtilsTest >> testStopComponent [
-"test method stopComponent: of Utils"
 
 	| homeServices deploymentServices |
 	MolUtils startComponent: MolBasicSubComponentImpl.
@@ -133,7 +147,6 @@ MolUtilsTest >> testStopComponent [
 
 { #category : #tests }
 MolUtilsTest >> testStopComponentWithName [
-"test method stopComponent:named: of Utils"
 
 	| homeServices deploymentServices |
 	MolUtils startComponent: MolBasicSubComponentImpl named: #myComponent.
@@ -144,4 +157,22 @@ MolUtilsTest >> testStopComponentWithName [
 	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl) equals: false.
 	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl named: #myComponent) equals: false.
 	self assert: (homeServices isWaitingForActivation: MolBasicSubComponentImpl named: #myComponent) equals: false.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testStopComponents [
+
+	| homeServices deploymentServices componentList |
+	MolUtils startComponent: MolBasicSubComponentImpl; startComponent: MolCompleteComponentImpl.
+	componentList := OrderedCollection with: MolBasicSubComponentImpl with: MolCompleteComponentImpl.
+	MolUtils stopComponents: componentList.	
+
+	homeServices := MolComponentManager default homeServices.	
+	deploymentServices := MolComponentManager default deploymentServices. 	
+	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl) equals: false.
+	self assert: (deploymentServices isDeployedComponentImplementation: MolCompleteComponentImpl) equals: false.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl) equals: false.
+	self assert: (MolUtils isInstanciateComponentOf: MolCompleteComponentImpl) equals: false.
+	self assert: (homeServices isWaitingForActivation: MolBasicSubComponentImpl) equals: false.
+self assert: (homeServices isWaitingForActivation: MolCompleteComponentImpl) equals: false.
 ]

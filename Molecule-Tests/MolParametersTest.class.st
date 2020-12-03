@@ -22,9 +22,7 @@ MolParametersTest >> tearDown [
 
 { #category : #tests }
 MolParametersTest >> testClientSetParameters [
-
 	| manager socket client |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -47,23 +45,13 @@ MolParametersTest >> testClientSetParameters [
 	client setProtocol: #tcp.
 	client connect.
 	client send: 'ping'.
-
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMySocketComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyClientComponentImpl.
-	manager cleanUp.
-	
 	
 ]
 
 { #category : #tests }
 MolParametersTest >> testClientSetParametersFromSeveralClient [
-""
-
 	| manager socket client1 client2 |
-	MolComponentManager cleanUp.
-	
+
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -95,22 +83,12 @@ MolParametersTest >> testClientSetParametersFromSeveralClient [
 	client1 connect.
 	client1 disconnect.
 	client2 setIp: '10.0.0.2'.
-	client2 connect.
-
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMySocketComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyClientComponentImpl.
-	manager cleanUp.
-	
-	
+	client2 connect.	
 ]
 
 { #category : #tests }
 MolParametersTest >> testClientSetParametersNamed [
-
 	| manager socket client |
-	MolComponentManager cleanUp.
 	
 	manager := MolComponentManager default.
 	
@@ -136,13 +114,5 @@ MolParametersTest >> testClientSetParametersNamed [
 	client setPort: 1234.
 	client setProtocol: #tcp.
 	client connect.
-	client send: 'ping'.
-
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMySocketComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyClientComponentImpl.
-	manager cleanUp.
-	
-	
+	client send: 'ping'.	
 ]
