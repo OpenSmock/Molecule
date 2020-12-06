@@ -19,7 +19,7 @@ Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark).
 
 ### Installing Molecule for Pharo 6 to 9
 
-Pharo 9 : 
+Pharo 7, 8, 9 (Supporting transparent class augmentation into a Component) : 
 
 ```smalltalk
 Metacello new
