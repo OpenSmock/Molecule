@@ -19,6 +19,16 @@ Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark).
 
 ### Installing Molecule for Pharo 6 to 9
 
+Pharo 9 : 
+
+```smalltalk
+Metacello new
+  githubUser: 'labordep' project: 'Molecule' commitish: 'pharo9' path: 'src';
+  baseline: 'Molecule';
+  load.
+```
+Pharo 6, 7, 8, 9 (Without complete class augmentation features) :
+
 ```smalltalk
 Metacello new
    baseline: 'Molecule';
