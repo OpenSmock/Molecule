@@ -17,7 +17,7 @@ Class {
 	#classVars : [
 		'Default'
 	],
-	#category : #'Molecule-Core'
+	#category : #'Molecule-Tools'
 }
 
 { #category : #accessing }
@@ -99,7 +99,7 @@ MolComponentFactory >> activateDynamicContractUpdate [
 
 { #category : #'private - code checking' }
 MolComponentFactory >> checkUsedTrait: aList in: aComponent [
-	| eventAndServices bool missing |
+	| eventAndServices missing |
 	
 	"check component used traits includes trait list "
 	eventAndServices := self collectComponentConnectionTraits: aComponent.
@@ -107,13 +107,13 @@ MolComponentFactory >> checkUsedTrait: aList in: aComponent [
 	missing ifNotEmpty: [self rebuildComponent: aComponent traitsAdding: missing].
 	eventAndServices := self collectComponentConnectionTraits: aComponent.
 
-	bool := false.
+	"bool := false.
 	aList do: [:e | (eventAndServices includes: e) ifFalse: [
 			bool := UIManager default
 								confirm:
 									'Used trait is not declared (' , e printString
 										, '), do you want to browse class ?']].
-	bool ifTrue: [aComponent browse]
+	bool ifTrue: [aComponent browse]"
 ]
 
 { #category : #'dirty components' }
@@ -125,9 +125,9 @@ MolComponentFactory >> collectComponentConnectionTraits: aComponent [
 { #category : #'system annoucements' }
 MolComponentFactory >> componentAddedAnnouncement: aClassAddedAnnouncement [
 	
-	| classAdded |
-	classAdded := aClassAddedAnnouncement classAdded.
-	self componentChanged: classAdded.
+	| classOrTraitAdded |
+	classOrTraitAdded := aClassAddedAnnouncement classAdded.
+	classOrTraitAdded isTrait ifFalse:[self componentChanged: classOrTraitAdded].
 ]
 
 { #category : #'system annoucements' }
@@ -470,10 +470,20 @@ MolComponentFactory >> isDynamicContractUpdateActivated: aBoolean [
 
 { #category : #'private - code generation' }
 MolComponentFactory >> rebuildComponent: aComponent traitsAdding: aList [
+	| classes |
+	classes := aComponent allSuperclasses reverse.
+	classes remove: Object; remove: ProtoObject.
+	classes add: aComponent class.
 
-	aList do: [:e | 
-		"Cannot add the traits if already present"
-		(aComponent traitComposition includesTrait: e) ifFalse:[aComponent addToComposition: e].
+	aList do: [:trait | | toBeAddedTrait |
+		trait ifNotNil:[ 
+			toBeAddedTrait := trait.
+			"Cannot add the traits if already present"
+			classes do: [ :c | 
+				(c traitComposition includesTrait: trait) ifTrue:[toBeAddedTrait := nil].
+			].
+			toBeAddedTrait ifNotNil:[aComponent addToComposition: toBeAddedTrait].
+		].
 	].
 ]
 

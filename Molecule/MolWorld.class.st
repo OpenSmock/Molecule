@@ -43,6 +43,30 @@ MolWorld class >> defineAComponent [
 	component ifNotNil: [ :e | MolComponentFactory defineComponent: e ]
 ]
 
+{ #category : #scripts }
+MolWorld class >> defineAllComponents [
+
+	"<script> Warning : too much risk to execute with a script"
+	| componentClasses |
+	componentClasses := Set new.
+	MolAbstractComponentImpl allSubclassesDo:[ :component | componentClasses add: component ].
+	MolComponentImpl users do: [:class | componentClasses add: class ].
+	componentClasses do: [ :c | MolComponentFactory defineComponent: c ]
+]
+
+{ #category : #menu }
+MolWorld class >> defineAllComponentsOn: aBuilder [
+
+	<worldMenu>
+	(aBuilder item: #MoleculeDefineAllComponents)
+		parent: #MoleculeDebug;
+		target: World;
+		order: 1.0;
+		action: [ self defineAllComponents ];
+		icon: (self iconNamed: #warning);
+		label: '[Danger] Define All Components'
+]
+
 { #category : #menu }
 MolWorld class >> defineComponentOn: aBuilder [
 
@@ -139,8 +163,8 @@ MolWorld class >> menuDebugOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDebug)
 		parent: #Molecule;
-		label: 'Debug';
-		help: 'Debug tools';
+		label: 'Debug and Tools';
+		help: 'Debug and tools for Molecule environment';
 		icon: (self iconNamed: #smallDebug);
 		order: 1.4;
 		withSeparatorAfter 
