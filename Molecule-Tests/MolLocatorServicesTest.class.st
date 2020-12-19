@@ -43,6 +43,7 @@ MolLocatorServicesTest >> testNotFoundParametersProvider [
 	
 	parametersProvider := MolComponentManager default locatorServices searchParametersProviderFor: MolUnusedParameters.
 	
+	self assert: (parametersProvider isKindOf: MolNotFoundParametersProvider).
 	self assert: parametersProvider isNotFoundParameters.
 	self assert: parametersProvider connect equals: nil.
 
@@ -54,6 +55,7 @@ MolLocatorServicesTest >> testNotFoundServiceProvider [
 
 	serviceProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolUnusedServices.
 	
+	self assert: (serviceProvider isKindOf: MolNotFoundServicesProvider).
 	self assert: serviceProvider isNotFoundServices.
 	self assert: serviceProvider connect equals: nil.
 	
@@ -78,6 +80,7 @@ MolLocatorServicesTest >> testSearchEventSubscriberFor [
 	component := MolUtils startComponent: MolCompleteComponentImpl.	
 	eventSubscriber := MolComponentManager default locatorServices searchEventsSubscriberFor: MolUsedEvents.
 
+	self assert: eventSubscriber isNotFoundEventsSubscriber not.
 	self assert: (eventSubscriber isKindOf: MolEventSubscriber).
 	self assert: eventSubscriber getOriginators size equals: 1.
 	self assert: eventSubscriber getOriginators first equals: component.

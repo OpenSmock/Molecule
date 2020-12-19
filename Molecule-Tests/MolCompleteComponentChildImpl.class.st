@@ -10,7 +10,7 @@ Class {
 MolCompleteComponentChildImpl >> getMolUsedChildEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolUsedChildEvents.
-	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [self error:'Events not found'].
+	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 

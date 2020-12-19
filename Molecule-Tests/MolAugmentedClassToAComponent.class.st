@@ -6,16 +6,41 @@ Class {
 	#category : #'Molecule-Tests-Resources'
 }
 
+{ #category : #'existing class API' }
+MolAugmentedClassToAComponent >> existingInterfaceA [
+	"Return true"
+
+	^ true 
+]
+
+{ #category : #'existing class API' }
+MolAugmentedClassToAComponent >> existingInterfaceB [
+	"Return true and send an event"
+
+	self getMolUsedEventsNotifier event.
+	^ true
+]
+
+{ #category : #'existing class API' }
+MolAugmentedClassToAComponent >> existingInterfaceC [
+	"Return true and use a service and a parameter"
+
+	| result result2 |
+	result := self getMolUsedServicesProvider service.
+	result2 := self getMolUsedParametersProvider parameter.
+	^ true
+]
+
 { #category : #'component accessing' }
 MolAugmentedClassToAComponent >> getMolUsedEventsNotifier [
-	^self eventsNotifiers at: MolUsedEvents ifAbsent: [nil]
+	^self eventsNotifiers at: MolUsedEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: itf name: nil].
 ]
 
 { #category : #'component accessing' }
 MolAugmentedClassToAComponent >> getMolUsedEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolUsedEvents.
-	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [self error:'Events not found'].
+	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
@@ -27,7 +52,7 @@ MolAugmentedClassToAComponent >> getMolUsedEventsSubscriber [
 MolAugmentedClassToAComponent >> getMolUsedParametersProvider [
 	| parametersSymbol parametersProvider itf |
 	itf := MolUsedParameters.
-	parametersSymbol := self parametersProviders at: itf ifAbsent: [self error:'parameters not found'].
+	parametersSymbol := self parametersProviders at: itf ifAbsent: [^MolNotFoundParametersProvider new interface: itf name: nil].
 	parametersSymbol isSymbol
 	 	ifTrue: 
 			[parametersProvider := MolComponentManager default locatorServices 
@@ -39,7 +64,7 @@ MolAugmentedClassToAComponent >> getMolUsedParametersProvider [
 MolAugmentedClassToAComponent >> getMolUsedServicesProvider [
 	| servicesSymbol servicesProvider itf |
 	itf := MolUsedServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [self error:'Services not found'].
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 

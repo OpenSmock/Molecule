@@ -1,8 +1,8 @@
 "
-I am used when a parameters provider is not found.
+I am used when an events notifier is not found.
 "
 Class {
-	#name : #MolNotFoundParametersProvider,
+	#name : #MolNotFoundEventsNotifier,
 	#superclass : #Object,
 	#instVars : [
 		'interface',
@@ -12,18 +12,18 @@ Class {
 }
 
 { #category : #'reflective operations' }
-MolNotFoundParametersProvider >> doesNotUnderstand: aMessage [ 
+MolNotFoundEventsNotifier >> doesNotUnderstand: aMessage [ 
 	MolUtils log: 'Message ', aMessage selector, ' of ', interface printString, ' sended to interface named ', (name ifNil:['[nil]']).
 	^nil
 ]
 
 { #category : #accessing }
-MolNotFoundParametersProvider >> interface: anInterface name: aName [ 
+MolNotFoundEventsNotifier >> interface: anInterface name: aName [ 
 	interface := anInterface.
 	name := aName
 ]
 
 { #category : #accessing }
-MolNotFoundParametersProvider >> isNotFoundParameters [
+MolNotFoundEventsNotifier >> isNotFoundEventsNotifier [
 	^true
 ]

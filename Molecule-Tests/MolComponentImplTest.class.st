@@ -4,6 +4,18 @@ Class {
 	#category : #'Molecule-Tests-Cases'
 }
 
+{ #category : #running }
+MolComponentImplTest >> setUp [
+	MolComponentManager cleanUp.
+	super setUp 
+]
+
+{ #category : #running }
+MolComponentImplTest >> tearDown [
+	super tearDown.
+	MolComponentManager cleanUp
+]
+
 { #category : #tests }
 MolComponentImplTest >> testAugmentedClassToAComponentConnecting [
 
@@ -47,9 +59,56 @@ MolComponentImplTest >> testAugmentedClassToAComponentProperties [
 ]
 
 { #category : #tests }
+MolComponentImplTest >> testAugmentedClassToAComponentUsesAsAClassicWay [
+	"Use existing API outside a Component system but with component capacities use inside (get services, parameters and notify events)"
+
+	| myInstance |
+	myInstance := MolAugmentedClassToAComponent new.
+	self assert: myInstance existingInterfaceA.
+	self assert: myInstance existingInterfaceB.
+	self assert: myInstance existingInterfaceC.
+]
+
+{ #category : #tests }
 MolComponentImplTest >> testDefineComponent [
 
 	self assert: MolComponentImpl defineComponent equals: MolComponentImpl.
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testFoundNotifier [
+
+	| component |
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	
+	self assert: component getMolUsedEventsNotifier isNotFoundEventsNotifier not.
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testFoundParameters [
+
+	| component |
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	
+	self assert: component getMolUsedParametersProvider isNotFoundParameters not.
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testFoundServices [
+
+	| component |
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	
+	self assert: component getMolUsedServicesProvider isNotFoundServices not.
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testFoundSubscriber [
+
+	| component |
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	
+	self assert: component getMolUsedEventsSubscriber isNotFoundEventsSubscriber not.
 ]
 
 { #category : #tests }
@@ -62,4 +121,52 @@ MolComponentImplTest >> testHaveComponentType [
 MolComponentImplTest >> testIsComponent [
 
 	self assert: MolComponentImpl isComponent.
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testNotFoundNotifier [
+
+	| component result |
+	component := MolCompleteComponentImpl new.
+	
+	self assert: component getMolUsedEventsNotifier isNotFoundEventsNotifier.
+	
+	result := component getMolUsedEventsNotifier event.
+	self assert: result isNil.
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testNotFoundParameters [
+
+	| component result |
+	component := MolCompleteComponentImpl new.
+	
+	self assert: component getMolUsedParametersProvider isNotFoundParameters.
+	
+	result := component getMolUsedParametersProvider parameter.
+	self assert: result isNil.
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testNotFoundServices [
+
+	| component result |
+	component := MolCompleteComponentImpl new.
+	
+	self assert: component getMolUsedServicesProvider isNotFoundServices.
+	
+	result := component getMolUsedServicesProvider service.
+	self assert: result isNil.
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testNotFoundSubscriber [
+
+	| component |
+	component := MolCompleteComponentImpl new.
+	
+	self assert: component getMolUsedEventsSubscriber isNotFoundEventsSubscriber.
+	
+	component getMolUsedEventsSubscriber subscribe: self.
+	component getMolUsedEventsSubscriber unsubscribe: self.
 ]

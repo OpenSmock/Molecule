@@ -33,7 +33,7 @@ MolMyServerTimeComponentImpl >> componentRemove [
 
 { #category : #'component accessing' }
 MolMyServerTimeComponentImpl >> getMolMyGlobalTimeEventsNotifier [
-	^self eventsNotifiers at: MolMyGlobalTimeEvents ifAbsent: [nil]
+	^self eventsNotifiers at: MolMyGlobalTimeEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: itf name: nil].
 ]
 
 { #category : #services }

@@ -8,12 +8,12 @@ Class {
 		'interface',
 		'name'
 	],
-	#category : #'Molecule-Core'
+	#category : #'Molecule-Exceptions-NotFound'
 }
 
 { #category : #'reflective operations' }
 MolNotFoundServicesProvider >> doesNotUnderstand: aMessage [ 
-	MolUtils log: 'Message ', aMessage selector, ' of ', interface printString, ' sended to interface named ', name.
+	MolUtils log: 'Message ', aMessage selector, ' of ', interface printString, ' sended to interface named ', (name ifNil:['[nil]']).
 	^nil
 ]
 

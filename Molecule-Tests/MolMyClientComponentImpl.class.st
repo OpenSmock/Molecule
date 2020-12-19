@@ -27,7 +27,7 @@ MolMyClientComponentImpl >> disconnect [
 MolMyClientComponentImpl >> getMolMySocketParametersProvider [
 	| parametersSymbol parametersProvider itf |
 	itf := MolMySocketParameters.
-	parametersSymbol := self parametersProviders at: itf ifAbsent: [self error:'parameters not found'].
+	parametersSymbol := self parametersProviders at: itf ifAbsent: [^MolNotFoundParametersProvider new interface: itf name: nil].
 	parametersSymbol isSymbol
 	 	ifTrue: 
 			[parametersProvider := MolComponentManager default locatorServices 
@@ -39,7 +39,7 @@ MolMyClientComponentImpl >> getMolMySocketParametersProvider [
 MolMyClientComponentImpl >> getMolMySocketServicesProvider [
 	| servicesSymbol servicesProvider itf |
 	itf := MolMySocketServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [self error:'Services not found'].
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 

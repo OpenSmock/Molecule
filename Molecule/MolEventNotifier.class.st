@@ -45,6 +45,11 @@ MolEventNotifier >> interface: anInterface originator: aComponentInstance [
 ]
 
 { #category : #'initialize-release' }
+MolEventNotifier >> isNotFoundEventsNotifier [ 
+	^false
+]
+
+{ #category : #'initialize-release' }
 MolEventNotifier >> release [
 	super release.
 	interface := nil.

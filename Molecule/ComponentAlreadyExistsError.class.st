@@ -4,5 +4,5 @@ Exception when a component try to start with the same name of an another compone
 Class {
 	#name : #ComponentAlreadyExistsError,
 	#superclass : #Error,
-	#category : #'Molecule-Exceptions'
+	#category : #'Molecule-Exceptions-NotFound'
 }

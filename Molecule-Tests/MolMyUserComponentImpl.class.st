@@ -9,107 +9,19 @@ Class {
 	#traits : 'MolMyUserComponent + MolComponentImpl',
 	#classTraits : 'MolMyUserComponent classTrait + MolComponentImpl classTrait',
 	#instVars : [
-		'name',
-		'connector',
 		'myTableServices'
 	],
 	#category : #'Molecule-Tests-Services Resources'
 }
 
-{ #category : #'private component accessing' }
-MolMyUserComponentImpl >> componentConnector [
-
-	^ connector
-]
-
-{ #category : #'private component accessing' }
-MolMyUserComponentImpl >> componentConnector: aConnector [
-
-	connector := aConnector
-]
-
-{ #category : #'private component accessing' }
-MolMyUserComponentImpl >> componentName [
-
-	^ name
-]
-
-{ #category : #'private component accessing' }
-MolMyUserComponentImpl >> componentName: aName [
-
-	name := aName
-]
-
-{ #category : #'private component accessing' }
-MolMyUserComponentImpl >> eventNotifiers [
-
-	^ self componentConnector eventsNotifiers
-]
-
-{ #category : #'private component accessing' }
-MolMyUserComponentImpl >> eventSubscribers [
-
-	^ self componentConnector eventsSubscribers
-]
-
-{ #category : #'private component accessing' }
-MolMyUserComponentImpl >> eventsNotifiers [
-
-	^ self componentConnector eventsNotifiers
-]
-
-{ #category : #'private component accessing' }
-MolMyUserComponentImpl >> eventsSubscribers [
-
-	^ self componentConnector eventsSubscribers
-]
-
-{ #category : #'component connecting' }
-MolMyUserComponentImpl >> forEvents: anEventTrait removeProducer: aProducer [
-
-	| producers |
-	producers := self eventsSubscribers at: anEventTrait.
-	producers isArray 
-		ifTrue: [ (self eventsSubscribers at: anEventTrait) remove: aProducer ]
-		ifFalse: [ (self eventsSubscribers removeKey: anEventTrait ) ]
-]
-
-{ #category : #'component connecting' }
-MolMyUserComponentImpl >> forEvents: anEventTrait useAllProducers: aProducerList [
-
-	self eventsSubscribers at: anEventTrait put: aProducerList
-]
-
-{ #category : #'component connecting' }
-MolMyUserComponentImpl >> forEvents: anEventTrait useProducer: aProducer [
-
-	(anEventTrait traits includes: MolComponentEvents)
-		ifTrue: [self eventsSubscribers at: anEventTrait put: aProducer]
-		ifFalse: [ MolUtils log: self printString, '>forEvent:useProducer: try to link a non event trait for an event ' ]
-]
-
-{ #category : #'component connecting' }
-MolMyUserComponentImpl >> forServices: aServiceTrait useProvider: aServiceProvider [
-
-	(aServiceTrait traits includes: MolComponentServices)
-		ifTrue: [self servicesProviders at: aServiceTrait put: aServiceProvider]
-		ifFalse: [ MolUtils log: self printString, '>forService:useProvider: try to link a non services trait for services ' ]
-]
-
 { #category : #'component accessing' }
 MolMyUserComponentImpl >> getMolMyTableServicesProvider [
 	| servicesSymbol servicesProvider itf |
 	itf := MolMyTableServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [self error:'Services not found'].
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
 						searchServicesProviderFor: MolMyTableServices named:  servicesSymbol]. 
 	^servicesProvider
-]
-
-{ #category : #'private component accessing' }
-MolMyUserComponentImpl >> servicesProviders [
-
-	^ self componentConnector servicesProviders
 ]

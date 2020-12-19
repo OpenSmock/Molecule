@@ -108,6 +108,11 @@ MolEventSubscriber >> isAllOriginatorsConnected [
 	^ (self originatorsLinks values includes: nil) not
 ]
 
+{ #category : #accessing }
+MolEventSubscriber >> isNotFoundEventsSubscriber [ 
+	^false
+]
+
 { #category : #testing }
 MolEventSubscriber >> isWaitingForSubscription [
 	^ self isAllOriginatorsConnected not

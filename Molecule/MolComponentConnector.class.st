@@ -16,22 +16,40 @@ Class {
 	#category : #'Molecule-Core'
 }
 
+{ #category : #connectors }
+MolComponentConnector class >> defaultEventsNotifiers [
+	^ Dictionary new
+]
+
+{ #category : #connectors }
+MolComponentConnector class >> defaultEventsSubscribers [
+	^ Dictionary new
+]
+
+{ #category : #connectors }
+MolComponentConnector class >> defaultParametersProviders [
+	^ Dictionary new
+]
+
+{ #category : #connectors }
+MolComponentConnector class >> defaultServicesProviders [
+	^ Dictionary new
+]
+
 { #category : #service }
 MolComponentConnector >> activateComponent [
-
-	eventsNotifiers do: [ :e | e activate ]
+	eventsNotifiers do: [ :e | e activate ] 
 ]
 
 { #category : #service }
 MolComponentConnector >> connectComponent: aComponent [
-
 	aComponent componentConnector: self.
 	
 	component := aComponent.
-	eventsNotifiers := Dictionary new.
-	eventsSubscribers := Dictionary new.
-	servicesProviders := Dictionary new.
-	parametersProviders := Dictionary new.
+	eventsNotifiers := self class defaultEventsNotifiers.
+	eventsSubscribers := self class defaultEventsSubscribers.
+	servicesProviders := self class defaultServicesProviders.
+	parametersProviders := self class defaultParametersProviders.
 	
 	component class allProducedEvents do: [ :evt | eventsNotifiers at: evt put: (MolEventNotifier new interface: evt originator: component)].
 	component class allUsedServices do: [ :svc | servicesProviders at: svc put: #default].
@@ -42,43 +60,36 @@ MolComponentConnector >> connectComponent: aComponent [
 
 { #category : #accessing }
 MolComponentConnector >> eventsNotifiers [
-
-	^ eventsNotifiers
+	^ eventsNotifiers 
 ]
 
 { #category : #accessing }
 MolComponentConnector >> eventsSubscribers [
-
-	^ eventsSubscribers
+	^ eventsSubscribers 
 ]
 
 { #category : #'initialize-release' }
 MolComponentConnector >> initialize [
-
 	super initialize.
 
-	eventsNotifiers := Dictionary new.
-	eventsSubscribers := Dictionary new.
-	servicesProviders := Dictionary new.
-	parametersProviders := Dictionary new.
+	eventsNotifiers := self class defaultEventsNotifiers.
+	eventsSubscribers := self class defaultEventsSubscribers.
+	servicesProviders := self class defaultServicesProviders.
+	parametersProviders := self class defaultParametersProviders.
 ]
 
 { #category : #accessing }
 MolComponentConnector >> parametersProviders [
-
-	^ parametersProviders
+	^ parametersProviders 
 ]
 
 { #category : #service }
 MolComponentConnector >> passivateComponent [
-	
-	eventsNotifiers do: [ :e | e deactivate]
-
+	eventsNotifiers do: [ :e | e deactivate ] 
 ]
 
 { #category : #'initialize-release' }
 MolComponentConnector >> release [
-
 	super release.
 
 	eventsNotifiers := nil.
@@ -91,6 +102,5 @@ MolComponentConnector >> release [
 
 { #category : #accessing }
 MolComponentConnector >> servicesProviders [
-
 	^ servicesProviders
 ]

@@ -654,8 +654,8 @@ MolComponentFactory >> getConsumedEventSourceCodeFor: aTrait selector: selector 
 		nextPutAll: '.'.
 	writeStream crtab: 1.
 	writeStream
-		nextPutAll:
-			'eventsSymbol := self eventsSubscribers at: itf ifAbsent: [self error:''Events not found''].'.
+		nextPutAll: 'eventsSymbol := self eventsSubscribers at: itf ';
+		nextPutAll: ' ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].'.	
 	writeStream crtab: 1.
 	writeStream
 		nextPutAll:
@@ -680,7 +680,7 @@ MolComponentFactory >> getProducedEventSourceCodeFor: aTrait selector: selector 
 	writeStream
 		nextPutAll: '^self eventsNotifiers at: ';
 		nextPutAll: aTrait asString;
-		nextPutAll: ' ifAbsent: [nil]'.
+		nextPutAll: ' ifAbsent: [^MolNotFoundEventsNotifier new interface: itf name: nil].'.	
 	^ writeStream
 ]
 
@@ -708,9 +708,8 @@ MolComponentFactory >> getUsedParametersSourceCodeFor: aTrait selector: selector
 		nextPutAll: aTrait asString;
 		nextPutAll: '.'.
 	writeStream crtab: 1.
-	writeStream
-		nextPutAll:
-			'parametersSymbol := self parametersProviders at: itf ifAbsent: [self error:''parameters not found''].'.
+	writeStream	
+		nextPutAll: 'parametersSymbol := self parametersProviders at: itf ifAbsent: [^MolNotFoundParametersProvider new interface: itf name: nil].'.
 	writeStream crtab: 1.
 	writeStream
 		nextPutAll:
@@ -739,9 +738,8 @@ MolComponentFactory >> getUsedServicesSourceCodeFor: aTrait selector: selector [
 		nextPutAll: aTrait asString;
 		nextPutAll: '.'.
 	writeStream crtab: 1.
-	writeStream
-		nextPutAll:
-			'servicesSymbol := self servicesProviders at: itf ifAbsent: [self error:''Services not found''].'.
+	writeStream	
+		nextPutAll: 'servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].'.
 	writeStream crtab: 1.
 	writeStream
 		nextPutAll:

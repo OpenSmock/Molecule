@@ -29,7 +29,7 @@ MolMyUserFacadeComponentImpl >> componentPassivate [
 MolMyUserFacadeComponentImpl >> getMolMyAlarmActivationServicesProvider [
 	| servicesSymbol servicesProvider itf |
 	itf := MolMyAlarmActivationServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [self error:'Services not found'].
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
@@ -41,7 +41,7 @@ MolMyUserFacadeComponentImpl >> getMolMyAlarmActivationServicesProvider [
 MolMyUserFacadeComponentImpl >> getMolMyAlarmParametersProvider [
 	| parametersSymbol parametersProvider itf |
 	itf := MolMyAlarmParameters.
-	parametersSymbol := self parametersProviders at: itf ifAbsent: [self error:'parameters not found'].
+	parametersSymbol := self parametersProviders at: itf ifAbsent: [^MolNotFoundParametersProvider new interface: itf name: nil].
 	parametersSymbol isSymbol
 	 	ifTrue: 
 			[parametersProvider := MolComponentManager default locatorServices 
@@ -53,7 +53,7 @@ MolMyUserFacadeComponentImpl >> getMolMyAlarmParametersProvider [
 MolMyUserFacadeComponentImpl >> getMolMyAlarmSoundsEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyAlarmSoundsEvents.
-	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [self error:'Events not found'].
+	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
@@ -65,7 +65,7 @@ MolMyUserFacadeComponentImpl >> getMolMyAlarmSoundsEventsSubscriber [
 MolMyUserFacadeComponentImpl >> getMolMyClockParametersProvider [
 	| parametersSymbol parametersProvider itf |
 	itf := MolMyClockParameters.
-	parametersSymbol := self parametersProviders at: itf ifAbsent: [self error:'parameters not found'].
+	parametersSymbol := self parametersProviders at: itf ifAbsent: [^MolNotFoundParametersProvider new interface: itf name: nil].
 	parametersSymbol isSymbol
 	 	ifTrue: 
 			[parametersProvider := MolComponentManager default locatorServices 
@@ -77,7 +77,7 @@ MolMyUserFacadeComponentImpl >> getMolMyClockParametersProvider [
 MolMyUserFacadeComponentImpl >> getMolMyClockServicesProvider [
 	| servicesSymbol servicesProvider itf |
 	itf := MolMyClockServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [self error:'Services not found'].
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
@@ -89,7 +89,7 @@ MolMyUserFacadeComponentImpl >> getMolMyClockServicesProvider [
 MolMyUserFacadeComponentImpl >> getMolMyLocalTimeEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyLocalTimeEvents.
-	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [self error:'Events not found'].
+	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 

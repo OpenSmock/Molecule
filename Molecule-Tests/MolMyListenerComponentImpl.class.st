@@ -54,7 +54,7 @@ MolMyListenerComponentImpl >> failureLevel [
 MolMyListenerComponentImpl >> getMolMyStateChangeEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyStateChangeEvents.
-	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [self error:'Events not found'].
+	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 

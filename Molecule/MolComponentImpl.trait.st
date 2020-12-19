@@ -50,13 +50,11 @@ MolComponentImpl >> componentActivate [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentConnector [
-
 	^ componentConnector
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentConnector: aConnector [
-
 	componentConnector := aConnector
 ]
 
@@ -95,12 +93,16 @@ MolComponentImpl >> componentRemove [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> eventsNotifiers [
-	^ self componentConnector eventsNotifiers
+	^ self componentConnector
+		ifNotNil: [ :e | e eventsNotifiers ]
+		ifNil: [ MolComponentConnector defaultEventsNotifiers ]
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> eventsSubscribers [
-	^ self componentConnector eventsSubscribers
+	^ self componentConnector
+		ifNotNil: [ :e | e eventsSubscribers ]
+		ifNil: [ MolComponentConnector defaultEventsSubscribers ]
 ]
 
 { #category : #'component connecting' }
@@ -150,10 +152,14 @@ MolComponentImpl >> isNotFoundServices [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> parametersProviders [
-	^ self componentConnector parametersProviders
+	^ self componentConnector
+		ifNotNil: [ :e | e parametersProviders ]
+		ifNil: [ MolComponentConnector defaultParametersProviders ]
 ]
 
 { #category : #'private component accessing' }
 MolComponentImpl >> servicesProviders [
-	^ self componentConnector servicesProviders 
+	^ self componentConnector
+		ifNotNil: [ :e | e servicesProviders ]
+		ifNil: [ MolComponentConnector defaultServicesProviders ]
 ]
