@@ -15,11 +15,10 @@ Molecule is working from Pharo 6 to 8, and [Pharo 9 in a dedicated branch](https
 
 Molecule has no dependencies.
 
-### Special Features for Pharo 9
+### Special Features for Pharo 8 and 9
 
-Molecule Pharo 9 support completely transparent class augmentation into component (not necessary to add code manually), in Pharo 8 or less is it necessary to add some variables and methods implementation (component connector and component name).
-Molecule dynamic contract update is only available on [Pharo 9 dedicated branch](https://github.com/OpenSmock/Molecule/tree/pharo9).
-This branch is also in development but fix some bugs about component interface trait-based generation.
+Molecule Pharo 9 (and also Pharo 8) support completely transparent class augmentation into component (not necessary to add code manually), in Pharo 7 or less is it necessary to add some variables and methods implementation (component connector and component name).
+Molecule dynamic contract update is only available on [Pharo 9 dedicated branch](https://github.com/OpenSmock/Molecule/tree/pharo9) , this branch works in Pharo 8 and includes release from 1.2.
 
 ### Installing Molecule
 
