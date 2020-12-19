@@ -66,7 +66,7 @@ To do so, we augment this class with component behavior.
 ## Test coverage
 
 DrTest coverage results :
-* Pharo 8.0 : 81.22%
+* Pharo 8.0 : 82.16%
 * Pharo 9 build 904 : 80,79%
 
 ## Credits
