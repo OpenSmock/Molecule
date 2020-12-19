@@ -8,26 +8,16 @@ His Component architecture approach provide an adapted structuration to graphic 
 Molecule provide a way to describe a software application as a components group. Components communicate by use of services, parameters and events propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
 Molecule support completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
 
-Molecule is working from Pharo 6 to 9.
-
 ## Getting Started
 
 ### Prerequisites
 
 Molecule Core has no dependencies.
-Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark).
+Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark), this package contains benchmarks for working on performances.
 
-### Installing Molecule for Pharo 6 to 9
+### Installing Molecule
 
-Pharo 8 and 9 (Supporting transparent class augmentation into a Component) : 
-
-```smalltalk
-Metacello new
-  githubUser: 'labordep' project: 'Molecule' commitish: 'pharo9' path: 'src';
-  baseline: 'Molecule';
-  load.
-```
-Pharo 6, 7, 8, 9 (Without complete class augmentation features) :
+Pharo 8 and Pharo 9 : 
 
 ```smalltalk
 Metacello new
@@ -35,6 +25,7 @@ Metacello new
    repository: 'github://OpenSmock/Molecule/src';
    load.
 ```
+Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
 
 ### Examples
 
@@ -66,8 +57,8 @@ To do so, we augment this class with component behavior.
 ## Test coverage
 
 DrTest coverage results :
-* Pharo 8.0 : 82.16%
 * Pharo 9 build 904 : 80,79%
+* Pharo 8.0 : 82.16%
 
 ## Credits
 
