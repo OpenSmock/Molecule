@@ -65,7 +65,9 @@ To do so, we augment this class with component behavior.
 
 ## Test coverage
 
-81,86% of Molecule is coverage by unit tests (DrTest coverage result).
+DrTest coverage results :
+* Pharo 8.0 : 81.22%
+* Pharo 9 build 904 : 80,79%
 
 ## Credits
 
