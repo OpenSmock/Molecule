@@ -7,7 +7,7 @@ His Component architecture approach provide an adapted structuration to graphic 
 
 Molecule provide a way to describe a software application as a components group. Components communicate by use of services, parameters and events propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
 
-# About Molecule 1.1.x branch
+## Molecule 1.1.x branch is deprecated
 
 This version of Molecule (1.1.x) is working from Pharo 6 to 7 and this branch is deprecated.
 The last version of Molecule is working in Pharo 8+ and available [in the master branch](https://github.com/OpenSmock/Molecule/tree/master).
