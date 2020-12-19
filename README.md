@@ -7,7 +7,10 @@ His Component architecture approach provide an adapted structuration to graphic 
 
 Molecule provide a way to describe a software application as a components group. Components communicate by use of services, parameters and events propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
 
-Molecule is working from Pharo 6 to 8, and [Pharo 9 in a dedicated branch](https://github.com/OpenSmock/Molecule/tree/pharo9).
+# About Molecule 1.1.x branch
+
+This version of Molecule (1.1.x) is working from Pharo 6 to 7 and this branch is deprecated.
+The last version of Molecule is working in Pharo 8+ and available [in the master branch](https://github.com/OpenSmock/Molecule/tree/master).
 
 ## Getting Started
 
@@ -15,18 +18,13 @@ Molecule is working from Pharo 6 to 8, and [Pharo 9 in a dedicated branch](https
 
 Molecule has no dependencies.
 
-### Special Features for Pharo 8 and 9
-
-Molecule Pharo 9 (and also Pharo 8) support completely transparent class augmentation into component (not necessary to add code manually), in Pharo 7 or less is it necessary to add some variables and methods implementation (component connector and component name).
-Molecule dynamic contract update is only available on [Pharo 9 dedicated branch](https://github.com/OpenSmock/Molecule/tree/pharo9) , this branch works in Pharo 8 and includes release from 1.2.
-
 ### Installing Molecule
 
 ```smalltalk
 Metacello new
-   baseline: 'Molecule';
-   repository: 'github://OpenSmock/Molecule/src';
-   load.
+  githubUser: 'labordep' project: 'Molecule' commitish: 'Molecule1.1.x' path: 'src';
+  baseline: 'Molecule';
+  load.
 ```
 
 ### Examples
