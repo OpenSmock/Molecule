@@ -82,7 +82,22 @@ MolUtils class >> isLogActive: aBoolean [
 
 { #category : #log }
 MolUtils class >> log: aString [
-	self isLogActive ifTrue: [ self traceCr: '[Molecule] ', aString ]
+	"Log a message"
+
+	| string |
+	self isLogActive ifFalse: [ ^ self ].
+	string := aString ifNil: [ 'Unkown information to log.' ].
+	self traceCr: '[Molecule] ' , string
+]
+
+{ #category : #log }
+MolUtils class >> showInformation: aString [
+	"Inform the user with a message into the Pharo UI"
+
+	| string |
+	string := aString ifNil: [ 'Unkown information to display.' ].
+	string isString ifFalse:[string := string printString ].
+	self inform: '[Molecule] ' , string
 ]
 
 { #category : #'component easy start and stop' }
@@ -154,7 +169,10 @@ MolUtils class >> stopComponents: aComponentClassList [
 
 { #category : #actions }
 MolUtils class >> toggleLog [
+	"Active (or deactive) Molecule logs"
 
 	self isLogActive: self isLogActive not.
-	self isLogActive ifTrue:[self inform: '[Molecule] Logs are active'] ifFalse:[self inform: '[Molecule] Logs are not active'].
+	self isLogActive
+		ifTrue: [ MolUtils showInformation: 'Logs are active' ]
+		ifFalse: [ MolUtils showInformation: 'Logs are not active' ]
 ]

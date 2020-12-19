@@ -47,7 +47,7 @@ MolEventSubscriber >> connectOriginator: coriSymbol to: anObserver [
 	interface allSelectors do: 
 			[:evt |
 			originator := self originatorsLinks at: coriSymbol.
-			originator isNil ifTrue: [self error: 'nil originator ?'].
+			originator isNil ifTrue: [ ^ self error: 'nil originator ?' ].
 			originator when: evt send: evt to: anObserver]
 ]
 
@@ -70,7 +70,7 @@ MolEventSubscriber >> disconnectOriginator: coriSymbol from: anObserver [
 	interface allSelectors do: 
 			[:evt | | originator |
 			originator := self originatorsLinks at: coriSymbol.
-			originator isNil ifTrue: [self error: 'nil originator ?'].
+			originator isNil ifTrue: [ ^ self error: 'nil originator ?' ].
 			originator removeActionsWithReceiver: anObserver forEvent: evt]
 ]
 

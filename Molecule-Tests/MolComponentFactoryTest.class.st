@@ -9,7 +9,17 @@ Class {
 
 { #category : #tests }
 MolComponentFactoryTest >> generatedClass [
-	^ #MolCompleteComponentTestImpl.
+	^self class environment at: self generatedClassSymbolName
+]
+
+{ #category : #tests }
+MolComponentFactoryTest >> generatedClassSymbolName [
+	^ #MolCompleteComponentTestImpl
+]
+
+{ #category : #tests }
+MolComponentFactoryTest >> generatedComponentTypeSymbolName [
+	^ #MolTestGeneratedComponentType
 ]
 
 { #category : #'setUp-tearDown' }
@@ -23,11 +33,12 @@ MolComponentFactoryTest >> setUpComponentAndType [
 	"Prepare or reset required test classes"
 	
 	| methodName source |
-	self class environment at: self generatedClass ifAbsent:[
-		MolComponentFactory
-			createComponentForType: MolCompleteComponent
-			named: self generatedClass
-			in: 'Molecule-Tests-Resources'.
+	self class environment at: self generatedComponentTypeSymbolName ifAbsent: [ 
+		MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	].
+
+	self class environment at: self generatedClassSymbolName ifAbsent: [
+		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedClassSymbolName in: 'Molecule-Tests-Resources'.
 	].
 
 	methodName := 'usedComponentServices'.
@@ -38,6 +49,7 @@ MolComponentFactoryTest >> setUpComponentAndType [
 		s nextPut: Character cr.
 		s nextPutAll: '^{ MolUsedServices }'.
 	].
+
 	MolCompleteComponent class compile: source.
 ]
 
@@ -56,34 +68,36 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	
 	"For testing deactive the dynamic contract update, store the previous setting for restore it at the end of the test"
 	isDynamicContractUpdateActivated := MolComponentFactory default isDynamicContractUpdateActivated.
-	MolComponentFactory default deactivateDynamicContractUpdate.
+	MolComponentFactory default deactivateDynamicContractUpdate: false.
 	
 	"remove the testing class, and create a new component without Type, when the type is added check if the component in on the dirty components list"
-	self class environment at: self generatedClass ifPresent: [ (self class environment at: self generatedClass) removeFromSystem ].
-	MolComponentFactory createComponentNamed: self generatedClass in: 'Molecule-Tests-Resources'.
+	self class environment at: self generatedClassSymbolName ifPresent: [ (self class environment at: self generatedClassSymbolName) removeFromSystem ].
+	MolComponentFactory createComponentNamed: self generatedClassSymbolName in: 'Molecule-Tests-Resources'.
 	
 	"Waiting for event callback"
 	(Delay forMilliseconds: 100) wait.
-	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedClass asClass)).
+	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedClass)).
 	MolComponentFactory default dirtyComponents removeAll.
 	
 	"add the type manually to the created component"
-	self generatedClass asClass setTraitComposition: MolCompleteComponent.
+	self generatedClass setTraitComposition: MolCompleteComponent.
 	"Waiting for event callback"
 	(Delay forMilliseconds: 100) wait.
-	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedClass asClass)).
+	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedClass)).
 	MolComponentFactory default dirtyComponents removeAll.
 	
 	"remove the testing class, and create a new component with Type, check if the component in on the dirty components list"
-	self class environment at: self generatedClass ifPresent: [ (self class environment at: self generatedClass) removeFromSystem ].
-	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedClass in: 'Molecule-Tests-Resources'.
+	self class environment at: self generatedClassSymbolName ifPresent: [ (self class environment at: self generatedClassSymbolName) removeFromSystem ].
+	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedClassSymbolName in: 'Molecule-Tests-Resources'.
 	
 	"Waiting for event callback"
 	(Delay forMilliseconds: 100) wait.
-	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedClass asClass)).
+	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedClass)).
 	MolComponentFactory default dirtyComponents removeAll.
 	
-	isDynamicContractUpdateActivated ifTrue:[MolComponentFactory default activateDynamicContractUpdate] ifFalse:[MolComponentFactory default deactivateDynamicContractUpdate].
+	isDynamicContractUpdateActivated 
+		ifTrue:[MolComponentFactory default activateDynamicContractUpdate: false] 
+		ifFalse:[MolComponentFactory default deactivateDynamicContractUpdate: false].
 	
 ]
 
@@ -96,7 +110,7 @@ MolComponentFactoryTest >> testComponentContractChanged [
 	
 	"For testing deactive the dynamic contract update, store the previous setting for restore it at the end of the test"
 	isDynamicContractUpdateActivated := MolComponentFactory default isDynamicContractUpdateActivated.
-	MolComponentFactory default deactivateDynamicContractUpdate.
+	MolComponentFactory default deactivateDynamicContractUpdate: false.
 	
 	"Add manually a new used services in the MolCompleteComponent Type"
 	methodName := 'usedComponentServices'.
@@ -115,7 +129,9 @@ MolComponentFactoryTest >> testComponentContractChanged [
 	self assert: (MolComponentFactory default dirtyComponentTypes includes: MolCompleteComponent).
 		
 	MolComponentFactory default dirtyComponentTypes removeAll.
-	isDynamicContractUpdateActivated ifTrue:[MolComponentFactory default activateDynamicContractUpdate] ifFalse:[MolComponentFactory default deactivateDynamicContractUpdate].
+	isDynamicContractUpdateActivated 
+		ifTrue:[MolComponentFactory default activateDynamicContractUpdate: false] 
+		ifFalse:[MolComponentFactory default deactivateDynamicContractUpdate: false].
 	
 ]
 
@@ -138,10 +154,10 @@ MolComponentFactoryTest >> testCreateComponentForTypeNamedIn [
 	
 	| class |
 	"delete generated class if presents"
-	self class environment at: self generatedClass ifPresent: [ (self class environment at: self generatedClass) removeFromSystem ].
-	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedClass in: 'Molecule-Tests-Resources'.
+	self class environment at: self generatedClassSymbolName ifPresent: [ (self class environment at: self generatedClassSymbolName) removeFromSystem ].
+	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedClassSymbolName in: 'Molecule-Tests-Resources'.
 
-	class := self class environment at: self generatedClass.
+	class := self class environment at: self generatedClassSymbolName.
 	self assert: class notNil.
 	self assert: class isComponent.
 	self assert: class haveComponentType.
@@ -155,15 +171,39 @@ MolComponentFactoryTest >> testCreateComponentNamedIn [
 	
 	| class |
 	"delete generated class if presents"
-	self class environment at: self generatedClass ifPresent: [ (self class environment at: self generatedClass) removeFromSystem ].
-	MolComponentFactory createComponentNamed: self generatedClass in: 'Molecule-Tests-Resources'.
+	self class environment at: self generatedClassSymbolName ifPresent: [ 
+		(self class environment at: self generatedClassSymbolName) removeFromSystem.
+	].
 
-	class := self class environment at: self generatedClass.
+	MolComponentFactory createComponentNamed: self generatedClassSymbolName in: 'Molecule-Tests-Resources'.
+
+	class := self class environment at: self generatedClassSymbolName.
 	self assert: class notNil.
 	self assert: class isComponent.
 	self assert: class haveComponentType equals: false.
 	
 	class comment: 'I am added and removed by test: ', self printString.
+]
+
+{ #category : #'tests - contract creation' }
+MolComponentFactoryTest >> testCreateComponentType [
+	"Create a Component Type from scratch"
+	
+	"Delete Generated Component Type if presents"
+	| trait |
+	self class environment at: self generatedComponentTypeSymbolName ifPresent: [ 
+		(self class environment at: self generatedComponentTypeSymbolName) removeFromSystem. 
+	].
+
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+
+	trait := self class environment at: self generatedComponentTypeSymbolName.
+	self assert: trait notNil.
+	self assert: trait isTrait.
+	self assert: trait isComponentType.
+	
+	trait comment: 'I am added and removed by test: ', self printString.
+	
 ]
 
 { #category : #tests }
@@ -199,10 +239,10 @@ MolComponentFactoryTest >> testDynamicContractUpdateActivation2 [
 
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
 	
-	MolComponentFactory default deactivateDynamicContractUpdate.
+	MolComponentFactory default deactivateDynamicContractUpdate: false.
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: false.
 	
-	MolComponentFactory default activateDynamicContractUpdate.
+	MolComponentFactory default activateDynamicContractUpdate: false.
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
 	
 	

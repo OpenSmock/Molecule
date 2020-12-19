@@ -23,22 +23,22 @@ Class {
 { #category : #accessing }
 MolComponentFactory class >> cleanUp [
 	<script: 'self cleanUp'>
-	
 	Default ifNil: [ ^ self ].
 	Default release.
-	Default := nil
+	Default := nil 
 ]
 
 { #category : #'componentImpl - creation' }
 MolComponentFactory class >> createComponentForType: aComponentType named: aSymbol in: aPackageName [
-
+	aSymbol ifNil:[^self].
+	aPackageName ifNil:[^self].
 	aComponentType notNil ifTrue:[
-		aComponentType isComponentType  ifFalse: [ self error: '[Molecule] Cannot create Component for a no Type object.' ].
+		aComponentType isComponentType ifFalse: [ ^ self error: '[Molecule] Cannot create Component for a no Type object.' ].
 	].
 		
-	self class environment
-		at: aSymbol
-		ifPresent: [self error:'[Molecule] Do not redefine an existing Component, remove it before.' ].
+	self class environment at: aSymbol ifPresent: [
+		^ self error:'[Molecule] Do not redefine an existing Component, remove it before.' 
+	].
 
 	OpalCompiler new evaluate:
 			'MolAbstractComponentImpl subclass: ' , aSymbol printString
@@ -51,49 +51,72 @@ MolComponentFactory class >> createComponentForType: aComponentType named: aSymb
 	classVariableNames: ''''
 	package: ''' , aPackageName , ''''.
 	
-	(self class environment at: aSymbol) defineComponent
+	"(self class environment at: aSymbol) defineComponent"
 ]
 
 { #category : #'componentImpl - creation' }
 MolComponentFactory class >> createComponentNamed: aSymbol in: aPackageName [
 
+	aSymbol ifNil:[^self].
+	aPackageName ifNil:[^self].
 	self createComponentForType: nil named: aSymbol in: aPackageName
+]
+
+{ #category : #'componentImpl - creation' }
+MolComponentFactory class >> createComponentType: aSymbol in: aPackageName [
+	"Create a ComponentType named aSymbol in a package"
+	
+	aSymbol ifNil:[^self].
+	aPackageName ifNil:[^self].
+	self class environment at: aSymbol ifPresent: [
+		^ self error:'[Molecule] Do not redefine an existing ComponentType, remove it before.'.
+	].
+
+	OpalCompiler new evaluate:
+			'Trait named: ' , aSymbol printString ,
+	' 
+	uses: MolComponentType
+	package: ''' , aPackageName , ''''.
+	
 ]
 
 { #category : #accessing }
 MolComponentFactory class >> default [
 	<script: 'self default'>
-
-	Default ifNil:[ Default := self new ].
-	^Default
+	Default ifNil: [ Default := self new ].
+	^ Default
 ]
 
 { #category : #accessing }
 MolComponentFactory class >> defineComponent: aComponentType [
-
 	self default defineComponent: aComponentType
- 
-
 ]
 
 { #category : #accessing }
 MolComponentFactory class >> defineDirtyComponents [
-
 	<script>
 	self default defineDirtyComponents
 ]
 
 { #category : #'class initialization' }
 MolComponentFactory class >> initialize [
-
-	self default
+	self default 
 ]
 
 { #category : #'dynamic contract update' }
 MolComponentFactory >> activateDynamicContractUpdate [
+	"Activate Dynamic Contract Update, this method display an information message to the user"
+	
+	self activateDynamicContractUpdate: true
+]
 
+{ #category : #'dynamic contract update' }
+MolComponentFactory >> activateDynamicContractUpdate: isInform [
+	"Activate Dynamic Contract Update, and choose to display an information message to the user"
+	
 	self isDynamicContractUpdateActivated ifTrue: [ ^ self ].
-	self inform: '[Molecule] Dynamic Contract Update is active'.
+	MolUtils log: 'Dynamic Contract Update is active'.
+	(isInform isNil or:[isInform]) ifTrue:[MolUtils showInformation: 'Dynamic Contract Update is active'].
 	self isDynamicContractUpdateActivated: true
 ]
 
@@ -127,12 +150,13 @@ MolComponentFactory >> componentAddedAnnouncement: aClassAddedAnnouncement [
 	
 	| classOrTraitAdded |
 	classOrTraitAdded := aClassAddedAnnouncement classAdded.
-	classOrTraitAdded isTrait ifFalse:[self componentChanged: classOrTraitAdded].
+	self componentChanged: classOrTraitAdded.
 ]
 
 { #category : #'system annoucements' }
 MolComponentFactory >> componentChanged: aChangedClass [
 
+	aChangedClass isTrait ifTrue:[^self].
 	aChangedClass isComponent ifTrue:[		
 		self isDynamicContractUpdateActivated ifTrue: [ 
 			"need to fork the definition because new traits are not already injected here to the component"
@@ -144,15 +168,15 @@ MolComponentFactory >> componentChanged: aChangedClass [
 { #category : #'system annoucements' }
 MolComponentFactory >> componentChangedAnnouncement: aClassModifiedClassDefinitionAnnouncement [
 
-	aClassModifiedClassDefinitionAnnouncement ifNil: [self error: '[Molecule] Error on Component changed notification.'. ^ self].
+	aClassModifiedClassDefinitionAnnouncement ifNil: [ ^ self error: '[Molecule] Error on Component changed notification.' ].
 	self componentChanged: aClassModifiedClassDefinitionAnnouncement newClassDefinition.
 ]
 
 { #category : #'system annoucements' }
 MolComponentFactory >> contractChanged: aComponentType [
 	
-	aComponentType ifNil: [self error: '[Molecule] Error on contract changed notification.'. ^ self ].
-	aComponentType isTrait ifFalse:["Only Component Type are supported" ^self].
+	aComponentType ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
+	aComponentType isTrait ifFalse:[ "Only Component Type are supported" ^ self ].
 
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"need to fork the definition because new traits are not already injected here to the component"
@@ -164,10 +188,10 @@ MolComponentFactory >> contractChanged: aComponentType [
 MolComponentFactory >> contractChangedAnnouncement: aMessage [
 	| aComponentType |
 	
-	aMessage ifNil: [ self error: '[Molecule] Error on contract changed notification.'. ^ self ].
-	aMessage pragma ifNil: [self error: '[Molecule] Error on contract changed notification.'. ^ self ].
-	aMessage pragma method ifNil: [self error: '[Molecule] Error on contract changed notification.'. ^ self ].
-	aMessage pragma method methodClass ifNil: [self error: '[Molecule] Error on contract changed notification.'. ^ self ].
+	aMessage ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
+	aMessage pragma ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
+	aMessage pragma method ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
+	aMessage pragma method methodClass ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
 
 	aComponentType := aMessage pragma method methodClass instanceSide.
 	self contractChanged: aComponentType.
@@ -175,9 +199,18 @@ MolComponentFactory >> contractChangedAnnouncement: aMessage [
 
 { #category : #'dynamic contract update' }
 MolComponentFactory >> deactivateDynamicContractUpdate [
+	"Deactivate Dynamic Contract Update, this method display an information message to the user"
 
+	self deactivateDynamicContractUpdate: true.
+]
+
+{ #category : #'dynamic contract update' }
+MolComponentFactory >> deactivateDynamicContractUpdate: isInform [ 
+	"Deactivate Dynamic Contract Update, and choose to display an information message to the user"
+	
 	self isDynamicContractUpdateActivated ifFalse: [ ^ self ].
-	self inform: '[Molecule] Dynamic Contract Update is not active'.
+	MolUtils log: 'Dynamic Contract Update is not active'.
+	(isInform isNil or:[isInform]) ifTrue:[MolUtils showInformation: 'Dynamic Contract Update is not active'].
 	self isDynamicContractUpdateActivated: false
 ]
 
@@ -206,8 +239,8 @@ MolComponentFactory >> defineComponent: aComponent [
 MolComponentFactory >> defineComponentTypeImplementors: aComponentType [
 	
 	"Check if the object is a trait"
-	aComponentType isTrait ifFalse:[self error: '[Molecule] Cannot define ComponentType implementors : This object is not a trait.'. ^self].
-	aComponentType isComponentType ifFalse:[self error: '[Molecule] Cannot define a no ComponentType implementors trait.'. ^self]. 
+	aComponentType isTrait ifFalse:[ ^ self error: '[Molecule] Cannot define ComponentType implementors : This object is not a trait.' ].
+	aComponentType isComponentType ifFalse:[ ^ self error: '[Molecule] Cannot define a no ComponentType implementors trait.' ]. 
 
 	aComponentType users do: [ :user | self defineComponent: user ].
 ]
@@ -349,7 +382,7 @@ MolComponentFactory >> getSourceCodeFor: aSymbol trait: aTrait selector: aSelect
 	aSymbol = #consumedEvents ifTrue:[^self getConsumedEventSourceCodeFor: aTrait selector: aSelector ].
 	aSymbol = #usedServices ifTrue:[^self getUsedServicesSourceCodeFor: aTrait selector: aSelector ].
 	aSymbol = #usedParameters ifTrue:[^self getUsedParametersSourceCodeFor: aTrait selector: aSelector ].
-	self error: 'Component Type contract category not supported'.
+	^ self error: 'Component Type contract category not supported'.
 ]
 
 { #category : #'private - code generation' }
@@ -427,20 +460,16 @@ MolComponentFactory >> initialize [
 
 { #category : #'initalize-release' }
 MolComponentFactory >> initializeIcebergAnnouncements [
-
-	"activate (or desactivate) component contract update when iceberge is used (or not)"
-
+	"Activate (or desactivate) component contract update when iceberge is used (or not)"
 	| announcer |
 	announcer := SystemAnnouncer uniqueInstance weak.
-	announcer ifNil: [ ^ self ].
-	announcer
-		when: MCVersionLoaderStarted
-		send: #deactivateDynamicContractUpdate
-		to: self.
-	announcer
-		when: MCVersionLoaderStopped
-		send: #activateDynamicContractUpdate
-		to: self
+	announcer ifNil: [
+		MolUtils log: 'Error on Iceberg annoucement initialization, system Announcer is nil'.
+		^ self 
+	].
+	announcer when: #MCVersionLoaderStarted send: #deactivateDynamicContractUpdate: to: self with: false.
+	"Activate without display information message"
+	announcer when: #MCVersionLoaderStopped send: #activateDynamicContractUpdate: to: self with: false.
 ]
 
 { #category : #'initalize-release' }

@@ -89,6 +89,15 @@ MolUtilsTest >> testLog2 [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testShowInformation [
+	MolUtils showInformation: nil.
+	MolUtils showInformation: #test.
+	MolUtils showInformation: MolCompleteComponent.
+	MolUtils showInformation: Time now.
+	MolUtils showInformation: 'My Information Message'.
+]
+
+{ #category : #tests }
 MolUtilsTest >> testStartComponent [
 
 	| homeServices deploymentServices |

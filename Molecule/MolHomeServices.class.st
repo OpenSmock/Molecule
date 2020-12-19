@@ -40,8 +40,8 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 	
 	"get to be activated component instance"
 	component := self instanceOf: aComponentClass named: aName.
-	component isNil ifTrue:[
-		ComponentNotFoundError signal: 'Can not activate a non instanciated component'.
+	component ifNil:[
+		^ComponentNotFoundError signal: 'Can not activate a non instanciated component'.
 	].
 	
 	"remove from waiting activation list"
@@ -101,7 +101,7 @@ MolHomeServices >> instanciateComponent: aClass named: aName [
 	
 	"check if the component can be instanciate"
 	deployed := deployedComponents at: aClass ifAbsent:[
-		ComponentNotDeployedError signal: 'Can not instanciate a non deployed component'.	
+		^ComponentNotDeployedError signal: 'Can not instanciate a non deployed component'.	
 	].
 	
 	"instanciate the component"
@@ -164,8 +164,8 @@ MolHomeServices >> passivateComponent: aClass named: aName [
 	
 	"get to be passivated component instance"
 	component := self instanceOf: aClass named: aName.
-	component isNil ifTrue: [
-		ComponentNotFoundError signal: 'Can not passivate a non instanciated component'.
+	component ifNil: [
+		^ComponentNotFoundError signal: 'Can not passivate a non instanciated component'.
 	].
 
 	component componentPassivate.
@@ -215,8 +215,8 @@ MolHomeServices >> removeComponent: aClass named: aName [
 	
 	"get to be removed component instance"
 	component := self instanceOf: aClass named: aName.
-	component isNil ifTrue:[
-		ComponentNotFoundError signal: 'Can not remove a non instanciated component'.
+	component ifNil:[
+		^ComponentNotFoundError signal: 'Can not remove a non instanciated component'.
 	].
 	
 	"passivation if necessary"
