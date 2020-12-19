@@ -47,7 +47,7 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 	"remove from waiting activation list"
 	waitingForActivation
 		remove: component
-		ifAbsent: [ "don't activate a component already activated" ^ self ].
+		ifAbsent: [ ^ComponentAlreadyActivatedError signal: 'Component is already activated.' ].
 		
 	component componentConnector activateComponent.
 	component componentActivate.
@@ -104,7 +104,12 @@ MolHomeServices >> instanciateComponent: aClass named: aName [
 		^ComponentNotDeployedError signal: 'Can not instanciate a non deployed component'.	
 	].
 	
-	"instanciate the component"
+	"instanciate the component if not exists"
+	deployed at: aName ifPresent:[ :c |
+		c ifNotNil:[
+			^ComponentAlreadyExistsError signal: 'Can not instanciate a component with the same name of another component'.	
+		].
+	].
 	component := aClass new componentName: aName; yourself.
 	MolUtils log: aClass printString , ' named: ' , aName printString , ' is instanciated.'.
 	deployed at: component componentName put: component.
@@ -156,22 +161,26 @@ MolHomeServices >> passivateComponent: aClass [
 ]
 
 { #category : #'component life cycle' }
-MolHomeServices >> passivateComponent: aClass named: aName [
+MolHomeServices >> passivateComponent: aComponentClass named: aName [
 	| component |
 	
-	self assert: [aClass isNotNil] description: ['[Molecule] Component class should be not nil.'].
+	self assert: [aComponentClass isNotNil] description: ['[Molecule] Component class should be not nil.'].
 	self assert: [aName isNotNil] description: ['[Molecule] Component name should be not nil.'].
 	
 	"get to be passivated component instance"
-	component := self instanceOf: aClass named: aName.
+	component := self instanceOf: aComponentClass named: aName.
 	component ifNil: [
 		^ComponentNotFoundError signal: 'Can not passivate a non instanciated component'.
+	].
+
+	(self isWaitingForActivation: aComponentClass named: aName) ifTrue:[
+		^ComponentAlreadyPassivatedError signal: 'Component is already passivated.' 
 	].
 
 	component componentPassivate.
 	component componentConnector passivateComponent.
 	
-	MolUtils log: aClass printString , ' named: ' , aName printString, ' is passivated.'.
+	MolUtils log: aComponentClass printString , ' named: ' , aName printString, ' is passivated.'.
 
 	"add in waiting activation list"
 	waitingForActivation add: component.
@@ -220,9 +229,11 @@ MolHomeServices >> removeComponent: aClass named: aName [
 	].
 	
 	"passivation if necessary"
-	(self isWaitingForActivation: component) ifFalse: [ self passivateComponent: aClass named: aName ].
-	
-	waitingForActivation remove: component.
+	(self isWaitingForActivation: aClass named: aName) ifFalse: [ self passivateComponent: aClass named: aName ].
+	waitingForActivation remove: component ifAbsent:[
+		"The Component has not been activated, just log an proceed to the remove"
+		MolUtils log: aClass printString , ' named: ' , aName printString , ' has not been activated during the session.'.
+	].
 	
 	component
 		triggerEvent: #removeComponent with: component;

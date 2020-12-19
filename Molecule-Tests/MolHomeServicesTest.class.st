@@ -108,6 +108,85 @@ MolHomeServicesTest >> testSeveralComponentsLifecycleWithName [
 ]
 
 { #category : #tests }
+MolHomeServicesTest >> testStartAndStopComponentsAlreadyExists [
+	"Test exception appear"
+	| manager error |
+
+	error := nil.
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
+	
+	manager homeServices instanciateComponent: MolBasicSubComponentImpl.
+	[manager homeServices instanciateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: ComponentAlreadyExistsError).
+	
+	manager homeServices activateComponent: MolBasicSubComponentImpl.
+	[manager homeServices activateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: ComponentAlreadyActivatedError).
+	
+	manager homeServices passivateComponent: MolBasicSubComponentImpl.
+	[manager homeServices passivateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: ComponentAlreadyPassivatedError).
+	
+	error := nil.
+	manager homeServices removeComponent: MolBasicSubComponentImpl.
+	[manager homeServices removeComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: ComponentNotFoundError).
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testStartAndStopComponentsNoExist [
+	"Test exception appear"
+	| manager error |
+
+	error := nil.
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
+	
+	error := nil.
+	[manager homeServices activateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: ComponentNotFoundError).
+
+	error := nil.
+	[manager homeServices passivateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: ComponentNotFoundError).
+
+	error := nil.
+	[manager homeServices removeComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: ComponentNotFoundError).
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testStartNotDeployedComponent [
+	"Test exception appear"
+	| manager error |
+
+	error := nil.
+	manager := MolComponentManager default.
+	
+	error := nil.
+	[manager homeServices instanciateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+		error := e.
+	].
+
+	self assert: (error isKindOf: ComponentNotDeployedError).
+]
+
+{ #category : #tests }
 MolHomeServicesTest >> testSubComponentLifecycle [
 "test life cycle of a component using AbstractComponentImpl as super class"
 	| manager component |

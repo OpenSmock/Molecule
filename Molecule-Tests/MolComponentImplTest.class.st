@@ -63,9 +63,3 @@ MolComponentImplTest >> testIsComponent [
 
 	self assert: MolComponentImpl isComponent.
 ]
-
-{ #category : #tests }
-MolComponentImplTest >> testProtocolForComponentAccess [
-
-	self assert: MolComponentImpl protocolForComponentAccess equals: 'component accessing'.
-]

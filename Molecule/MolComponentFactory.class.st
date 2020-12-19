@@ -20,6 +20,240 @@ Class {
 	#category : #'Molecule-Tools'
 }
 
+{ #category : #'component - contract management' }
+MolComponentFactory class >> addConsumedEvents: aComponentEvents in: aComponentType [
+	"Add a provided ComponentEvents in a ComponentType"
+	
+	| declaredConsumedComponentEvents selector sourceCode |
+	(aComponentEvents isNil or:[aComponentEvents isTrait not]) ifTrue:[^self].
+	aComponentEvents isComponentEvents ifFalse:[^self].
+	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
+	aComponentType isComponentType ifFalse:[^self].
+	
+	"ComponentEvents already declare"
+	(aComponentType isConsumeEvents: aComponentEvents) ifTrue:[^self].
+	
+	"Get declared events to rebuild the ComponentType accessor"
+	declaredConsumedComponentEvents := aComponentType consumedComponentEvents asOrderedCollection.
+	declaredConsumedComponentEvents add: aComponentEvents.
+	
+	selector := 'consumedComponentEvents'.
+	sourceCode := WriteStream on: String new.
+	sourceCode nextPutAll: selector.
+	sourceCode crtab: 1.
+	sourceCode
+		nextPutAll: '<componentContract>';
+		crtab: 1;
+		"Empty : nextPutAll: '^ {}'."
+		nextPutAll: '^ {'.
+	1 to: (declaredConsumedComponentEvents size) do:[ :i |
+		sourceCode nextPutAll: ' ' , (declaredConsumedComponentEvents at: i) printString , ' '.
+		i < declaredConsumedComponentEvents size ifTrue:[sourceCode nextPutAll: '.'].
+	].
+	sourceCode nextPutAll: '}'.
+	
+	"Compile"
+	aComponentType class
+		compile: sourceCode contents 
+		classified: self protocolForComponentEvents.
+	
+]
+
+{ #category : #'component - contract management' }
+MolComponentFactory class >> addProducedEvents: aComponentEvents in: aComponentType [
+	"Add a provided ComponentEvents in a ComponentType"
+	
+	| declaredProducedComponentEvents selector sourceCode |
+	(aComponentEvents isNil or:[aComponentEvents isTrait not]) ifTrue:[^self].
+	aComponentEvents isComponentEvents ifFalse:[^self].
+	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
+	aComponentType isComponentType ifFalse:[^self].
+	
+	"ComponentEvents already declare"
+	(aComponentType isProduceEvents: aComponentEvents) ifTrue:[^self].
+	
+	"Get declared events to rebuild the ComponentType accessor"
+	declaredProducedComponentEvents := aComponentType producedComponentEvents asOrderedCollection.
+	declaredProducedComponentEvents add: aComponentEvents.
+	
+	selector := 'producedComponentEvents'.
+	sourceCode := WriteStream on: String new.
+	sourceCode nextPutAll: selector.
+	sourceCode crtab: 1.
+	sourceCode
+		nextPutAll: '<componentContract>';
+		crtab: 1;
+		"Empty : nextPutAll: '^ {}'."
+		nextPutAll: '^ {'.
+	1 to: (declaredProducedComponentEvents size) do:[ :i |
+		sourceCode nextPutAll: ' ' , (declaredProducedComponentEvents at: i) printString , ' '.
+		i < declaredProducedComponentEvents size ifTrue:[sourceCode nextPutAll: '.'].
+	].
+	sourceCode nextPutAll: '}'.
+	
+	"Compile"
+	aComponentType class
+		compile: sourceCode contents 
+		classified: self protocolForComponentEvents.
+	
+]
+
+{ #category : #'component - contract management' }
+MolComponentFactory class >> addProvidedParameters: aComponentParameters in: aComponentType [
+	"Add a provided ComponentParameters in a ComponentType"
+	
+	| declaredProvidedComponentParameters selector sourceCode |
+	(aComponentParameters isNil or:[aComponentParameters isTrait not]) ifTrue:[^self].
+	aComponentParameters isComponentParameters ifFalse:[^self].
+	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
+	aComponentType isComponentType ifFalse:[^self].
+	
+	"ComponentParameters already declare"
+	(aComponentType isProvideParameters: aComponentParameters) ifTrue:[^self].
+	
+	"Get declared parameters to rebuild the ComponentType accessor"
+	declaredProvidedComponentParameters := aComponentType providedComponentParameters asOrderedCollection.
+	declaredProvidedComponentParameters add: aComponentParameters.
+	
+	selector := 'providedComponentParameters'.
+	sourceCode := WriteStream on: String new.
+	sourceCode nextPutAll: selector.
+	sourceCode crtab: 1.
+	sourceCode
+		nextPutAll: '<componentContract>';
+		crtab: 1;
+		"Empty : nextPutAll: '^ {}'."
+		nextPutAll: '^ {'.
+	1 to: (declaredProvidedComponentParameters size) do:[ :i |
+		sourceCode nextPutAll: ' ' , (declaredProvidedComponentParameters at: i) printString , ' '.
+		i < declaredProvidedComponentParameters size ifTrue:[sourceCode nextPutAll: '.'].
+	].
+	sourceCode nextPutAll: '}'.
+	
+	"Compile"
+	aComponentType class
+		compile: sourceCode contents 
+		classified: self protocolForComponentParameters.
+	
+]
+
+{ #category : #'component - contract management' }
+MolComponentFactory class >> addProvidedServices: aComponentServices in: aComponentType [
+	"Add a provided ComponentServices in a ComponentType"
+	
+	| declaredProvidedComponentServices selector sourceCode |
+	(aComponentServices isNil or:[aComponentServices isTrait not]) ifTrue:[^self].
+	aComponentServices isComponentServices ifFalse:[^self].
+	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
+	aComponentType isComponentType ifFalse:[^self].
+	
+	"ComponentServices already declare"
+	(aComponentType isProvideServices: aComponentServices) ifTrue:[^self].
+	
+	"Get declared services to rebuild the ComponentType accessor"
+	declaredProvidedComponentServices := aComponentType providedComponentServices asOrderedCollection.
+	declaredProvidedComponentServices add: aComponentServices.
+	
+	selector := 'providedComponentServices'.
+	sourceCode := WriteStream on: String new.
+	sourceCode nextPutAll: selector.
+	sourceCode crtab: 1.
+	sourceCode
+		nextPutAll: '<componentContract>';
+		crtab: 1;
+		"Empty : nextPutAll: '^ {}'."
+		nextPutAll: '^ {'.
+	1 to: (declaredProvidedComponentServices size) do:[ :i |
+		sourceCode nextPutAll: ' ' , (declaredProvidedComponentServices at: i) printString , ' '.
+		i < declaredProvidedComponentServices size ifTrue:[sourceCode nextPutAll: '.'].
+	].
+	sourceCode nextPutAll: '}'.
+	
+	"Compile"
+	aComponentType class
+		compile: sourceCode contents 
+		classified: self protocolForComponentServices.
+	
+]
+
+{ #category : #'component - contract management' }
+MolComponentFactory class >> addUsedParameters: aComponentParameters in: aComponentType [
+	"Add a provided ComponentParameters in a ComponentType"
+	
+	| declaredUsedComponentParameters selector sourceCode |
+	(aComponentParameters isNil or:[aComponentParameters isTrait not]) ifTrue:[^self].
+	aComponentParameters isComponentParameters ifFalse:[^self].
+	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
+	aComponentType isComponentType ifFalse:[^self].
+	
+	"ComponentParameters already declare"
+	(aComponentType isUseParameters: aComponentParameters) ifTrue:[^self].
+	
+	"Get declared parameters to rebuild the ComponentType accessor"
+	declaredUsedComponentParameters := aComponentType usedComponentParameters asOrderedCollection.
+	declaredUsedComponentParameters add: aComponentParameters.
+	
+	selector := 'usedComponentParameters'.
+	sourceCode := WriteStream on: String new.
+	sourceCode nextPutAll: selector.
+	sourceCode crtab: 1.
+	sourceCode
+		nextPutAll: '<componentContract>';
+		crtab: 1;
+		"Empty : nextPutAll: '^ {}'."
+		nextPutAll: '^ {'.
+	1 to: (declaredUsedComponentParameters size) do:[ :i |
+		sourceCode nextPutAll: ' ' , (declaredUsedComponentParameters at: i) printString , ' '.
+		i < declaredUsedComponentParameters size ifTrue:[sourceCode nextPutAll: '.'].
+	].
+	sourceCode nextPutAll: '}'.
+	
+	"Compile"
+	aComponentType class
+		compile: sourceCode contents 
+		classified: self protocolForComponentParameters.
+	
+]
+
+{ #category : #'component - contract management' }
+MolComponentFactory class >> addUsedServices: aComponentServices in: aComponentType [
+	"Add a provided ComponentServices in a ComponentType"
+	
+	| declaredUsedComponentServices selector sourceCode |
+	(aComponentServices isNil or:[aComponentServices isTrait not]) ifTrue:[^self].
+	aComponentServices isComponentServices ifFalse:[^self].
+	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
+	aComponentType isComponentType ifFalse:[^self].
+	
+	"ComponentServices already declare"
+	(aComponentType isUseServices: aComponentServices) ifTrue:[^self].
+	
+	"Get declared services to rebuild the ComponentType accessor"
+	declaredUsedComponentServices := aComponentType usedComponentServices asOrderedCollection.
+	declaredUsedComponentServices add: aComponentServices.
+	
+	selector := 'usedComponentServices'.
+	sourceCode := WriteStream on: String new.
+	sourceCode nextPutAll: selector.
+	sourceCode crtab: 1.
+	sourceCode
+		nextPutAll: '<componentContract>';
+		crtab: 1;
+		"Empty : nextPutAll: '^ {}'."
+		nextPutAll: '^ {'.
+	1 to: (declaredUsedComponentServices size) do:[ :i |
+		sourceCode nextPutAll: ' ' , (declaredUsedComponentServices at: i) printString , ' '.
+		i < declaredUsedComponentServices size ifTrue:[sourceCode nextPutAll: '.'].
+	].
+	sourceCode nextPutAll: '}'.
+	
+	"Compile"
+	aComponentType class
+		compile: sourceCode contents 
+		classified: self protocolForComponentServices.
+	
+]
+
 { #category : #accessing }
 MolComponentFactory class >> cleanUp [
 	<script: 'self cleanUp'>
@@ -28,7 +262,25 @@ MolComponentFactory class >> cleanUp [
 	Default := nil 
 ]
 
-{ #category : #'componentImpl - creation' }
+{ #category : #'component - creation' }
+MolComponentFactory class >> createComponentEvents: aSymbol in: aPackageName [
+	"Create a ComponentEvents interface named aSymbol in a package"
+	
+	aSymbol ifNil:[^self].
+	aPackageName ifNil:[^self].
+	self class environment at: aSymbol ifPresent: [
+		^ self error:'[Molecule] Do not create an existing ComponentEvents, remove it before.'.
+	].
+
+	OpalCompiler new evaluate:
+			'Trait named: ' , aSymbol printString ,
+	' 
+	uses: MolComponentEvents
+	package: ''' , aPackageName , ''''.
+	
+]
+
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentForType: aComponentType named: aSymbol in: aPackageName [
 	aSymbol ifNil:[^self].
 	aPackageName ifNil:[^self].
@@ -54,7 +306,7 @@ MolComponentFactory class >> createComponentForType: aComponentType named: aSymb
 	"(self class environment at: aSymbol) defineComponent"
 ]
 
-{ #category : #'componentImpl - creation' }
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentNamed: aSymbol in: aPackageName [
 
 	aSymbol ifNil:[^self].
@@ -62,14 +314,50 @@ MolComponentFactory class >> createComponentNamed: aSymbol in: aPackageName [
 	self createComponentForType: nil named: aSymbol in: aPackageName
 ]
 
-{ #category : #'componentImpl - creation' }
+{ #category : #'component - creation' }
+MolComponentFactory class >> createComponentParameters: aSymbol in: aPackageName [
+	"Create a ComponentParameters interface named aSymbol in a package"
+	
+	aSymbol ifNil:[^self].
+	aPackageName ifNil:[^self].
+	self class environment at: aSymbol ifPresent: [
+		^ self error:'[Molecule] Do not create an existing ComponentParameters, remove it before.'.
+	].
+
+	OpalCompiler new evaluate:
+			'Trait named: ' , aSymbol printString ,
+	' 
+	uses: MolComponentParameters
+	package: ''' , aPackageName , ''''.
+	
+]
+
+{ #category : #'component - creation' }
+MolComponentFactory class >> createComponentServices: aSymbol in: aPackageName [
+	"Create a ComponentServices interface named aSymbol in a package"
+	
+	aSymbol ifNil:[^self].
+	aPackageName ifNil:[^self].
+	self class environment at: aSymbol ifPresent: [
+		^ self error:'[Molecule] Do not create an existing ComponentServices, remove it before.'.
+	].
+
+	OpalCompiler new evaluate:
+			'Trait named: ' , aSymbol printString ,
+	' 
+	uses: MolComponentServices
+	package: ''' , aPackageName , ''''.
+	
+]
+
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentType: aSymbol in: aPackageName [
 	"Create a ComponentType named aSymbol in a package"
 	
 	aSymbol ifNil:[^self].
 	aPackageName ifNil:[^self].
 	self class environment at: aSymbol ifPresent: [
-		^ self error:'[Molecule] Do not redefine an existing ComponentType, remove it before.'.
+		^ self error:'[Molecule] Do not create an existing ComponentType, remove it before.'.
 	].
 
 	OpalCompiler new evaluate:
@@ -101,6 +389,26 @@ MolComponentFactory class >> defineDirtyComponents [
 { #category : #'class initialization' }
 MolComponentFactory class >> initialize [
 	self default 
+]
+
+{ #category : #protocol }
+MolComponentFactory class >> protocolForComponentAccess [
+	^ 'component accessing'
+]
+
+{ #category : #protocol }
+MolComponentFactory class >> protocolForComponentEvents [
+	^ 'accessing - events'
+]
+
+{ #category : #protocol }
+MolComponentFactory class >> protocolForComponentParameters [
+	^ 'accessing - parameters'
+]
+
+{ #category : #protocol }
+MolComponentFactory class >> protocolForComponentServices [
+	^ 'accessing - services'
 ]
 
 { #category : #'dynamic contract update' }
@@ -177,6 +485,7 @@ MolComponentFactory >> contractChanged: aComponentType [
 	
 	aComponentType ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
 	aComponentType isTrait ifFalse:[ "Only Component Type are supported" ^ self ].
+	aComponentType = MolComponentType ifTrue:[ "Exception for the ComponentType Trait (Abstract ComponentType)" ^ self ].
 
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"need to fork the definition because new traits are not already injected here to the component"
@@ -281,7 +590,7 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 			ifTrue: [ 
 				aComponent
 					compile: sourceCode contents
-					classified: aComponent protocolForComponentAccess ]
+					classified: self class protocolForComponentAccess ]
 			ifFalse: [ "if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
 				"the selector must not be a parent"
 				(aComponent selectors includes: selector) ifTrue: [ 
@@ -291,7 +600,7 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 						sourceMethod ~= sourceCode contents ifTrue: [ "rewrite the method"
 							aComponent
 								compile: sourceCode contents
-								classified: aComponent protocolForComponentAccess ] ] ] ] ]
+								classified: self class protocolForComponentAccess ] ] ] ] ]
 ]
 
 { #category : #'code generation' }

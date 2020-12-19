@@ -22,7 +22,7 @@ Trait {
 { #category : #'component definition' }
 MolComponentImpl classSide >> defineComponent [
 
-	self removeProtocol: self protocolForComponentAccess.
+	self removeProtocol: MolComponentFactory protocolForComponentAccess.
 	MolComponentFactory defineComponent: self.
 
 ]
@@ -41,12 +41,6 @@ MolComponentImpl classSide >> haveComponentType [
 { #category : #testing }
 MolComponentImpl classSide >> isComponent [
 	^ true
-]
-
-{ #category : #'component definition' }
-MolComponentImpl classSide >> protocolForComponentAccess [
-
-	^'component accessing'
 ]
 
 { #category : #'component life cycle' }

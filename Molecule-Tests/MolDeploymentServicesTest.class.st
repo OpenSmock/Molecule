@@ -20,6 +20,23 @@ MolDeploymentServicesTest >> tearDown [
 ]
 
 { #category : #tests }
+MolDeploymentServicesTest >> testDeployAlreadyDeployedImplementation [
+	| manager |
+	
+	manager := MolComponentManager default.	
+	self assert: manager homeServices deployedComponents isEmpty.
+	
+	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
+
+	self assert: manager homeServices deployedComponents size equals: 1.	
+	
+	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
+	self assert: manager homeServices deployedComponents size equals: 0.	
+]
+
+{ #category : #tests }
 MolDeploymentServicesTest >> testDeploymentServices [
 	| manager |
 	
@@ -40,5 +57,15 @@ MolDeploymentServicesTest >> testDeploymentServices [
 	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl2.
 	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl2.
 	self assert: manager homeServices deployedComponents isEmpty.
+	
+]
+
+{ #category : #tests }
+MolDeploymentServicesTest >> testUndeployANotDeployComponent [
+	| manager |
+	
+	manager := MolComponentManager default.
+	
+	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl. "No error"
 	
 ]

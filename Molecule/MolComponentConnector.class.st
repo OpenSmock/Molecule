@@ -34,9 +34,9 @@ MolComponentConnector >> connectComponent: aComponent [
 	parametersProviders := Dictionary new.
 	
 	component class allProducedEvents do: [ :evt | eventsNotifiers at: evt put: (MolEventNotifier new interface: evt originator: component)].
-	component class allRequiredServices do: [ :svc | servicesProviders at: svc put: #default].
+	component class allUsedServices do: [ :svc | servicesProviders at: svc put: #default].
 	component class allConsumedEvents do: [ :evt | eventsSubscribers at: evt put: #default].
-	component class allRequiredParameters do: [ :svc | parametersProviders at: svc put: #default].
+	component class allUsedParameters do: [ :svc | parametersProviders at: svc put: #default].
 
 ]
 

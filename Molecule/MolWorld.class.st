@@ -31,7 +31,7 @@ MolWorld class >> deepCleanUp: aBuilder [
 		icon: (self iconNamed: #refresh);
 		action: [ MolComponentManager deepCleanUp ];
 		label: 'Do Image Molecule Cleanup';
-		help: 'Cleanup Molecule system and flush all components instance of the image'
+		help: 'Cleanup all Molecule system instances and components of the image'
 ]
 
 { #category : #scripts }

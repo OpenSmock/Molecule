@@ -43,16 +43,32 @@ MolComponentManager class >> cleanUp [
 { #category : #'initialize-release' }
 MolComponentManager class >> deepCleanUp [
 	<script: 'self deepCleanUp'>
-	| i |
+	| i j |
 	self cleanUp.
-	
-	i := 0.
 	MolComponentFactory allInstancesDo: [ :factory | (factory == MolComponentFactory default) ifFalse:[factory release]].
-	MolAbstractComponentImpl allSubInstancesDo:[ :component | component componentFlush. i := i+1 ].
-	MolComponentImpl users do: [:impl | impl allInstances do: [:component | component componentFlush. i := i+1]].
+	i := self flushComponents.
+	j := i.
+
 	SmalltalkImage cleanUp.
-	MolUtils showInformation: 'Deep Cleanup : ',i printString,' lost component(s) found and released.'.
+	Smalltalk garbageCollect.
+	Smalltalk garbageCollectMost.
+	
+	"Try to reflush"
+	i > 0 ifTrue:[
+		(Delay forMilliseconds: 500) wait.
+		j := self flushComponents.	
+	].
+	
 	MolUtils log: 'Deep Cleanup: ',i printString,' lost component(s) found and released.'.
+	i <= 0 ifFalse:[
+		j <= 0 ifFalse:[
+			MolUtils showInformation: 'Warning : Cannot release ',i printString,' component(s) after two clean pass, please try again to confirm correct cleanup.'.
+		] ifTrue:[
+			MolUtils showInformation: 'Clean success : ',i printString,' lost component(s) found and released.'.
+		].
+	] ifTrue:[
+		MolUtils showInformation: 'No problem : image was clean.'.
+	].
 ]
 
 { #category : #singleton }
@@ -61,6 +77,16 @@ MolComponentManager class >> default [
 	
 	Default ifNil: [Default := self new].
 	^Default
+]
+
+{ #category : #'initialize-release' }
+MolComponentManager class >> flushComponents [
+	"Flush all components an return number of flushed components"
+	| i |
+	i := 0.
+	MolAbstractComponentImpl allSubInstancesDo:[ :component | component componentFlush. i := i + 1 ].
+	MolComponentImpl users do: [:impl | impl allInstances do: [:component | component componentFlush. i := i + 1]].
+	^i
 ]
 
 { #category : #'initialize-release' }

@@ -1,5 +1,5 @@
 "
-I am added and removed by test: MolComponentFactoryTest>>#testCreateComponentNamedIn
+I am added and removed by test: MolComponentFactoryTest>>#testCreateComponentClassWithoutType
 "
 Class {
 	#name : #MolCompleteComponentTestImpl,
