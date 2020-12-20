@@ -27,10 +27,10 @@ MolExtensionsTest >> testHaveComponentType [
 { #category : #tests }
 MolExtensionsTest >> testIsComponent [
 
-	self assert: Object isComponent equals: false.
-	self assert: 2 class isComponent equals: false.
-	self assert: MolAbstractComponentImpl  isComponent.
-	self assert: MolMyClientComponentImpl isComponent.
+	self assert: Object isComponentClass equals: false.
+	self assert: 2 class isComponentClass equals: false.
+	self assert: MolAbstractComponentImpl  isComponentClass.
+	self assert: MolMyClientComponentImpl isComponentClass.
 	
 ]
 

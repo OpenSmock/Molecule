@@ -39,7 +39,7 @@ MolComponentImpl classSide >> haveComponentType [
 ]
 
 { #category : #testing }
-MolComponentImpl classSide >> isComponent [
+MolComponentImpl classSide >> isComponentClass [
 	^ true
 ]
 
@@ -138,6 +138,11 @@ MolComponentImpl >> forServices: aServicesTrait useProvider: aServicesProvider [
 	(aServicesTrait traits includes: MolComponentServices)
 		ifTrue: [self servicesProviders at: aServicesTrait put: aServicesProvider]
 		ifFalse: [ MolUtils log: self printString, '>forService:useProvider: try to link a non services trait for services ' ]
+]
+
+{ #category : #testing }
+MolComponentImpl >> isComponent [
+	^ true
 ]
 
 { #category : #testing }

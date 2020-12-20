@@ -12,7 +12,7 @@ Class {
 { #category : #deployment }
 MolDeploymentServices >> deployComponentImplementation: aComponentClass [
 
-	(aComponentClass isComponent) ifFalse: [ ^ self error: '[Molecule] Cannot allow no Component class deployment.' ].
+	(aComponentClass isComponentClass) ifFalse: [ ^ self error: '[Molecule] Cannot allow no Component class deployment.' ].
 	(aComponentClass haveComponentType) ifFalse: [ ^ self error: '[Molecule] Cannot allow no Typed Component class deployment' ].
 	
 	MolComponentManager default homeServices addDeployedComponent: aComponentClass

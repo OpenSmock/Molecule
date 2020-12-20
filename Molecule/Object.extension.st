@@ -1,6 +1,11 @@
 Extension { #name : #Object }
 
 { #category : #'*Molecule' }
-Object class >> isComponent [
+Object >> isComponent [
+	^ false
+]
+
+{ #category : #'*Molecule' }
+Object class >> isComponentClass [
 	^ false
 ]

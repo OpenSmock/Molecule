@@ -386,8 +386,8 @@ MolComponentFactory class >> defineAllComponents [
 ]
 
 { #category : #accessing }
-MolComponentFactory class >> defineComponent: aComponentType [
-	self default defineComponent: aComponentType
+MolComponentFactory class >> defineComponent: aComponentClass [
+	self default defineComponent: aComponentClass
 ]
 
 { #category : #accessing }
@@ -439,28 +439,35 @@ MolComponentFactory >> activateDynamicContractUpdate: isInform [
 ]
 
 { #category : #'private - code checking' }
-MolComponentFactory >> checkUsedTrait: aList in: aComponent [
-	| eventAndServices missing |
+MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass: aComponentClass [
+	"Check if a Component Class uses a list of Trait Class and do uses"
+	| traitList missingTraits |
 	
-	"check component used traits includes trait list "
-	eventAndServices := self collectComponentConnectionTraits: aComponent.
-	missing := aList reject: [:e | eventAndServices includes: e].
-	missing ifNotEmpty: [self rebuildComponent: aComponent traitsAdding: missing].
-	eventAndServices := self collectComponentConnectionTraits: aComponent.
+	traitList := self collectComponentConnectionTraits: aComponentClass.
+	missingTraits := aTraitList reject: [ :e | traitList includes: e ].
+	missingTraits ifNotEmpty: [self rebuildComponent: aComponentClass traitsAdding: missingTraits].
 
+	"eventParametersAndServices := self collectComponentConnectionTraits: aComponentClass."
 	"bool := false.
-	aList do: [:e | (eventAndServices includes: e) ifFalse: [
+	aTraitList do: [:e | (eventAndServices includes: e) ifFalse: [
 			bool := UIManager default
 								confirm:
 									'Used trait is not declared (' , e printString
 										, '), do you want to browse class ?']].
-	bool ifTrue: [aComponent browse]"
+	bool ifTrue: [aComponentClass browse]"
 ]
 
 { #category : #'dirty components' }
-MolComponentFactory >> collectComponentConnectionTraits: aComponent [
-
-	^aComponent traitComposition allTraits select: [:e | (e traitComposition allTraits includes: MolComponentServices) or: [(e traitComposition allTraits includes: MolComponentEvents) or: [e traitComposition allTraits includes: MolComponentParameters]]].
+MolComponentFactory >> collectComponentConnectionTraits: aComponentOrAComponentClass [
+	"Collect a Component Traits : Services, Events and Parameters"
+	| componentClass |
+	aComponentOrAComponentClass ifNil:[^OrderedCollection new].
+	componentClass := aComponentOrAComponentClass isClass ifTrue:[aComponentOrAComponentClass] ifFalse:[aComponentOrAComponentClass class].
+	componentClass isComponentClass ifFalse:[^OrderedCollection new].
+	
+	^ componentClass traitComposition allTraits select: [ :e |
+		e isComponentServices or:[e isComponentEvents or:[e isComponentParameters]]	
+	]
 ]
 
 { #category : #'system annoucements' }
@@ -473,9 +480,9 @@ MolComponentFactory >> componentAddedAnnouncement: aClassAddedAnnouncement [
 
 { #category : #'system annoucements' }
 MolComponentFactory >> componentChanged: aChangedClass [
-
+	"Update a ComponentClass triggered by a class description change"
 	aChangedClass isTrait ifTrue:[^self].
-	aChangedClass isComponent ifTrue:[		
+	aChangedClass isComponentClass ifTrue:[		
 		self isDynamicContractUpdateActivated ifTrue: [ 
 			"need to fork the definition because new traits are not already injected here to the component"
 			[self defineComponent: aChangedClass] fork. 
@@ -534,33 +541,38 @@ MolComponentFactory >> deactivateDynamicContractUpdate: isInform [
 ]
 
 { #category : #'component definition' }
-MolComponentFactory >> defineComponent: aComponent [
+MolComponentFactory >> defineComponent: aComponentClass [
 	"A component is a Class, define it"
-	 | toUseTraits |
-	aComponent isComponent ifFalse:[^self].
+	 | toUseTraitList |
+	(aComponentClass isNil or:[aComponentClass isClass not or:[aComponentClass isComponentClass not]]) ifTrue:[^self].
 	
-	self generateConsumedEventsComponentAccessorsFor: aComponent.
-	self generateProducedEventsComponentAccessorsFor: aComponent.
-	self generateUsedServicesComponentAccessorsFor: aComponent.
-	self generateUsedParametersComponentAccessorsFor: aComponent.
+	"Generate or remove accessors"
+	self generateOrRemoveConsumedEventsComponentAccessorsFor: aComponentClass.
+	self generateOrRemoveProducedEventsComponentAccessorsFor: aComponentClass.
+	self generateOrRemoveUsedServicesComponentAccessorsFor: aComponentClass.
+	self generateOrRemoveUsedParametersComponentAccessorsFor: aComponentClass.
 
-	"Check if the object have a component type, the type should be deleted when work on a component class or not already added"
-	aComponent haveComponentType ifFalse:[^self].
-	
-	"Check missing traits"
-	toUseTraits := OrderedCollection withAll: aComponent consumedComponentEvents.
-	toUseTraits addAll: aComponent providedComponentServices.
-	toUseTraits addAll: aComponent providedComponentParameters.
-	self checkUsedTrait: toUseTraits in: aComponent.
+	"Check if the object have a component type, if not remove injected component contract traits"
+	aComponentClass haveComponentType ifFalse:[ | traitList |
+		"Remove persistant contract traits"
+		traitList := self collectComponentConnectionTraits: aComponentClass.
+		traitList do:[ :trait | aComponentClass removeFromComposition: trait ].
+		^ self
+	] ifTrue:[
+		"Check missing traits"
+		toUseTraitList := Set withAll: aComponentClass consumedComponentEvents.
+		toUseTraitList addAll: aComponentClass providedComponentServices.
+		toUseTraitList addAll: aComponentClass providedComponentParameters.
+		self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
+	].
 ]
 
 { #category : #'component definition' }
 MolComponentFactory >> defineComponentTypeImplementors: aComponentType [
-	
 	"Check if the object is a trait"
-	aComponentType isTrait ifFalse:[ ^ self error: '[Molecule] Cannot define ComponentType implementors : This object is not a trait.' ].
-	aComponentType isComponentType ifFalse:[ ^ self error: '[Molecule] Cannot define a no ComponentType implementors trait.' ]. 
 
+	aComponentType isTrait ifFalse: [ ^ self ].
+	aComponentType isComponentType ifFalse: [ ^ self ].
 	aComponentType users do: [ :user | self defineComponent: user ].
 ]
 
@@ -614,7 +626,7 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateConsumedEventsComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aComponent [
 
 	self removeOldConsumedEventsComponentAccessorsFor: aComponent.
 	aComponent haveComponentType ifTrue:[
@@ -623,7 +635,7 @@ MolComponentFactory >> generateConsumedEventsComponentAccessorsFor: aComponent [
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateProducedEventsComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aComponent [
 
 	self removeOldProducedEventsComponentAccessorsFor: aComponent.
 	aComponent haveComponentType ifTrue:[
@@ -632,7 +644,7 @@ MolComponentFactory >> generateProducedEventsComponentAccessorsFor: aComponent [
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateUsedParametersComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aComponent [
 
 	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
 	aComponent haveComponentType ifTrue:[
@@ -641,7 +653,7 @@ MolComponentFactory >> generateUsedParametersComponentAccessorsFor: aComponent [
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateUsedServicesComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aComponent [
  
 	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
 	aComponent haveComponentType ifTrue:[
@@ -817,21 +829,22 @@ MolComponentFactory >> isDynamicContractUpdateActivated: aBoolean [
 ]
 
 { #category : #'private - code generation' }
-MolComponentFactory >> rebuildComponent: aComponent traitsAdding: aList [
+MolComponentFactory >> rebuildComponent: aComponentClass traitsAdding: aTraitsList [
 	| classes |
-	classes := aComponent allSuperclasses reverse.
-	classes remove: Object; remove: ProtoObject.
-	classes add: aComponent class.
+	"Get class hierarchy of the component class and clean classes not concerned by Component Contract Traits"
+	classes := aComponentClass allSuperclasses reverse.
+	classes remove: Object; remove: ProtoObject; remove: MolAbstractComponentImpl ifAbsent:[nil].
+	classes add: aComponentClass.
 
-	aList do: [:trait | | toBeAddedTrait |
-		trait ifNotNil:[ 
-			toBeAddedTrait := nil.
-			"Cannot add the traits if already present"
-			classes do: [ :c | (c traitComposition includesTrait: trait) ifFalse:[toBeAddedTrait := trait]].
+	aTraitsList do: [:trait | | toBeAddedTrait |
+		(trait notNil and:[trait isTrait and:[trait isObsolete not]]) ifTrue:[ 
+			toBeAddedTrait := trait.
+			"Cannot add the traits if already present in superclasses"
+			classes do: [ :c | toBeAddedTrait ifNotNil:[ (c allTraits includes: trait) ifTrue:[toBeAddedTrait := nil] ]].
 			toBeAddedTrait ifNotNil:[
-				aComponent traitComposition isEmpty 
-					ifTrue:[aComponent setTraitComposition: toBeAddedTrait] 
-					ifFalse:[aComponent addToComposition: toBeAddedTrait].
+				aComponentClass traitComposition isEmpty 
+					ifTrue:[aComponentClass setTraitComposition: toBeAddedTrait] 
+					ifFalse:[	aComponentClass addToComposition: toBeAddedTrait].
 			].
 		].
 	].

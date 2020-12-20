@@ -45,16 +45,17 @@ MolMyClockSystem class >> start [
 MolMyClockSystem class >> startAlarmExample [
 	"Start Clock System example : simulate a clock alarm for sleeping !"
 	<script: 'self startAlarmExample'>
-	| now alarm alarmParameters alarmActivationServices |
+	| now alarm alarmParameters alarmActivationServices isLogActive |
 	
 	"Activate the Molecule log for display results"
-	MolUtils isLogActive: true.
-	
-	"Dialog to inform user to open a Transcrip to see results"
+	isLogActive := MolUtils isLogActive.
+	isLogActive ifFalse:[MolUtils toggleLog].
+	 
+	"Dialog to inform user to open a Transcript to see results"
 	(UITheme current
 		proceedIn: Morph new 
-		text: 'Open a Transcript to see this example.'
-		title: 'Molecule - Clock System') ifFalse:[^self].
+		text: 'This example displays results in a Transcript and stop after 10 seconds, clic OK to open a Transcript.'
+		title: 'Molecule - Clock System Example') ifTrue:[Transcript open].
 	
 	"Clean up the Component Manager in case of previous example running"
 	MolComponentManager cleanUp.
@@ -81,6 +82,7 @@ MolMyClockSystem class >> startAlarmExample [
 		self stop. 
 		"Clean up the Component Manager in case of next example running"
 		MolComponentManager cleanUp.
+		isLogActive ifFalse:[MolUtils toggleLog].
 	] fork.
 ]
 

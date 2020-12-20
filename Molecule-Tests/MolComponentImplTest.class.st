@@ -43,7 +43,7 @@ MolComponentImplTest >> testAugmentedClassToAComponentProperties [
 	| component connector |
 	component := MolAugmentedClassToAComponentWithoutType new.
 
-	self assert: component class isComponent.
+	self assert: component class isComponentClass.
 	self assert: component class haveComponentType equals: false.
 
 	"Component name"
@@ -120,7 +120,7 @@ MolComponentImplTest >> testHaveComponentType [
 { #category : #tests }
 MolComponentImplTest >> testIsComponent [
 
-	self assert: MolComponentImpl isComponent.
+	self assert: MolComponentImpl isComponentClass.
 ]
 
 { #category : #tests }

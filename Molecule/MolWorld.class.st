@@ -234,7 +234,7 @@ MolWorld class >> openDefineComponentDialog [
 	| searchClass list retValue |
 	list := SystemNavigation default allClasses select: [ :c | 
 		        c isTrait not and: [ 
-			        (c allSuperclasses includes: Object) and: [ c isComponent ] ] ].
+			        (c allSuperclasses includes: Object) and: [ c isComponentClass ] ] ].
 	searchClass := SearchFacade classSearchIn: list.
 	searchClass title: 'Select the Molecule Component to define'.
 	retValue := searchClass openModal.
