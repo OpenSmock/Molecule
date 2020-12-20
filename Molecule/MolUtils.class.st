@@ -23,14 +23,6 @@ MolUtils class >> createAllComponents [
 	components keysDo: [ :aClass | homeServices activateComponent: aClass ]
 ]
 
-{ #category : #'component creation' }
-MolUtils class >> defineAllComponents [
-	"define all components subsclasses"
-	<script: 'self defineAllComponents'>
-
-	MolAbstractComponentImpl allSubclassesDo: [ :c | c defineComponent ]
-]
-
 { #category : #accessing }
 MolUtils class >> instanceKindOf: aClass [
 	^self instanceKindOf: aClass named: #default

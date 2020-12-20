@@ -21,7 +21,8 @@ MolWorldMenuTest >> testWorldMenuBuilding [
 	| menuBuilder |
 	menuBuilder := WorldState new menuBuilder.
 	
-	MolWorld clearComponentManagerOn: menuBuilder.
+	MolWorld currentComponentSystem: menuBuilder.
+	MolWorld componentManagerCleanUp: menuBuilder.
 	MolWorld deepCleanUp: menuBuilder.
 	MolWorld defineComponentOn: menuBuilder.
 	MolWorld defineDirtyComponentsOn: menuBuilder.

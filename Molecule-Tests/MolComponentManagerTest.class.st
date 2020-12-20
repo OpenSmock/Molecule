@@ -53,3 +53,16 @@ MolComponentManagerTest >> testDeepCleanUp [
 	self assert: manager locatorServices isNil.
 	self assert: factory == MolComponentFactory default equals: false.
 ]
+
+{ #category : #tests }
+MolComponentManagerTest >> testIsRunningComponents [
+
+	MolComponentManager cleanUp.
+	self assert: MolComponentManager isRunningComponents equals: false.
+	
+	MolUtils startComponent: MolCompleteComponentImpl.
+	self assert: MolComponentManager isRunningComponents equals: true.
+	
+	MolUtils stopComponent: MolCompleteComponentImpl.
+	self assert: MolComponentManager isRunningComponents equals: false.
+]

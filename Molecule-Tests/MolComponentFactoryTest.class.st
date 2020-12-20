@@ -542,6 +542,11 @@ MolComponentFactoryTest >> testCreateEmptyComponentServices [
 ]
 
 { #category : #test }
+MolComponentFactoryTest >> testDefineAllComponents [
+	MolComponentFactory defineAllComponents.
+]
+
+{ #category : #test }
 MolComponentFactoryTest >> testDefineDirtyComponents [
 
 	self assert: MolComponentFactory default dirtyComponentTypes isEmpty.

@@ -8,16 +8,46 @@ Class {
 }
 
 { #category : #menu }
-MolWorld class >> clearComponentManagerOn: aBuilder [
+MolWorld class >> componentManagerCleanUp: aBuilder [
 
 	<worldMenu>
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #Molecule;
 		target: World;
 		order: 1.3;
+		help: 'Clean the current ComponentManager and current running Components';
 		icon: (self iconNamed: #refresh);
-		action: [ MolComponentManager cleanUp ];
+		action: [ | window result |
+			MolComponentManager isRunningComponents ifTrue:[
+				"Confirmation window when system running components"
+				window := ProceedDialogWindow new.
+				window title: 'Confirmation'.
+				window text: 'Actually some Components are running, clean anyway ?'.
+				result := World world openModal: window.
+			].
+			((result notNil and:[result cancelled not]) or:[result isNil]) ifTrue:[MolComponentManager cleanUp]. 
+		];
 		label: 'Do ComponentManager Cleanup'
+]
+
+{ #category : #menu }
+MolWorld class >> currentComponentSystem: aBuilder [
+	<worldMenu>
+	| label isRunning |
+	isRunning := MolComponentManager isRunningComponents.
+	label := isRunning 
+		ifTrue:['System is running Components'] 
+		ifFalse:['Actually, no Components are running'].
+	
+	(aBuilder item: #InspectComponents)
+		parent: #Molecule;
+		target: World;
+		enabled: false;
+		order: 1.0;
+		icon: (isRunning ifTrue:[(self iconNamed: #smallInfo)] ifFalse:[(self iconNamed: #pause)]);
+		help: 'Component System Status';
+		label: label;
+		withSeparatorAfter
 ]
 
 { #category : #menu }
@@ -27,9 +57,17 @@ MolWorld class >> deepCleanUp: aBuilder [
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.7;
+		order: 1.8;
 		icon: (self iconNamed: #refresh);
-		action: [ MolComponentManager deepCleanUp ];
+		action: [| window result |
+			"Confirmation window"
+			window := ProceedDialogWindow new.
+			window title: 'Confirmation'.
+			window text: 'Do you want to scan and clean all the Molecule Components of your Pharo image ? 
+This action may be necessary if your system is broken.'.
+			result := World world openModal: window.
+			result cancelled ifFalse:[ MolComponentManager deepCleanUp]. 
+		];
 		label: 'Do Image Molecule Cleanup';
 		help: 'Cleanup all Molecule system instances and components of the image'
 ]
@@ -43,28 +81,24 @@ MolWorld class >> defineAComponent [
 	component ifNotNil: [ :e | MolComponentFactory defineComponent: e ]
 ]
 
-{ #category : #scripts }
-MolWorld class >> defineAllComponents [
-
-	"<script> Warning : too much risk to execute with a script"
-	| componentClasses |
-	componentClasses := Set new.
-	MolAbstractComponentImpl allSubclassesDo:[ :component | componentClasses add: component ].
-	MolComponentImpl users do: [:class | componentClasses add: class ].
-	componentClasses do: [ :c | MolComponentFactory defineComponent: c ]
-]
-
 { #category : #menu }
 MolWorld class >> defineAllComponentsOn: aBuilder [
-
 	<worldMenu>
 	(aBuilder item: #MoleculeDefineAllComponents)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.0;
-		action: [ self defineAllComponents ];
+		order: 1.7;
+		action: [ | window result |
+			"Confirmation window"
+			window := ProceedDialogWindow new.
+			window title: 'Confirmation'.
+			window text: 'Do you want to define all the Molecule Components of your Pharo image ? 
+This action may be necessary in the event of a Molecule update.'.
+			result := World world openModal: window.
+			result cancelled ifFalse:[MolComponentFactory defineAllComponents]. 
+		];
 		icon: (self iconNamed: #warning);
-		label: '[Danger] Define All Components'
+		label: 'Define All Components'
 ]
 
 { #category : #menu }
@@ -87,7 +121,7 @@ MolWorld class >> defineDirtyComponentsOn: aBuilder [
 	(aBuilder item: #MoleculeDefineDirtyComponents)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.5;
+		order: 1.6;
 		action: [ MolComponentFactory defineDirtyComponents ];
 		icon: (self iconNamed: #smallUpdate);
 		label: 'Define dirty Components'
@@ -100,14 +134,14 @@ MolWorld class >> inspectAllComponentInstances: aBuilder [
 	(aBuilder item: #InspectAllComponentInstances)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.6;
+		order: 1.5;
 		action: [ 
 			| components |
 			components := OrderedCollection new.
 			MolAbstractComponentImpl allSubInstancesDo:[ :component | components add: component ].
 			MolComponentImpl users do: [:impl | impl allInstances do: [:component | components add: component ]].
 			components inspect ];
-		icon: (self iconNamed: #tools);
+		icon: (self iconNamed: #glamorousInspect);
 		label: 'Inspect all component instances'
 ]
 
@@ -120,8 +154,8 @@ MolWorld class >> inspectComponents: aBuilder [
 		target: World;
 		order: 1.3;
 		action: [ MolComponentManager default homeServices inspect ];
-		icon: (self iconNamed: #tools);
-		label: 'Inspect instanciate Components'
+		icon: (self iconNamed: #glamorousInspect);
+		label: 'Inspect running Components'
 ]
 
 { #category : #menu }
@@ -133,7 +167,7 @@ MolWorld class >> inspectDirtyComponentTypes: aBuilder [
 		target: World;
 		order: 1.3;
 		action: [ MolComponentFactory default dirtyComponentTypes inspect ];
-		icon: (self iconNamed: #tools);
+		icon: (self iconNamed: #glamorousInspect);
 		label: 'Inspect dirty Component Types'
 ]
 
@@ -146,7 +180,7 @@ MolWorld class >> inspectDirtyComponents: aBuilder [
 		target: World;
 		order: 1.4;
 		action: [ MolComponentFactory default dirtyComponents inspect ];
-		icon: (self iconNamed: #tools);
+		icon: (self iconNamed: #glamorousInspect);
 		label: 'Inspect dirty Components'
 ]
 
@@ -233,6 +267,8 @@ MolWorld class >> toggleDynamicContractUpdate: aBuilder [
 				action: [ MolComponentFactory default deactivateDynamicContractUpdate.  MenubarMorph reset.  ];
 				label: 'Deactive dynamic update'
 		].
+	
+	aBuilder withSeparatorAfter
 ]
 
 { #category : #menu }

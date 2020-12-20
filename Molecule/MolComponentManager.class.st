@@ -73,7 +73,7 @@ MolComponentManager class >> deepCleanUp [
 
 { #category : #singleton }
 MolComponentManager class >> default [
-	<script: 'self default'>
+	<script: 'self default inspect'>
 	
 	Default ifNil: [Default := self new].
 	^Default
@@ -87,6 +87,17 @@ MolComponentManager class >> flushComponents [
 	MolAbstractComponentImpl allSubInstancesDo:[ :component | component componentFlush. i := i + 1 ].
 	MolComponentImpl users do: [:impl | impl allInstances do: [:component | component componentFlush. i := i + 1]].
 	^i
+]
+
+{ #category : #'initialize-release' }
+MolComponentManager class >> isRunningComponents [
+	<script:'self isRunningComponents inspect'>
+	"Test if somes components are present to define a running Component System"
+	
+	Default ifNotNil:[
+		^Default homeServices deployedComponents notEmpty
+	].
+	^false
 ]
 
 { #category : #'initialize-release' }

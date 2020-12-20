@@ -376,6 +376,16 @@ MolComponentFactory class >> default [
 ]
 
 { #category : #accessing }
+MolComponentFactory class >> defineAllComponents [
+	"<script> Don't be a script : too much risk to perform without doing it on purpose"
+	| componentClasses |
+	componentClasses := Set new.
+	MolAbstractComponentImpl allSubclassesDo:[ :component | componentClasses add: component ].
+	MolComponentImpl users do: [:class | componentClasses add: class ].
+	componentClasses do: [ :c | MolComponentFactory defineComponent: c ]
+]
+
+{ #category : #accessing }
 MolComponentFactory class >> defineComponent: aComponentType [
 	self default defineComponent: aComponentType
 ]

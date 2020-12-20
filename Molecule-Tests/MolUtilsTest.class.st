@@ -38,12 +38,6 @@ MolUtilsTest >> testCreateAllComponents [
 ]
 
 { #category : #tests }
-MolUtilsTest >> testDefineAllComponents [
-
-	MolUtils defineAllComponents.
-]
-
-{ #category : #tests }
 MolUtilsTest >> testInstanceKindOf [
 "Test method instanceKindOf: of Utils"
 
