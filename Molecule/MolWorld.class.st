@@ -17,15 +17,14 @@ MolWorld class >> componentManagerCleanUp: aBuilder [
 		order: 1.3;
 		help: 'Clean the current ComponentManager and current running Components';
 		icon: (self iconNamed: #refresh);
-		action: [ | window result |
+		action: [ | result |
 			MolComponentManager isRunningComponents ifTrue:[
 				"Confirmation window when system running components"
-				window := ProceedDialogWindow new.
-				window title: 'Confirmation'.
-				window text: 'Actually some Components are running, clean anyway ?'.
-				result := World world openModal: window.
+				result := UITheme current proceedIn: Morph new 
+					text: 'Actually some Components are running, clean anyway ?' 
+					title: 'Molecule - Confirmation'.
 			].
-			((result notNil and:[result cancelled not]) or:[result isNil]) ifTrue:[MolComponentManager cleanUp]. 
+			((result notNil and:[result]) or:[result isNil]) ifTrue:[MolComponentManager cleanUp]. 
 		];
 		label: 'Do ComponentManager Cleanup'
 ]
@@ -59,14 +58,13 @@ MolWorld class >> deepCleanUp: aBuilder [
 		target: World;
 		order: 1.8;
 		icon: (self iconNamed: #refresh);
-		action: [| window result |
+		action: [| result |
 			"Confirmation window"
-			window := ProceedDialogWindow new.
-			window title: 'Confirmation'.
-			window text: 'Do you want to scan and clean all the Molecule Components of your Pharo image ? 
-This action may be necessary if your system is broken.'.
-			result := World world openModal: window.
-			result cancelled ifFalse:[ MolComponentManager deepCleanUp]. 
+			result := UITheme current proceedIn: Morph new 
+				text: 'Do you want to scan and clean all the Molecule Components of your Pharo image ? 
+This action may be necessary if your system is broken.' 
+				title: 'Molecule - Confirmation'.
+			result ifTrue:[ MolComponentManager deepCleanUp]. 
 		];
 		label: 'Do Image Molecule Cleanup';
 		help: 'Cleanup all Molecule system instances and components of the image'
@@ -88,14 +86,13 @@ MolWorld class >> defineAllComponentsOn: aBuilder [
 		parent: #MoleculeDebug;
 		target: World;
 		order: 1.7;
-		action: [ | window result |
+		action: [ | result |
 			"Confirmation window"
-			window := ProceedDialogWindow new.
-			window title: 'Confirmation'.
-			window text: 'Do you want to define all the Molecule Components of your Pharo image ? 
-This action may be necessary in the event of a Molecule update.'.
-			result := World world openModal: window.
-			result cancelled ifFalse:[MolComponentFactory defineAllComponents]. 
+			result := UITheme current proceedIn: Morph new 
+				text: 'Do you want to define all the Molecule Components of your Pharo image ? 
+This action may be necessary in the event of a Molecule update.' 
+				title: 'Molecule - Confirmation'.
+			result ifTrue:[MolComponentFactory defineAllComponents]. 
 		];
 		icon: (self iconNamed: #warning);
 		label: 'Define All Components'

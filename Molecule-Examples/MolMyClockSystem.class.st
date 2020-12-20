@@ -51,7 +51,7 @@ MolMyClockSystem class >> startAlarmExample [
 	MolUtils isLogActive: true.
 	
 	"Dialog to inform user to open a Transcrip to see results"
-	(Smalltalk ui theme
+	(UITheme current
 		proceedIn: Morph new 
 		text: 'Open a Transcript to see this example.'
 		title: 'Molecule - Clock System') ifFalse:[^self].
