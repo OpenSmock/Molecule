@@ -56,9 +56,10 @@ To do so, we augment this class with component behavior.
 
 ## Test coverage
 
+Molecule includes more than 100 unit tests, we have also written tests that simulate the work of a developer when creating and modifying components.
 DrTest coverage results :
-* Pharo 9 build 904 : 80,79%
-* Pharo 8.0 : 82.64%
+* Pharo 9 build 904 : 80.79%
+* Pharo 8.0 : 81.97%
 
 ## Credits
 
