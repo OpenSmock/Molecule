@@ -21,7 +21,7 @@ MolMyWarnerComponentImpl >> failureEvent [
 
 { #category : #'component accessing' }
 MolMyWarnerComponentImpl >> getMolMyStateChangeEventsNotifier [
-	^self eventsNotifiers at: MolMyStateChangeEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: itf name: nil].
+	^self eventsNotifiers at: MolMyStateChangeEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolMyStateChangeEvents name: nil].
 ]
 
 { #category : #event }

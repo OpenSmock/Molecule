@@ -621,6 +621,132 @@ MolComponentFactoryTest >> testGenerateUsedServicesComponentAccessorsFor [
 ]
 
 { #category : #'tests - component creation' }
+MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
+	"Create a Component, adding a trait and adding a component type
+	- Create a component Class
+	- Add a Trait
+	- Declare Component Type
+	"
+	
+	| class componentClassNameSymbol |
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
+	self cleanGeneratedClassesAndTraits.
+	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
+
+	class := MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources'.
+	class := self class environment at: componentClassNameSymbol.
+	class comment: 'I am added and removed by test: ', self printString.
+	
+	"Set an existing Trait, outside Component system"
+	class setTraitComposition: MolTestNoComponentTraits.
+	self assert: (class canPerform: #methodOfNoComponentTrait).
+	
+	"Set the component type and check if the existing Trait is already functionnal"
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	class addToComposition: self generatedComponentTypeTrait.
+	
+	(Delay forMilliseconds: 100) wait.
+	self assert: (class canPerform: #methodOfNoComponentTrait).
+	
+	self cleanGeneratedClassesAndTraits.
+]
+
+{ #category : #'tests - component creation' }
+MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
+	"Create a Component from scratch and adding a trait
+	- Create a component Class
+	- Create a Component Type
+	- Declare Component Type
+	- Make Component Contract
+	- Add a Trait"
+	
+	| componentClassNameSymbol componentClass |
+	self timeLimit: (Duration seconds: 15).
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
+	self cleanGeneratedClassesAndTraits.
+	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
+	
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources'.
+	componentClass := self class environment at: componentClassNameSymbol.
+	
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	componentClass setTraitComposition: self generatedComponentTypeTrait.
+	
+	self testCreateEmptyComponentServices.
+	self testCreateEmptyComponentParameters.
+	self testCreateEmptyComponentEvents.
+	
+	MolComponentFactory addProvidedServices: self generatedComponentServicesTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addUsedServices: self generatedComponentServicesTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addProvidedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
+	
+	(Delay forSeconds: 2) wait.
+	
+	"Add a trait"
+	componentClass addToComposition: MolTestNoComponentTraits.
+	self assert: (componentClass canPerform: #methodOfNoComponentTrait).
+	self assert: (componentClass traitComposition members size = 5).
+	self assert: (componentClass traitComposition includesTrait: MolTestNoComponentTraits).
+	self assert: (componentClass traitComposition includesTrait: MolComponentType).
+	self assert: (componentClass traitComposition includesTrait: self generatedComponentServicesTrait).
+	self assert: (componentClass traitComposition includesTrait: self generatedComponentParametersTrait).
+	self assert: (componentClass traitComposition includesTrait: self generatedComponentEventsTrait).
+		
+	self cleanGeneratedClassesAndTraits.
+]
+
+{ #category : #'tests - component creation' }
+MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlternative2 [
+	"Create a Component from scratch and adding a trait
+	- Create a component Class
+	- Add a Trait
+	- Create a Component Type
+	- Declare Component Type
+	- Make Component Contract
+	"
+	| componentClassNameSymbol componentClass |
+	self timeLimit: (Duration seconds: 15).
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
+	self cleanGeneratedClassesAndTraits.
+	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
+	
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources'.
+	componentClass := self class environment at: componentClassNameSymbol.
+	
+	"Add a trait"
+	componentClass setTraitComposition: MolTestNoComponentTraits.
+	
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	componentClass addToComposition: self generatedComponentTypeTrait.
+	
+	self testCreateEmptyComponentServices.
+	self testCreateEmptyComponentParameters.
+	self testCreateEmptyComponentEvents.
+	
+	MolComponentFactory addProvidedServices: self generatedComponentServicesTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addUsedServices: self generatedComponentServicesTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addProvidedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
+	
+	(Delay forSeconds: 2) wait.
+ 
+	self assert: (componentClass canPerform: #methodOfNoComponentTrait).
+	self assert: (componentClass traitComposition members size = 5).
+	self assert: (componentClass traitComposition includesTrait: MolTestNoComponentTraits).
+	self assert: (componentClass traitComposition includesTrait: MolComponentType).
+	self assert: (componentClass traitComposition includesTrait: self generatedComponentServicesTrait).
+	self assert: (componentClass traitComposition includesTrait: self generatedComponentParametersTrait).
+	self assert: (componentClass traitComposition includesTrait: self generatedComponentEventsTrait).
+		
+	self cleanGeneratedClassesAndTraits.
+]
+
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	"Make a Component from scratch, try to reproduce the workflow of a component creator developper is this order : 
 	- Create Component Class

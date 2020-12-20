@@ -40,7 +40,7 @@ MolGPSHardware >> getAccuracyRadiusInMeters [
 
 { #category : #'component accessing' }
 MolGPSHardware >> getMolGPSDataEventsNotifier [
-	^self eventsNotifiers at: MolGPSDataEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: itf name: nil].
+	^self eventsNotifiers at: MolGPSDataEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolGPSDataEvents name: nil].
 ]
 
 { #category : #'GPS hardware existing API' }

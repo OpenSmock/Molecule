@@ -53,7 +53,7 @@ MolMyClockComponentImpl >> getMolMyGlobalTimeEventsSubscriber [
 
 { #category : #'component accessing' }
 MolMyClockComponentImpl >> getMolMyLocalTimeEventsNotifier [
-	^self eventsNotifiers at: MolMyLocalTimeEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: itf name: nil].
+	^self eventsNotifiers at: MolMyLocalTimeEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolMyLocalTimeEvents name: nil].
 ]
 
 { #category : #'component accessing' }

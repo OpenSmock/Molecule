@@ -60,7 +60,7 @@ MolMyAlarmComponentImpl >> getBell [
 
 { #category : #'component accessing' }
 MolMyAlarmComponentImpl >> getMolMyAlarmSoundsEventsNotifier [
-	^self eventsNotifiers at: MolMyAlarmSoundsEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: itf name: nil].
+	^self eventsNotifiers at: MolMyAlarmSoundsEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolMyAlarmSoundsEvents name: nil].
 ]
 
 { #category : #'component accessing' }

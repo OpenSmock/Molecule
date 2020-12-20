@@ -11,7 +11,7 @@ Class {
 
 { #category : #'component accessing' }
 MolCompleteComponentImpl >> getMolUsedEventsNotifier [
-	^self eventsNotifiers at: MolUsedEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: itf name: nil].
+	^self eventsNotifiers at: MolUsedEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolUsedEvents name: nil].
 ]
 
 { #category : #'component accessing' }

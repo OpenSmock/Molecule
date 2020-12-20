@@ -690,7 +690,9 @@ MolComponentFactory >> getProducedEventSourceCodeFor: aTrait selector: selector 
 	writeStream
 		nextPutAll: '^self eventsNotifiers at: ';
 		nextPutAll: aTrait asString;
-		nextPutAll: ' ifAbsent: [^MolNotFoundEventsNotifier new interface: itf name: nil].'.	
+		nextPutAll: ' ifAbsent: [^MolNotFoundEventsNotifier new interface: ';
+		nextPutAll: aTrait asString;
+		nextPutAll: ' name: nil].'.	
 	^ writeStream
 ]
 
@@ -823,12 +825,14 @@ MolComponentFactory >> rebuildComponent: aComponent traitsAdding: aList [
 
 	aList do: [:trait | | toBeAddedTrait |
 		trait ifNotNil:[ 
-			toBeAddedTrait := trait.
+			toBeAddedTrait := nil.
 			"Cannot add the traits if already present"
-			classes do: [ :c | 
-				(c traitComposition includesTrait: trait) ifTrue:[toBeAddedTrait := nil].
+			classes do: [ :c | (c traitComposition includesTrait: trait) ifFalse:[toBeAddedTrait := trait]].
+			toBeAddedTrait ifNotNil:[
+				aComponent traitComposition isEmpty 
+					ifTrue:[aComponent setTraitComposition: toBeAddedTrait] 
+					ifFalse:[aComponent addToComposition: toBeAddedTrait].
 			].
-			toBeAddedTrait ifNotNil:[aComponent addToComposition: toBeAddedTrait].
 		].
 	].
 ]
