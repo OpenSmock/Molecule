@@ -92,11 +92,14 @@ MolComponentManager class >> flushComponents [
 { #category : #'initialize-release' }
 MolComponentManager class >> isRunningComponents [
 	<script:'self isRunningComponents inspect'>
-	"Test if somes components are present to define a running Component System"
+	"Test if somes components are started and running"
 	
-	Default ifNotNil:[
-		^Default homeServices deployedComponents notEmpty
+	Default ifNotNil:[ | components |
+		components := Default homeServices deployedComponents.
+		components ifNil:[ ^false ].
+		components valuesDo: [ :aDictionary | aDictionary notEmpty ifTrue:[ ^true ] ].
 	].
+
 	^false
 ]
 

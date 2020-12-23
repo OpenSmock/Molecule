@@ -65,4 +65,27 @@ MolComponentManagerTest >> testIsRunningComponents [
 	
 	MolUtils stopComponent: MolCompleteComponentImpl.
 	self assert: MolComponentManager isRunningComponents equals: false.
+	MolComponentManager cleanUp.
+]
+
+{ #category : #tests }
+MolComponentManagerTest >> testIsRunningComponentsAllSteps [
+
+	MolComponentManager cleanUp.
+	MolComponentManager default deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	self assert: MolComponentManager isRunningComponents equals: false.
+	
+	MolComponentManager default homeServices instanciateComponent: MolCompleteComponentImpl.
+	self assert: MolComponentManager isRunningComponents equals: true.
+	
+	MolComponentManager default homeServices activateComponent: MolCompleteComponentImpl.
+	self assert: MolComponentManager isRunningComponents equals: true.
+	
+	MolComponentManager default homeServices passivateComponent: MolCompleteComponentImpl.
+	self assert: MolComponentManager isRunningComponents equals: true.
+
+	MolComponentManager default homeServices removeComponent: MolCompleteComponentImpl.
+	self assert: MolComponentManager isRunningComponents equals: false.
+	
+	MolComponentManager cleanUp.
 ]
