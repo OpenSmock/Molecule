@@ -262,8 +262,16 @@ MolHomeServices >> removeComponent: aClass named: aName [
 
 { #category : #private }
 MolHomeServices >> removeDeployedComponent: aComponentClass [
-	deployedComponents isEmpty ifTrue: [^self].
-	deployedComponents removeKey: aComponentClass ifAbsent:[^self]
+	"Remove a deployed component"
+	deployedComponents at: aComponentClass ifPresent:[ :compDict | 
+		"Check if this component class have running instances"
+		compDict isEmpty 
+			ifTrue:[deployedComponents removeKey: aComponentClass] 
+			ifFalse:[
+				"Remove existing components"
+				compDict copy keysAndValuesDo: [ :k :v | self removeComponent: (v class) named: k ].
+			].
+	] ifAbsent:[ ^self ].
 ]
 
 { #category : #private }

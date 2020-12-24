@@ -143,7 +143,7 @@ MolUtilsTest >> testStopComponent [
 
 	homeServices := MolComponentManager default homeServices.	
 	deploymentServices := MolComponentManager default deploymentServices. 	
-	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl) equals: false.
+	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl) equals: true.
 	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl) equals: false.
 	self assert: (homeServices isWaitingForActivation: MolBasicSubComponentImpl) equals: false.
 ]
@@ -157,7 +157,7 @@ MolUtilsTest >> testStopComponentWithName [
 	
 	homeServices := MolComponentManager default homeServices.	
 	deploymentServices := MolComponentManager default deploymentServices. 
-	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl) equals: false.
+	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl) equals: true.
 	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl named: #myComponent) equals: false.
 	self assert: (homeServices isWaitingForActivation: MolBasicSubComponentImpl named: #myComponent) equals: false.
 ]
@@ -172,8 +172,8 @@ MolUtilsTest >> testStopComponents [
 
 	homeServices := MolComponentManager default homeServices.	
 	deploymentServices := MolComponentManager default deploymentServices. 	
-	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl) equals: false.
-	self assert: (deploymentServices isDeployedComponentImplementation: MolCompleteComponentImpl) equals: false.
+	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl) equals: true.
+	self assert: (deploymentServices isDeployedComponentImplementation: MolCompleteComponentImpl) equals: true.
 	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl) equals: false.
 	self assert: (MolUtils isInstanciateComponentOf: MolCompleteComponentImpl) equals: false.
 	self assert: (homeServices isWaitingForActivation: MolBasicSubComponentImpl) equals: false.

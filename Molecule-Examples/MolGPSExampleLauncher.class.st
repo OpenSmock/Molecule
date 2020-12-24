@@ -7,12 +7,12 @@ MolGPSExampleLauncher start.
 
 2 - Swap between available implementation :
 
-MolGPSDataLauncher swapGPSDataImplByGPSHardware.
-MolGPSDataLauncher swapGPSHardwareByGPSDataImpl.
+MolGPSExampleLauncher swapGPSDataImplByGPSHardware.
+MolGPSExampleLauncher swapGPSHardwareByGPSDataImpl.
 
 3 - Stop the demo when you want
 
-MolGPSDataLauncher stop.
+MolGPSExampleLauncher stop.
 "
 Class {
 	#name : #MolGPSExampleLauncher,

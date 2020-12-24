@@ -101,10 +101,12 @@ MolUtils class >> startComponent: aComponentClass [
 
 { #category : #'component easy start and stop' }
 MolUtils class >> startComponent: aComponentClass named: aName [
-	"deploy, instanciate and activate quickly a component and return the instance"
+	"auto deploy, instanciate and activate quickly a component and return the instance"
 	| component |
 
-	MolComponentManager default deploymentServices deployComponentImplementation: aComponentClass.
+	(MolComponentManager default deploymentServices isDeployedComponentImplementation: aComponentClass) ifFalse:[
+		MolComponentManager default deploymentServices deployComponentImplementation: aComponentClass.
+	].
 	component := MolComponentManager default homeServices instanciateComponent: aComponentClass named: aName.
 	MolComponentManager default homeServices activateComponent: aComponentClass named: aName.
 	
@@ -140,10 +142,9 @@ MolUtils class >> stopComponent: aComponentClass [
 
 { #category : #'component easy start and stop' }
 MolUtils class >> stopComponent: aComponentClass named: aName [
-	"passivate, remove and undeploy quickly a component"
+	"passivate and remove quickly a component"
 
 	MolComponentManager default homeServices removeComponent: aComponentClass named: aName.
-	MolComponentManager default deploymentServices undeployComponentImplementation: aComponentClass.
 ]
 
 { #category : #'component easy start and stop' }
@@ -153,9 +154,6 @@ MolUtils class >> stopComponents: aComponentClassList [
 	aComponentClassList ifNil:[^self].
 	aComponentClassList do:[ :componentClass | 
 		MolComponentManager default homeServices removeComponent: componentClass.
-	].
-	aComponentClassList do:[ :componentClass | 		
-		MolComponentManager default deploymentServices undeployComponentImplementation: componentClass.
 	].
 ]
 

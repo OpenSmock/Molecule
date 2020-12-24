@@ -7,7 +7,7 @@ Class {
 	#category : #'Molecule-Tests-Cases'
 }
 
-{ #category : #tests }
+{ #category : #'tests - general' }
 MolComponentManagerTest >> testCleanUp [
 	| manager1 manager2 |
 	MolComponentManager cleanUp.
@@ -22,7 +22,19 @@ MolComponentManagerTest >> testCleanUp [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - general' }
+MolComponentManagerTest >> testCleanUpIgnoreErrors [
+	"Start a manuel tree of components and clean up, components are removed during the cleanUp but some componentRemove methods should remove again an already removed component : a error is reach but ignored during a cleanUp"
+	
+	MolComponentManager cleanUp.
+
+	"Check no error"
+	MolUtils startComponent: MolTestComponentTreeLevel0Impl.	
+	
+	MolComponentManager cleanUp.
+]
+
+{ #category : #'tests - general' }
 MolComponentManagerTest >> testComponentManager [
 	"Test creation of ComponentManager"
 	| manager factory |
@@ -40,7 +52,27 @@ MolComponentManagerTest >> testComponentManager [
 	self assert: factory == MolComponentFactory default equals: false.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - component start & stop' }
+MolComponentManagerTest >> testComponentTree [
+	"Start a component Tree : a component which is starting sub components, etc."
+	| nb |
+	MolComponentManager cleanUp.
+	MolComponentManager default deploymentServices deployComponentImplementation: MolTestComponentTreeLevel0Impl.
+	MolComponentManager default homeServices instanciateComponent: MolTestComponentTreeLevel0Impl.
+	MolComponentManager default homeServices activateComponent: MolTestComponentTreeLevel0Impl.
+	
+	"Check started components"
+	nb := 0.
+	MolComponentManager default homeServices deployedComponents valuesDo:[ :compList | nb := nb + (compList size) ].
+	self assert: nb equals: 13.
+	
+	MolComponentManager default homeServices passivateComponent: MolTestComponentTreeLevel0Impl.
+	MolComponentManager default homeServices removeComponent: MolTestComponentTreeLevel0Impl.
+	MolComponentManager default deploymentServices undeployComponentImplementation: MolTestComponentTreeLevel2Impl.
+	MolComponentManager cleanUp.
+]
+
+{ #category : #'tests - general' }
 MolComponentManagerTest >> testDeepCleanUp [
 
 	| manager factory |
@@ -54,7 +86,7 @@ MolComponentManagerTest >> testDeepCleanUp [
 	self assert: factory == MolComponentFactory default equals: false.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - general' }
 MolComponentManagerTest >> testIsRunningComponents [
 
 	MolComponentManager cleanUp.
@@ -68,7 +100,7 @@ MolComponentManagerTest >> testIsRunningComponents [
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - general' }
 MolComponentManagerTest >> testIsRunningComponentsAllSteps [
 
 	MolComponentManager cleanUp.

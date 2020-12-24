@@ -21,22 +21,28 @@ Class {
 MolComponentManager class >> cleanUp [
 	<script: 'self cleanUp'>
 	| notifiers subscribers |
+	MolUtils log: 'Starting a cleanUp.'.
 
 	"CleanUp and initialize the ComponentFactory"
 	MolComponentFactory cleanUp.
 	MolComponentFactory initialize.
 	
-	Default ifNil:[^self].
+	Default ifNil:[MolUtils log: 'End of the cleanUp.'. ^self].
 	Default locatorServices eventsSubscribers: nil.
 
 	notifiers := MolEventNotifier allInstances.
 	subscribers := MolEventSubscriber allInstances.
 
-	Default release.
+	"Ignore some Error during the cleanUp because the clean process can be different of the start order"
+	[Default release] on: ComponentAlreadyPassivatedError, ComponentNotFoundError do:[ :e | 
+		"Just log"
+		MolUtils log: 'Error during the cleanUp : ', e printString , ', this error may be normal during a cleanUp.'. 
+	].
 	Default := nil.
+
 	notifiers do: [:n | n release].
 	subscribers do: [:n | n release].
-	
+	MolUtils log: 'End of the cleanUp.'.
 	
 ]
 
@@ -45,6 +51,7 @@ MolComponentManager class >> deepCleanUp [
 	<script: 'self deepCleanUp'>
 	| i j |
 	self cleanUp.
+	MolUtils log: 'Starting a deep cleanUp.'.
 	MolComponentFactory allInstancesDo: [ :factory | (factory == MolComponentFactory default) ifFalse:[factory release]].
 	i := self flushComponents.
 	j := i.
@@ -69,6 +76,8 @@ MolComponentManager class >> deepCleanUp [
 	] ifTrue:[
 		MolUtils showInformation: 'No problem : image was clean.'.
 	].
+
+	MolUtils log: 'End of the deep cleanUp.'.
 ]
 
 { #category : #singleton }

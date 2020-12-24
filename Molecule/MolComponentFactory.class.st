@@ -282,11 +282,11 @@ MolComponentFactory class >> createComponentEvents: aSymbol in: aPackageName [
 
 { #category : #'component - creation' }
 MolComponentFactory class >> createComponentForType: aComponentType named: aSymbol in: aPackageName [
-	aSymbol ifNil:[^self].
-	aPackageName ifNil:[^self].
-	aComponentType notNil ifTrue:[
-		aComponentType isComponentType ifFalse: [ ^ self error: '[Molecule] Cannot create Component for a no Type object.' ].
+	aComponentType ifNotNil: [ 
+		(aComponentType isTrait and:[aComponentType isComponentType]) ifFalse:[ ^ NotAComponentTypeError signal: 'Cannot create Component for a no ComponentType object.' ].
 	].
+	aSymbol ifNil:[^ self error:'[Molecule] Cannot create a component without a name.'].
+	aPackageName ifNil:[^ self error:'[Molecule] Cannot create a component without a package name.'].
 		
 	self class environment at: aSymbol ifPresent: [
 		^ self error:'[Molecule] Do not redefine an existing Component, remove it before.' 
@@ -302,8 +302,6 @@ MolComponentFactory class >> createComponentForType: aComponentType named: aSymb
 	instanceVariableNames: ''''
 	classVariableNames: ''''
 	package: ''' , aPackageName , ''''.
-	
-	"(self class environment at: aSymbol) defineComponent"
 ]
 
 { #category : #'component - creation' }

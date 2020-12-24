@@ -517,6 +517,19 @@ MolComponentFactoryTest >> testCreateComponentEvents [
 	self createInstanceMethod: 'testGeneratedEventB' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 ]
 
+{ #category : #'tests - component creation' }
+MolComponentFactoryTest >> testCreateComponentForTypeNamedIn [
+	"Test errors cases"
+	| error |
+	error := false.
+	[MolComponentFactory createComponentForType: nil named: nil in: nil] on: Error do:[ error := true ].
+	self assert: error equals: true.
+	
+	error := false.
+	[MolComponentFactory createComponentForType: String named: #ClassName in: #packageName] on: NotAComponentTypeError do:[ error := true ].
+	self assert: error equals: true.
+]
+
 { #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateComponentParameters [
 	"Create a Component Parameters from scratch"

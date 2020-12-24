@@ -37,6 +37,32 @@ MolDeploymentServicesTest >> testDeployAlreadyDeployedImplementation [
 ]
 
 { #category : #tests }
+MolDeploymentServicesTest >> testDeployComponentImplementation [
+	| manager isError |
+	
+	manager := MolComponentManager default.	
+		
+	isError := false.
+	[manager deploymentServices deployComponentImplementation: nil] on: NotAComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+	
+	isError := false.
+	[manager deploymentServices deployComponentImplementation: String] on: NotAComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+
+	isError := false.
+	[manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl new] on: NotAComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+		
+	isError := false.
+	[manager deploymentServices deployComponentImplementation: MolAugmentedClassToAComponentWithoutType] on: NotATypedComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+		
+	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
+	
+]
+
+{ #category : #tests }
 MolDeploymentServicesTest >> testDeploymentServices [
 	| manager |
 	
@@ -61,6 +87,32 @@ MolDeploymentServicesTest >> testDeploymentServices [
 ]
 
 { #category : #tests }
+MolDeploymentServicesTest >> testIsDeployedComponentImplementation [
+	| manager isError |
+	
+	manager := MolComponentManager default.	
+		
+	isError := false.
+	[manager deploymentServices isDeployedComponentImplementation: nil] on: NotAComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+	
+	isError := false.
+	[manager deploymentServices isDeployedComponentImplementation: String] on: NotAComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+		
+	isError := false.
+	[manager deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl new] on: NotAComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+		
+	isError := false.
+	[manager deploymentServices isDeployedComponentImplementation: MolAugmentedClassToAComponentWithoutType] on: NotATypedComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+	
+	self assert: (manager deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl) equals: false.
+	
+]
+
+{ #category : #tests }
 MolDeploymentServicesTest >> testUndeployANotDeployComponent [
 	| manager |
 	
@@ -68,4 +120,29 @@ MolDeploymentServicesTest >> testUndeployANotDeployComponent [
 	
 	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl. "No error"
 	
+]
+
+{ #category : #tests }
+MolDeploymentServicesTest >> testUndeployComponentImplementation [
+	| manager isError |
+	
+	manager := MolComponentManager default.	
+		
+	isError := false.
+	[manager deploymentServices undeployComponentImplementation: nil] on: NotAComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+	
+	isError := false.
+	[manager deploymentServices undeployComponentImplementation: String] on: NotAComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+
+	isError := false.
+	[manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl new] on: NotAComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+		
+	isError := false.
+	[manager deploymentServices undeployComponentImplementation: MolAugmentedClassToAComponentWithoutType] on: NotATypedComponentClassError do:[ :e | isError := true ].
+	self assert: isError equals: true.	
+	
+	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
 ]

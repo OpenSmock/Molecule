@@ -18,7 +18,6 @@ MolComponentLifeCycleTest >> tearDown [
 
 { #category : #tests }
 MolComponentLifeCycleTest >> testSwitchComponentsSearchServicesProviderFor [
-
 	"start first implemention of a component contract"
 	MolUtils startComponent: MolCompleteComponentImpl.
 	
@@ -36,7 +35,6 @@ MolComponentLifeCycleTest >> testSwitchComponentsSearchServicesProviderFor [
 { #category : #tests }
 MolComponentLifeCycleTest >> testSwitchComponentsWithKeys [
 	| compA1 compB |
-
 	"start first implemention of a component contract"
 	compA1 := MolUtils startComponent: MolCompleteComponentImpl named: #compA.
 	compB := MolUtils startComponent: MolCompleteComponentImpl named: #compB.
@@ -57,7 +55,6 @@ MolComponentLifeCycleTest >> testSwitchComponentsWithKeys [
 
 { #category : #tests }
 MolComponentLifeCycleTest >> testSwitchComponentsWithKeysSearchServicesProviderFor [
-
 	"start first implemention of a component contract"
 	MolUtils startComponent: MolCompleteComponentImpl named: #comp1.
 	
