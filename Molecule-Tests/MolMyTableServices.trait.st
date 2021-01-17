@@ -9,7 +9,7 @@ Trait {
 	#name : #MolMyTableServices,
 	#traits : 'MolComponentServices',
 	#classTraits : 'MolComponentServices classTrait',
-	#category : #'Molecule-Tests-Services Resources'
+	#category : #'Molecule-Tests-Resources - Contracts'
 }
 
 { #category : #services }

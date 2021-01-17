@@ -14,7 +14,7 @@ Class {
 		'currentState',
 		'failureLevel'
 	],
-	#category : #'Molecule-Tests-Events Resources'
+	#category : #'Molecule-Tests-Resources - Implementations'
 }
 
 { #category : #'life cycle' }

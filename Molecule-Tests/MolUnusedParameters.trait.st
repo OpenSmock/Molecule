@@ -5,5 +5,5 @@ Trait {
 	#name : #MolUnusedParameters,
 	#traits : 'MolComponentParameters',
 	#classTraits : 'MolComponentParameters classTrait',
-	#category : #'Molecule-Tests-Services Events Parameters Resources'
+	#category : #'Molecule-Tests-Resources - Contracts'
 }

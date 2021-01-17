@@ -7,5 +7,5 @@ Class {
 	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolBasicComponent',
 	#classTraits : 'MolBasicComponent classTrait',
-	#category : #'Molecule-Tests-Services Events Parameters Resources'
+	#category : #'Molecule-Tests-Resources - Implementations'
 }

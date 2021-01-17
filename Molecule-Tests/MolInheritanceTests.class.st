@@ -2,8 +2,8 @@ Class {
 	#name : #MolInheritanceTests,
 	#superclass : #TestCase,
 	#instVars : [
-		'superComponent',
-		'subComponent'
+		'motherComponent',
+		'childComponent'
 	],
 	#category : #'Molecule-Tests-Cases'
 }
@@ -19,19 +19,18 @@ MolInheritanceTests >> setUp [
 	manager deploymentServices deployComponentImplementation: MolCompleteComponentChildImpl.
 	
 	"Instanciate componenets"
-	superComponent := manager homeServices instanciateComponent: MolCompleteComponentImpl.
-	subComponent := manager homeServices instanciateComponent: MolCompleteComponentChildImpl.
+	motherComponent := manager homeServices instanciateComponent: MolCompleteComponentImpl.
+	childComponent := manager homeServices instanciateComponent: MolCompleteComponentChildImpl.
 	
+	"Activate components"
+	 manager homeServices activateComponent: MolCompleteComponentImpl.
+	 manager homeServices activateComponent: MolCompleteComponentChildImpl.
+
 ]
 
 { #category : #running }
 MolInheritanceTests >> tearDown [ 
-	| manager |
-	manager := MolComponentManager default.
-	manager homeServices passivateAllComponents.
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolCompleteComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolCompleteComponentChildImpl.
+
 	MolComponentManager cleanUp.
 ]
 
@@ -47,35 +46,75 @@ MolInheritanceTests >> testDefineComponent [
 MolInheritanceTests >> testEvents [
 	"Test events behavior"
 	
-	self assert: superComponent event equals: #event.
-	self assert: subComponent event equals: #event.
-	self assert: subComponent subEvent equals: #subEvent.
-	self deny: (superComponent class selectors includes: #subEvent).
+	self assert: motherComponent event equals: #event.
+	self deny: (motherComponent class selectors includes: #subEvent).
+		
+	self assert: childComponent event equals: #event.
+	self assert: childComponent subEvent equals: #subEvent.
 ]
 
 { #category : #tests }
 MolInheritanceTests >> testEventsNotifier [
 	"Test call to event notifier"
 	
-	subComponent getMolUsedEventsNotifier event
+	motherComponent getMolUsedEventsNotifier event.
+	
+	childComponent getMolUsedEventsNotifier event.
+	childComponent getMolUsedChildEventsNotifier subEvent.
+]
+
+{ #category : #tests }
+MolInheritanceTests >> testEventsSubscriber [
+	"Test call to event notifier"
+	
+	motherComponent getMolUsedEventsSubscriber subscribe: motherComponent.
+	motherComponent getMolUsedEventsSubscriber unsubscribe: motherComponent.
+	
+	childComponent getMolUsedEventsSubscriber subscribe: childComponent.
+	childComponent getMolUsedChildEventsSubscriber subscribe: childComponent.
+	childComponent getMolUsedEventsSubscriber unsubscribe: childComponent.
+	childComponent getMolUsedChildEventsSubscriber unsubscribe: childComponent.
+	
 ]
 
 { #category : #tests }
 MolInheritanceTests >> testParameters [
 	"Test parameters behavior"
 	
-	self assert: superComponent parameter equals: #parameter.
-	self assert: subComponent parameter equals: #parameter.
-	self assert: subComponent subParameter equals: #subParameter.
-	self deny: (superComponent class selectors includes: #subParameter).
+	self assert: motherComponent parameter equals: #parameter.
+	self deny: (motherComponent class selectors includes: #subParameter).
+
+	self assert: childComponent parameter equals: #parameter.
+	self assert: childComponent subParameter equals: #subParameter.
 ]
 
 { #category : #tests }
 MolInheritanceTests >> testServices [
 	"Test services behavior"
 	
-	self assert: superComponent service equals: #service.
-	self assert: subComponent service equals: #service.
-	self assert: subComponent subService equals: #subService.
-	self deny: (superComponent class selectors includes: #subService).
+	self assert: motherComponent service equals: #service.
+	self assert: motherComponent getMolUsedServicesProvider identicalTo: childComponent.
+	self assert: motherComponent getMolUsedServicesProvider service equals: #service.
+	self deny: (motherComponent class selectors includes: #subService).
+	
+	self assert: childComponent service equals: #service.
+	self assert: childComponent subService equals: #subService.
+	"In the case of same used Services Type the used services provider is the last instanciated component : the child"
+	self assert: childComponent getMolUsedServicesProvider identicalTo: childComponent.
+	self assert: childComponent getMolUsedServicesProvider service equals: #service.
+	self assert: childComponent getMolUsedChildServicesProvider identicalTo: childComponent.
+]
+
+{ #category : #tests }
+MolInheritanceTests >> testServicesWithoutChild [
+	"Test services behavior"
+	
+	MolUtils stopComponent: MolCompleteComponentChildImpl.
+	
+	self assert: motherComponent getMolUsedServicesProvider identicalTo: motherComponent.
+	
+	childComponent := MolUtils startComponent: MolCompleteComponentChildImpl.
+	"Child component dynamically override the previous provider"
+	self assert: motherComponent getMolUsedServicesProvider identicalTo: childComponent.
+	
 ]

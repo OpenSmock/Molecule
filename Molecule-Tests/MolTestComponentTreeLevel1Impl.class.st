@@ -3,7 +3,7 @@ Class {
 	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolTestComponentTreeType',
 	#classTraits : 'MolTestComponentTreeType classTrait',
-	#category : #'Molecule-Tests-Resources'
+	#category : #'Molecule-Tests-Resources - Implementations'
 }
 
 { #category : #'component life cycle' }

@@ -2,7 +2,7 @@ Trait {
 	#name : #MolUsedChildEvents,
 	#traits : 'MolComponentEvents',
 	#classTraits : 'MolComponentEvents classTrait',
-	#category : #'Molecule-Tests-Services Events Parameters Resources'
+	#category : #'Molecule-Tests-Resources - Contracts'
 }
 
 { #category : #events }

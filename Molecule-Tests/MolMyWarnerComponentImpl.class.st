@@ -10,7 +10,7 @@ Class {
 	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolMyWarnerComponent',
 	#classTraits : 'MolMyWarnerComponent classTrait',
-	#category : #'Molecule-Tests-Events Resources'
+	#category : #'Molecule-Tests-Resources - Implementations'
 }
 
 { #category : #event }

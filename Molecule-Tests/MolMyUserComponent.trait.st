@@ -9,7 +9,7 @@ Trait {
 	#name : #MolMyUserComponent,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : #'Molecule-Tests-Services Resources'
+	#category : #'Molecule-Tests-Resources - Contracts'
 }
 
 { #category : #'accessing - services' }

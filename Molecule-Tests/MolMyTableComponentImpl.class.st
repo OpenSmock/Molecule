@@ -12,7 +12,7 @@ Class {
 		'tableContent',
 		'columnNames'
 	],
-	#category : #'Molecule-Tests-Services Resources'
+	#category : #'Molecule-Tests-Resources - Implementations'
 }
 
 { #category : #accessing }

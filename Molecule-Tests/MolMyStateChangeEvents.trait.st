@@ -9,7 +9,7 @@ Trait {
 	#name : #MolMyStateChangeEvents,
 	#traits : 'MolComponentEvents',
 	#classTraits : 'MolComponentEvents classTrait',
-	#category : #'Molecule-Tests-Events Resources'
+	#category : #'Molecule-Tests-Resources - Contracts'
 }
 
 { #category : #events }

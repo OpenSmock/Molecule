@@ -20,6 +20,24 @@ MolUtilsTest >> tearDown [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testAllComponentInstancesOfType [
+
+	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) isEmpty.
+
+	MolUtils startComponent: MolCompleteComponentImpl named: #compA.
+	MolUtils startComponent: MolCompleteComponentImpl named: #compB.
+	MolUtils startComponent: MolCompleteComponentImpl named: #compC.
+	
+	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) size = 3.
+	
+	MolUtils startComponent: MolCompleteComponentImpl named: #compD.
+	
+	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) size = 4.
+	
+	
+]
+
+{ #category : #tests }
 MolUtilsTest >> testCreateAllComponents [
 "MolUtils>createAllComponents instanciate and activate all deployed components"
 

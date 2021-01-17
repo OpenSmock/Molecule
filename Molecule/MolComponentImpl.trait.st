@@ -19,6 +19,17 @@ Trait {
 	#category : #'Molecule-Core-Impl'
 }
 
+{ #category : #testing }
+MolComponentImpl classSide >> componentType [
+	| traits |
+
+	traits := Set new.
+	self withAllSuperclassesDo: [ :c | 
+		(c  ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[traits addAll: c traitComposition allTraits].
+	].
+	^(traits detect:[ :t | t traitComposition includesTrait: MolComponentType ] ifNone:[nil])
+]
+
 { #category : #'component definition' }
 MolComponentImpl classSide >> defineComponent [
 
@@ -35,7 +46,7 @@ MolComponentImpl classSide >> haveComponentType [
 	self withAllSuperclassesDo: [ :c | 
 		(c  ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[traits addAll: c traitComposition allTraits].
 	].
-	^(traits includes: MolComponentType). 
+	^(traits includes: MolComponentType)
 ]
 
 { #category : #testing }

@@ -9,7 +9,7 @@ Trait {
 	#name : #MolMyWarnerComponent,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : #'Molecule-Tests-Events Resources'
+	#category : #'Molecule-Tests-Resources - Contracts'
 }
 
 { #category : #'accessing - events' }

@@ -9,7 +9,7 @@ Trait {
 	#name : #MolMyClientComponent,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : #'Molecule-Tests-Parameters Resources'
+	#category : #'Molecule-Tests-Resources - Contracts'
 }
 
 { #category : #'accessing - parameters' }

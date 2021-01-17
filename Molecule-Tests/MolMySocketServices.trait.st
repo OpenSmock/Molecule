@@ -9,7 +9,7 @@ Trait {
 	#name : #MolMySocketServices,
 	#traits : 'MolComponentServices',
 	#classTraits : 'MolComponentServices classTrait',
-	#category : #'Molecule-Tests-Parameters Resources'
+	#category : #'Molecule-Tests-Resources - Contracts'
 }
 
 { #category : #services }

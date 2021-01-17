@@ -5,5 +5,5 @@ I am a component implementation because I am a subclass of BasicSubComponentImpl
 Class {
 	#name : #MolBasicSubSubComponentImpl,
 	#superclass : #MolBasicSubComponentImpl,
-	#category : #'Molecule-Tests-Services Events Parameters Resources'
+	#category : #'Molecule-Tests-Resources - Implementations'
 }

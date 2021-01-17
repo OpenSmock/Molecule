@@ -61,7 +61,7 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 
 { #category : #private }
 MolHomeServices >> addDeployedComponent: aComponentClass [
-	deployedComponents at: aComponentClass ifAbsentPut: [Dictionary new]
+	self deployedComponents at: aComponentClass ifAbsentPut: [Dictionary new]
 ]
 
 { #category : #accessing }
@@ -79,7 +79,7 @@ MolHomeServices >> initialize [
 
 { #category : #accessing }
 MolHomeServices >> instanceOf: aClass named: aName [
-	^(deployedComponents at: aClass ifAbsent: [^nil]) at: aName ifAbsent: [^nil]
+	^(self deployedComponents at: aClass ifAbsent: [^nil]) at: aName ifAbsent: [^nil]
 ]
 
 { #category : #'component life cycle' }
@@ -99,16 +99,15 @@ MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 	(aComponentClass isNil or:[aName isNil]) ifTrue:[^self].
 	
 	"check if the component can be instanciate"
-	deployed := deployedComponents at: aComponentClass ifAbsent:[
+	deployed := self deployedComponents at: aComponentClass ifAbsent:[
 		^ComponentNotDeployedError signal: 'Can not instanciate a non deployed component'.	
 	].
 	
-	"instanciate the component if not exists"
-	deployed at: aName ifPresent:[ :c |
-		c ifNotNil:[
-			^ComponentAlreadyExistsError signal: 'Can not instanciate a component with the same name of another component'.	
-		].
-	].
+	"check if a component instance with the same name is already exists"
+	deployed at: aName ifPresent:[ :c | c ifNotNil:[
+		^ComponentAlreadyExistsError signal: 'Can not instanciate a component with the same name of another component'.	
+	]].
+
 	component := aComponentClass new componentName: aName; yourself.
 	MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is instanciated.'.
 	deployed at: component componentName put: component.
@@ -127,7 +126,7 @@ MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 { #category : #private }
 MolHomeServices >> isDeployedComponent: aComponentClass [
 
-	^ deployedComponents includesKey: aComponentClass
+	^ self deployedComponents includesKey: aComponentClass
 ]
 
 { #category : #testing }
@@ -147,7 +146,7 @@ MolHomeServices >> isWaitingForActivation: aComponentClass named: aComponentName
 
 { #category : #'component life cycle' }
 MolHomeServices >> passivateAllComponents [
-	deployedComponents do: [ :aDictionary | 
+	self deployedComponents do: [ :aDictionary | 
 		aDictionary keysAndValuesDo: [ :aName :aComponent | 
 			(waitingForActivation includes: aComponent) ifFalse: [self passivateComponent: aComponent class named: aName]
 		]
@@ -198,7 +197,7 @@ MolHomeServices >> release [
 { #category : #'component life cycle' }
 MolHomeServices >> removeAllComponents [
 	| components |
-	components := deployedComponents.
+	components := self deployedComponents.
 	components keysAndValuesDo:  [:key :values | 
 		(values copy) do:[ :component | self removeComponent: key named: component componentName]
 	]
@@ -234,7 +233,7 @@ MolHomeServices >> removeComponent: aComponentClass named: aName [
 		componentConnector: nil.
 	waitingForActivation do: [ :waitingComponent | self resetComponentConnection: waitingComponent instance: component ].
 	
-	deployed := deployedComponents at: aComponentClass ifAbsent:[
+	deployed := self deployedComponents at: aComponentClass ifAbsent:[
 		MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is not a deployed component class.'.
 	].
 	
@@ -242,7 +241,7 @@ MolHomeServices >> removeComponent: aComponentClass named: aName [
 		MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is not a deployed component class.'.
 	].
 		
-	deployedComponents keysAndValuesDo: [ :class :componentDictionary | 
+	self deployedComponents keysAndValuesDo: [ :class :componentDictionary | 
 		componentDictionary keysAndValuesDo: [ :name :value | 
 			self resetComponentConnection: value instance: component 
 		] 
@@ -257,10 +256,10 @@ MolHomeServices >> removeComponent: aComponentClass named: aName [
 { #category : #private }
 MolHomeServices >> removeDeployedComponent: aComponentClass [
 	"Remove a deployed component"
-	deployedComponents at: aComponentClass ifPresent:[ :compDict | 
+	self deployedComponents at: aComponentClass ifPresent:[ :compDict | 
 		"Check if this component class have running instances"
 		compDict isEmpty 
-			ifTrue:[deployedComponents removeKey: aComponentClass] 
+			ifTrue:[self deployedComponents removeKey: aComponentClass] 
 			ifFalse:[
 				"Remove existing components"
 				compDict copy keysAndValuesDo: [ :k :v | self removeComponent: (v class) named: k ].

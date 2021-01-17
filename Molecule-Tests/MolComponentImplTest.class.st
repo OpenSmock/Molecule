@@ -67,6 +67,19 @@ MolComponentImplTest >> testAugmentedClassToAComponentUsesAsAClassicWay [
 ]
 
 { #category : #tests }
+MolComponentImplTest >> testComponentType [ 
+
+	self assert: MolComponentImpl componentType equals: nil.
+	self assert: MolCompleteComponentImpl componentType equals: MolCompleteComponent.
+	self assert: MolTestComponentImplA componentType equals: nil.
+	
+	"inheritance"
+	self assert: MolCompleteComponentChildImpl componentType equals: MolCompleteComponentChild.
+	
+	
+]
+
+{ #category : #tests }
 MolComponentImplTest >> testDefineComponent [
 
 	self assert: MolComponentImpl defineComponent equals: MolComponentImpl.

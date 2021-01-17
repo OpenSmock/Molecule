@@ -12,6 +12,23 @@ Class {
 	#category : #'Molecule-Tools'
 }
 
+{ #category : #accessing }
+MolUtils class >> allComponentInstancesOfType: aComponentType [
+
+	| oc homeServices |
+	(aComponentType notNil and:[aComponentType isTrait and:[aComponentType isComponentType]]) ifFalse:[^OrderedCollection new].
+	
+	oc := OrderedCollection new.
+	homeServices := MolComponentManager default homeServices.
+	aComponentType users do:[ :class | 
+		(homeServices isDeployedComponent: class) ifTrue:[
+			oc addAll: (homeServices deployedComponents at: class) values.
+		]
+	].
+	
+	^oc
+]
+
 { #category : #'component creation' }
 MolUtils class >> createAllComponents [
 	"instanciate and activate all deployed components"

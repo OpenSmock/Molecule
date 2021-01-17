@@ -5,5 +5,5 @@ Trait {
 	#name : #MolBasicComponent,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : #'Molecule-Tests-Services Events Parameters Resources'
+	#category : #'Molecule-Tests-Resources - Contracts'
 }

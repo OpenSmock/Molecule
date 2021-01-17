@@ -1,6 +1,6 @@
 Trait {
 	#name : #MolTestNoComponentTraitB,
-	#category : #'Molecule-Tests-Resources'
+	#category : #'Molecule-Tests-Resources - Contracts'
 }
 
 { #category : #API }

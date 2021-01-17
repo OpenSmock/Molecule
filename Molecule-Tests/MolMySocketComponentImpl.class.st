@@ -13,7 +13,7 @@ Class {
 		'port',
 		'protocol'
 	],
-	#category : #'Molecule-Tests-Parameters Resources'
+	#category : #'Molecule-Tests-Resources - Implementations'
 }
 
 { #category : #services }

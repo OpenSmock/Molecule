@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'MolComponentImpl + MolCompleteComponent + MolUsedEvents + MolUsedServices + MolUsedParameters',
 	#classTraits : 'MolComponentImpl classTrait + MolCompleteComponent classTrait + MolUsedEvents classTrait + MolUsedServices classTrait + MolUsedParameters classTrait',
-	#category : #'Molecule-Tests-Resources'
+	#category : #'Molecule-Tests-Resources - Implementations'
 }
 
 { #category : #'existing class API' }
