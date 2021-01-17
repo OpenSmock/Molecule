@@ -17,30 +17,8 @@ MolComponentImplTest >> tearDown [
 ]
 
 { #category : #tests }
-MolComponentImplTest >> testAugmentedClassToAComponentConnecting [
-
-	| component |
-	component := MolUtils startComponent: MolAugmentedClassToAComponent.
-
-	self assert: component componentName equals: #default.
-	self assert: (component componentConnector isKindOf: MolComponentConnector).
-
-	self assert: component eventsNotifiers notEmpty.
-	self assert: component parametersProviders notEmpty.
-	self assert: component servicesProviders notEmpty.
-	self assert: component eventsSubscribers notEmpty.
-
-	component forServices: MolServicesTest useProvider:  #default. 
-	component forEvents: MolEventsTest useProducer:  #default. 
-	component forParameters: MolParametersTest useProvider:  #default. 
-	
-	MolUtils stopComponent: MolAugmentedClassToAComponent.
-]
-
-{ #category : #tests }
 MolComponentImplTest >> testAugmentedClassToAComponentProperties [
-
-	| component connector |
+	| component |
 	component := MolAugmentedClassToAComponentWithoutType new.
 
 	self assert: component class isComponentClass.
@@ -51,11 +29,30 @@ MolComponentImplTest >> testAugmentedClassToAComponentProperties [
 	component componentName: #default.
 	self assert: component componentName equals: #default.
 	
-	"Component connector"
+	"Component connector, just test if accessors exists because componentConnector is managed on component instanciation"
 	self assert: component componentConnector equals: nil.
-	connector := MolComponentConnector new.
-	component componentConnector: connector.
-	self assert: component componentConnector equals: connector.
+	component componentConnector: nil.
+	self assert: component componentConnector equals: nil.
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testAugmentedClassToAComponentRemoveAndReuseAsNormalWay [
+	"Use an existing class to a component, remove the component and reuse the instance as a normal way"
+
+	| myInstance |
+	"Start the component"
+	myInstance := MolUtils startComponent: MolAugmentedClassToAComponent.
+	self assert: myInstance service equals: #service2.
+	self assert: myInstance parameter equals: #parameter2.
+	
+	"Stop the component but after use instance as a normal way"	
+	MolUtils stopComponent: MolAugmentedClassToAComponent.
+	"Use classic methods wich uses component methods and check if no errors are rising in case of using these methods in the classic implementation"
+	self assert: myInstance existingInterfaceA.
+	self assert: myInstance existingInterfaceB.
+	self assert: myInstance existingInterfaceC.
+	myInstance getMolUsedEventsSubscriber subscribe: myInstance.
+	myInstance getMolUsedEventsSubscriber unsubscribe: myInstance.
 ]
 
 { #category : #tests }

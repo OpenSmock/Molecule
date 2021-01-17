@@ -149,7 +149,7 @@ MolUtils class >> stopComponent: aComponentClass named: aName [
 
 { #category : #'component easy start and stop' }
 MolUtils class >> stopComponents: aComponentClassList [
-	"remove and undeploy quickly a list of components"
+	"remove quickly a list of components"
 
 	aComponentClassList ifNil:[^self].
 	aComponentClassList do:[ :componentClass | 

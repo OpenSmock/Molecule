@@ -55,13 +55,16 @@ MolComponentImpl >> componentConnector [
 
 { #category : #'private component accessing' }
 MolComponentImpl >> componentConnector: aConnector [
-	componentConnector := aConnector
-]
+	"set a connector to a component, release previous if necessary"
 
-{ #category : #'component life cycle' }
-MolComponentImpl >> componentFlush [
-
-	self componentConnector release
+	(componentConnector notNil and: [ componentConnector ~= aConnector ])
+		ifTrue: [ 
+			componentConnector disconnectComponent: self.
+			componentConnector release.
+		].
+	
+	componentConnector := aConnector.
+	aConnector ifNotNil: [ aConnector connectComponent: self ]
 ]
 
 { #category : #'component life cycle' }

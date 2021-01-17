@@ -93,8 +93,8 @@ MolComponentManager class >> flushComponents [
 	"Flush all components an return number of flushed components"
 	| i |
 	i := 0.
-	MolAbstractComponentImpl allSubInstancesDo:[ :component | component componentFlush. i := i + 1 ].
-	MolComponentImpl users do: [:impl | impl allInstances do: [:component | component componentFlush. i := i + 1]].
+	MolAbstractComponentImpl allSubInstancesDo:[ :component | component componentConnector: nil. i := i + 1 ].
+	MolComponentImpl users do: [:impl | impl allInstances do: [:component | component componentConnector: nil. i := i + 1]].	
 	^i
 ]
 

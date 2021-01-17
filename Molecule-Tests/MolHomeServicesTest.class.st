@@ -29,6 +29,194 @@ MolHomeServicesTest >> tearDown [
 ]
 
 { #category : #tests }
+MolHomeServicesTest >> testActivateComponent [
+	"Test Component properties after activation"
+	| manager component |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	component := manager homeServices instanciateComponent: MolCompleteComponentImpl.
+	manager homeServices activateComponent: MolCompleteComponentImpl.
+	
+	self assert: component componentName equals: #default.
+	self assert: (component componentConnector isKindOf: MolComponentConnector).
+	self assert: component eventsNotifiers notEmpty.
+	self assert: component eventsSubscribers notEmpty.
+	self assert: component parametersProviders notEmpty.
+	self assert: component servicesProviders notEmpty.
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testActivateComponentAugmentedClass [
+	"Test Component properties after activation"
+	| manager component |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolAugmentedClassToAComponent.
+	component := manager homeServices instanciateComponent: MolAugmentedClassToAComponent.
+	manager homeServices activateComponent: MolAugmentedClassToAComponent.
+	
+	self assert: component componentName equals: #default.
+	self assert: (component componentConnector isKindOf: MolComponentConnector).
+	self assert: component eventsNotifiers notEmpty.
+	self assert: component eventsSubscribers notEmpty.
+	self assert: component parametersProviders notEmpty.
+	self assert: component servicesProviders notEmpty.
+	
+	component forServices: MolServicesTest useProvider:  #default. 
+	component forEvents: MolEventsTest useProducer:  #default. 
+	component forParameters: MolParametersTest useProvider:  #default.
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testActivateComponentNamed [
+	"Test Component properties after activation"
+	| manager component |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	component := manager homeServices instanciateComponent: MolCompleteComponentImpl named: #testComponent.
+	manager homeServices activateComponent: MolCompleteComponentImpl named: #testComponent.
+	
+	self assert: component componentName equals: #testComponent.
+	self assert: (component componentConnector isKindOf: MolComponentConnector).
+	self assert: component eventsNotifiers notEmpty.
+	self assert: component eventsSubscribers notEmpty.
+	self assert: component parametersProviders notEmpty.
+	self assert: component servicesProviders notEmpty.
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testInstanciateComponent [
+	"Test Component properties after instanciation"
+	| manager component |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	component := manager homeServices instanciateComponent: MolCompleteComponentImpl.
+	
+	self assert: component componentName equals: #default.
+	self assert: (component componentConnector isKindOf: MolComponentConnector).
+	self assert: component eventsNotifiers notEmpty.
+	self assert: component eventsSubscribers notEmpty.
+	self assert: component parametersProviders notEmpty.
+	self assert: component servicesProviders notEmpty.
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testInstanciateComponentNamed [
+	"Test Component properties after instanciation"
+	| manager component |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	component := manager homeServices instanciateComponent: MolCompleteComponentImpl named: #testComponent.
+	
+	self assert: component componentName equals: #testComponent.
+	self assert: (component componentConnector isKindOf: MolComponentConnector).
+	self assert: component eventsNotifiers notEmpty.
+	self assert: component eventsSubscribers notEmpty.
+	self assert: component parametersProviders notEmpty.
+	self assert: component servicesProviders notEmpty.
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testPassivateComponent [
+	"Test Component properties after passivation"
+	| manager component |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	component := manager homeServices instanciateComponent: MolCompleteComponentImpl.
+	manager homeServices activateComponent: MolCompleteComponentImpl.
+	manager homeServices passivateComponent: MolCompleteComponentImpl.
+	
+	self assert: component componentName equals: #default.
+	self assert: (component componentConnector isKindOf: MolComponentConnector).
+	self assert: component eventsNotifiers notEmpty.
+	self assert: component eventsSubscribers notEmpty.
+	self assert: component parametersProviders notEmpty.
+	self assert: component servicesProviders notEmpty.
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testPassivateComponentNamed [
+	"Test Component properties after passivation"
+	| manager component |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	component := manager homeServices instanciateComponent: MolCompleteComponentImpl named: #testComponent.
+	manager homeServices activateComponent: MolCompleteComponentImpl named: #testComponent.
+	manager homeServices passivateComponent: MolCompleteComponentImpl named: #testComponent.
+	
+	self assert: component componentName equals: #testComponent.
+	self assert: (component componentConnector isKindOf: MolComponentConnector).
+	self assert: component eventsNotifiers notEmpty.
+	self assert: component eventsSubscribers notEmpty.
+	self assert: component parametersProviders notEmpty.
+	self assert: component servicesProviders notEmpty.
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testRemoveAllComponents [
+	"Test Component release on a remove"
+	| manager |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+
+	manager homeServices instanciateComponent: MolCompleteComponentImpl named: #comp1.
+	manager homeServices instanciateComponent: MolCompleteComponentImpl named: #comp2.
+	manager homeServices instanciateComponent: MolCompleteComponentImpl named: #comp3.
+	manager homeServices activateComponent: MolCompleteComponentImpl named: #comp1.
+	manager homeServices activateComponent: MolCompleteComponentImpl named: #comp2.
+	manager homeServices passivateComponent: MolCompleteComponentImpl named: #comp2.
+	
+	self assert: (manager homeServices isDeployedComponent: MolCompleteComponentImpl) equals: true.
+	self assert: (manager homeServices deployedComponents at: MolCompleteComponentImpl) notEmpty.
+	self assert: manager homeServices waitingForActivation notEmpty.
+	
+	manager homeServices removeAllComponents.
+	
+	self assert: (manager homeServices isDeployedComponent: MolCompleteComponentImpl) equals: true.
+	self assert: (manager homeServices deployedComponents at: MolCompleteComponentImpl) isEmpty.
+	self assert: manager homeServices waitingForActivation isEmpty.
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testRemoveComponent [
+	"Test Component release on a remove"
+	| manager component |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	component := manager homeServices instanciateComponent: MolCompleteComponentImpl.
+	manager homeServices activateComponent: MolCompleteComponentImpl.
+	manager homeServices passivateComponent: MolCompleteComponentImpl.
+	manager homeServices removeComponent: MolCompleteComponentImpl.
+
+	"Check all components properties"
+	self assert: component componentName isNil.
+	self assert: component componentConnector isNil.	
+	self assert: component eventsNotifiers equals: MolComponentConnector defaultEventsNotifiers.
+	self assert: component eventsSubscribers equals: MolComponentConnector defaultEventsSubscribers.
+	self assert: component parametersProviders equals: MolComponentConnector defaultParametersProviders.
+	self assert: component servicesProviders equals: MolComponentConnector defaultServicesProviders.
+]
+
+{ #category : #tests }
+MolHomeServicesTest >> testRemoveComponentNamed [
+	"Test Component release on a remove"
+	| manager component |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	component := manager homeServices instanciateComponent: MolCompleteComponentImpl named: #testComponent.
+	manager homeServices activateComponent: MolCompleteComponentImpl named: #testComponent.
+	manager homeServices passivateComponent: MolCompleteComponentImpl named: #testComponent.
+	manager homeServices removeComponent: MolCompleteComponentImpl named: #testComponent.
+
+	"Check all components properties"
+	self assert: component componentName isNil.
+	self assert: component componentConnector isNil.	
+	self assert: component eventsNotifiers equals: MolComponentConnector defaultEventsNotifiers.
+	self assert: component eventsSubscribers equals: MolComponentConnector defaultEventsSubscribers.
+	self assert: component parametersProviders equals: MolComponentConnector defaultParametersProviders.
+	self assert: component servicesProviders equals: MolComponentConnector defaultServicesProviders.
+]
+
+{ #category : #tests }
 MolHomeServicesTest >> testSeveralComponentsLifecycle [
 	"Test life cycle of several components"
 	| manager |

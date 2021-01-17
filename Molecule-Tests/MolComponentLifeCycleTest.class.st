@@ -16,7 +16,7 @@ MolComponentLifeCycleTest >> tearDown [
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - component switching' }
 MolComponentLifeCycleTest >> testSwitchComponentsSearchServicesProviderFor [
 	"start first implemention of a component contract"
 	MolUtils startComponent: MolCompleteComponentImpl.
@@ -32,7 +32,7 @@ MolComponentLifeCycleTest >> testSwitchComponentsSearchServicesProviderFor [
 	self assert: ((MolComponentManager default locatorServices searchServicesProviderFor: MolUsedServices) isKindOf: MolAugmentedClassToAComponent).
 ]
 
-{ #category : #tests }
+{ #category : #'tests - component switching' }
 MolComponentLifeCycleTest >> testSwitchComponentsWithKeys [
 	| compA1 compB |
 	"start first implemention of a component contract"
@@ -53,7 +53,7 @@ MolComponentLifeCycleTest >> testSwitchComponentsWithKeys [
 	self assert: compB getMolUsedServicesProvider service equals: #service2.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - component switching' }
 MolComponentLifeCycleTest >> testSwitchComponentsWithKeysSearchServicesProviderFor [
 	"start first implemention of a component contract"
 	MolUtils startComponent: MolCompleteComponentImpl named: #comp1.

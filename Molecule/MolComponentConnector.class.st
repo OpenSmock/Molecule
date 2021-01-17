@@ -10,8 +10,7 @@ Class {
 		'servicesProviders',
 		'parametersProviders',
 		'eventsSubscribers',
-		'eventsNotifiers',
-		'component'
+		'eventsNotifiers'
 	],
 	#category : #'Molecule-Core'
 }
@@ -43,19 +42,28 @@ MolComponentConnector >> activateComponent [
 
 { #category : #service }
 MolComponentConnector >> connectComponent: aComponent [
-	aComponent componentConnector: self.
 	
-	component := aComponent.
 	eventsNotifiers := self class defaultEventsNotifiers.
 	eventsSubscribers := self class defaultEventsSubscribers.
 	servicesProviders := self class defaultServicesProviders.
 	parametersProviders := self class defaultParametersProviders.
 	
-	component class allProducedEvents do: [ :evt | eventsNotifiers at: evt put: (MolEventNotifier new interface: evt originator: component)].
-	component class allUsedServices do: [ :svc | servicesProviders at: svc put: #default].
-	component class allConsumedEvents do: [ :evt | eventsSubscribers at: evt put: #default].
-	component class allUsedParameters do: [ :svc | parametersProviders at: svc put: #default].
+	aComponent class allProducedEvents do: [ :evt | eventsNotifiers at: evt put: (MolEventNotifier new interface: evt originator: aComponent)].
+	aComponent class allUsedServices do: [ :svc | servicesProviders at: svc put: #default].
+	aComponent class allConsumedEvents do: [ :evt | eventsSubscribers at: evt put: #default].
+	aComponent class allUsedParameters do: [ :svc | parametersProviders at: svc put: #default].
 
+]
+
+{ #category : #service }
+MolComponentConnector >> disconnectComponent: aComponent [
+	"Remove link between component and connector"
+	aComponent componentConnector == self ifFalse:[^self].
+	
+	eventsNotifiers := nil.
+	eventsSubscribers := nil.
+	servicesProviders := nil.
+	parametersProviders := nil.
 ]
 
 { #category : #accessing }
@@ -66,16 +74,6 @@ MolComponentConnector >> eventsNotifiers [
 { #category : #accessing }
 MolComponentConnector >> eventsSubscribers [
 	^ eventsSubscribers 
-]
-
-{ #category : #'initialize-release' }
-MolComponentConnector >> initialize [
-	super initialize.
-
-	eventsNotifiers := self class defaultEventsNotifiers.
-	eventsSubscribers := self class defaultEventsSubscribers.
-	servicesProviders := self class defaultServicesProviders.
-	parametersProviders := self class defaultParametersProviders.
 ]
 
 { #category : #accessing }
@@ -96,7 +94,6 @@ MolComponentConnector >> release [
 	eventsSubscribers := nil.
 	servicesProviders := nil.
 	parametersProviders := nil.
-	component := nil.
 	
 ]
 
