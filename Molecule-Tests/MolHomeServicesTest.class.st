@@ -442,6 +442,61 @@ MolHomeServicesTest >> testSubComponentLifecycleWithName [
 	self assert: manager homeServices deployedComponents isEmpty.
 ]
 
+{ #category : #'tests - threading' }
+MolHomeServicesTest >> testThreadsToStartAndStopComponents [
+
+	| manager nb |
+	manager := MolComponentManager default.
+	nb := 500.
+	
+	1 to: nb do:[ :i |
+		[
+		(Delay forMilliseconds: (Random new next * 10)) wait.
+		manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+		manager homeServices instanciateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
+		manager homeServices activateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
+		] fork.
+	].
+	(Delay forSeconds: 1) wait.
+
+	self assert: manager homeServices deployedComponents size equals: 1.
+	self assert: (manager homeServices deployedComponents at: MolCompleteComponentImpl) size equals: nb.
+		
+	1 to: nb do:[ :i |
+		[
+		(Delay forMilliseconds: (Random new next * 10)) wait.
+		manager homeServices passivateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
+		manager homeServices removeComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
+		] fork.
+	].
+	(Delay forSeconds: 1) wait.
+
+	self assert: manager homeServices deployedComponents size equals: 1.
+	self assert: (manager homeServices deployedComponents at: MolCompleteComponentImpl) isEmpty.
+]
+
+{ #category : #'tests - threading' }
+MolHomeServicesTest >> testThreadsToStartAndStopComponents2 [
+
+	| nb oc |
+	nb := 500.
+	oc := OrderedCollection new.
+	1 to: nb do:[ :i |
+		oc add: [
+			MolComponentManager default deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+			MolComponentManager default homeServices instanciateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
+			MolComponentManager default homeServices activateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
+			MolComponentManager default homeServices passivateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
+			MolComponentManager default homeServices removeComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
+		].
+	].
+	oc do:[ :bloc | bloc fork ].
+	(Delay forSeconds: 1) wait.
+
+	self assert: MolComponentManager default homeServices deployedComponents size equals: 1.
+	self assert: (MolComponentManager default homeServices deployedComponents at: MolCompleteComponentImpl) isEmpty.
+]
+
 { #category : #tests }
 MolHomeServicesTest >> testTraitComponentLifecycle [
 "test life cycle of a component using ComponentImpl trait"
