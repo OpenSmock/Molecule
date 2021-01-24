@@ -396,7 +396,15 @@ MolComponentFactory class >> defineDirtyComponents [
 
 { #category : #'class initialization' }
 MolComponentFactory class >> initialize [
-	self default 
+	self default
+]
+
+{ #category : #'class initialization' }
+MolComponentFactory class >> isInitialized [
+	"Test if the Component Factory is initialized"
+
+	<script: 'self isInitialized inspect'>
+	^ Default notNil
 ]
 
 { #category : #protocol }
@@ -675,7 +683,7 @@ MolComponentFactory >> getConsumedEventSourceCodeFor: aTrait selector: selector 
 	writeStream crtab: 1.
 	writeStream
 		nextPutAll: 'eventsSymbol := self eventsSubscribers at: itf ';
-		nextPutAll: ' ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].'.	
+		nextPutAll: 'ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].'.	
 	writeStream crtab: 1.
 	writeStream
 		nextPutAll:
@@ -684,7 +692,7 @@ MolComponentFactory >> getConsumedEventSourceCodeFor: aTrait selector: selector 
 			[eventsSubscriber := MolComponentManager default locatorServices 
 						searchEventsSubscriberFor: ';
 		nextPutAll: aTrait asString;
-		nextPutAll: ' named:  eventsSymbol ]. '.
+		nextPutAll: ' named: eventsSymbol ]. '.
 	writeStream crtab: 1.
 	writeStream nextPutAll: '^eventsSubscriber'.
 	^ writeStream
@@ -740,7 +748,7 @@ MolComponentFactory >> getUsedParametersSourceCodeFor: aTrait selector: selector
 			[parametersProvider := MolComponentManager default locatorServices 
 						searchParametersProviderFor: ';
 		nextPutAll: aTrait asString;
-		nextPutAll: ' named:  parametersSymbol]. '.
+		nextPutAll: ' named: parametersSymbol]. '.
 	writeStream crtab: 1.
 	writeStream nextPutAll: '^parametersProvider'.
 	^ writeStream
@@ -770,7 +778,7 @@ MolComponentFactory >> getUsedServicesSourceCodeFor: aTrait selector: selector [
 			[servicesProvider := MolComponentManager default locatorServices 
 						searchServicesProviderFor: ';
 		nextPutAll: aTrait asString;
-		nextPutAll: ' named:  servicesSymbol]. '.
+		nextPutAll: ' named: servicesSymbol]. '.
 	writeStream crtab: 1.
 	writeStream nextPutAll: '^servicesProvider'.
 	^ writeStream

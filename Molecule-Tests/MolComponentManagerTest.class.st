@@ -7,11 +7,21 @@ Class {
 	#category : #'Molecule-Tests-Cases'
 }
 
-{ #category : #'tests - general' }
+{ #category : #'setUp - tearDown' }
+MolComponentManagerTest >> setUp [
+	super setUp.
+	MolComponentManager cleanUp
+]
+
+{ #category : #'setUp - tearDown' }
+MolComponentManagerTest >> tearDown [
+	MolComponentManager cleanUp.
+	super tearDown
+]
+
+{ #category : #tests }
 MolComponentManagerTest >> testCleanUp [
 	| manager1 manager2 |
-	MolComponentManager cleanUp.
-	
 	manager1 := MolComponentManager default.
 	manager1 cleanUp.
 	
@@ -26,37 +36,14 @@ MolComponentManagerTest >> testCleanUp [
 MolComponentManagerTest >> testCleanUpIgnoreErrors [
 	"Start a manuel tree of components and clean up, components are removed during the cleanUp but some componentRemove methods should remove again an already removed component : a error is reach but ignored during a cleanUp"
 	
-	MolComponentManager cleanUp.
-
 	"Check no error"
 	MolUtils startComponent: MolTestComponentTreeLevel0Impl.	
-	
-	MolComponentManager cleanUp.
-]
-
-{ #category : #'tests - general' }
-MolComponentManagerTest >> testComponentManager [
-	"Test creation of ComponentManager"
-	| manager factory |
-	MolComponentManager cleanUp.
-	manager := MolComponentManager default.
-	factory := MolComponentFactory default.
-	self assert: manager deploymentServices notNil.
-	self assert: manager homeServices notNil.
-	self assert: manager locatorServices notNil.
-	
-	manager cleanUp.
-	self assert: manager deploymentServices isNil.
-	self assert: manager homeServices isNil.
-	self assert: manager locatorServices isNil.
-	self assert: factory == MolComponentFactory default equals: false.
 ]
 
 { #category : #'tests - component start & stop' }
 MolComponentManagerTest >> testComponentTree [
 	"Start a component Tree : a component which is starting sub components, etc."
 	| nb |
-	MolComponentManager cleanUp.
 	MolComponentManager default deploymentServices deployComponentImplementation: MolTestComponentTreeLevel0Impl.
 	MolComponentManager default homeServices instanciateComponent: MolTestComponentTreeLevel0Impl.
 	MolComponentManager default homeServices activateComponent: MolTestComponentTreeLevel0Impl.
@@ -69,10 +56,9 @@ MolComponentManagerTest >> testComponentTree [
 	MolComponentManager default homeServices passivateComponent: MolTestComponentTreeLevel0Impl.
 	MolComponentManager default homeServices removeComponent: MolTestComponentTreeLevel0Impl.
 	MolComponentManager default deploymentServices undeployComponentImplementation: MolTestComponentTreeLevel2Impl.
-	MolComponentManager cleanUp.
 ]
 
-{ #category : #'tests - general' }
+{ #category : #tests }
 MolComponentManagerTest >> testDeepCleanUp [
 
 	| manager factory |
@@ -86,10 +72,67 @@ MolComponentManagerTest >> testDeepCleanUp [
 	self assert: factory == MolComponentFactory default equals: false.
 ]
 
-{ #category : #'tests - general' }
+{ #category : #tests }
+MolComponentManagerTest >> testDefault [
+	self assert: (MolComponentManager default isKindOf: MolComponentManager).
+	
+]
+
+{ #category : #tests }
+MolComponentManagerTest >> testDeploymentServices [
+	| manager |
+	manager := MolComponentManager default.
+	self assert: (manager deploymentServices isKindOf: MolDeploymentServices).
+]
+
+{ #category : #tests }
+MolComponentManagerTest >> testFlushComponents [
+	| nb |
+	
+	"Create some classics components to flush"
+	1 to: 10 do:[ :i | MolCompleteComponentImpl new ].
+	"Create some augmented class as components to flush"
+	1 to: 10 do:[ :i | MolAugmentedClassToAComponent new ].
+	"Check created instances"
+	self assert: MolCompleteComponentImpl allInstances size equals: 10.
+	self assert: MolAugmentedClassToAComponent allInstances size equals: 10.
+	
+	nb := MolComponentManager flushComponents.
+	self assert: nb equals: 20.
+	self assert: MolCompleteComponentImpl allInstances size equals: 0.
+	self assert: MolAugmentedClassToAComponent allInstances size equals: 0.
+]
+
+{ #category : #tests }
+MolComponentManagerTest >> testHomeServices [
+	| manager |
+	manager := MolComponentManager default.
+	self assert: (manager homeServices isKindOf: MolHomeServices).
+]
+
+{ #category : #tests }
+MolComponentManagerTest >> testInitialize [
+	| manager |
+	self assert: MolComponentManager isInitialized equals: false.
+	manager := MolComponentManager default.
+	self assert: MolComponentManager isInitialized equals: true.
+	self assert: manager deploymentServices notNil.
+	self assert: manager locatorServices notNil.
+	self assert: manager homeServices notNil.
+]
+
+{ #category : #tests }
+MolComponentManagerTest >> testIsInitialized [
+	self assert: MolComponentManager isInitialized equals: false.
+	MolComponentManager default.
+	self assert: MolComponentManager isInitialized equals: true.
+	MolComponentManager cleanUp.
+	self assert: MolComponentManager isInitialized equals: false.
+]
+
+{ #category : #tests }
 MolComponentManagerTest >> testIsRunningComponents [
 
-	MolComponentManager cleanUp.
 	self assert: MolComponentManager isRunningComponents equals: false.
 	
 	MolUtils startComponent: MolCompleteComponentImpl.
@@ -97,13 +140,11 @@ MolComponentManagerTest >> testIsRunningComponents [
 	
 	MolUtils stopComponent: MolCompleteComponentImpl.
 	self assert: MolComponentManager isRunningComponents equals: false.
-	MolComponentManager cleanUp.
 ]
 
 { #category : #'tests - general' }
 MolComponentManagerTest >> testIsRunningComponentsAllSteps [
 
-	MolComponentManager cleanUp.
 	MolComponentManager default deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
 	self assert: MolComponentManager isRunningComponents equals: false.
 	
@@ -118,6 +159,23 @@ MolComponentManagerTest >> testIsRunningComponentsAllSteps [
 
 	MolComponentManager default homeServices removeComponent: MolCompleteComponentImpl.
 	self assert: MolComponentManager isRunningComponents equals: false.
-	
+]
+
+{ #category : #tests }
+MolComponentManagerTest >> testLocatorServices [
+	| manager |
+	manager := MolComponentManager default.
+	self assert: (manager locatorServices isKindOf: MolLocatorServices).
+]
+
+{ #category : #tests }
+MolComponentManagerTest >> testRelease [
+	| manager |
+	manager := MolComponentManager default.
+	self assert: MolComponentManager isInitialized equals: true.
 	MolComponentManager cleanUp.
+	self assert: MolComponentManager isInitialized equals: false.
+	self assert: manager deploymentServices isNil.
+	self assert: manager locatorServices isNil.
+	self assert: manager homeServices isNil.
 ]

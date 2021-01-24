@@ -54,6 +54,26 @@ MolComponentImpl classSide >> isComponentClass [
 	^ true
 ]
 
+{ #category : #'start & stop' }
+MolComponentImpl classSide >> start [ 
+	^MolUtils startComponent: self
+]
+
+{ #category : #'start & stop' }
+MolComponentImpl classSide >> start: aComponentName [
+	^MolUtils startComponent: self named: aComponentName
+]
+
+{ #category : #'start & stop' }
+MolComponentImpl classSide >> stop [
+	^MolUtils stopComponent: self
+]
+
+{ #category : #'start & stop' }
+MolComponentImpl classSide >> stop: aComponentName [
+	^MolUtils stopComponent: self named: aComponentName
+]
+
 { #category : #'component life cycle' }
 MolComponentImpl >> componentActivate [
 	"here write the code corresponding to component activation phase"
@@ -120,37 +140,37 @@ MolComponentImpl >> eventsSubscribers [
 ]
 
 { #category : #'component connecting' }
-MolComponentImpl >> forEvents: anEventsTrait removeProducer: aProducer [
+MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 	| producers |
 	producers := self eventsSubscribers at: anEventsTrait.
 	producers isArray 
-		ifTrue: [ producers remove: aProducer ifAbsent:[nil]]
+		ifTrue: [ producers remove: aComponentName ifAbsent:[nil]]
 		ifFalse: [self eventsSubscribers removeKey: anEventsTrait ifAbsent:[nil]]
 ]
 
 { #category : #'component connecting' }
-MolComponentImpl >> forEvents: anEventsTrait useAllProducers: aProducerList [
-	self eventsSubscribers at: anEventsTrait put: aProducerList
+MolComponentImpl >> forEvents: anEventsTrait useAllProducers: aComponentNameList [
+	self eventsSubscribers at: anEventsTrait put: aComponentNameList
 ]
 
 { #category : #'component connecting' }
-MolComponentImpl >> forEvents: anEventsTrait useProducer: aProducer [
+MolComponentImpl >> forEvents: anEventsTrait useProducer: aComponentName [
 	(anEventsTrait traits includes: MolComponentEvents)
-		ifTrue: [self eventsSubscribers at: anEventsTrait put: aProducer]
+		ifTrue: [self eventsSubscribers at: anEventsTrait put: aComponentName]
 		ifFalse: [ MolUtils log: self printString, '>forEvent:useProducer: try to link a non event trait for an event ' ]
 ]
 
 { #category : #'component connecting' }
-MolComponentImpl >> forParameters: aParametersTrait useProvider: aParametersProvider [
+MolComponentImpl >> forParameters: aParametersTrait useProvider: aComponentName [
 	(aParametersTrait traits includes: MolComponentParameters)
-		ifTrue: [self parametersProviders at: aParametersTrait put: aParametersProvider]
+		ifTrue: [self parametersProviders at: aParametersTrait put: aComponentName]
 		ifFalse: [ MolUtils log: self printString, '>forParameters:useProvider: try to link a non parameters trait for parameters ' ]
 ]
 
 { #category : #'component connecting' }
-MolComponentImpl >> forServices: aServicesTrait useProvider: aServicesProvider [
+MolComponentImpl >> forServices: aServicesTrait useProvider: aComponentName [
 	(aServicesTrait traits includes: MolComponentServices)
-		ifTrue: [self servicesProviders at: aServicesTrait put: aServicesProvider]
+		ifTrue: [self servicesProviders at: aServicesTrait put: aComponentName]
 		ifFalse: [ MolUtils log: self printString, '>forService:useProvider: try to link a non services trait for services ' ]
 ]
 

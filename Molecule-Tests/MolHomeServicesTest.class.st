@@ -61,9 +61,9 @@ MolHomeServicesTest >> testActivateComponentAugmentedClass [
 	self assert: component parametersProviders notEmpty.
 	self assert: component servicesProviders notEmpty.
 	
-	component forServices: MolServicesTest useProvider:  #default. 
-	component forEvents: MolEventsTest useProducer:  #default. 
-	component forParameters: MolParametersTest useProvider:  #default.
+	component forServices: MolServicesTest useProvider: #default. 
+	component forEvents: MolEventsTest useProducer: #default. 
+	component forParameters: MolParametersTest useProvider: #default.
 ]
 
 { #category : #tests }

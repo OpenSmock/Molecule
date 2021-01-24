@@ -180,3 +180,31 @@ MolComponentImplTest >> testNotFoundSubscriber [
 	component getMolUsedEventsSubscriber subscribe: self.
 	component getMolUsedEventsSubscriber unsubscribe: self.
 ]
+
+{ #category : #tests }
+MolComponentImplTest >> testStart [
+	| component |
+	component := MolCompleteComponentImpl start.
+	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) notNil.
+	self assert: component isComponent.
+	self assert: component componentName equals: #default.
+	
+	component := MolCompleteComponentImpl start: #compA.
+	self assert: (MolUtils instanceOf: MolCompleteComponentImpl named: #compA) notNil.
+	self assert: component isComponent.
+	self assert: component componentName equals: #compA.
+	
+	
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testStop [
+	MolCompleteComponentImpl start.
+	MolCompleteComponentImpl stop.
+	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) equals: nil.
+	
+	MolCompleteComponentImpl start: #compA.
+	MolCompleteComponentImpl stop: #compA.
+	self assert: (MolUtils instanceOf: MolCompleteComponentImpl named: #compA) equals: nil.
+	
+]

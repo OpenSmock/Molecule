@@ -31,7 +31,7 @@ MolMyClientComponentImpl >> getMolMySocketParametersProvider [
 	parametersSymbol isSymbol
 	 	ifTrue: 
 			[parametersProvider := MolComponentManager default locatorServices 
-						searchParametersProviderFor: MolMySocketParameters named:  parametersSymbol]. 
+						searchParametersProviderFor: MolMySocketParameters named: parametersSymbol]. 
 	^parametersProvider
 ]
 
@@ -43,7 +43,7 @@ MolMyClientComponentImpl >> getMolMySocketServicesProvider [
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolMySocketServices named:  servicesSymbol]. 
+						searchServicesProviderFor: MolMySocketServices named: servicesSymbol]. 
 	^servicesProvider
 ]
 

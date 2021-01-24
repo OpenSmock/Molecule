@@ -40,11 +40,11 @@ MolAugmentedClassToAComponent >> getMolUsedEventsNotifier [
 MolAugmentedClassToAComponent >> getMolUsedEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolUsedEvents.
-	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
+	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolUsedEvents named:  eventsSymbol ]. 
+						searchEventsSubscriberFor: MolUsedEvents named: eventsSymbol ]. 
 	^eventsSubscriber
 ]
 
@@ -56,7 +56,7 @@ MolAugmentedClassToAComponent >> getMolUsedParametersProvider [
 	parametersSymbol isSymbol
 	 	ifTrue: 
 			[parametersProvider := MolComponentManager default locatorServices 
-						searchParametersProviderFor: MolUsedParameters named:  parametersSymbol]. 
+						searchParametersProviderFor: MolUsedParameters named: parametersSymbol]. 
 	^parametersProvider
 ]
 
@@ -68,7 +68,7 @@ MolAugmentedClassToAComponent >> getMolUsedServicesProvider [
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolUsedServices named:  servicesSymbol]. 
+						searchServicesProviderFor: MolUsedServices named: servicesSymbol]. 
 	^servicesProvider
 ]
 

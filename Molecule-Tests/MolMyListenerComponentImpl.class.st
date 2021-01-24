@@ -21,14 +21,12 @@ Class {
 MolMyListenerComponentImpl >> componentActivate [
 
 	self getMolMyStateChangeEventsSubscriber subscribe: self.
-	"Producers are specified at initialization."
 ]
 
 { #category : #'life cycle' }
 MolMyListenerComponentImpl >> componentPassivate [
 
-	self getMolMyStateChangeEventsSubscriber ifNotNil: 
-		[self getMolMyStateChangeEventsSubscriber unsubscribe: self]
+	self getMolMyStateChangeEventsSubscriber unsubscribe: self
 ]
 
 { #category : #accessing }
@@ -54,11 +52,11 @@ MolMyListenerComponentImpl >> failureLevel [
 MolMyListenerComponentImpl >> getMolMyStateChangeEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyStateChangeEvents.
-	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
+	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolMyStateChangeEvents named:  eventsSymbol ]. 
+						searchEventsSubscriberFor: MolMyStateChangeEvents named: eventsSymbol ]. 
 	^eventsSubscriber
 ]
 

@@ -69,7 +69,7 @@ MolLocatorServicesTest >> testNotReadySearchEventSubscriberFor [
 	eventSubscriber := MolComponentManager default locatorServices searchEventsSubscriberFor: MolUsedEvents.
 
 	self assert: (eventSubscriber isKindOf: MolEventSubscriber).
-	self assert: (eventSubscriber getOriginators isEmpty).
+	self assert: (eventSubscriber originators isEmpty).
 	self assert: (eventSubscriber observersConnection isEmpty).
 ]
 
@@ -82,8 +82,8 @@ MolLocatorServicesTest >> testSearchEventSubscriberFor [
 
 	self assert: eventSubscriber isNotFoundEventsSubscriber not.
 	self assert: (eventSubscriber isKindOf: MolEventSubscriber).
-	self assert: eventSubscriber getOriginators size equals: 1.
-	self assert: eventSubscriber getOriginators first equals: component.
+	self assert: eventSubscriber originators size equals: 1.
+	self assert: eventSubscriber originators first equals: component.
 	self assert: (eventSubscriber observersConnection isEmpty).
 ]
 

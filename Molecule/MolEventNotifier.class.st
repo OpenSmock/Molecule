@@ -35,6 +35,7 @@ MolEventNotifier >> doesNotUnderstand: aMessage [
 
 { #category : #'initialize-release' }
 MolEventNotifier >> initialize [
+	super initialize.
 	activate := false
 ]
 
@@ -51,7 +52,7 @@ MolEventNotifier >> isNotFoundEventsNotifier [
 
 { #category : #'initialize-release' }
 MolEventNotifier >> release [
-	super release.
 	interface := nil.
-	originator := nil
+	originator := nil.
+	super release.
 ]

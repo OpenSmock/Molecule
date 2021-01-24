@@ -26,7 +26,8 @@ MolWorld class >> componentManagerCleanUp: aBuilder [
 			].
 			((result notNil and:[result]) or:[result isNil]) ifTrue:[MolComponentManager cleanUp]. 
 		];
-		label: 'Do ComponentManager Cleanup'
+		label: 'Do ComponentManager Cleanup';
+		withSeparatorAfter 
 ]
 
 { #category : #menu }
@@ -45,8 +46,7 @@ MolWorld class >> currentComponentSystem: aBuilder [
 		order: 1.0;
 		icon: (isRunning ifTrue:[(self iconNamed: #smallInfo)] ifFalse:[(self iconNamed: #pause)]);
 		help: 'Component System Status';
-		label: label;
-		withSeparatorAfter
+		label: label.
 ]
 
 { #category : #menu }
@@ -149,10 +149,11 @@ MolWorld class >> inspectComponents: aBuilder [
 	(aBuilder item: #InspectComponents)
 		parent: #Molecule;
 		target: World;
-		order: 1.3;
+		order: 1.1;
 		action: [ MolComponentManager default homeServices inspect ];
 		icon: (self iconNamed: #glamorousInspect);
-		label: 'Inspect running Components'
+		label: 'Inspect running Components';
+		withSeparatorAfter
 ]
 
 { #category : #menu }
@@ -197,8 +198,7 @@ MolWorld class >> menuDebugOn: aBuilder [
 		label: 'Debug and Tools';
 		help: 'Debug and tools for Molecule environment';
 		icon: (self iconNamed: #smallDebug);
-		order: 1.4;
-		withSeparatorAfter 
+		order: 1.2
 ]
 
 { #category : #menu }

@@ -22,6 +22,6 @@ MolMyUserComponentImpl >> getMolMyTableServicesProvider [
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolMyTableServices named:  servicesSymbol]. 
+						searchServicesProviderFor: MolMyTableServices named: servicesSymbol]. 
 	^servicesProvider
 ]

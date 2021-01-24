@@ -67,11 +67,11 @@ MolMyAlarmComponentImpl >> getMolMyAlarmSoundsEventsNotifier [
 MolMyAlarmComponentImpl >> getMolMyLocalTimeEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyLocalTimeEvents.
-	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
+	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolMyLocalTimeEvents named:  eventsSymbol ]. 
+						searchEventsSubscriberFor: MolMyLocalTimeEvents named: eventsSymbol ]. 
 	^eventsSubscriber
 ]
 

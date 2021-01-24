@@ -11,6 +11,7 @@ Class {
 { #category : #'setUp - tearDown' }
 MolEventsTest >> setUp [
 
+	super setUp.
 	MolComponentManager cleanUp.
 ]
 
@@ -18,14 +19,12 @@ MolEventsTest >> setUp [
 MolEventsTest >> tearDown [
 
 	MolComponentManager cleanUp.
+	super tearDown.
 ]
 
 { #category : #tests }
 MolEventsTest >> testSeveralListeners [
-
 	| manager warner listener1 listener2 |
-	MolComponentManager cleanUp.
-	
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -64,16 +63,12 @@ MolEventsTest >> testSeveralListeners [
 	manager homeServices removeAllComponents.
 	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
 	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSeveralWarners [
-
-	| manager warner1 warner2 listener subscriptions |
-	MolComponentManager cleanUp.
-	
+	| manager warner1 warner2 listener subscriptions subscribers |
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -88,6 +83,12 @@ MolEventsTest >> testSeveralWarners [
 	"Subscriptions"
 	subscriptions := (Array with: #warner1 with: #warner2).
 	listener forEvents: MolMyStateChangeEvents useAllProducers: subscriptions.
+
+	subscribers := listener eventsSubscribers.	
+	self assert: subscribers size equals: 1.
+	self assert: (subscribers at: MolMyStateChangeEvents) size equals: 2.
+	self assert: ((subscribers at: MolMyStateChangeEvents) at: 1) equals: #warner1.
+	self assert: ((subscribers at: MolMyStateChangeEvents) at: 2) equals: #warner2.
 	
 	"Activation"
 	manager homeServices activateComponent: MolMyWarnerComponentImpl named: #warner1.
@@ -113,16 +114,12 @@ MolEventsTest >> testSeveralWarners [
 	manager homeServices removeAllComponents.
 	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
 	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleListenerNotActivated [
-
 	| manager warner listener |
-	MolComponentManager cleanUp.
-	
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -155,16 +152,12 @@ MolEventsTest >> testSimpleListenerNotActivated [
 	manager homeServices removeAllComponents.
 	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
 	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleListenerNotActivatedNamed [
-
 	| manager warner listener |
-	MolComponentManager cleanUp.
-	
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -200,17 +193,12 @@ MolEventsTest >> testSimpleListenerNotActivatedNamed [
 	manager homeServices removeAllComponents.
 	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
 	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
-	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleWarnerNotActivated [
 	"A component not activated send events."
-
 	| manager warner listener |
-	MolComponentManager cleanUp.
-	
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -244,17 +232,13 @@ MolEventsTest >> testSimpleWarnerNotActivated [
 	manager homeServices removeAllComponents.
 	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
 	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleWarnerNotActivatedNamed [
 	"A component not activated send events."
-
 	| manager warner listener |
-	MolComponentManager cleanUp.
-	
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -291,16 +275,12 @@ MolEventsTest >> testSimpleWarnerNotActivatedNamed [
 	manager homeServices removeAllComponents.
 	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
 	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleWarningSystem [
-
 	| manager warner listener |
-	MolComponentManager cleanUp.
-	
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -330,16 +310,12 @@ MolEventsTest >> testSimpleWarningSystem [
 	manager homeServices removeAllComponents.
 	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
 	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleWarningSystemNamed [
-
 	| manager warner listener |
-	MolComponentManager cleanUp.
-	
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -369,17 +345,13 @@ MolEventsTest >> testSimpleWarningSystemNamed [
 	manager homeServices removeAllComponents.
 	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
 	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleWarningSystemNamedDelayed [
 "Test subscription after activation"
-
 	| manager warner listener |
-	MolComponentManager cleanUp.
-	
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -403,17 +375,13 @@ MolEventsTest >> testSimpleWarningSystemNamedDelayed [
 	manager homeServices removeAllComponents.
 	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
 	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSubscriptionBeforeInstanciation [
 	"A component not activated send events."
-
 	| manager warner listener |
-	MolComponentManager cleanUp.
-	
 	manager := MolComponentManager default.
 	
 	"Deployment"
@@ -437,6 +405,5 @@ MolEventsTest >> testSubscriptionBeforeInstanciation [
 	manager homeServices removeAllComponents.
 	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
 	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	manager cleanUp.
 	
 ]

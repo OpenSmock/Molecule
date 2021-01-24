@@ -23,7 +23,7 @@ MolComponentManager class >> cleanUp [
 	| notifiers subscribers |
 	MolUtils log: 'Starting a cleanUp.'.
 
-	"CleanUp and initialize the ComponentFactory"
+	"CleanUp and initialize a new ComponentFactory instance"
 	MolComponentFactory cleanUp.
 	MolComponentFactory initialize.
 	
@@ -55,15 +55,11 @@ MolComponentManager class >> deepCleanUp [
 	MolComponentFactory allInstancesDo: [ :factory | (factory == MolComponentFactory default) ifFalse:[factory release]].
 	i := self flushComponents.
 	j := i.
-
-	SmalltalkImage cleanUp.
-	Smalltalk garbageCollect.
-	Smalltalk garbageCollectMost.
 	
 	"Try to reflush"
 	i > 0 ifTrue:[
 		(Delay forMilliseconds: 500) wait.
-		j := self flushComponents.	
+		j := self flushComponents.
 	].
 	
 	MolUtils log: 'Deep Cleanup: ',i printString,' lost component(s) found and released.'.
@@ -84,18 +80,40 @@ MolComponentManager class >> deepCleanUp [
 MolComponentManager class >> default [
 	<script: 'self default inspect'>
 	
-	Default ifNil: [Default := self new].
+	Default ifNil: [
+		MolComponentFactory isInitialized ifFalse:[MolComponentFactory initialize].
+		Default := self new.
+	].
 	^Default
 ]
 
 { #category : #'initialize-release' }
 MolComponentManager class >> flushComponents [
-	"Flush all components an return number of flushed components"
+	"Flush all components : detect all component class instances of the Pharo image and disconnect each componentconnector, return number of flushed components"
 	| i |
 	i := 0.
-	MolAbstractComponentImpl allSubInstancesDo:[ :component | component componentConnector: nil. i := i + 1 ].
-	MolComponentImpl users do: [:impl | impl allInstances do: [:component | component componentConnector: nil. i := i + 1]].	
+	"First : search direct component class subinstances (inheritance from MolAbstractComponentImpl class)"
+	MolAbstractComponentImpl allSubInstancesDo:[ :component | 
+		component componentConnector: nil. i := i + 1.
+	].
+	"Second : search augmented class as a component instances (using the MolComponentImpl trait)"
+	MolComponentImpl users do: [ :impl | 
+		impl allInstances do: [:component | component componentConnector: nil. i := i + 1].
+	].	
+	
+	SmalltalkImage cleanUp.
+	Smalltalk garbageCollect.
+	Smalltalk garbageCollectMost.
+	
 	^i
+]
+
+{ #category : #'initialize-release' }
+MolComponentManager class >> isInitialized [
+	"Test if the Component Manager is initialized"
+
+	<script: 'self isInitialized inspect'>
+	^ Default notNil
 ]
 
 { #category : #'initialize-release' }
@@ -133,14 +151,10 @@ MolComponentManager >> homeServices [
 
 { #category : #'initialize-release' }
 MolComponentManager >> initialize [
-
 	super initialize.
-
-	MolComponentFactory initialize.
-
 	deploymentServices := MolDeploymentServices new.
 	locatorServices := MolLocatorServices new.
-	homeServices := MolHomeServices new.
+	homeServices := MolHomeServices new
 ]
 
 { #category : #accessing }
@@ -151,14 +165,11 @@ MolComponentManager >> locatorServices [
 
 { #category : #'initialize-release' }
 MolComponentManager >> release [
-	
 	deploymentServices release.
 	locatorServices release.
 	homeServices release.
-	
 	deploymentServices := nil.
 	locatorServices := nil.
-	homeServices := nil.
-	
-	super release.
+	homeServices := nil. 
+	super release
 ]

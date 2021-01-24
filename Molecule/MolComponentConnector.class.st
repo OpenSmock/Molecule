@@ -88,13 +88,11 @@ MolComponentConnector >> passivateComponent [
 
 { #category : #'initialize-release' }
 MolComponentConnector >> release [
-	super release.
-
 	eventsNotifiers := nil.
 	eventsSubscribers := nil.
 	servicesProviders := nil.
 	parametersProviders := nil.
-	
+	super release.	
 ]
 
 { #category : #accessing }

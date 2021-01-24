@@ -54,7 +54,7 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 	MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is activated.'.
 	
 	"manage connexion between components"
-	MolComponentManager default locatorServices resolveWaitingSubscribtions: component.
+	MolComponentManager default locatorServices resolveWaitingSubscriptions: component.
 	
 	^ component
 ]
@@ -72,7 +72,6 @@ MolHomeServices >> deployedComponents [
 { #category : #'initialize-release' }
 MolHomeServices >> initialize [
 	super initialize.
-	
 	deployedComponents := Dictionary new.
 	waitingForActivation := Set new.
 ]
@@ -96,16 +95,16 @@ MolHomeServices >> instanciateComponent: aComponentClass [
 MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 	| component connector deployed |
 	
-	(aComponentClass isNil or:[aName isNil]) ifTrue:[^self].
+	(aComponentClass isNil or:[aName isNil]) ifTrue:[^nil].
 	
 	"check if the component can be instanciate"
 	deployed := self deployedComponents at: aComponentClass ifAbsent:[
-		^ComponentNotDeployedError signal: 'Can not instanciate a non deployed component'.	
+		ComponentNotDeployedError signal: 'Can not instanciate a non deployed component'. ^nil	
 	].
 	
 	"check if a component instance with the same name is already exists"
 	deployed at: aName ifPresent:[ :c | c ifNotNil:[
-		^ComponentAlreadyExistsError signal: 'Can not instanciate a component with the same name of another component'.	
+		ComponentAlreadyExistsError signal: 'Can not instanciate a component with the same name of another component'.	^nil
 	]].
 
 	component := aComponentClass new componentName: aName; yourself.
@@ -190,7 +189,6 @@ MolHomeServices >> release [
 	self removeAllComponents.
 	deployedComponents := nil.
 	waitingForActivation := nil.
-	
 	super release.
 ]
 
@@ -198,8 +196,8 @@ MolHomeServices >> release [
 MolHomeServices >> removeAllComponents [
 	| components |
 	components := self deployedComponents.
-	components keysAndValuesDo:  [:key :values | 
-		(values copy) do:[ :component | self removeComponent: key named: component componentName]
+	components keysAndValuesDo: [ :key :values | 
+		values copy do:[ :component | self removeComponent: key named: component componentName]
 	]
 ]
 
@@ -210,47 +208,49 @@ MolHomeServices >> removeComponent: aComponentClass [
 
 { #category : #'component life cycle' }
 MolHomeServices >> removeComponent: aComponentClass named: aName [
-	| component deployed |
+	| removedComponent deployedComponentsOfThisClass |
+	(aComponentClass isNil or:[aName isNil]) ifTrue:[^nil].
 	
-	(aComponentClass isNil or:[aName isNil]) ifTrue:[^self].
+	"Get to be removed component instance"
+	removedComponent := self instanceOf: aComponentClass named: aName.
+	removedComponent ifNil:[ ComponentNotFoundError signal: 'Can not remove a non instanciated component'. ^nil ].
 	
-	"get to be removed component instance"
-	component := self instanceOf: aComponentClass named: aName.
-	component ifNil:[
-		^ComponentNotFoundError signal: 'Can not remove a non instanciated component'.
-	].
-	
-	"passivation if necessary"
+	"Passivation of the component if activated"
 	(self isWaitingForActivation: aComponentClass named: aName) ifFalse: [ self passivateComponent: aComponentClass named: aName ].
-	waitingForActivation remove: component ifAbsent:[
-		"The Component has not been activated, just log an proceed to the remove"
+	waitingForActivation remove: removedComponent ifAbsent:[
+		"The Component has not been activated, log and proceed to the remove"
 		MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' has not been activated during the session.'.
 	].
 	
-	component
-		triggerEvent: #removeComponent with: component; 
-		componentRemove;
-		componentConnector: nil.
-	waitingForActivation do: [ :waitingComponent | self resetComponentConnection: waitingComponent instance: component ].
+	"Remove the component"
+	removedComponent triggerEvent: #removeComponent with: removedComponent.
+	removedComponent componentRemove.
+	removedComponent componentConnector: nil.
 	
-	deployed := self deployedComponents at: aComponentClass ifAbsent:[
+	"Get deployed component instances of this component class"
+	deployedComponentsOfThisClass := self deployedComponents at: aComponentClass ifAbsent:[
 		MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is not a deployed component class.'.
 	].
 	
-	deployed removeKey: aName ifAbsent: [ 
+	"Remove the instance"
+	deployedComponentsOfThisClass removeKey: aName ifAbsent: [ 
 		MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is not a deployed component class.'.
 	].
-		
+
+	"Resolve connections between components"
+	"Unlink component connection between this old component and not yet activated components"
+	waitingForActivation do: [ :waitingComponent | self resetComponentConnection: waitingComponent withRemovedComponent: removedComponent ].
+	"Unlink component connection between this old component and activated components"	
 	self deployedComponents keysAndValuesDo: [ :class :componentDictionary | 
-		componentDictionary keysAndValuesDo: [ :name :value | 
-			self resetComponentConnection: value instance: component 
+		componentDictionary valuesDo: [ :activatedComponent | 
+			self resetComponentConnection: activatedComponent withRemovedComponent: removedComponent.
 		] 
 	].
 	
-	"Finish release"
-	component componentName: nil.
-	
+	"Finish release of the component life-cycle"
+	removedComponent componentName: nil.
 	MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is removed.'.
+	^removedComponent
 ]
 
 { #category : #private }
@@ -268,36 +268,35 @@ MolHomeServices >> removeDeployedComponent: aComponentClass [
 ]
 
 { #category : #private }
-MolHomeServices >> resetComponentConnection: aComponent instance: anUsedComponent [
+MolHomeServices >> resetComponentConnection: aComponent withRemovedComponent: aRemovedComponent [
+	"Unlink component connections with a removed component, this action reset component connexion in case of a new instance appears"
+	| eventAndComponentNameAssocList eventsSubscribers |
+	(aComponent isNil or:[aRemovedComponent isNil]) ifTrue:[ ^ self ].
+	eventsSubscribers := MolComponentManager default locatorServices eventsSubscribers.
+	eventsSubscribers ifEmpty: [ ^ self ].
+	
+	eventAndComponentNameAssocList := aRemovedComponent class allProducedEvents collect: [ :event | 
+		event -> aRemovedComponent componentName
+	].
 
-	(aComponent isNil or:[anUsedComponent isNil]) ifTrue:[^self].
-
-	"reset services connection"
-	(aComponent servicesProviders includes: anUsedComponent)
-		ifTrue: 
-			[anUsedComponent class providedComponentServices do: 
-					[:e |
-					aComponent servicesProviders at: e
-						ifPresent: [:i | aComponent servicesProviders at: e put: anUsedComponent componentName]]].
-
-	"reset events connection"
-	(aComponent eventsSubscribers includes: anUsedComponent)
-		ifTrue: 
-			[anUsedComponent class producedComponentEvents do: 
-					[:e |
-					aComponent eventsSubscribers at: e
-						ifPresent: [:i | aComponent eventsSubscribers at: e put: anUsedComponent componentName]]].
-
-	self flag:'PLA Patch provisoire pour débrancher et rebrancher à chaud un composant, à rendre robuste'.
-	MolComponentManager default locatorServices waitSubscribtions: aComponent for: anUsedComponent.
-
-	"reset parameters connection"
-	(aComponent parametersProviders includes: anUsedComponent)
-		ifTrue: 
-			[anUsedComponent class providedComponentParameters do: 
-					[:e |
-					aComponent parametersProviders at: e
-						ifPresent: [:i | aComponent parametersProviders at: e put: anUsedComponent componentName]]].
+	eventAndComponentNameAssocList do: [ :eventAndComponentNameAssoc |
+		eventsSubscribers keysAndValuesDo:[ :k :eventSubscriber |
+			(k key = eventAndComponentNameAssoc key 
+			and:[k value = eventAndComponentNameAssoc value or: [k value includes: eventAndComponentNameAssoc value ]]) ifTrue:[ 
+				(eventSubscriber notNil "and:[eventSubscriber isWaitingForSubscription not]") ifTrue:[
+					"(eventSubscriber includesOriginator: aRemovedComponent) ifTrue:[" | newObserversSet |
+						"eventSubscriber getOriginators remove: aRemovedComponent."
+						eventSubscriber unlinkOriginator: aRemovedComponent.
+						newObserversSet := eventSubscriber observersConnection at: aComponent ifAbsent:[ nil ].
+						newObserversSet ifNotNil:[
+							newObserversSet remove: aComponent componentName ifAbsent:[ nil ].
+							eventSubscriber observersConnection at: aComponent put: newObserversSet.
+						].
+					"]."
+				]. 
+			].	
+		].
+	].
 ]
 
 { #category : #accessing }

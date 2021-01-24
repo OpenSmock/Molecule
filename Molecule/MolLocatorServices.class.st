@@ -24,7 +24,7 @@ MolLocatorServices >> eventsSubscribers: aDictionaryOrNil [
 ]
 
 { #category : #accessing }
-MolLocatorServices >> resolveWaitingSubscribtions: aComponent [
+MolLocatorServices >> resolveWaitingSubscriptions: aComponent [
 	| eventsKey |
 
 	self eventsSubscribers ifEmpty: [^self].
@@ -40,13 +40,12 @@ MolLocatorServices >> resolveWaitingSubscribtions: aComponent [
 	
 		eventsList := eventsList collect: [ :event | self eventsSubscribers at: event ].
 		eventsList do: [ :event |
-			event ifNotNil:[
-				event isWaitingForSubscription ifTrue:[
-						(event getOriginators includes: aComponent) ifFalse:[ 
-							event 	addOriginator: aComponent; linkOriginator: aComponent.
-						].
-						event subscribeAllWaiting.
-				]. 
+			(event notNil and:[event isWaitingForSubscription]) ifTrue:[
+				(event includesOriginator: aComponent) ifFalse:[ 
+					event 	addOriginator: aComponent.
+					event linkOriginator: aComponent.
+				].
+				event subscribeAllWaiting.
 			]. 
 		].
 	]
@@ -81,10 +80,11 @@ MolLocatorServices >> searchEventsSubscriberFor: anEventsTrait named: aSymbolOrA
 
 	events := self eventsSubscribers
 		at: itf -> aSymbolOrArrayOfSymbols
-		ifAbsentPut: [ MolEventSubscriber new interface: itf originators: subscribers ].
+		ifAbsentPut: [ MolEventSubscriber events: itf originators: subscribers ].
 	subscribers do: [ :e | events originatorsLinks at: e componentName put: e ].
 	remainingNames do: [ :e | events originatorsLinks at: e put: nil].
 	events addOriginators: subscribers.
+	events linkOriginators: subscribers. 
 	
 	^ events
 ]
@@ -124,41 +124,4 @@ MolLocatorServices >> searchServicesProviderFor: aServicesTrait named: aSymbol [
 			((comp isProvideServices: itf) and: [(comps at: comp) includesKey: aSymbol]) 
 				ifTrue: [^(comps at: comp) at: aSymbol]].
 	^MolNotFoundServicesProvider new interface: aServicesTrait name: aSymbol
-]
-
-{ #category : #accessing }
-MolLocatorServices >> waitSubscribtions: aToBeWaitingComponent for: anUsedComponent [
-	| eventsKey |
-
-	self flag:'PLA Méthode à revoir car patch provisoire pour remplacer à chaud un composant par une autre (autre implémentation) qui émet des évènements que d autres écoutent, à rendre robuste'.
-
-	self eventsSubscribers ifEmpty: [^self].
-	
-	eventsKey := anUsedComponent class allProducedEvents collect: [ :event | event -> anUsedComponent componentName ].
-	
-	eventsKey do: [ :eventKey | | eventsList |
-		
-		eventsList := self eventsSubscribers keys select: [ :key | key key = eventKey key ].
-		eventsList := eventsList select: [ :event | 
-			event value = eventKey value or: [ event value includes: eventKey value ] 
-		].
-	
-		eventsList := eventsList collect: [ :event | self eventsSubscribers at: event ].
-		eventsList do: [ :event |
-			event ifNotNil:[
-				event isWaitingForSubscription ifFalse:[
-						(event getOriginators includes: anUsedComponent) ifTrue:[ | newObserversSet |
-							self flag:'Partie faite à la main : décliner des méthodes et industrialiser tout ça'.
-							event getOriginators remove: anUsedComponent. 
-							event originatorsLinks at: (anUsedComponent componentName) put: nil.
-							newObserversSet := event observersConnection at: aToBeWaitingComponent ifAbsent:[nil].
-							newObserversSet ifNotNil:[
-								newObserversSet remove: (anUsedComponent componentName).
-								event observersConnection at: aToBeWaitingComponent put: (newObserversSet).
-							].
-						].
-				]. 
-			]. 
-		].
-	]
 ]

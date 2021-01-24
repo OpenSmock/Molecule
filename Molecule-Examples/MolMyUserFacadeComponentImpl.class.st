@@ -33,7 +33,7 @@ MolMyUserFacadeComponentImpl >> getMolMyAlarmActivationServicesProvider [
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolMyAlarmActivationServices named:  servicesSymbol]. 
+						searchServicesProviderFor: MolMyAlarmActivationServices named: servicesSymbol]. 
 	^servicesProvider
 ]
 
@@ -45,7 +45,7 @@ MolMyUserFacadeComponentImpl >> getMolMyAlarmParametersProvider [
 	parametersSymbol isSymbol
 	 	ifTrue: 
 			[parametersProvider := MolComponentManager default locatorServices 
-						searchParametersProviderFor: MolMyAlarmParameters named:  parametersSymbol]. 
+						searchParametersProviderFor: MolMyAlarmParameters named: parametersSymbol]. 
 	^parametersProvider
 ]
 
@@ -53,11 +53,11 @@ MolMyUserFacadeComponentImpl >> getMolMyAlarmParametersProvider [
 MolMyUserFacadeComponentImpl >> getMolMyAlarmSoundsEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyAlarmSoundsEvents.
-	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
+	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolMyAlarmSoundsEvents named:  eventsSymbol ]. 
+						searchEventsSubscriberFor: MolMyAlarmSoundsEvents named: eventsSymbol ]. 
 	^eventsSubscriber
 ]
 
@@ -69,7 +69,7 @@ MolMyUserFacadeComponentImpl >> getMolMyClockParametersProvider [
 	parametersSymbol isSymbol
 	 	ifTrue: 
 			[parametersProvider := MolComponentManager default locatorServices 
-						searchParametersProviderFor: MolMyClockParameters named:  parametersSymbol]. 
+						searchParametersProviderFor: MolMyClockParameters named: parametersSymbol]. 
 	^parametersProvider
 ]
 
@@ -81,7 +81,7 @@ MolMyUserFacadeComponentImpl >> getMolMyClockServicesProvider [
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolMyClockServices named:  servicesSymbol]. 
+						searchServicesProviderFor: MolMyClockServices named: servicesSymbol]. 
 	^servicesProvider
 ]
 
@@ -89,11 +89,11 @@ MolMyUserFacadeComponentImpl >> getMolMyClockServicesProvider [
 MolMyUserFacadeComponentImpl >> getMolMyLocalTimeEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyLocalTimeEvents.
-	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
+	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolMyLocalTimeEvents named:  eventsSymbol ]. 
+						searchEventsSubscriberFor: MolMyLocalTimeEvents named: eventsSymbol ]. 
 	^eventsSubscriber
 ]
 

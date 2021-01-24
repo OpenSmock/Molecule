@@ -15,11 +15,11 @@ MolCompleteComponentChildImpl >> getMolUsedChildEventsNotifier [
 MolCompleteComponentChildImpl >> getMolUsedChildEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolUsedChildEvents.
-	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
+	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolUsedChildEvents named:  eventsSymbol ]. 
+						searchEventsSubscriberFor: MolUsedChildEvents named: eventsSymbol ]. 
 	^eventsSubscriber
 ]
 
@@ -31,7 +31,7 @@ MolCompleteComponentChildImpl >> getMolUsedChildParametersProvider [
 	parametersSymbol isSymbol
 	 	ifTrue: 
 			[parametersProvider := MolComponentManager default locatorServices 
-						searchParametersProviderFor: MolUsedChildParameters named:  parametersSymbol]. 
+						searchParametersProviderFor: MolUsedChildParameters named: parametersSymbol]. 
 	^parametersProvider
 ]
 
@@ -43,6 +43,6 @@ MolCompleteComponentChildImpl >> getMolUsedChildServicesProvider [
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolUsedChildServices named:  servicesSymbol]. 
+						searchServicesProviderFor: MolUsedChildServices named: servicesSymbol]. 
 	^servicesProvider
 ]

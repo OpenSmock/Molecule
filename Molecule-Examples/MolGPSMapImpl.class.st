@@ -33,11 +33,11 @@ MolGPSMapImpl >> currentPositionChanged: aGeoPosition [
 MolGPSMapImpl >> getMolGPSDataEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolGPSDataEvents.
-	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
+	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolGPSDataEvents named:  eventsSymbol ]. 
+						searchEventsSubscriberFor: MolGPSDataEvents named: eventsSymbol ]. 
 	^eventsSubscriber
 ]
 
@@ -49,7 +49,7 @@ MolGPSMapImpl >> getMolGPSDataServicesProvider [
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolGPSDataServices named:  servicesSymbol]. 
+						searchServicesProviderFor: MolGPSDataServices named: servicesSymbol]. 
 	^servicesProvider
 ]
 

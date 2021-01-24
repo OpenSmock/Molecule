@@ -43,11 +43,11 @@ MolMyClockComponentImpl >> componentPassivate [
 MolMyClockComponentImpl >> getMolMyGlobalTimeEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyGlobalTimeEvents.
-	eventsSymbol := self eventsSubscribers at: itf  ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
+	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolMyGlobalTimeEvents named:  eventsSymbol ]. 
+						searchEventsSubscriberFor: MolMyGlobalTimeEvents named: eventsSymbol ]. 
 	^eventsSubscriber
 ]
 
@@ -64,7 +64,7 @@ MolMyClockComponentImpl >> getMolMyServerTimeServicesProvider [
 	servicesSymbol isSymbol
 	 	ifTrue: 
 			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolMyServerTimeServices named:  servicesSymbol]. 
+						searchServicesProviderFor: MolMyServerTimeServices named: servicesSymbol]. 
 	^servicesProvider
 ]
 
