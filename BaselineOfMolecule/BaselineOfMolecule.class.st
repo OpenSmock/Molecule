@@ -50,7 +50,10 @@ BaselineOfMolecule >> preload: loader package: packageSpec [
 		(UITheme current
 		proceedIn: Morph new 
 		text: 'Warning, you are going to modify Molecule then components are started, do you want to continue ?'
-		title: 'Molecule - Loading a baseline') ifFalse:[ "Stop loading" Halt now ].
+		title: 'Molecule - Loading a baseline') ifFalse:[ 
+			self flag:'PLA : How to stop the loading ? For the moment you should close the debug windows openend when Halt is call'.	
+			Halt now.
+		].
 	].
 
 	(Smalltalk classNamed: #MolComponentManager) cleanUp.	
