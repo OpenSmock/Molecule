@@ -68,11 +68,28 @@ MyComponentClass deploy.
 component := MyComponentClass instanciate.
 MyComponentClass activate.
 ```
+
+With a name :
+
+```smalltalk
+MyComponentClass deploy.
+componentA := MyComponentClass instanciate: #compA.
+MyComponentClass activate: #compA.
+```
+
 Stop a component is equivalent to :
 
 ```smalltalk
 MyComponentClass passivate.
 MyComponentClass remove.
+MyComponentClass undeploy.
+```
+
+With a name :
+
+```smalltalk
+MyComponentClass passivate: #compA.
+MyComponentClass remove: #compA.
 MyComponentClass undeploy.
 ```
 
