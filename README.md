@@ -27,7 +27,56 @@ Metacello new
 ```
 Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
 
-### Examples
+## Using Components
+
+### Start and stop method
+
+Components can be used with the start & stop method.
+
+To start a component :
+
+```smalltalk
+component := MyComponentClass start.
+```
+
+To stop a component : 
+
+```smalltalk
+MyComponentClass stop.
+```
+
+Component can be identified with a name. To start a component with a specific name :
+
+```smalltalk
+componentA := MyComponentClass start: #componentA.
+```
+
+To stop a component identified by a name.
+
+```smalltalk
+MyComponentClass stop: #componentA.
+```
+
+### Component Life-cycle method
+
+Components can be used with the life-cycle method, the two methods (start & stop, life-cycle) can be combined.
+
+Start a component is equivalent to :
+
+```smalltalk
+MyComponentClass deploy.
+component := MyComponentClass instanciate.
+MyComponentClass activate.
+```
+Stop a component is equivalent to :
+
+```smalltalk
+MyComponentClass passivate.
+MyComponentClass remove.
+MyComponentClass undeploy.
+```
+
+## Some examples
 
 Examples are available in the package 'Molecule-Examples'.
 Before running examples open the Transcript, some results are showed on the Transcript window.
