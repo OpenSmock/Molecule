@@ -4,13 +4,13 @@ Commands for World menu
 Class {
 	#name : #MolWorld,
 	#superclass : #Object,
-	#category : #'Molecule-Tools'
+	#category : #'Molecule-IDE-Menus'
 }
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> componentManagerCleanUp: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #Molecule;
 		target: World;
@@ -30,9 +30,10 @@ MolWorld class >> componentManagerCleanUp: aBuilder [
 		withSeparatorAfter 
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> currentComponentSystem: aBuilder [
 	<worldMenu>
+
 	| label isRunning |
 	isRunning := MolComponentManager isRunningComponents.
 	label := isRunning 
@@ -49,10 +50,10 @@ MolWorld class >> currentComponentSystem: aBuilder [
 		label: label.
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> deepCleanUp: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #MoleculeDebug;
 		target: World;
@@ -79,9 +80,10 @@ MolWorld class >> defineAComponent [
 	component ifNotNil: [ :e | MolComponentFactory defineComponent: e ]
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> defineAllComponentsOn: aBuilder [
 	<worldMenu>
+
 	(aBuilder item: #MoleculeDefineAllComponents)
 		parent: #MoleculeDebug;
 		target: World;
@@ -98,10 +100,10 @@ This action may be necessary in the event of a Molecule update.'
 		label: 'Define All Components'
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> defineComponentOn: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #MoleculeDefineComponent)
 		parent: #MoleculeDebug;
 		target: World;
@@ -111,10 +113,10 @@ MolWorld class >> defineComponentOn: aBuilder [
 		label: 'Define a Component...'
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> defineDirtyComponentsOn: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #MoleculeDefineDirtyComponents)
 		parent: #MoleculeDebug;
 		target: World;
@@ -124,10 +126,10 @@ MolWorld class >> defineDirtyComponentsOn: aBuilder [
 		label: 'Define dirty Components'
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> inspectAllComponentInstances: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #InspectAllComponentInstances)
 		parent: #MoleculeDebug;
 		target: World;
@@ -142,10 +144,10 @@ MolWorld class >> inspectAllComponentInstances: aBuilder [
 		label: 'Inspect all component instances'
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> inspectComponents: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #InspectComponents)
 		parent: #Molecule;
 		target: World;
@@ -156,10 +158,10 @@ MolWorld class >> inspectComponents: aBuilder [
 		withSeparatorAfter
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> inspectDirtyComponentTypes: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #InspectDirtyComponentTypes)
 		parent: #MoleculeDebug;
 		target: World;
@@ -169,10 +171,10 @@ MolWorld class >> inspectDirtyComponentTypes: aBuilder [
 		label: 'Inspect dirty Component Types'
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> inspectDirtyComponents: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #InspectDirtyComponents)
 		parent: #MoleculeDebug;
 		target: World;
@@ -182,17 +184,17 @@ MolWorld class >> inspectDirtyComponents: aBuilder [
 		label: 'Inspect dirty Components'
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> menuCommandOn: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #Molecule) order:  100
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> menuDebugOn: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #MoleculeDebug)
 		parent: #Molecule;
 		label: 'Debug and Tools';
@@ -201,10 +203,10 @@ MolWorld class >> menuDebugOn: aBuilder [
 		order: 1.2
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> menuGithubOn: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #GitHub)
 		parent: #Molecule;
 		order: 3.0;
@@ -214,10 +216,10 @@ MolWorld class >> menuGithubOn: aBuilder [
 		action: [WebBrowser openOn: 'https://github.com/OpenSmock/Molecule']
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> menuReportBugOn: aBuilder [
-
 	<worldMenu>
+
 	(aBuilder item: #ReportBug)
 		parent: #Molecule;
 		order: 3.1;
@@ -241,10 +243,10 @@ MolWorld class >> openDefineComponentDialog [
 	^ retValue answer
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> toggleDynamicContractUpdate: aBuilder [
-
 	<worldMenu>
+
 	MolComponentFactory default isDynamicContractUpdateActivated 
 		ifFalse: [ 
 			(aBuilder item: #TurnOffMolLogs)
@@ -268,10 +270,10 @@ MolWorld class >> toggleDynamicContractUpdate: aBuilder [
 	aBuilder withSeparatorAfter
 ]
 
-{ #category : #menu }
+{ #category : #'menu description' }
 MolWorld class >> toggleMolLogsOn: aBuilder [
-
 	<worldMenu>
+
 	MolUtils isLogActive 
 		ifFalse: [ 
 			(aBuilder item: #TurnOffMolLogs)
