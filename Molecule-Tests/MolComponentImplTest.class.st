@@ -181,8 +181,20 @@ MolComponentImplTest >> testNotFoundSubscriber [
 	component getMolUsedEventsSubscriber unsubscribe: self.
 ]
 
-{ #category : #tests }
+{ #category : #'tests - component creation' }
 MolComponentImplTest >> testStart [
+	MolCompleteComponentImpl deploy.
+	MolCompleteComponentImpl instanciate.
+	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) notNil.
+	MolCompleteComponentImpl activate.
+	MolCompleteComponentImpl passivate.
+	MolCompleteComponentImpl remove.
+	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) isNil.
+	MolCompleteComponentImpl undeploy.
+]
+
+{ #category : #'tests - component creation' }
+MolComponentImplTest >> testStart2 [
 	| component |
 	component := MolCompleteComponentImpl start.
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) notNil.
@@ -193,11 +205,21 @@ MolComponentImplTest >> testStart [
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl named: #compA) notNil.
 	self assert: component isComponent.
 	self assert: component componentName equals: #compA.
-	
-	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - component creation' }
+MolComponentImplTest >> testStartWithName [
+	MolCompleteComponentImpl deploy.
+	MolCompleteComponentImpl instanciate: #myComponent.
+	self assert: (MolUtils instanceOf: MolCompleteComponentImpl named: #myComponent) notNil.
+	MolCompleteComponentImpl activate: #myComponent.
+	MolCompleteComponentImpl passivate: #myComponent.
+	MolCompleteComponentImpl remove: #myComponent.
+	self assert: (MolUtils instanceOf: MolCompleteComponentImpl named: #myComponent) isNil.
+	MolCompleteComponentImpl undeploy.
+]
+
+{ #category : #'tests - component creation' }
 MolComponentImplTest >> testStop [
 	MolCompleteComponentImpl start.
 	MolCompleteComponentImpl stop.

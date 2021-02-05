@@ -19,6 +19,16 @@ Trait {
 	#category : #'Molecule-Core-Impl'
 }
 
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> activate [
+	^MolComponentManager default homeServices activateComponent: self.
+]
+
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> activate: aComponentName [
+	^MolComponentManager default homeServices activateComponent: self named: aComponentName.
+]
+
 { #category : #testing }
 MolComponentImpl classSide >> componentType [
 	| traits |
@@ -38,6 +48,11 @@ MolComponentImpl classSide >> defineComponent [
 
 ]
 
+{ #category : #deployment }
+MolComponentImpl classSide >> deploy [
+	^MolComponentManager default deploymentServices deployComponentImplementation: self.
+]
+
 { #category : #testing }
 MolComponentImpl classSide >> haveComponentType [
 	| traits |
@@ -49,9 +64,39 @@ MolComponentImpl classSide >> haveComponentType [
 	^(traits includes: MolComponentType)
 ]
 
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> instanciate [
+	^MolComponentManager default homeServices instanciateComponent: self.
+]
+
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> instanciate: aComponentName [
+	^MolComponentManager default homeServices instanciateComponent: self named: aComponentName.
+]
+
 { #category : #testing }
 MolComponentImpl classSide >> isComponentClass [
 	^ true
+]
+
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> passivate [
+	^MolComponentManager default homeServices passivateComponent: self.
+]
+
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> passivate: aComponentName [
+	^MolComponentManager default homeServices passivateComponent: self named: aComponentName.
+]
+
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> remove [
+	^MolComponentManager default homeServices removeComponent: self.
+]
+
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> remove: aComponentName [
+	^MolComponentManager default homeServices removeComponent: self named: aComponentName.
 ]
 
 { #category : #'start & stop' }
@@ -72,6 +117,11 @@ MolComponentImpl classSide >> stop [
 { #category : #'start & stop' }
 MolComponentImpl classSide >> stop: aComponentName [
 	^MolUtils stopComponent: self named: aComponentName
+]
+
+{ #category : #deployment }
+MolComponentImpl classSide >> undeploy [
+	^MolComponentManager default deploymentServices undeployComponentImplementation: self.
 ]
 
 { #category : #'component life cycle' }
