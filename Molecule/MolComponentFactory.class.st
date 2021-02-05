@@ -791,34 +791,34 @@ MolComponentFactory >> initialize [
 
 	dirtyComponentTypes := Set new.
 	dirtyComponents := Set new.
-	self initializeSystemAnnouncements.
-	self initializeIcebergAnnouncements
+	self initializePragmaAnnouncements.
+	self initializeSystemAnnouncements
 ]
 
 { #category : #'initalize-release' }
-MolComponentFactory >> initializeIcebergAnnouncements [
-	"Activate (or desactivate) component contract update when iceberge is used (or not)"
-	| announcer |
-	announcer := SystemAnnouncer uniqueInstance weak.
-	announcer ifNil: [
-		MolUtils log: 'Error on Iceberg annoucement initialization, system Announcer is nil'.
-		^ self 
-	].
-	announcer when: #MCVersionLoaderStarted send: #deactivateDynamicContractUpdate: to: self with: false.
-	"Activate without display information message"
-	announcer when: #MCVersionLoaderStopped send: #activateDynamicContractUpdate: to: self with: false.
-]
-
-{ #category : #'initalize-release' }
-MolComponentFactory >> initializeSystemAnnouncements [
-
+MolComponentFactory >> initializePragmaAnnouncements [
 	"Component Type Observer"
 	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = #componentContract ]) reset.
 	pragmaCollector announcer when: PragmaAnnouncement send: #contractChangedAnnouncement: to: self.
 	
 	"Component Implementation Observer"
-	SystemAnnouncer uniqueInstance  when: ClassAdded send: #componentAddedAnnouncement: to: self.
-	SystemAnnouncer uniqueInstance  when: ClassModifiedClassDefinition send: #componentChangedAnnouncement: to: self.
+	SystemAnnouncer uniqueInstance when: ClassAdded send: #componentAddedAnnouncement: to: self.
+	SystemAnnouncer uniqueInstance when: ClassModifiedClassDefinition send: #componentChangedAnnouncement: to: self.
+]
+
+{ #category : #'initalize-release' }
+MolComponentFactory >> initializeSystemAnnouncements [
+	"Activate (or desactivate) component contract update when iceberge is used (or not)"
+	| announcer |
+	announcer := SystemAnnouncer uniqueInstance weak.
+	announcer ifNil: [
+		MolUtils log: 'Error on Systems announcements initialization, system Announcer is nil'.
+		^ self 
+	].
+
+	"Monticello events"
+	announcer when: #MCVersionLoaderStarted send: #deactivateDynamicContractUpdate: to: self with: false.
+	announcer when: #MCVersionLoaderStopped send: #activateDynamicContractUpdate: to: self with: false.
 ]
 
 { #category : #accessing }
@@ -859,8 +859,8 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsAdding: aTraitsLi
 { #category : #'initalize-release' }
 MolComponentFactory >> release [
 
-	self releaseIcebergAnnouncements.
 	self releaseSystemAnnouncements.
+	self releasePragmaAnnouncements.
 	isDynamicContractUpdateActivated := false.
 	dirtyComponentTypes := nil.
 	dirtyComponents := nil.
@@ -869,22 +869,19 @@ MolComponentFactory >> release [
 ]
 
 { #category : #'initalize-release' }
-MolComponentFactory >> releaseIcebergAnnouncements [
+MolComponentFactory >> releasePragmaAnnouncements [
+	pragmaCollector release.
+	pragmaCollector := nil.
+	SystemAnnouncer uniqueInstance unsubscribe: self
+]
 
+{ #category : #'initalize-release' }
+MolComponentFactory >> releaseSystemAnnouncements [
 	| announcer |
 	announcer := SystemAnnouncer uniqueInstance.
 	announcer ifNil: [ ^ self ].
 	announcer unsubscribe: self.
 	announcer unsubscribe: self
-]
-
-{ #category : #'initalize-release' }
-MolComponentFactory >> releaseSystemAnnouncements [
-
-	pragmaCollector release.
-	pragmaCollector := nil.
-
-	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
 { #category : #'code generation' }
