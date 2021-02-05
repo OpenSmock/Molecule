@@ -51,6 +51,8 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 		
 	component componentConnector activateComponent.
 	component componentActivate.
+	component triggerEvent: #activateComponent with: component.
+	
 	MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is activated.'.
 	
 	"manage connexion between components"
@@ -115,6 +117,7 @@ MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 	connector := MolComponentConnector new.
 	component componentConnector: connector.
 	component componentInitialize.
+	component triggerEvent: #instanciateComponent with: component.
 	
 	"add the component to waiting activation list"
 	waitingForActivation add: component.
@@ -175,6 +178,7 @@ MolHomeServices >> passivateComponent: aComponentClass named: aName [
 
 	component componentPassivate.
 	component componentConnector passivateComponent.
+	component triggerEvent: #passivateComponent with: component.
 	
 	MolUtils log: aComponentClass printString , ' named: ' , aName printString, ' is passivated.'.
 
@@ -223,9 +227,9 @@ MolHomeServices >> removeComponent: aComponentClass named: aName [
 	].
 	
 	"Remove the component"
-	removedComponent triggerEvent: #removeComponent with: removedComponent.
 	removedComponent componentRemove.
 	removedComponent componentConnector: nil.
+	removedComponent triggerEvent: #removeComponent with: removedComponent.
 	
 	"Get deployed component instances of this component class"
 	deployedComponentsOfThisClass := self deployedComponents at: aComponentClass ifAbsent:[

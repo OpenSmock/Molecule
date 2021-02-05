@@ -21,7 +21,7 @@ MolEventSubscriberTest >> tearDown [
 	super tearDown.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testAddOriginator [
 	| subscribers componentEvents eventSubscriber component |
 	subscribers := OrderedCollection new.
@@ -41,7 +41,7 @@ MolEventSubscriberTest >> testAddOriginator [
 	self assert: (eventSubscriber originators includes: component).
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testAddOriginators [
 	| subscribers componentEvents eventSubscriber componentA componentB |
 	subscribers := OrderedCollection new.
@@ -60,7 +60,7 @@ MolEventSubscriberTest >> testAddOriginators [
 	self assert: (eventSubscriber originators includes: componentB).
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testEventsOriginators [
 	| subscribers componentEvents eventSubscriber componentA componentB |
 	subscribers := OrderedCollection new.
@@ -75,7 +75,28 @@ MolEventSubscriberTest >> testEventsOriginators [
 	self assert: (eventSubscriber originators includes: componentB).
 ]
 
-{ #category : #tests }
+{ #category : #test }
+MolEventSubscriberTest >> testGetObserversFrom [
+	| observer producer |
+
+	observer := MolCompleteComponentImpl start.
+	producer := MolCompleteComponentImpl start: #producer.
+
+	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: nil) isEmpty.
+	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) isEmpty.
+	
+	observer getMolUsedEventsSubscriber subscribe: observer.
+	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) isEmpty.
+	
+	observer forEvents: MolUsedEvents useProducer: #producer. 
+	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) isEmpty.
+	
+	observer getMolUsedEventsSubscriber subscribe: observer.
+	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) size equals: 1.
+	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) first identicalTo: observer.
+]
+
+{ #category : #test }
 MolEventSubscriberTest >> testIncludesOriginator [
 	| subscribers componentEvents eventSubscriber component |
 	subscribers := OrderedCollection new.
@@ -89,7 +110,7 @@ MolEventSubscriberTest >> testIncludesOriginator [
 	self assert: (eventSubscriber includesOriginator: component).
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testInitialize [
 	| eventSubscriber |
 	eventSubscriber := MolEventSubscriber new.
@@ -100,7 +121,7 @@ MolEventSubscriberTest >> testInitialize [
 	self assert: eventSubscriber observersConnection isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testIsAllOriginatorsLinked [
 	| subscribers componentEvents eventSubscriber |
 	subscribers := OrderedCollection new.
@@ -111,7 +132,7 @@ MolEventSubscriberTest >> testIsAllOriginatorsLinked [
 	self assert: eventSubscriber isAllOriginatorsLinked equals: true.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testIsNotFoundEventsSubscriber [
 	| subscribers componentEvents eventSubscriber |
 	subscribers := OrderedCollection new.
@@ -121,7 +142,7 @@ MolEventSubscriberTest >> testIsNotFoundEventsSubscriber [
 	self assert: eventSubscriber isNotFoundEventsSubscriber equals: false.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testRelease [
 	| subscribers componentEvents eventSubscriber |
 	subscribers := OrderedCollection new.
@@ -137,9 +158,10 @@ MolEventSubscriberTest >> testRelease [
 	self assert: eventSubscriber observersConnection isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testRemoveOriginator [
 	| subscribers componentEvents eventSubscriber component |
+	
 	subscribers := OrderedCollection new.
 	componentEvents := MolUsedChildEvents.
 	component := MolCompleteComponentImpl new.
@@ -150,7 +172,43 @@ MolEventSubscriberTest >> testRemoveOriginator [
 	self assert: (eventSubscriber originators isEmpty).
 ]
 
-{ #category : #tests }
+{ #category : #test }
+MolEventSubscriberTest >> testRemoveOriginatorWithManyObservers [
+	| observer producerA producerB |
+	
+	observer := MolCompleteComponentImpl start.
+	producerA := MolCompleteComponentImpl start: #producerA.
+	producerB := MolCompleteComponentImpl start: #producerB.
+	observer forEvents: MolUsedEvents useAllProducers: #(#producerA #producerB). 
+
+	observer getMolUsedEventsSubscriber subscribe: observer.
+	self assert: (observer getMolUsedEventsSubscriber observersConnection at: observer) size equals: 2.
+
+	"Remove only producer A"
+	observer getMolUsedEventsSubscriber removeOriginator: producerA.
+	self assert: (observer getMolUsedEventsSubscriber observersConnection at: observer) size equals: 1.
+	
+	"Remove only producer B"
+	observer getMolUsedEventsSubscriber removeOriginator: producerB.
+	self assert: (observer getMolUsedEventsSubscriber observersConnection at: observer) isEmpty.
+]
+
+{ #category : #test }
+MolEventSubscriberTest >> testRemoveOriginatorWithObservers [
+	| observer producer |
+	
+	observer := MolCompleteComponentImpl start.
+	producer := MolCompleteComponentImpl start: #producer.
+	observer forEvents: MolUsedEvents useProducer: #producer. 
+
+	observer getMolUsedEventsSubscriber subscribe: observer.
+	self assert: (observer getMolUsedEventsSubscriber observersConnection at: observer) size equals: 1.
+
+	observer getMolUsedEventsSubscriber removeOriginator: producer.
+	self assert: (observer getMolUsedEventsSubscriber observersConnection at: observer) isEmpty.
+]
+
+{ #category : #test }
 MolEventSubscriberTest >> testSubscribe [
 	| eventSubscriber component |
 	eventSubscriber := MolEventSubscriber events: MolUsedEvents originators: #(#default).
@@ -169,7 +227,7 @@ MolEventSubscriberTest >> testSubscribe [
 	self assert: eventSubscriber originatorsLinks isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testSubscribe2 [
 	| eventSubscriber component |
 	component := MolUtils startComponent: MolCompleteComponentImpl.
@@ -189,7 +247,7 @@ MolEventSubscriberTest >> testSubscribe2 [
 	
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testUnsubscribe [
 	| eventSubscriber component |
 	eventSubscriber := MolEventSubscriber events: MolUsedEvents originators: #(#default).
@@ -202,7 +260,7 @@ MolEventSubscriberTest >> testUnsubscribe [
 	self assert: (eventSubscriber observersConnection includesKey: component) equals: false.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolEventSubscriberTest >> testUnsubscribe2 [
 	| eventSubscriber component |
 	component := MolUtils startComponent: MolCompleteComponentImpl.

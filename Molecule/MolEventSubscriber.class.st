@@ -27,6 +27,8 @@ MolEventSubscriber >> addOriginator: aComponent [
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ self ].
 	(self includesOriginator: aComponent) ifTrue: [ ^ self ].
 	self originators add: aComponent.
+	
+	"Trigger an event when the originator is removed"
 	aComponent when: #removeComponent send: #removeOriginator: to: self.
 ]
 
@@ -39,7 +41,7 @@ MolEventSubscriber >> addOriginators: aComponentList [
 { #category : #private }
 MolEventSubscriber >> connectAllOriginatorsTo: aComponent [
 	self mutex criticalReleasingOnError:[ | set |
-		set := self observersConnection at: aComponent ifAbsentPut: [Set new].
+		set := self observersConnection at: aComponent ifAbsentPut: [ Set new ].
 		self getOriginatorsConnectedKeys do: [ :e |
 			(set includes: e) ifFalse:[ 
 				set add: e.
@@ -100,13 +102,17 @@ MolEventSubscriber >> events: aComponentEvents originators: aComponentList [
 { #category : #private }
 MolEventSubscriber >> getObserversFrom: aComponent [
 	| observers |
-	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ nil ].
 	observers := OrderedCollection new.
-	self observersConnection
-		keysDo: [ :e | 
-			(self observersConnection at: e)
-				ifNotNil: [ (self observersConnection includes: aComponent componentName)
-						ifTrue: [ observers add: e ] ] ].
+	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ observers ].
+
+	self observersConnection keysDo: [ :comp | 
+		(self observersConnection at: comp ifAbsent:[ nil ]) ifNotNil: [ :observersList |
+			(observersList includes: aComponent componentName) ifTrue: [ 
+				observers add: comp. 
+			]. 
+		]. 
+	].
+
 	^ observers 
 ]
 
@@ -204,20 +210,19 @@ MolEventSubscriber >> release [
 { #category : #originators }
 MolEventSubscriber >> removeOriginator: aComponent [
 	| observersList |
+	
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ self ].
 	(self includesOriginator: aComponent) ifFalse:[ ^ self ].
 
 	self originators remove: aComponent. 
 	observersList := self getObserversFrom: aComponent.
-	observersList do: [ :comp | | newObserversSet|
-		self flag:'PLA : on ne passe pas ici'.
+	observersList do: [ :comp | | newObserversSet |
 		self disconnectOriginator: aComponent componentName from: comp.
-		self observersConnection at: comp put: nil.
-		"newObserversSet := self observersConnection at: aComponent ifAbsent:[ nil ].
+		newObserversSet := self observersConnection at: comp ifAbsent:[ nil ].
 		newObserversSet ifNotNil:[
-			newObserversSet remove: comp componentName ifAbsent:[ nil ].
-			self observersConnection at: comp put: newObserversSet.
-		]."
+			newObserversSet remove: aComponent componentName ifAbsent:[ nil ].
+			self observersConnection at: aComponent put: newObserversSet.
+		].
 	].
 ]
 
