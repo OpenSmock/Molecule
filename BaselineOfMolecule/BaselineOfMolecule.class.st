@@ -46,15 +46,11 @@ BaselineOfMolecule >> preload: loader package: packageSpec [
 	"If a Molecule component system is running, confirm loading and cleanUp before installation of the new version"
 	
 	(Smalltalk includesKey: #MolComponentManager) ifFalse:[ ^self ].
-
-	(Smalltalk classNamed: #MolComponentManager) default isRunningComponents ifTrue:[ 
+	(Smalltalk classNamed: #MolComponentManager) isRunningComponents ifTrue:[ 
 		(UITheme current
 		proceedIn: Morph new 
 		text: 'Warning, you are going to modify Molecule then components are started, do you want to continue ?'
-		title: 'Molecule - Loading a baseline') ifFalse:[
-			"Stop loading"
-			self halt.
-		].
+		title: 'Molecule - Loading a baseline') ifFalse:[ "Stop loading" Halt now ].
 	].
 
 	(Smalltalk classNamed: #MolComponentManager) cleanUp.	
