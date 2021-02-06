@@ -57,5 +57,10 @@ MolGPSMapImpl >> getMolGPSDataServicesProvider [
 MolGPSMapImpl >> updatePositionCircleOnMap: aGeoPosition radius: radius [
 	"Update geographic position of the received GPS position circle with a precision radius"
 	
-	Transcript show: ('[Map] Receive new GPS position: ', ((aGeoPosition roundTo: 0.1) printString), ' radius: ', radius rounded printString, ' m'); cr.
+	| point text |
+	point := aGeoPosition.
+	point := point truncateTo: 0.01.
+	text := (point x printShowingDecimalPlaces: 2), '@', (point y printShowingDecimalPlaces: 2).
+	
+	Transcript show: ('[Map] Receive new GPS position: ', text, ' radius: ', radius rounded printString, ' m'); cr.
 ]

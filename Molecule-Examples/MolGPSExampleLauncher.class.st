@@ -29,18 +29,18 @@ MolGPSExampleLauncher class >> start [
 		text: 'This example displays results in a Transcript, clic OK to open a Transcript.'
 		title: 'Molecule - GPS Example') ifTrue:[Transcript open].
 	
-	"Start GPSDataImpl component (an implementation of MolGPSData Type)"
-	MolUtils startComponent: MolGPSDataImpl.
+	"Start GPSDataImpl component (a Component with MolGPSData Type)"
+	MolGPSDataImpl start.
 	
-	"Start GPSMapImpl component (an implementation of MolGPSMap Type)"
-	MolUtils startComponent: MolGPSMapImpl.
+	"Start GPSMapImpl component (a Component with MolGPSMap Type)"
+	MolGPSMapImpl start.
 ]
 
 { #category : #scripts }
 MolGPSExampleLauncher class >> stop [
 	<script: 'self stop'>
 	
-	"Brutal stop : Cleanup the Component Manager"
+	"General stop : Cleanup the Component Manager"
 	MolComponentManager cleanUp
 ]
 
@@ -49,8 +49,8 @@ MolGPSExampleLauncher class >> swapGPSDataImplByGPSHardware [
 	<script: 'self swapGPSDataImplByGPSHardware'>
 	
 	"Swap MolGPSDataImpl by MolGPSHardware"
-	MolUtils stopComponent: MolGPSDataImpl.
-	MolUtils startComponent: MolGPSHardware.
+	MolGPSDataImpl stop.
+	MolGPSHardware start.
 
 ]
 
@@ -59,7 +59,7 @@ MolGPSExampleLauncher class >> swapGPSHardwareByGPSDataImpl [
 	<script: 'self swapGPSHardwareByGPSDataImpl'>
 	
 	"Swap MolGPSDataImpl by MolGPSHardware"
-	MolUtils stopComponent: MolGPSHardware.
-	MolUtils startComponent: MolGPSDataImpl.
+	MolGPSHardware stop.
+	MolGPSDataImpl start.
 
 ]
