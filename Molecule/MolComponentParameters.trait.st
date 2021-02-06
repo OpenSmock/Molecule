@@ -12,5 +12,5 @@ The difference between the parameters and the services is semantic.
 "
 Trait {
 	#name : #MolComponentParameters,
-	#category : #'Molecule-Core'
+	#category : #'Molecule-Component Contract'
 }

@@ -10,5 +10,5 @@ Naming conventions :
 "
 Trait {
 	#name : #MolComponentEvents,
-	#category : #'Molecule-Core'
+	#category : #'Molecule-Component Contract'
 }

@@ -15,7 +15,7 @@ Then, create a component implementation by using AbstractComponentImpl or Compon
 "
 Trait {
 	#name : #MolComponentType,
-	#category : #'Molecule-Core'
+	#category : #'Molecule-Component Contract'
 }
 
 { #category : #actions }

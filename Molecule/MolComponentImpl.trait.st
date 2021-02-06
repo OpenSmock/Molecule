@@ -16,7 +16,7 @@ Trait {
 		'componentConnector',
 		'componentName'
 	],
-	#category : #'Molecule-Core-Impl'
+	#category : #'Molecule-Component'
 }
 
 { #category : #'life cycle' }
