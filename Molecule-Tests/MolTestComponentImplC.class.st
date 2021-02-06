@@ -1,5 +1,5 @@
 Class {
 	#name : #MolTestComponentImplC,
 	#superclass : #MolTestComponentImplB,
-	#category : #'Molecule-Tests-Resources - Implementations'
+	#category : #'Molecule-Tests-Resources - Components'
 }

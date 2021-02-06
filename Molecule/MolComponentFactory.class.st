@@ -614,12 +614,12 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 			              getSourceCodeFor: aSymbol
 			              trait: trait
 			              selector: selector.
-		(aComponent allSelectors includes: selector) not
-			ifTrue: [ 
+		(aComponent allSelectors includes: selector)
+			ifFalse: [ 
 				aComponent
 					compile: sourceCode contents
 					classified: self class protocolForComponentAccess ]
-			ifFalse: [ "if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
+			ifTrue: [ "if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
 				"the selector must not be a parent"
 				(aComponent selectors includes: selector) ifTrue: [ 
 					method := aComponent >> selector.

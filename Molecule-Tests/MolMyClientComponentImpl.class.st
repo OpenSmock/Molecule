@@ -8,7 +8,7 @@ Class {
 	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolMyClientComponent',
 	#classTraits : 'MolMyClientComponent classTrait',
-	#category : #'Molecule-Tests-Resources - Implementations'
+	#category : #'Molecule-Tests-Resources - Components'
 }
 
 { #category : #services }

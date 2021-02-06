@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'myTableServices'
 	],
-	#category : #'Molecule-Tests-Resources - Implementations'
+	#category : #'Molecule-Tests-Resources - Components'
 }
 
 { #category : #'component accessing' }

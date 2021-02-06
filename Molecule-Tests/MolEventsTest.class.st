@@ -24,61 +24,51 @@ MolEventsTest >> tearDown [
 
 { #category : #tests }
 MolEventsTest >> testSeveralListeners [
-	| manager warner listener1 listener2 |
-	manager := MolComponentManager default.
-	
+	| warner listener1 listener2 |
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
 	
 	"Instanciation"
-	warner := manager homeServices instanciateComponent: MolMyWarnerComponentImpl named: #warner.
-	listener1 := manager homeServices instanciateComponent: MolMyListenerComponentImpl named: #listener1.
-	listener2 := manager homeServices instanciateComponent: MolMyListenerComponentImpl named: #listener2.
+	warner := MolMyWarnerComponentImpl instanciate: #warner.
+	listener1 := MolMyListenerComponentImpl instanciate: #listener1.
+	listener2 := MolMyListenerComponentImpl instanciate: #listener2.
 	
 	"Subscriptions"
 	listener1 forEvents: MolMyStateChangeEvents useProducer: #warner.
 	listener2 forEvents: MolMyStateChangeEvents useProducer: #warner.
 	
 	"Activation"
-	manager homeServices activateComponent: MolMyWarnerComponentImpl named: #warner.
-	manager homeServices activateComponent: MolMyListenerComponentImpl named: #listener1.
+	MolMyWarnerComponentImpl activate: #warner.
+	MolMyListenerComponentImpl activate: #listener1.
 	
 	"Tests"
 	warner operationalEvent.
 	self assert: listener1 currentState equals: #operational.
 	self assert: listener2 currentState equals: nil.
 	
-	manager homeServices activateComponent: MolMyListenerComponentImpl named: #listener2.
+	MolMyListenerComponentImpl activate: #listener2.
 	warner maintenanceEvent.
 	self assert: listener1 currentState equals: #maintenance.
 	self assert: listener2 currentState equals: #maintenance.
 	
-	manager homeServices passivateComponent: MolMyListenerComponentImpl named: #listener1.
+	MolMyListenerComponentImpl passivate: #listener1.
 	warner failureEvent.
 	self assert: listener1 currentState equals: #maintenance.
-	self assert: listener2 currentState equals: #failure.
-	
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	
+	self assert: listener2 currentState equals: #failure.	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSeveralWarners [
-	| manager warner1 warner2 listener subscriptions subscribers |
-	manager := MolComponentManager default.
-	
+	| warner1 warner2 listener subscriptions subscribers |
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
 	
 	"Instanciation"
-	warner1 := manager homeServices instanciateComponent: MolMyWarnerComponentImpl named: #warner1.
-	warner2 := manager homeServices instanciateComponent: MolMyWarnerComponentImpl named: #warner2.
-	listener := manager homeServices instanciateComponent: MolMyListenerComponentImpl named: #listener.
+	warner1 := MolMyWarnerComponentImpl instanciate: #warner1.
+	warner2 := MolMyWarnerComponentImpl instanciate: #warner2.
+	listener := MolMyListenerComponentImpl instanciate: #listener.
 	
 	"Subscriptions"
 	subscriptions := (Array with: #warner1 with: #warner2).
@@ -91,319 +81,261 @@ MolEventsTest >> testSeveralWarners [
 	self assert: ((subscribers at: MolMyStateChangeEvents) at: 2) equals: #warner2.
 	
 	"Activation"
-	manager homeServices activateComponent: MolMyWarnerComponentImpl named: #warner1.
-	manager homeServices activateComponent: MolMyListenerComponentImpl named: #listener.
+	MolMyWarnerComponentImpl activate: #warner1.
+	MolMyListenerComponentImpl activate: #listener.
 	
 	"Tests"
 	warner1 operationalEvent.
 	self assert: listener currentState equals: #operational.
-	warner2 failureEvent.
-	self assert: listener currentState equals: #failure.
+	warner2 failureEvent. "warner 2 is not active, so he can't send an event"
+	self assert: listener currentState equals: #operational.
 	
-	manager homeServices activateComponent: MolMyWarnerComponentImpl named: #warner2.
+	MolMyWarnerComponentImpl activate: #warner2.
 	warner1 maintenanceEvent.
 	self assert: listener currentState equals: #maintenance.
 	warner2 failureEvent.
 	self assert: listener currentState equals: #failure.
 	
-	manager homeServices passivateComponent: MolMyWarnerComponentImpl named: #warner1.
-	warner1 operationalEvent.
-	self assert: listener currentState equals: #operational.
-	
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
-	
+	MolMyWarnerComponentImpl passivate: #warner1.
+	warner1 operationalEvent. "warner 1 is not active, so he can't send an event"
+	self assert: listener currentState equals: #failure.
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleListenerNotActivated [
-	| manager warner listener |
-	manager := MolComponentManager default.
-	
+	| warner listener |
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
 	
 	"Instanciation"
-	warner := manager homeServices instanciateComponent: MolMyWarnerComponentImpl.
-	listener := manager homeServices instanciateComponent: MolMyListenerComponentImpl.
+	warner := MolMyWarnerComponentImpl instanciate.
+	listener := MolMyListenerComponentImpl instanciate.
 	
 	"Activation / Passivation"
-	manager homeServices activateComponent: MolMyWarnerComponentImpl.
+	MolMyWarnerComponentImpl activate.
 	
 	warner operationalEvent.
 	self assert: listener currentState equals: nil.
 		
-	manager homeServices activateComponent: MolMyListenerComponentImpl.
+	MolMyListenerComponentImpl activate.
+	warner failureEvent.
+	self assert: listener currentState equals: #failure.
+	
+	MolMyListenerComponentImpl passivate.
+	warner maintenanceEvent.
+	self assert: listener currentState equals: #failure.
+	
+	MolMyListenerComponentImpl activate.
 	warner operationalEvent.
 	self assert: listener currentState equals: #operational.
-	
-	manager homeServices passivateComponent: MolMyListenerComponentImpl.
-	warner maintenanceEvent.
-	self assert: listener currentState equals: #operational.
-	
-	manager homeServices activateComponent: MolMyListenerComponentImpl.
-	warner maintenanceEvent.
-	self assert: listener currentState equals: #maintenance.
-	
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleListenerNotActivatedNamed [
-	| manager warner listener |
-	manager := MolComponentManager default.
-	
+	| warner listener |
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
 	
 	"Instanciation"
-	warner := manager homeServices instanciateComponent: MolMyWarnerComponentImpl named: #myWarner.
-	listener := manager homeServices instanciateComponent: MolMyListenerComponentImpl named: #myListener.
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
 	
 	"Subscription"
 	listener forEvents: MolMyStateChangeEvents useProducer: #myWarner.
 	
 	"Activation"
-	manager homeServices activateComponent: MolMyWarnerComponentImpl named: #myWarner.
+	MolMyWarnerComponentImpl activate: #myWarner.
 	
 	warner operationalEvent.
 	self assert: listener currentState equals: nil.
 		
-	manager homeServices activateComponent: MolMyListenerComponentImpl named: #myListener.
+	MolMyListenerComponentImpl activate: #myListener.
+	warner failureEvent.
+	self assert: listener currentState equals: #failure.
+	
+	MolMyListenerComponentImpl passivate: #myListener.
+	warner maintenanceEvent.
+	self assert: listener currentState equals: #failure.
+	
+	MolMyListenerComponentImpl activate: #myListener.
 	warner operationalEvent.
 	self assert: listener currentState equals: #operational.
-	
-	manager homeServices passivateComponent: MolMyListenerComponentImpl named: #myListener.
-	warner maintenanceEvent.
-	self assert: listener currentState equals: #operational.
-	
-	manager homeServices activateComponent: MolMyListenerComponentImpl named: #myListener.
-	warner maintenanceEvent.
-	self assert: listener currentState equals: #maintenance.
-	
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleWarnerNotActivated [
 	"A component not activated send events."
-	| manager warner listener |
-	manager := MolComponentManager default.
-	
+	| warner listener |
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
 	
 	"Instanciation"
-	warner := manager homeServices instanciateComponent: MolMyWarnerComponentImpl.
-	listener := manager homeServices instanciateComponent: MolMyListenerComponentImpl.
+	warner := MolMyWarnerComponentImpl instanciate.
+	listener := MolMyListenerComponentImpl instanciate.
 	
 	"Activation"
-	manager homeServices activateComponent: MolMyListenerComponentImpl.
+	MolMyListenerComponentImpl activate.
 	
 	"Tests"
 	warner operationalEvent.
-	self assert: listener currentState equals: #operational.
+	self assert: listener currentState isNil.
 	
-	manager homeServices activateComponent: MolMyWarnerComponentImpl.
+	MolMyWarnerComponentImpl activate.
 	warner failureEvent.
 	self assert: listener currentState equals: #failure.
 	
-	manager homeServices passivateComponent: MolMyWarnerComponentImpl.
+	MolMyWarnerComponentImpl passivate.
+	warner maintenanceEvent.
+	self assert: listener currentState equals: #failure.
+	
+	MolMyWarnerComponentImpl activate.
 	warner operationalEvent.
 	self assert: listener currentState equals: #operational.
-	
-	manager homeServices activateComponent: MolMyWarnerComponentImpl.
-	warner maintenanceEvent.
-	self assert: listener currentState equals: #maintenance.
-	
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleWarnerNotActivatedNamed [
 	"A component not activated send events."
-	| manager warner listener |
-	manager := MolComponentManager default.
-	
+	| warner listener |
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
 	
 	"Instanciation"
-	warner := manager homeServices instanciateComponent: MolMyWarnerComponentImpl named: #myWarner.
-	listener := manager homeServices instanciateComponent: MolMyListenerComponentImpl named: #myListener.
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
 	
 	"Subscription"
 	listener forEvents: MolMyStateChangeEvents useProducer: #myWarner.
 	
 	"Activation"
-	manager homeServices activateComponent: MolMyListenerComponentImpl named: #myListener.
+	MolMyListenerComponentImpl activate: #myListener.
 	
 	"Tests"
 	warner maintenanceEvent.
-	self assert: listener currentState equals: #maintenance.
+	self assert: listener currentState isNil.
 	
-	manager homeServices activateComponent: MolMyWarnerComponentImpl named: #myWarner.
-	warner operationalEvent.
-	self assert: listener currentState equals: #operational.
+	MolMyWarnerComponentImpl activate: #myWarner.
+	warner failureEvent.
+	self assert: listener currentState equals: #failure.
 	
-	manager homeServices passivateComponent: MolMyWarnerComponentImpl named: #myWarner.
+	MolMyWarnerComponentImpl passivate: #myWarner.
 	warner maintenanceEvent.
-	self assert: listener currentState equals: #maintenance.
+	self assert: listener currentState equals: #failure.
 	
-	manager homeServices activateComponent: MolMyWarnerComponentImpl named: #myWarner.
+	MolMyWarnerComponentImpl activate: #myWarner.
 	warner operationalEvent.
 	self assert: listener currentState equals: #operational.
-	
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleWarningSystem [
-	| manager warner listener |
-	manager := MolComponentManager default.
-	
+	| warner listener |
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
 	
 	"Instanciation : by default, components name is #default"
-	warner := manager homeServices instanciateComponent: MolMyWarnerComponentImpl.
-	listener := manager homeServices instanciateComponent: MolMyListenerComponentImpl.
+	warner := MolMyWarnerComponentImpl instanciate.
+	listener := MolMyListenerComponentImpl instanciate.
 	
 	"Subscription : by default, a component is subscribed to events from component #default."
 	"It will be effective after activation"
 	
 	"Activation : by default, components are activated with name default"
-	manager homeServices activateComponent: MolMyWarnerComponentImpl.
-	manager homeServices activateComponent: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl activate.
+	MolMyListenerComponentImpl activate.
 	
 	"Tests"
 	self assert: listener currentState equals: nil.
+	
 	warner operationalEvent.
 	self assert: listener currentState equals: #operational.
+	
 	warner failureEvent.
 	self assert: listener currentState equals: #failure.
 	self assert: listener failureLevel notNil.
-	
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleWarningSystemNamed [
-	| manager warner listener |
-	manager := MolComponentManager default.
-	
+	| warner listener |
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
 	
 	"Instanciation"
-	warner := manager homeServices instanciateComponent: MolMyWarnerComponentImpl named: #myWarner.
-	listener := manager homeServices instanciateComponent: MolMyListenerComponentImpl named: #myListener.
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
 	
 	"Subscription : it should be done in SCMMyListenerComponentImpl > componentInitialize"
 	listener forEvents: MolMyStateChangeEvents useProducer: #myWarner.
 	
 	"Activation"
-	manager homeServices activateComponent: MolMyWarnerComponentImpl named: #myWarner.
-	manager homeServices activateComponent: MolMyListenerComponentImpl named: #myListener.
+	MolMyWarnerComponentImpl activate: #myWarner.
+	MolMyListenerComponentImpl activate: #myListener.
 	
 	"Tests"
 	self assert: listener currentState equals: nil.
+	
 	warner operationalEvent.
 	self assert: listener currentState equals: #operational.
+	
 	warner failureEvent.
 	self assert: listener currentState equals: #failure.
 	self assert: listener failureLevel notNil.
-	
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSimpleWarningSystemNamedDelayed [
 "Test subscription after activation"
-	| manager warner listener |
-	manager := MolComponentManager default.
-	
+	| warner listener |
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
 	
 	"Initialization and activation of listener"
-	listener := manager homeServices instanciateComponent: MolMyListenerComponentImpl named: #myListener.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
 	listener forEvents: MolMyStateChangeEvents useProducer: #myWarner. "Warner does not exist."
-	manager homeServices activateComponent: MolMyListenerComponentImpl named: #myListener.
+	MolMyListenerComponentImpl activate: #myListener.
 	
 	"Initialization and activation of warner"
-	warner := manager homeServices instanciateComponent: MolMyWarnerComponentImpl named: #myWarner.
-	manager homeServices activateComponent: MolMyWarnerComponentImpl named: #myWarner.
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	MolMyWarnerComponentImpl activate: #myWarner.
 	
 	"Tests"
 	warner operationalEvent.
 	self assert: listener currentState equals: #operational.
-	
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
 	
 ]
 
 { #category : #tests }
 MolEventsTest >> testSubscriptionBeforeInstanciation [
 	"A component not activated send events."
-	| manager warner listener |
-	manager := MolComponentManager default.
-	
+	| warner listener |
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolMyListenerComponentImpl.
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
 	
 	"Creation and subscription of listener"
-	listener := manager homeServices instanciateComponent: MolMyListenerComponentImpl named: #myListener.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
 	listener forEvents: MolMyStateChangeEvents useProducer: #myWarner.
-	manager homeServices activateComponent: MolMyListenerComponentImpl named: #myListener.
+	MolMyListenerComponentImpl activate: #myListener.
 	
 	"Creation of warner"
-	warner := manager homeServices instanciateComponent: MolMyWarnerComponentImpl named: #myWarner.
-	manager homeServices activateComponent: MolMyWarnerComponentImpl named: #myWarner.
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	MolMyWarnerComponentImpl activate: #myWarner.
 	
 	"Test"
 	warner maintenanceEvent.
 	self assert: listener currentState equals: #maintenance.
-	
-	"End of test"
-	manager homeServices removeAllComponents.
-	manager deploymentServices undeployComponentImplementation: MolMyWarnerComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolMyListenerComponentImpl.
 	
 ]

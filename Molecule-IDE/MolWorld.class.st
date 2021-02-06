@@ -7,16 +7,15 @@ Class {
 	#category : #'Molecule-IDE-Menus'
 }
 
-{ #category : #'menu description' }
+{ #category : #menu }
 MolWorld class >> componentManagerCleanUp: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #Molecule;
 		target: World;
 		order: 1.3;
 		help: 'Clean the current ComponentManager and current running Components';
-		icon: (self iconNamed: #refresh);
+		icon: (self iconNamed: #stop);
 		action: [ | result |
 			MolComponentManager isRunningComponents ifTrue:[
 				"Confirmation window when system running components"
@@ -24,41 +23,44 @@ MolWorld class >> componentManagerCleanUp: aBuilder [
 					text: 'Actually some Components are running, clean anyway ?' 
 					title: 'Molecule - Confirmation'.
 			].
-			((result notNil and:[result]) or:[result isNil]) ifTrue:[MolComponentManager cleanUp]. 
+			((result notNil and:[result]) or:[result isNil]) ifTrue:[
+				MolComponentManager cleanUp.
+				MolUtils showInformation: 'Clean Molecule'.
+			]. 
 		];
 		label: 'Do ComponentManager Cleanup';
 		withSeparatorAfter 
 ]
 
-{ #category : #'menu description' }
+{ #category : #menu }
 MolWorld class >> currentComponentSystem: aBuilder [
 	<worldMenu>
-
 	| label isRunning |
 	isRunning := MolComponentManager isRunningComponents.
 	label := isRunning 
 		ifTrue:['System is running Components'] 
-		ifFalse:['Actually, no Components are running'].
+		ifFalse:['No Components are running'].
 	
 	(aBuilder item: #InspectComponents)
 		parent: #Molecule;
 		target: World;
-		enabled: false;
+		enabled: isRunning;
 		order: 1.0;
-		icon: (isRunning ifTrue:[(self iconNamed: #smallInfo)] ifFalse:[(self iconNamed: #pause)]);
-		help: 'Component System Status';
-		label: label.
+		action: [ MolComponentManager default homeServices inspect ];
+		icon: (isRunning ifTrue:[(self iconNamed: #objects)] ifFalse:[(self iconNamed: #pause)]);
+		help: 'Component System Status, click to inspect running components';
+		label: label;
+		withSeparatorAfter.
 ]
 
-{ #category : #'menu description' }
+{ #category : #'menu - debug' }
 MolWorld class >> deepCleanUp: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #MoleculeDebug;
 		target: World;
 		order: 1.8;
-		icon: (self iconNamed: #refresh);
+		icon: (self iconNamed: #remove);
 		action: [| result |
 			"Confirmation window"
 			result := UITheme current proceedIn: Morph new 
@@ -80,10 +82,9 @@ MolWorld class >> defineAComponent [
 	component ifNotNil: [ :e | MolComponentFactory defineComponent: e ]
 ]
 
-{ #category : #'menu description' }
+{ #category : #'menu - debug' }
 MolWorld class >> defineAllComponentsOn: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #MoleculeDefineAllComponents)
 		parent: #MoleculeDebug;
 		target: World;
@@ -100,10 +101,9 @@ This action may be necessary in the event of a Molecule update.'
 		label: 'Define All Components'
 ]
 
-{ #category : #'menu description' }
+{ #category : #'menu - debug' }
 MolWorld class >> defineComponentOn: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #MoleculeDefineComponent)
 		parent: #MoleculeDebug;
 		target: World;
@@ -113,10 +113,9 @@ MolWorld class >> defineComponentOn: aBuilder [
 		label: 'Define a Component...'
 ]
 
-{ #category : #'menu description' }
+{ #category : #'menu - debug' }
 MolWorld class >> defineDirtyComponentsOn: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #MoleculeDefineDirtyComponents)
 		parent: #MoleculeDebug;
 		target: World;
@@ -126,10 +125,9 @@ MolWorld class >> defineDirtyComponentsOn: aBuilder [
 		label: 'Define dirty Components'
 ]
 
-{ #category : #'menu description' }
+{ #category : #'menu - debug' }
 MolWorld class >> inspectAllComponentInstances: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #InspectAllComponentInstances)
 		parent: #MoleculeDebug;
 		target: World;
@@ -144,24 +142,9 @@ MolWorld class >> inspectAllComponentInstances: aBuilder [
 		label: 'Inspect all component instances'
 ]
 
-{ #category : #'menu description' }
-MolWorld class >> inspectComponents: aBuilder [
-	<worldMenu>
-
-	(aBuilder item: #InspectComponents)
-		parent: #Molecule;
-		target: World;
-		order: 1.1;
-		action: [ MolComponentManager default homeServices inspect ];
-		icon: (self iconNamed: #glamorousInspect);
-		label: 'Inspect running Components';
-		withSeparatorAfter
-]
-
-{ #category : #'menu description' }
+{ #category : #'menu - debug' }
 MolWorld class >> inspectDirtyComponentTypes: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #InspectDirtyComponentTypes)
 		parent: #MoleculeDebug;
 		target: World;
@@ -171,10 +154,9 @@ MolWorld class >> inspectDirtyComponentTypes: aBuilder [
 		label: 'Inspect dirty Component Types'
 ]
 
-{ #category : #'menu description' }
+{ #category : #'menu - debug' }
 MolWorld class >> inspectDirtyComponents: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #InspectDirtyComponents)
 		parent: #MoleculeDebug;
 		target: World;
@@ -184,29 +166,43 @@ MolWorld class >> inspectDirtyComponents: aBuilder [
 		label: 'Inspect dirty Components'
 ]
 
-{ #category : #'menu description' }
+{ #category : #menu }
 MolWorld class >> menuCommandOn: aBuilder [
 	<worldMenu>
-
-	(aBuilder item: #Molecule) order:  100
+	(aBuilder item: #Molecule) order: 100
 ]
 
-{ #category : #'menu description' }
+{ #category : #menu }
 MolWorld class >> menuDebugOn: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #MoleculeDebug)
 		parent: #Molecule;
 		label: 'Debug and Tools';
 		help: 'Debug and tools for Molecule environment';
-		icon: (self iconNamed: #smallDebug);
+		icon: (self iconNamed: #repair);
 		order: 1.2
 ]
 
-{ #category : #'menu description' }
+{ #category : #menu }
+MolWorld class >> menuExamplesOn: aBuilder [
+	<worldMenu>
+	"Check if the examples package exists"
+	| package |
+	package := (Smalltalk packages detect: [ :p | p name = 'Molecule-Examples'] ifNone:[nil]).
+	package ifNil:[ ^self ].
+	
+	(aBuilder item: #MoleculeExamples)
+		parent: #Molecule;
+		label: 'Examples';
+		help: 'Examples of Molecule applications';
+		action: [ Smalltalk tools browser openOnPackage: package ];
+		icon: (self iconNamed: #smallHome);
+		order: 1.4
+]
+
+{ #category : #menu }
 MolWorld class >> menuGithubOn: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #GitHub)
 		parent: #Molecule;
 		order: 3.0;
@@ -216,10 +212,9 @@ MolWorld class >> menuGithubOn: aBuilder [
 		action: [WebBrowser openOn: 'https://github.com/OpenSmock/Molecule']
 ]
 
-{ #category : #'menu description' }
+{ #category : #menu }
 MolWorld class >> menuReportBugOn: aBuilder [
 	<worldMenu>
-
 	(aBuilder item: #ReportBug)
 		parent: #Molecule;
 		order: 3.1;
@@ -243,16 +238,15 @@ MolWorld class >> openDefineComponentDialog [
 	^ retValue answer
 ]
 
-{ #category : #'menu description' }
+{ #category : #'menu - debug' }
 MolWorld class >> toggleDynamicContractUpdate: aBuilder [
 	<worldMenu>
-
 	MolComponentFactory default isDynamicContractUpdateActivated 
 		ifFalse: [ 
 			(aBuilder item: #TurnOffMolLogs)
 				parent: #MoleculeDebug;
 				target: World;
-				icon: (self iconNamed: #smallDebug);
+				icon: (self iconNamed: #smallAuthoringTools);
 				order: 1.2;
 				action: [ MolComponentFactory default activateDynamicContractUpdate. MenubarMorph reset. ];
 				label: 'Active dynamic update'
@@ -261,7 +255,7 @@ MolWorld class >> toggleDynamicContractUpdate: aBuilder [
 			(aBuilder item: #TurnOnMolLogs)
 				parent: #MoleculeDebug;
 				target: World;
-				icon: (self iconNamed: #smallDebug);
+				icon: (self iconNamed: #smallAuthoringTools);
 				order: 1.2;
 				action: [ MolComponentFactory default deactivateDynamicContractUpdate.  MenubarMorph reset.  ];
 				label: 'Deactive dynamic update'
@@ -270,10 +264,9 @@ MolWorld class >> toggleDynamicContractUpdate: aBuilder [
 	aBuilder withSeparatorAfter
 ]
 
-{ #category : #'menu description' }
+{ #category : #'menu - debug' }
 MolWorld class >> toggleMolLogsOn: aBuilder [
 	<worldMenu>
-
 	MolUtils isLogActive 
 		ifFalse: [ 
 			(aBuilder item: #TurnOffMolLogs)

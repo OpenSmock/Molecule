@@ -6,7 +6,7 @@ Class {
 	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolCompleteComponent + MolUsedEvents + MolUsedServices + MolUsedParameters',
 	#classTraits : 'MolCompleteComponent classTrait + MolUsedEvents classTrait + MolUsedServices classTrait + MolUsedParameters classTrait',
-	#category : #'Molecule-Tests-Resources - Implementations'
+	#category : #'Molecule-Tests-Resources - Components'
 }
 
 { #category : #'component accessing' }

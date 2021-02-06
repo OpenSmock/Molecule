@@ -29,7 +29,7 @@ MolGPSDataImpl >> componentActivate [
 	sendCurrentPositionThread := [
 		
 	 	[true] whileTrue:[
-			(Delay forSeconds: 1) wait.
+			(Delay forMilliseconds: 50) wait.
 			self getMolGPSDataEventsNotifier currentPositionChanged: (self getRandomizedGPSPosition).
 			self increaseAccuracy.
 		].

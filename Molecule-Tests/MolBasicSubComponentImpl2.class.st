@@ -6,5 +6,5 @@ Class {
 	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolBasicComponent',
 	#classTraits : 'MolBasicComponent classTrait',
-	#category : #'Molecule-Tests-Resources - Implementations'
+	#category : #'Molecule-Tests-Resources - Components'
 }

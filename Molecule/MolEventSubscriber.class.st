@@ -62,17 +62,16 @@ MolEventSubscriber >> connectOriginator: componentName to: aComponent [
 
 { #category : #private }
 MolEventSubscriber >> disconnectAllOriginatorsFrom: aComponent [
-	self mutex criticalReleasingOnError: 
-			[| set | set := self observersConnection at: aComponent ifAbsent: [nil].
-			set ifNotNil:[self getOriginatorsConnectedKeys do: 
-					[:cori |
-					(set includes: cori)
-						ifTrue: 
-							[set remove: cori.
-							self disconnectOriginator: cori from: aComponent]]].
-		
+	self mutex criticalReleasingOnError:[ | set | 
+		set := self observersConnection at: aComponent ifAbsent: [nil].
+		set ifNotNil:[self getOriginatorsConnectedKeys do:[ :cori |
+				(set includes: cori)
+					ifTrue: 
+						[set remove: cori.
+						self disconnectOriginator: cori from: aComponent]
+			].
+		].
 		self observersConnection removeKey: aComponent ifAbsent:[nil].
-		
 	].
 ]
 
@@ -210,19 +209,15 @@ MolEventSubscriber >> release [
 { #category : #originators }
 MolEventSubscriber >> removeOriginator: aComponent [
 	| observersList |
-	
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ self ].
 	(self includesOriginator: aComponent) ifFalse:[ ^ self ].
 
 	self originators remove: aComponent. 
 	observersList := self getObserversFrom: aComponent.
-	observersList do: [ :comp | | newObserversSet |
+	observersList do: [ :comp | | set |
 		self disconnectOriginator: aComponent componentName from: comp.
-		newObserversSet := self observersConnection at: comp ifAbsent:[ nil ].
-		newObserversSet ifNotNil:[
-			newObserversSet remove: aComponent componentName ifAbsent:[ nil ].
-			self observersConnection at: aComponent put: newObserversSet.
-		].
+		set := self observersConnection at: comp ifAbsent:[ nil ].
+		set ifNotNil:[set remove: aComponent componentName ifAbsent:[ nil ]].
 	].
 ]
 

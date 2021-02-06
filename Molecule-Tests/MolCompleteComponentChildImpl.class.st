@@ -3,7 +3,7 @@ Class {
 	#superclass : #MolCompleteComponentImpl,
 	#traits : 'MolCompleteComponentChild + MolUsedChildEvents + MolUsedChildServices + MolUsedChildParameters',
 	#classTraits : 'MolCompleteComponentChild classTrait + MolUsedChildEvents classTrait + MolUsedChildServices classTrait + MolUsedChildParameters classTrait',
-	#category : #'Molecule-Tests-Resources - Implementations'
+	#category : #'Molecule-Tests-Resources - Components'
 }
 
 { #category : #'component accessing' }

@@ -3,5 +3,5 @@ Class {
 	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolTestComponentTreeType',
 	#classTraits : 'MolTestComponentTreeType classTrait',
-	#category : #'Molecule-Tests-Resources - Implementations'
+	#category : #'Molecule-Tests-Resources - Components'
 }

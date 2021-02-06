@@ -9,7 +9,6 @@ Class {
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
-
 	self class environment at: #MolTestGeneratedComponentImpl ifPresent: [ :c | c removeFromSystem].
 	self class environment at: self generatedComponentTypeSymbolName ifPresent: [ :c | c removeFromSystem].
 	self class environment at: self generatedComponentServicesSymbolName ifPresent: [ :c | c removeFromSystem].
@@ -20,7 +19,6 @@ MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 { #category : #utils }
 MolComponentFactoryTest >> createInstanceMethod: aSelector in: aClassOrTrait protocol: aProtocolString withCode: aSourceCodeString [
 	"Create an instance method in a Class or Trait with source code implementation"
-	
 	| sourceCode |
 	sourceCode := WriteStream on: String new.
 	sourceCode nextPutAll: aSelector.
@@ -83,35 +81,39 @@ MolComponentFactoryTest >> generatedComponentTypeTrait [
 	^self class environment at: self generatedComponentTypeSymbolName
 ]
 
+{ #category : #utils }
+MolComponentFactoryTest >> longWait [
+
+	(Delay forMilliseconds: 2000) wait.
+]
+
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUp [
-
-	self setUpComponentAndType.
+	self setUpComponentAndType 
 ]
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUpComponentAndType [
 	"Prepare or reset required test classes"
-	
 	| methodName source |
 	self class environment at: self generatedComponentTypeSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+		MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	].
  
 	self class environment at: self generatedComponentServicesSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: 'Molecule-Tests-Resources'.
+		MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	].
 
 	self class environment at: self generatedComponentParametersSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: 'Molecule-Tests-Resources'.
+		MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	].
 
 	self class environment at: self generatedComponentEventsSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: 'Molecule-Tests-Resources'.
+		MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	].
 
 	self class environment at: self generatedComponentClassSymbolName ifAbsent: [
-		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources'.
+		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	].
 
 	methodName := 'usedComponentServices'.
@@ -126,15 +128,19 @@ MolComponentFactoryTest >> setUpComponentAndType [
 	MolCompleteComponent class compile: source.
 ]
 
+{ #category : #utils }
+MolComponentFactoryTest >> smallWait [
+
+	(Delay forMilliseconds: 10) wait.
+]
+
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> tearDown [
-
-	self setUpComponentAndType.
+	self setUpComponentAndType
 ]
 
 { #category : #test }
 MolComponentFactoryTest >> testCollectComponentConnectionTraits [
-
 	| traits |
 	traits := MolComponentFactory default collectComponentConnectionTraits: nil.
 	self assert: traits isEmpty.
@@ -161,7 +167,6 @@ MolComponentFactoryTest >> testCollectComponentConnectionTraits [
 { #category : #test }
 MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	"Create a class, edit this class from different ways and check if the factory define the component or not"
-	
 	| isDynamicContractUpdateActivated |
 	self assert: MolComponentFactory default dirtyComponents isEmpty.
 	
@@ -171,26 +176,26 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	
 	"remove the testing class, and create a new component without Type, when the type is added check if the component in on the dirty components list"
 	self class environment at: self generatedComponentClassSymbolName ifPresent: [ (self class environment at: self generatedComponentClassSymbolName) removeFromSystem ].
-	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	
 	"Waiting for event callback"
-	(Delay forMilliseconds: 100) wait.
+	self smallWait.
 	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedComponentClass)).
 	MolComponentFactory default dirtyComponents removeAll.
 	
 	"add the type manually to the created component"
 	self generatedComponentClass setTraitComposition: MolCompleteComponent.
 	"Waiting for event callback"
-	(Delay forMilliseconds: 100) wait.
+	self smallWait.
 	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedComponentClass)).
 	MolComponentFactory default dirtyComponents removeAll.
 	
 	"remove the testing class, and create a new component with Type, check if the component in on the dirty components list"
 	self class environment at: self generatedComponentClassSymbolName ifPresent: [ (self class environment at: self generatedComponentClassSymbolName) removeFromSystem ].
-	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	
 	"Waiting for event callback"
-	(Delay forMilliseconds: 100) wait.
+	self smallWait.
 	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedComponentClass)).
 	MolComponentFactory default dirtyComponents removeAll.
 	
@@ -203,7 +208,6 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 { #category : #test }
 MolComponentFactoryTest >> testComponentContractChanged [
 	"Create a class, edit this class from different ways and check if the factory define the component or not"
-	
 	| isDynamicContractUpdateActivated methodName source |
 	self assert: MolComponentFactory default dirtyComponentTypes isEmpty.
 	
@@ -223,7 +227,7 @@ MolComponentFactoryTest >> testComponentContractChanged [
 	MolCompleteComponent class compile: source.
 	
 	"Waiting for event callback"
-	(Delay forMilliseconds: 100) wait.
+	self smallWait.
 	
 	self assert: (MolComponentFactory default dirtyComponentTypes includes: MolCompleteComponent).
 		
@@ -236,7 +240,6 @@ MolComponentFactoryTest >> testComponentContractChanged [
 
 { #category : #test }
 MolComponentFactoryTest >> testComponentFactoryDefaultClass [
-
 	MolComponentFactory cleanUp.
 
 	self assert: MolComponentFactory default class equals: MolComponentFactory.
@@ -257,7 +260,7 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	- Add a TraitB in the Component B, check if it only on B
 	- Add a TraitC in the Component C, check if it only on C
 	"
-	self timeLimit: (Duration seconds: 15).
+	"self timeLimit: (Duration seconds: 15)."
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
 	MolTestComponentImplA setTraitComposition: #().
@@ -278,7 +281,7 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	MolComponentFactory addProducedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait. 
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	
-	(Delay forSeconds: 2) wait.
+	self longWait.
 	
 	"Check Trait composition of A, B and C"
 	self assert: MolTestComponentImplA traitComposition traits size equals: 4.
@@ -290,7 +293,7 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	MolTestComponentImplB setTraitComposition: MolTestNoComponentTraitB.
 	MolTestComponentImplC setTraitComposition: MolTestNoComponentTraitC.
 	
-	(Delay forSeconds: 2) wait.
+	self longWait.
 	
 	"Check Trait composition of A, B and C"
 	self assert: MolTestComponentImplA traitComposition traits size equals: 5.
@@ -300,7 +303,7 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	"Remove the type and check if the each no components traits are already here"
 	MolTestComponentImplA removeFromComposition: self generatedComponentTypeTrait.
 	
-	(Delay forSeconds: 2) wait.
+	self longWait.
 	
 	"Check Trait composition of A, B and C"
 	self assert: MolTestComponentImplA traitComposition traits size equals: 1.
@@ -310,20 +313,18 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	MolTestComponentImplA setTraitComposition: #().
 	MolTestComponentImplB setTraitComposition: #().
 	MolTestComponentImplC setTraitComposition: #().
-	self cleanGeneratedClassesAndTraits.
 ]
 
 { #category : #'tests - component creation' }
 MolComponentFactoryTest >> testCreateComponentClassWithType [
 	"Create a Component from scratch with a Type"
-	
 	| class |
 	"delete generated class if presents"
 	self class environment at: self generatedComponentClassSymbolName ifPresent: [ 
 		(self class environment at: self generatedComponentClassSymbolName) removeFromSystem 
 	].
 
-	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
 
 	class := self class environment at: self generatedComponentClassSymbolName.
 	self assert: class notNil.
@@ -336,14 +337,13 @@ MolComponentFactoryTest >> testCreateComponentClassWithType [
 { #category : #'tests - component creation' }
 MolComponentFactoryTest >> testCreateComponentClassWithoutType [
 	"Create a Component from scratch without Type"
-	
 	| class |
 	"delete generated class if presents"
 	self class environment at: self generatedComponentClassSymbolName ifPresent: [ 
 		(self class environment at: self generatedComponentClassSymbolName) removeFromSystem.
 	].
 
-	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
 
 	class := self class environment at: self generatedComponentClassSymbolName.
 	self assert: class notNil.
@@ -560,7 +560,7 @@ MolComponentFactoryTest >> testCreateComponentType [
 		(self class environment at: self generatedComponentTypeSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 
 	trait := self class environment at: self generatedComponentTypeSymbolName.
 	self assert: trait notNil.
@@ -584,7 +584,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentEvents [
 		(self class environment at: self generatedComponentEventsSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: 'Molecule-Tests-Resources - Generated'.
 
 	trait := self class environment at: self generatedComponentEventsSymbolName.
 	self assert: trait notNil.
@@ -608,7 +608,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentParameters [
 		(self class environment at: self generatedComponentParametersSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: 'Molecule-Tests-Resources - Generated'.
 
 	trait := self class environment at: self generatedComponentParametersSymbolName.
 	self assert: trait notNil.
@@ -632,7 +632,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentServices [
 		(self class environment at: self generatedComponentServicesSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: 'Molecule-Tests-Resources - Generated'.
 
 	trait := self class environment at: self generatedComponentServicesSymbolName.
 	self assert: trait notNil.
@@ -654,7 +654,6 @@ MolComponentFactoryTest >> testDefineAllComponents [
 { #category : #test }
 MolComponentFactoryTest >> testDefineComponent [
 	"The Factory can define only Component Classes"
-	
 	MolComponentFactory defineComponent: nil.
 	
 	MolComponentFactory defineComponent: Boolean.
@@ -668,7 +667,6 @@ MolComponentFactoryTest >> testDefineComponent [
 
 { #category : #test }
 MolComponentFactoryTest >> testDefineComponentTypeImplementors [
-	
 	MolComponentFactory default defineComponentTypeImplementors: nil.
 	
 	MolComponentFactory default defineComponentTypeImplementors: Boolean.
@@ -682,12 +680,11 @@ MolComponentFactoryTest >> testDefineComponentTypeImplementors [
 
 { #category : #test }
 MolComponentFactoryTest >> testDefineDirtyComponents [
-
 	self assert: MolComponentFactory default dirtyComponentTypes isEmpty.
 
 	"Add a dirty component type manually"
-	MolComponentFactory default  dirtyComponentTypes add: MolMyClientComponent.
-	MolComponentFactory default  dirtyComponents add: MolMyClientComponentImpl.
+	MolComponentFactory default dirtyComponentTypes add: MolMyClientComponent.
+	MolComponentFactory default dirtyComponents add: MolMyClientComponentImpl.
 	self assert: MolComponentFactory default dirtyComponentTypes notEmpty.
 	self assert: MolComponentFactory default dirtyComponents notEmpty.
 	
@@ -698,7 +695,6 @@ MolComponentFactoryTest >> testDefineDirtyComponents [
 
 { #category : #test }
 MolComponentFactoryTest >> testDynamicContractUpdateActivation [
-
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
 	
 	MolComponentFactory default isDynamicContractUpdateActivated: false.
@@ -710,7 +706,6 @@ MolComponentFactoryTest >> testDynamicContractUpdateActivation [
 
 { #category : #test }
 MolComponentFactoryTest >> testDynamicContractUpdateActivation2 [
-
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
 	
 	MolComponentFactory default deactivateDynamicContractUpdate: false.
@@ -724,7 +719,6 @@ MolComponentFactoryTest >> testDynamicContractUpdateActivation2 [
 
 { #category : #test }
 MolComponentFactoryTest >> testGenerateConsumedEventComponentAccessorsFor [
-
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsSubscriber.
 	MolComponentFactory default generateOrRemoveConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsSubscriber).
@@ -732,7 +726,6 @@ MolComponentFactoryTest >> testGenerateConsumedEventComponentAccessorsFor [
 
 { #category : #test }
 MolComponentFactoryTest >> testGenerateProducedEventComponentAccessorsFor [
-
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsNotifier.
 	MolComponentFactory default generateOrRemoveProducedEventsComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsNotifier).
@@ -740,7 +733,6 @@ MolComponentFactoryTest >> testGenerateProducedEventComponentAccessorsFor [
 
 { #category : #test }
 MolComponentFactoryTest >> testGenerateUsedParametersComponentAccessorsFor [
-
 	MolCompleteComponentImpl removeSelector: #getMolUsedParametersProvider.
 	MolComponentFactory default generateOrRemoveUsedParametersComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedParametersProvider).
@@ -748,7 +740,6 @@ MolComponentFactoryTest >> testGenerateUsedParametersComponentAccessorsFor [
 
 { #category : #test }
 MolComponentFactoryTest >> testGenerateUsedServicesComponentAccessorsFor [
-
 	MolCompleteComponentImpl removeSelector: #getMolUsedServicesProvider.
 	MolComponentFactory default generateOrRemoveUsedServicesComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedServicesProvider).
@@ -761,13 +752,12 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 	- Add a Trait
 	- Declare Component Type
 	"
-	
 	| class componentClassNameSymbol |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
 
-	class := MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources'.
+	class := MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	class := self class environment at: componentClassNameSymbol.
 	class comment: 'I am added and removed by test: ', self printString.
 	
@@ -776,13 +766,11 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 	self assert: (class canPerform: #methodOfNoComponentTrait).
 	
 	"Set the component type and check if the existing Trait is already functionnal"
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	class addToComposition: self generatedComponentTypeTrait.
 	
-	(Delay forMilliseconds: 100) wait.
+	self smallWait.
 	self assert: (class canPerform: #methodOfNoComponentTrait).
-	
-	self cleanGeneratedClassesAndTraits.
 ]
 
 { #category : #'tests - component creation' }
@@ -793,17 +781,15 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	- Declare Component Type
 	- Make Component Contract
 	- Add a Trait"
-	
 	| componentClassNameSymbol componentClass |
-	self timeLimit: (Duration seconds: 15).
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
 	
-	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	componentClass setTraitComposition: self generatedComponentTypeTrait.
 	
 	self testCreateEmptyComponentServices.
@@ -817,7 +803,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	
-	(Delay forSeconds: 2) wait.
+	self longWait.
 	
 	"Add a trait"
 	componentClass addToComposition: MolTestNoComponentTraitA.
@@ -828,8 +814,6 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentServicesTrait).
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentParametersTrait).
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentEventsTrait).
-		
-	self cleanGeneratedClassesAndTraits.
 ]
 
 { #category : #'tests - component creation' }
@@ -842,18 +826,17 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlt
 	- Make Component Contract
 	"
 	| componentClassNameSymbol componentClass |
-	self timeLimit: (Duration seconds: 15).
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
 	
-	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	"Add a trait"
 	componentClass setTraitComposition: MolTestNoComponentTraitA.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	componentClass addToComposition: self generatedComponentTypeTrait.
 	
 	self testCreateEmptyComponentServices.
@@ -867,7 +850,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlt
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	
-	(Delay forSeconds: 2) wait.
+	self longWait.
  
 	self assert: (componentClass canPerform: #methodOfNoComponentTrait).
 	self assert: (componentClass traitComposition members size = 5).
@@ -876,8 +859,6 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlt
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentServicesTrait).
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentParametersTrait).
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentEventsTrait).
-		
-	self cleanGeneratedClassesAndTraits.
 ]
 
 { #category : #'tests - component creation' }
@@ -889,17 +870,15 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	- Create Services, Event and Parameters without API
 	- Declare Services, Events and Parameters in the Component Type
 	- Add API into Services, Events and Parameters"
-	
 	| componentClassNameSymbol componentClass |
-	self timeLimit: (Duration seconds: 15).
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
 	
-	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	componentClass setTraitComposition: self generatedComponentTypeTrait.
 	
 	self testCreateEmptyComponentServices.
@@ -913,7 +892,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	
-	(Delay forSeconds: 2) wait.
+	self longWait.
 	
 	"Check generated methods"
 	self assert: (componentClass canPerform: #getMolTestGeneratedComponentServicesProvider).
@@ -928,7 +907,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	self createInstanceMethod: 'testGeneratedEventA' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 	self createInstanceMethod: 'testGeneratedEventB' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 
-	(Delay forSeconds: 3) wait.
+	self longWait.
 	
 	"Check generated methods"
 	self assert: (componentClass canPerform: #testGeneratedServiceA).
@@ -937,8 +916,6 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	self assert: (componentClass canPerform: #testGeneratedParameterB).
 	self assert: (componentClass canPerform: #testGeneratedEventA).
 	self assert: (componentClass canPerform: #testGeneratedEventB).
-		
-	self cleanGeneratedClassesAndTraits.
 ]
 
 { #category : #'tests - component creation' }
@@ -949,14 +926,12 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 	- Declare Services, Events and Parameters in the Component Type
 	- Add API into Services, Events and Parameters
 	- Create Component Class directly with the Type"
-	
 	| componentClassNameSymbol componentClass |
-	self timeLimit: (Duration seconds: 15).
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	
 	self testCreateEmptyComponentServices.
 	self testCreateEmptyComponentParameters.
@@ -976,10 +951,10 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 	self createInstanceMethod: 'testGeneratedEventA' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 	self createInstanceMethod: 'testGeneratedEventB' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 
-	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	componentClass := self class environment at: componentClassNameSymbol.
 
-	(Delay forSeconds: 2) wait.
+	self longWait.
 	
 	"Check generated methods"
 	self assert: (componentClass canPerform: #getMolTestGeneratedComponentServicesProvider).
@@ -993,8 +968,6 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 	self assert: (componentClass canPerform: #testGeneratedParameterB).
 	self assert: (componentClass canPerform: #testGeneratedEventA).
 	self assert: (componentClass canPerform: #testGeneratedEventB).
-		
-	self cleanGeneratedClassesAndTraits.
 ]
 
 { #category : #'tests - component creation' }
@@ -1006,14 +979,13 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative3 [
 	- Declare Services, Events and Parameters in the Component Type"
 	
 	| componentClassNameSymbol componentClass |
-	self timeLimit: (Duration seconds: 15).
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	
-	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	self testCreateComponentServices.
@@ -1027,7 +999,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative3 [
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	
-	(Delay forSeconds: 3) wait.
+	self longWait.
 	
 	"Check generated methods"
 	self assert: (componentClass canPerform: #getMolTestGeneratedComponentServicesProvider).
@@ -1041,8 +1013,6 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative3 [
 	self assert: (componentClass canPerform: #testGeneratedParameterB).
 	self assert: (componentClass canPerform: #testGeneratedEventA).
 	self assert: (componentClass canPerform: #testGeneratedEventB).
-		
-	self cleanGeneratedClassesAndTraits.
 ]
 
 { #category : #'tests - component creation' }
@@ -1055,14 +1025,13 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	- Remove Component Type uses and check if Traits are removed"
 	
 	| componentClassNameSymbol componentClass | 
-	self timeLimit: (Duration seconds: 15).
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	
-	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: 'Molecule-Tests-Resources'.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	self testCreateComponentServices.
@@ -1076,13 +1045,13 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	
-	(Delay forSeconds: 2) wait.
+	self longWait.
 
 	self assert: componentClass traitComposition members size equals: 4.
 	
 	componentClass removeFromComposition: self generatedComponentTypeTrait.
 
-	(Delay forSeconds: 2) wait.
+	self longWait.
 
 	self assert: componentClass traitComposition isEmpty.
 		
@@ -1097,8 +1066,6 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	self assert: (componentClass canPerform: #testGeneratedParameterB) equals: false.
 	self assert: (componentClass canPerform: #testGeneratedEventA) equals: false.
 	self assert: (componentClass canPerform: #testGeneratedEventB) equals: false.
-		
-	self cleanGeneratedClassesAndTraits.
 ]
 
 { #category : #'tests - protocol' }

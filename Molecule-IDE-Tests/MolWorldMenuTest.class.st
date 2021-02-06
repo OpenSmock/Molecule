@@ -25,11 +25,11 @@ MolWorldMenuTest >> testWorldMenuBuilding [
 	MolWorld defineComponentOn: menuBuilder.
 	MolWorld defineDirtyComponentsOn: menuBuilder.
 	MolWorld inspectAllComponentInstances: menuBuilder.
-	MolWorld inspectComponents: menuBuilder.
 	MolWorld inspectDirtyComponentTypes: menuBuilder.
 	MolWorld inspectDirtyComponents: menuBuilder.
 	MolWorld menuCommandOn: menuBuilder.
 	MolWorld menuDebugOn: menuBuilder.
+	MolWorld menuExamplesOn: menuBuilder.
 	MolWorld menuGithubOn: menuBuilder.
 	MolWorld menuReportBugOn: menuBuilder.
 	MolWorld toggleDynamicContractUpdate: menuBuilder.
