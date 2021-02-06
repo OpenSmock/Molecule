@@ -143,6 +143,30 @@ MolWorld class >> inspectAllComponentInstances: aBuilder [
 ]
 
 { #category : #'menu - debug' }
+MolWorld class >> inspectComponentFactory: aBuilder [
+	<worldMenu>
+	(aBuilder item: #InspectComponentFactory)
+		parent: #MoleculeDebug;
+		target: World;
+		order: 1.4;
+		action: [ MolComponentFactory default inspect ];
+		icon: (self iconNamed: #glamorousInspect);
+		label: 'Inspect the Component factory'
+]
+
+{ #category : #'menu - debug' }
+MolWorld class >> inspectComponentManager: aBuilder [
+	<worldMenu>
+	(aBuilder item: #InspectComponentManager)
+		parent: #MoleculeDebug;
+		target: World;
+		order: 1.4;
+		action: [ MolComponentManager default inspect ];
+		icon: (self iconNamed: #glamorousInspect);
+		label: 'Inspect the Component manager'
+]
+
+{ #category : #'menu - debug' }
 MolWorld class >> inspectDirtyComponentTypes: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectDirtyComponentTypes)
