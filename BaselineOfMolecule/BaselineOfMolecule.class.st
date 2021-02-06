@@ -10,6 +10,9 @@ All
 Class {
 	#name : #BaselineOfMolecule,
 	#superclass : #BaselineOf,
+	#instVars : [
+		'previousDynamicContractUpdateActivated'
+	],
 	#category : #BaselineOfMolecule
 }
 
@@ -38,7 +41,10 @@ BaselineOfMolecule >> postload: loader package: packageSpec [
 	"Reload new Molecule tools"
 
 	(Smalltalk includesKey: #MolComponentManager) ifFalse:[ ^self ].
-	(Smalltalk classNamed: #MolComponentManager) cleanUp
+	(Smalltalk classNamed: #MolComponentManager) cleanUp.
+	(previousDynamicContractUpdateActivated == false) ifFalse:[
+		MolComponentFactory default activateDynamicContractUpdate.	
+	].
 ]
 
 { #category : #'load scripts' }
@@ -55,7 +61,8 @@ BaselineOfMolecule >> preload: loader package: packageSpec [
 			Halt now.
 		].
 	].
-
-	(Smalltalk classNamed: #MolComponentManager) cleanUp.	
-	(Smalltalk classNamed: #MolComponentFactory) cleanUp.
+ 
+	(Smalltalk classNamed: #MolComponentManager) cleanUp.
+	previousDynamicContractUpdateActivated := MolComponentFactory default isDynamicContractUpdateActivated.
+	MolComponentFactory default deactivateDynamicContractUpdate.
 ]
