@@ -122,7 +122,7 @@ To do so, we augment this class with component behavior.
 
 ## Test coverage
 
-Molecule includes more than 100 unit tests, we have also written tests that simulate the work of a developer when creating and modifying components. Test coverage is detailed in the release notes.
+Molecule includes more than 175 unit tests, we have also written tests that simulate the work of a developer when creating and modifying components. Test coverage is detailed in the release notes.
 
 ## Credits
 
