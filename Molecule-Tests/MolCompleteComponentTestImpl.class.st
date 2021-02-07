@@ -4,8 +4,8 @@ I am added and removed by test: MolComponentFactoryTest>>#testCreateComponentCla
 Class {
 	#name : #MolCompleteComponentTestImpl,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolCompleteComponent + MolUsedParameters',
-	#classTraits : 'MolCompleteComponent classTrait + MolUsedParameters classTrait',
+	#traits : 'MolCompleteComponent + MolUsedParameters + MolUsedServices + MolUsedEvents',
+	#classTraits : 'MolCompleteComponent classTrait + MolUsedParameters classTrait + MolUsedServices classTrait + MolUsedEvents classTrait',
 	#category : #'Molecule-Tests-Resources - Generated'
 }
 
