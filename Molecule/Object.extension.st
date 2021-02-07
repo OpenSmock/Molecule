@@ -4,8 +4,3 @@ Extension { #name : #Object }
 Object >> isComponent [
 	^ false
 ]
-
-{ #category : #'*Molecule' }
-Object class >> isComponentClass [
-	^ false
-]

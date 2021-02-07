@@ -59,7 +59,7 @@ MolWorld class >> deepCleanUp: aBuilder [
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.8;
+		order: 1.9;
 		icon: (self iconNamed: #remove);
 		action: [| result |
 			"Confirmation window"
@@ -88,7 +88,7 @@ MolWorld class >> defineAllComponentsOn: aBuilder [
 	(aBuilder item: #MoleculeDefineAllComponents)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.7;
+		order: 1.9;
 		action: [ | result |
 			"Confirmation window"
 			result := UITheme current proceedIn: Morph new 
@@ -98,7 +98,8 @@ This action may be necessary in the event of a Molecule update.'
 			result ifTrue:[MolComponentFactory defineAllComponents]. 
 		];
 		icon: (self iconNamed: #warning);
-		label: 'Define All Components'
+		label: 'Define All Components'; 
+		withSeparatorAfter 
 ]
 
 { #category : #'menu - debug' }
@@ -119,7 +120,7 @@ MolWorld class >> defineDirtyComponentsOn: aBuilder [
 	(aBuilder item: #MoleculeDefineDirtyComponents)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.6;
+		order: 1.8;
 		action: [ MolComponentFactory defineDirtyComponents ];
 		icon: (self iconNamed: #smallUpdate);
 		label: 'Define dirty Components'
@@ -131,7 +132,7 @@ MolWorld class >> inspectAllComponentInstances: aBuilder [
 	(aBuilder item: #InspectAllComponentInstances)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.5;
+		order: 1.3;
 		action: [ 
 			| components |
 			components := OrderedCollection new.
@@ -148,7 +149,7 @@ MolWorld class >> inspectComponentFactory: aBuilder [
 	(aBuilder item: #InspectComponentFactory)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.4;
+		order: 1.5;
 		action: [ MolComponentFactory default inspect ];
 		icon: (self iconNamed: #glamorousInspect);
 		label: 'Inspect the Component factory'
@@ -172,10 +173,11 @@ MolWorld class >> inspectDirtyComponentTypes: aBuilder [
 	(aBuilder item: #InspectDirtyComponentTypes)
 		parent: #MoleculeDebug;
 		target: World;
-		order: 1.3;
+		order: 1.7;
 		action: [ MolComponentFactory default dirtyComponentTypes inspect ];
 		icon: (self iconNamed: #glamorousInspect);
-		label: 'Inspect dirty Component Types'
+		label: 'Inspect dirty Component Types';
+		withSeparatorAfter
 ]
 
 { #category : #'menu - debug' }
