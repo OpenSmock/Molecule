@@ -23,8 +23,8 @@ Class {
 { #category : #'component - contract management' }
 MolComponentFactory class >> addConsumedEvents: aComponentEvents in: aComponentType [
 	"Add a provided ComponentEvents in a ComponentType"
-	
 	| declaredConsumedComponentEvents selector sourceCode |
+	
 	(aComponentEvents isNil or:[aComponentEvents isTrait not]) ifTrue:[^self].
 	aComponentEvents isComponentEvents ifFalse:[^self].
 	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
