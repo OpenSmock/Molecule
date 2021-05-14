@@ -175,6 +175,7 @@ MolComponentFactoryTest >> smallWait [
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> tearDown [
+	(Delay forMilliseconds: 10) wait.
 	self cleanGeneratedClassesAndTraits.
 	MolComponentManager cleanUp.
 ]
@@ -353,6 +354,26 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	MolTestComponentImplA setTraitComposition: #().
 	MolTestComponentImplB setTraitComposition: #().
 	MolTestComponentImplC setTraitComposition: #().
+]
+
+{ #category : #'test - component subclasses' }
+MolComponentFactoryTest >> testComponentSubclassesTraitsUses2 [
+
+	MolTestComponentImplA setTraitComposition: #().
+	
+	self testCreateComponentType.
+	MolTestComponentImplA setTraitComposition: self generatedComponentTypeTrait.
+
+	self testCreateComponentServices.
+	self testCreateComponentParameters.
+	self testCreateComponentEvents.
+	
+	MolComponentFactory addProvidedServices: self generatedComponentServicesTrait in: self generatedComponentTypeTrait.
+
+	(Delay forSeconds: 1) wait.	
+	self assert: MolTestComponentImplA traitComposition traits size equals: 2.
+	
+
 ]
 
 { #category : #'tests - component creation' }

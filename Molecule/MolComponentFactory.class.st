@@ -508,12 +508,8 @@ MolComponentFactory >> contractChanged: aComponentType [
 	aComponentType = MolComponentType ifTrue:[ "Exception for the ComponentType Trait (Abstract ComponentType)" ^ self ].
 
 	self isDynamicContractUpdateActivated ifTrue: [ 
-		('Pharo8.*.*' match: Smalltalk version) ifTrue:[
-			"need to fork the definition because new traits are not already injected here to the component"
-			[self defineComponentTypeImplementors: aComponentType] fork.
-		] ifFalse:[
-			self defineComponentTypeImplementors: aComponentType.
-		]. 
+		"need to fork the definition because new traits are not already injected here to the component"
+		[self defineComponentTypeImplementors: aComponentType] fork.
 	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
 ]
 
@@ -801,11 +797,6 @@ MolComponentFactory >> initializePragmaAnnouncements [
 	"Component Type Observer"
 	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = #componentContract ]) reset.
 	pragmaCollector announcer when: PragmaAnnouncement send: #contractChangedAnnouncement: to: self.
-	
-	"Component Implementation Observer"
-	SystemAnnouncer uniqueInstance when: ClassAdded send: #componentAddedAnnouncement: to: self.
-	SystemAnnouncer uniqueInstance when: ClassModifiedClassDefinition send: #componentChangedAnnouncement: to: self.
-	SystemAnnouncer uniqueInstance when: MethodAnnouncement send: #methodAnnouncement: to: self.
 ]
 
 { #category : #'initalize-release' }
@@ -817,6 +808,10 @@ MolComponentFactory >> initializeSystemAnnouncements [
 		MolUtils log: 'Error on Systems announcements initialization, system Announcer is nil'.
 		^ self 
 	].
+
+	"Component Implementation Observer"
+	announcer when: ClassAdded send: #componentAddedAnnouncement: to: self.
+	announcer when: ClassModifiedClassDefinition send: #componentChangedAnnouncement: to: self.
 
 	"Monticello events"
 	announcer when: #MCVersionLoaderStarted send: #deactivateDynamicContractUpdate: to: self with: false.
@@ -834,20 +829,6 @@ MolComponentFactory >> isDynamicContractUpdateActivated [
 MolComponentFactory >> isDynamicContractUpdateActivated: aBoolean [
 
 	isDynamicContractUpdateActivated := aBoolean
-]
-
-{ #category : #'system annoucements' }
-MolComponentFactory >> methodAnnouncement: aMessage [
-
-	self flag:'PLA : tests pour supprimer les forks'.
-
-	(aMessage isKindOf:  MethodAdded) ifFalse:[^self].
-	aMessage classAffected isObsolete ifTrue:[^self].
-	aMessage classAffected isTrait ifFalse:[^self].
-	(aMessage classAffected traitComposition allTraits includes: MolComponentType classTrait) ifFalse:[^self].
-
-	"Adding new component contract pragma"
-	self contractChanged: (aMessage classAffected instanceSide).
 ]
 
 { #category : #'private - code generation' }
@@ -888,7 +869,6 @@ MolComponentFactory >> release [
 MolComponentFactory >> releasePragmaAnnouncements [
 	pragmaCollector release.
 	pragmaCollector := nil.
-	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
 { #category : #'initalize-release' }
@@ -897,7 +877,6 @@ MolComponentFactory >> releaseSystemAnnouncements [
 	announcer := SystemAnnouncer uniqueInstance.
 	announcer ifNil: [ ^ self ].
 	announcer unsubscribe: self.
-	announcer unsubscribe: self
 ]
 
 { #category : #'code generation' }
