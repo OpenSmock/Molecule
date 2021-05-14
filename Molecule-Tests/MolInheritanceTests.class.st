@@ -20,11 +20,13 @@ MolInheritanceTests >> setUp [
 	
 	"Instanciate componenets"
 	motherComponent := manager homeServices instanciateComponent: MolCompleteComponentImpl.
-	childComponent := manager homeServices instanciateComponent: MolCompleteComponentChildImpl.
+	childComponent := manager homeServices instanciateComponent: MolCompleteComponentChildImpl named: #compB.
+	
+	motherComponent forServices: MolUsedServices useProvider: #compB.
 	
 	"Activate components"
 	 manager homeServices activateComponent: MolCompleteComponentImpl.
-	 manager homeServices activateComponent: MolCompleteComponentChildImpl.
+	 manager homeServices activateComponent: MolCompleteComponentChildImpl named: #compB.
 
 ]
 
@@ -100,21 +102,20 @@ MolInheritanceTests >> testServices [
 	self assert: childComponent service equals: #service.
 	self assert: childComponent subService equals: #subService.
 	"In the case of same used Services Type the used services provider is the last instanciated component : the child"
-	self assert: childComponent getMolUsedServicesProvider identicalTo: childComponent.
+	self assert: childComponent getMolUsedServicesProvider identicalTo: motherComponent.
 	self assert: childComponent getMolUsedServicesProvider service equals: #service.
-	self assert: childComponent getMolUsedChildServicesProvider identicalTo: childComponent.
+	self assert: childComponent getMolUsedChildServicesProvider isNotFoundServices.
 ]
 
 { #category : #tests }
 MolInheritanceTests >> testServicesWithoutChild [
 	"Test services behavior"
 	
-	MolUtils stopComponent: MolCompleteComponentChildImpl.
+	MolUtils stopComponent: MolCompleteComponentChildImpl named: #compB.
 	
-	self assert: motherComponent getMolUsedServicesProvider identicalTo: motherComponent.
+	self assert: motherComponent getMolUsedServicesProvider isNotFoundServices.
 	
-	childComponent := MolUtils startComponent: MolCompleteComponentChildImpl.
-	"Child component dynamically override the previous provider"
+	childComponent := MolUtils startComponent: MolCompleteComponentChildImpl named: #compB.
+	"Child component dynamically become the previous provider"
 	self assert: motherComponent getMolUsedServicesProvider identicalTo: childComponent.
-	
 ]

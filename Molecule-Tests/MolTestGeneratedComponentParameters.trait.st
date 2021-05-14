@@ -1,5 +1,5 @@
 "
-I am added and removed by test: MolComponentFactoryTest>>#testMakeAComponentFromScratchAlternative4
+I am added and removed by test: MolComponentFactoryTest>>#testMakeAComponentFromScratch
 "
 Trait {
 	#name : #MolTestGeneratedComponentParameters,

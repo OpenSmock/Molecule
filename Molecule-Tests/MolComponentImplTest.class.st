@@ -134,6 +134,13 @@ MolComponentImplTest >> testIsComponent [
 ]
 
 { #category : #tests }
+MolComponentImplTest >> testIsOverrideComponentType [
+
+	self assert: MolCompleteComponentImpl isOverrideComponentType equals: false.
+	self assert: MolCompleteComponentChildImpl isOverrideComponentType equals: true.
+]
+
+{ #category : #tests }
 MolComponentImplTest >> testNotFoundNotifier [
 
 	| component result |
@@ -179,6 +186,14 @@ MolComponentImplTest >> testNotFoundSubscriber [
 	
 	component getMolUsedEventsSubscriber subscribe: self.
 	component getMolUsedEventsSubscriber unsubscribe: self.
+]
+
+{ #category : #tests }
+MolComponentImplTest >> testOverridedComponentTypes [
+
+	self assert: MolCompleteComponentImpl overridedComponentTypes isEmpty.
+	self assert: MolCompleteComponentChildImpl overridedComponentTypes size equals: 1.
+	self assert: MolCompleteComponentChildImpl overridedComponentTypes first equals: MolCompleteComponent.
 ]
 
 { #category : #'tests - component creation' }

@@ -94,8 +94,8 @@ MolComponentFactoryTest >> setUp [
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUpComponentAndType [
+	<script: 'self new setUpComponentAndType'>
 	"Prepare or reset required test classes"
-	| methodName source |
 	self class environment at: self generatedComponentTypeSymbolName ifAbsent: [ 
 		MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	].
@@ -116,16 +116,7 @@ MolComponentFactoryTest >> setUpComponentAndType [
 		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	].
 
-	methodName := 'usedComponentServices'.
-	source := String streamContents: [ :s | 
-		s nextPutAll: methodName. 
-		s nextPut: Character cr. 
-		s nextPutAll: '<componentContract>'.
-		s nextPut: Character cr.
-		s nextPutAll: '^{ MolUsedServices }'.
-	].
-
-	MolCompleteComponent class compile: source.
+	MolComponentFactory addUsedServices: MolUsedServices in: MolCompleteComponent.
 ]
 
 { #category : #utils }

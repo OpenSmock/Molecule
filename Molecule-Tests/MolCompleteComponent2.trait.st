@@ -1,50 +1,45 @@
 "
-I am used for testing.
-
-/!\ DO NOT :
-- consumed & produced the same events;
-- provided & used the same services;
-- provided & used the same parameters.
+This Contract is the same that MolCompleteComponent : same services, parameters and events.
 "
 Trait {
-	#name : #MolCompleteComponent,
+	#name : #MolCompleteComponent2,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
 	#category : #'Molecule-Tests-Resources - Contracts'
 }
 
 { #category : #'accessing - events' }
-MolCompleteComponent classSide >> consumedComponentEvents [
+MolCompleteComponent2 classSide >> consumedComponentEvents [
 	<componentContract>	
 	^{ MolUsedEvents } 
 ]
 
 { #category : #'accessing - events' }
-MolCompleteComponent classSide >> producedComponentEvents [
+MolCompleteComponent2 classSide >> producedComponentEvents [
 	<componentContract>		
 	^{ MolUsedEvents }
 ]
 
 { #category : #'accessing - parameters' }
-MolCompleteComponent classSide >> providedComponentParameters [
+MolCompleteComponent2 classSide >> providedComponentParameters [
 	<componentContract>		
 	^{ MolUsedParameters }
 ]
 
 { #category : #'accessing - services' }
-MolCompleteComponent classSide >> providedComponentServices [
+MolCompleteComponent2 classSide >> providedComponentServices [
 	<componentContract>	
 	^{ MolUsedServices } 
 ]
 
 { #category : #'accessing - parameters' }
-MolCompleteComponent classSide >> usedComponentParameters [
-	<componentContract>
-	^ { MolUsedParameters }
+MolCompleteComponent2 classSide >> usedComponentParameters [
+	<componentContract>	
+	^{ MolUsedParameters }
 ]
 
 { #category : #'accessing - services' }
-MolCompleteComponent classSide >> usedComponentServices [
+MolCompleteComponent2 classSide >> usedComponentServices [
 	<componentContract>
-	^ { MolUsedServices }
+	^{ MolUsedServices }
 ]

@@ -21,12 +21,14 @@ Trait {
 
 { #category : #'life cycle' }
 MolComponentImpl classSide >> activate [
-	^MolComponentManager default homeServices activateComponent: self.
+
+	^ MolComponentManager default homeServices activateComponent: self
 ]
 
 { #category : #'life cycle' }
 MolComponentImpl classSide >> activate: aComponentName [
-	^MolComponentManager default homeServices activateComponent: self named: aComponentName.
+
+	^ MolComponentManager default homeServices activateComponent: self named: aComponentName
 ]
 
 { #category : #testing }
@@ -37,7 +39,7 @@ MolComponentImpl classSide >> componentType [
 	self withAllSuperclassesDo: [ :c | 
 		(c  ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[traits addAll: c traitComposition allTraits].
 	].
-	^(traits detect:[ :t | t traitComposition includesTrait: MolComponentType ] ifNone:[nil])
+	^(traits detect:[ :t | t isComponentType] ifNone:[nil])
 ]
 
 { #category : #'component definition' }
@@ -50,78 +52,104 @@ MolComponentImpl classSide >> defineComponent [
 
 { #category : #deployment }
 MolComponentImpl classSide >> deploy [
-	^MolComponentManager default deploymentServices deployComponentImplementation: self.
+
+	^ MolComponentManager default deploymentServices deployComponentImplementation: self
 ]
 
 { #category : #testing }
 MolComponentImpl classSide >> haveComponentType [
-	| traits |
+
+	^ self componentType notNil
+]
+
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> instanciate [
+
+	^ MolComponentManager default homeServices instanciateComponent: self
+]
+
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> instanciate: aComponentName [
+
+	^ MolComponentManager default homeServices instanciateComponent: self named: aComponentName
+]
+
+{ #category : #testing }
+MolComponentImpl classSide >> isComponentClass [
+
+	^ true
+]
+
+{ #category : #testing }
+MolComponentImpl classSide >> isOverrideComponentType [
+
+	^ self overridedComponentTypes notEmpty
+]
+
+{ #category : #private }
+MolComponentImpl classSide >> overridedComponentTypes [
+	| traits componentType |
 
 	traits := Set new.
 	self withAllSuperclassesDo: [ :c | 
 		(c  ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[traits addAll: c traitComposition allTraits].
 	].
-	^(traits includes: MolComponentType)
-]
-
-{ #category : #'life cycle' }
-MolComponentImpl classSide >> instanciate [
-	^MolComponentManager default homeServices instanciateComponent: self.
-]
-
-{ #category : #'life cycle' }
-MolComponentImpl classSide >> instanciate: aComponentName [
-	^MolComponentManager default homeServices instanciateComponent: self named: aComponentName.
-]
-
-{ #category : #testing }
-MolComponentImpl classSide >> isComponentClass [
-	^ true
+	componentType := self componentType.
+	^(traits select:[ :t | t isComponentType and:[t ~= componentType] ]) asOrderedCollection 
 ]
 
 { #category : #'life cycle' }
 MolComponentImpl classSide >> passivate [
-	^MolComponentManager default homeServices passivateComponent: self.
+
+	^ MolComponentManager default homeServices passivateComponent: self
 ]
 
 { #category : #'life cycle' }
 MolComponentImpl classSide >> passivate: aComponentName [
-	^MolComponentManager default homeServices passivateComponent: self named: aComponentName.
+
+	^ MolComponentManager default homeServices passivateComponent: self named: aComponentName
 ]
 
 { #category : #'life cycle' }
 MolComponentImpl classSide >> remove [
-	^MolComponentManager default homeServices removeComponent: self.
+
+	^ MolComponentManager default homeServices removeComponent: self
 ]
 
 { #category : #'life cycle' }
 MolComponentImpl classSide >> remove: aComponentName [
-	^MolComponentManager default homeServices removeComponent: self named: aComponentName.
+
+	^ MolComponentManager default homeServices removeComponent: self named: aComponentName
 ]
 
 { #category : #'start & stop' }
-MolComponentImpl classSide >> start [ 
-	^MolUtils startComponent: self
+MolComponentImpl classSide >> start [
+
+	^ MolUtils startComponent: self
 ]
 
 { #category : #'start & stop' }
 MolComponentImpl classSide >> start: aComponentName [
-	^MolUtils startComponent: self named: aComponentName
+
+	^ MolUtils startComponent: self named: aComponentName
 ]
 
 { #category : #'start & stop' }
 MolComponentImpl classSide >> stop [
-	^MolUtils stopComponent: self
+
+	^ MolUtils stopComponent: self
 ]
 
 { #category : #'start & stop' }
 MolComponentImpl classSide >> stop: aComponentName [
-	^MolUtils stopComponent: self named: aComponentName
+
+	^ MolUtils stopComponent: self named: aComponentName
 ]
 
 { #category : #deployment }
 MolComponentImpl classSide >> undeploy [
-	^MolComponentManager default deploymentServices undeployComponentImplementation: self.
+
+	^ MolComponentManager default deploymentServices undeployComponentImplementation: self
 ]
 
 { #category : #'component life cycle' }

@@ -1,8 +1,8 @@
 Class {
 	#name : #MolTestGeneratedComponentImpl,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolTestGeneratedComponentType + MolTestGeneratedComponentServices + MolTestGeneratedComponentEvents + MolTestGeneratedComponentParameters',
-	#classTraits : 'MolTestGeneratedComponentType classTrait + MolTestGeneratedComponentServices classTrait + MolTestGeneratedComponentEvents classTrait + MolTestGeneratedComponentParameters classTrait',
+	#traits : 'MolTestGeneratedComponentType + MolTestGeneratedComponentParameters + MolTestGeneratedComponentServices + MolTestGeneratedComponentEvents',
+	#classTraits : 'MolTestGeneratedComponentType classTrait + MolTestGeneratedComponentParameters classTrait + MolTestGeneratedComponentServices classTrait + MolTestGeneratedComponentEvents classTrait',
 	#category : #'Molecule-Tests-Resources - Generated'
 }
 

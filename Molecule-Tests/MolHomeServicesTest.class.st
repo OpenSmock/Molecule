@@ -115,6 +115,93 @@ MolHomeServicesTest >> testInstanciateComponentNamed [
 	self assert: component servicesProviders notEmpty.
 ]
 
+{ #category : #'test - errors' }
+MolHomeServicesTest >> testInstanciateComponentWithOverridedInstanciateTypeAndSameName [
+	"Test exception appear"
+	| manager error |
+
+	error := nil.
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentChildImpl.
+
+	"normal case"
+	manager homeServices instanciateComponent: MolCompleteComponentImpl.
+	error := nil.
+	[manager homeServices instanciateComponent: MolCompleteComponentChildImpl named: #compB] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: error isNil.
+	 manager homeServices removeComponent: MolCompleteComponentImpl.
+	 manager homeServices removeComponent: MolCompleteComponentChildImpl named: #compB.
+	
+	"error case"
+	manager homeServices instanciateComponent: MolCompleteComponentImpl.
+	error := nil.
+	[manager homeServices instanciateComponent: MolCompleteComponentChildImpl] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: ComponentProvidedServicesAlreadyExistsError).
+]
+
+{ #category : #'test - errors' }
+MolHomeServicesTest >> testInstanciateComponentWithSameNameAndServices [
+	"Test exception appear"
+	| manager error |
+
+	error := nil.
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponent2Impl.
+	
+	"normal case"
+	manager homeServices instanciateComponent: MolCompleteComponentImpl.
+	error := nil.
+	[manager homeServices instanciateComponent: MolCompleteComponent2Impl named: #compB] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: error isNil.
+	 manager homeServices removeComponent: MolCompleteComponentImpl.
+	 manager homeServices removeComponent: MolCompleteComponent2Impl named: #compB.
+	
+	"error case"
+	manager homeServices instanciateComponent: MolCompleteComponentImpl.
+	error := nil.
+	[manager homeServices instanciateComponent: MolCompleteComponent2Impl] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: ComponentProvidedServicesAlreadyExistsError).
+]
+
+{ #category : #'test - errors' }
+MolHomeServicesTest >> testInstanciateComponentWithSameNameAndType [
+	"Test exception appear"
+	| manager error |
+
+	error := nil.
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl2.
+	
+	"normal case"
+	manager homeServices instanciateComponent: MolBasicComponentImpl.
+	error := nil.
+	[manager homeServices instanciateComponent: MolBasicComponentImpl2 named: #compB] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: error isNil.
+	 manager homeServices removeComponent: MolBasicComponentImpl.
+	 manager homeServices removeComponent: MolBasicComponentImpl2 named: #compB.
+	
+	"error case"
+	manager homeServices instanciateComponent: MolBasicComponentImpl.
+	error := nil.
+	[manager homeServices instanciateComponent: MolBasicComponentImpl2] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: ComponentAlreadyExistsError).
+]
+
 { #category : #tests }
 MolHomeServicesTest >> testPassivateComponent [
 	"Test Component properties after passivation"
@@ -224,36 +311,36 @@ MolHomeServicesTest >> testSeveralComponentsLifecycle [
 	manager := MolComponentManager default.
 	
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl2.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
 
 	"Test method instanciateAllComponents"
 	manager homeServices instanciateAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl2).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl2).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolCompleteComponentImpl).
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl).
+	self assert: (manager homeServices isWaitingForActivation: MolCompleteComponentImpl).
 
 	"Test method activateAllComponents"
 	manager homeServices activateAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl2).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl) not.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl2) not.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolCompleteComponentImpl).
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl) not.
+	self assert: (manager homeServices isWaitingForActivation: MolCompleteComponentImpl) not.
 
 	"Test method passivateAllComponents"
 	manager homeServices passivateAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl2).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl2).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolCompleteComponentImpl).
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl).
+	self assert: (manager homeServices isWaitingForActivation: MolCompleteComponentImpl).
 	
 	"Test method removeAllComponents"
 	manager homeServices removeAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl) not.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl2) not.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl) not.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl2) not.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl) not.
+	self assert: (MolUtils isInstanciateComponentOf: MolCompleteComponentImpl) not.
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl) not.
+	self assert: (manager homeServices isWaitingForActivation: MolCompleteComponentImpl) not.
 ]
 
 { #category : #tests }
@@ -264,101 +351,101 @@ MolHomeServicesTest >> testSeveralComponentsLifecycleWithName [
 	manager := MolComponentManager default.
 	
 	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl2.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl2.
 
-	manager homeServices instanciateComponent: MolBasicSubComponentImpl named: #component1.
-	manager homeServices instanciateComponent: MolBasicSubComponentImpl.
-	manager homeServices instanciateComponent: MolBasicSubComponentImpl2 named: #component2.
+	manager homeServices instanciateComponent: MolBasicComponentImpl named: #component1.
+	manager homeServices instanciateComponent: MolBasicComponentImpl.
+	manager homeServices instanciateComponent: MolBasicComponentImpl2 named: #component2.
 
 	"Test method activateAllComponents"
 	manager homeServices activateAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl named: #component1).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl2 named: #component2).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl named: #component1) not.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl) not.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl2 named: #component2) not.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #component1).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl2 named: #component2).
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl named: #component1) not.
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl) not.
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl2 named: #component2) not.
 	
 	"Test method passivateAllComponents"
 	manager homeServices passivateAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl named: #component1).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl2 named: #component2).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl named: #component1).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl2 named: #component2).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #component1).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl2 named: #component2).
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl named: #component1).
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl).
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl2 named: #component2).
 	
 	manager homeServices removeAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl named: #component1) not.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl) not.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl2 named: #component2) not.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #component1) not.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl) not.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl2 named: #component2) not.
 ]
 
-{ #category : #tests }
+{ #category : #'test - errors' }
 MolHomeServicesTest >> testStartAndStopComponentsAlreadyExists [
 	"Test exception appear"
 	| manager error |
 
 	error := nil.
 	manager := MolComponentManager default.
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
 	
-	manager homeServices instanciateComponent: MolBasicSubComponentImpl.
-	[manager homeServices instanciateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+	manager homeServices instanciateComponent: MolBasicComponentImpl.
+	[manager homeServices instanciateComponent: MolBasicComponentImpl] on: Error do:[ :e |
 		error := e.
 	].
 	self assert: (error isKindOf: ComponentAlreadyExistsError).
 	
-	manager homeServices activateComponent: MolBasicSubComponentImpl.
-	[manager homeServices activateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+	manager homeServices activateComponent: MolBasicComponentImpl.
+	[manager homeServices activateComponent: MolBasicComponentImpl] on: Error do:[ :e |
 		error := e.
 	].
 	self assert: (error isKindOf: ComponentAlreadyActivatedError).
 	
-	manager homeServices passivateComponent: MolBasicSubComponentImpl.
-	[manager homeServices passivateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+	manager homeServices passivateComponent: MolBasicComponentImpl.
+	[manager homeServices passivateComponent: MolBasicComponentImpl] on: Error do:[ :e |
 		error := e.
 	].
 	self assert: (error isKindOf: ComponentAlreadyPassivatedError).
 	
 	error := nil.
-	manager homeServices removeComponent: MolBasicSubComponentImpl.
-	[manager homeServices removeComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+	manager homeServices removeComponent: MolBasicComponentImpl.
+	[manager homeServices removeComponent: MolBasicComponentImpl] on: Error do:[ :e |
 		error := e.
 	].
 	self assert: (error isKindOf: ComponentNotFoundError).
 ]
 
-{ #category : #tests }
+{ #category : #'test - errors' }
 MolHomeServicesTest >> testStartAndStopComponentsNoExist [
 	"Test exception appear"
 	| manager error |
 
 	error := nil.
 	manager := MolComponentManager default.
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
 	
 	error := nil.
-	[manager homeServices activateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+	[manager homeServices activateComponent: MolBasicComponentImpl] on: Error do:[ :e |
 		error := e.
 	].
 	self assert: (error isKindOf: ComponentNotFoundError).
 
 	error := nil.
-	[manager homeServices passivateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+	[manager homeServices passivateComponent: MolBasicComponentImpl] on: Error do:[ :e |
 		error := e.
 	].
 	self assert: (error isKindOf: ComponentNotFoundError).
 
 	error := nil.
-	[manager homeServices removeComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+	[manager homeServices removeComponent: MolBasicComponentImpl] on: Error do:[ :e |
 		error := e.
 	].
 	self assert: (error isKindOf: ComponentNotFoundError).
 ]
 
-{ #category : #tests }
+{ #category : #'test - errors' }
 MolHomeServicesTest >> testStartNotDeployedComponent [
 	"Test exception appear"
 	| manager error |
@@ -367,7 +454,7 @@ MolHomeServicesTest >> testStartNotDeployedComponent [
 	manager := MolComponentManager default.
 	
 	error := nil.
-	[manager homeServices instanciateComponent: MolBasicSubComponentImpl] on: Error do:[ :e |
+	[manager homeServices instanciateComponent: MolBasicComponentImpl] on: Error do:[ :e |
 		error := e.
 	].
 
@@ -382,29 +469,29 @@ MolHomeServicesTest >> testSubComponentLifecycle [
 	manager := MolComponentManager default.
 	
 	"Deployment"
-	manager deploymentServices  deployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices  deployComponentImplementation: MolBasicComponentImpl.
 	self assert: manager homeServices deployedComponents notEmpty.
 	
 	"Instanciation"
-	component := manager homeServices instanciateComponent: MolBasicSubComponentImpl.
-	self assert: component class equals: MolBasicSubComponentImpl.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl).
+	component := manager homeServices instanciateComponent: MolBasicComponentImpl.
+	self assert: component class equals: MolBasicComponentImpl.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl).
 	
 	"Activation"
-	manager homeServices activateComponent: MolBasicSubComponentImpl.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl) not.
+	manager homeServices activateComponent: MolBasicComponentImpl.
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl) not.
 	
 	"Passivation"
-	manager homeServices passivateComponent: MolBasicSubComponentImpl.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl).
+	manager homeServices passivateComponent: MolBasicComponentImpl.
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl).
 	
 	"Deletion"
-	manager homeServices removeComponent: MolBasicSubComponentImpl.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl) not.
+	manager homeServices removeComponent: MolBasicComponentImpl.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl) not.
 	
 	"Undeployment"
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices undeployComponentImplementation: MolBasicComponentImpl.
 	self assert: manager homeServices deployedComponents isEmpty.
 ]
 
@@ -416,29 +503,29 @@ MolHomeServicesTest >> testSubComponentLifecycleWithName [
 	manager := MolComponentManager default.
 	
 	"Deployment"
-	manager deploymentServices  deployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices  deployComponentImplementation: MolBasicComponentImpl.
 	self assert: manager homeServices deployedComponents notEmpty.
 	
 	"Instanciation"
-	manager homeServices instanciateComponent: MolBasicSubComponentImpl named: #myComp.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl named: #myComp).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl named: #myComp).
+	manager homeServices instanciateComponent: MolBasicComponentImpl named: #myComp.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #myComp).
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl named: #myComp).
 	
 	"Activation"
-	manager homeServices activateComponent: MolBasicSubComponentImpl named: #myComp.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl named: #myComp) not.
+	manager homeServices activateComponent: MolBasicComponentImpl named: #myComp.
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl named: #myComp) not.
 	
 	"Passivation"
-	manager homeServices passivateComponent: MolBasicSubComponentImpl named: #myComp.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl named: #myComp).
+	manager homeServices passivateComponent: MolBasicComponentImpl named: #myComp.
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl named: #myComp).
 	
 	"Deletion"
-	manager homeServices removeComponent: MolBasicSubComponentImpl named: #myComp.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicSubComponentImpl named: #myComp) not.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicSubComponentImpl named: #myComp) not.
+	manager homeServices removeComponent: MolBasicComponentImpl named: #myComp.
+	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl named: #myComp) not.
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #myComp) not.
 	
 	"Undeployment"
-	manager deploymentServices  undeployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices  undeployComponentImplementation: MolBasicComponentImpl.
 	self assert: manager homeServices deployedComponents isEmpty.
 ]
 
@@ -457,7 +544,7 @@ MolHomeServicesTest >> testThreadsToStartAndStopComponents [
 		manager homeServices activateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
 		] fork.
 	].
-	(Delay forSeconds: 1) wait.
+	(Delay forSeconds: 2) wait.
 
 	self assert: manager homeServices deployedComponents size equals: 1.
 	self assert: (manager homeServices deployedComponents at: MolCompleteComponentImpl) size equals: nb.
@@ -469,7 +556,7 @@ MolHomeServicesTest >> testThreadsToStartAndStopComponents [
 		manager homeServices removeComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
 		] fork.
 	].
-	(Delay forSeconds: 1) wait.
+	(Delay forSeconds: 2) wait.
 
 	self assert: manager homeServices deployedComponents size equals: 1.
 	self assert: (manager homeServices deployedComponents at: MolCompleteComponentImpl) isEmpty.

@@ -26,13 +26,13 @@ MolDeploymentServicesTest >> testDeployAlreadyDeployedImplementation [
 	manager := MolComponentManager default.	
 	self assert: manager homeServices deployedComponents isEmpty.
 	
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
 
 	self assert: manager homeServices deployedComponents size equals: 1.	
 	
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices undeployComponentImplementation: MolBasicComponentImpl.
+	manager deploymentServices undeployComponentImplementation: MolBasicComponentImpl.
 	self assert: manager homeServices deployedComponents size equals: 0.	
 ]
 
@@ -51,14 +51,14 @@ MolDeploymentServicesTest >> testDeployComponentImplementation [
 	self assert: isError equals: true.	
 
 	isError := false.
-	[manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl new] on: NotAComponentClassError do:[ :e | isError := true ].
+	[manager deploymentServices deployComponentImplementation: MolBasicComponentImpl new] on: NotAComponentClassError do:[ :e | isError := true ].
 	self assert: isError equals: true.	
 		
 	isError := false.
 	[manager deploymentServices deployComponentImplementation: MolAugmentedClassToAComponentWithoutType] on: NotATypedComponentClassError do:[ :e | isError := true ].
 	self assert: isError equals: true.	
 		
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
 	
 ]
 
@@ -70,18 +70,18 @@ MolDeploymentServicesTest >> testDeploymentServices [
 	
 	self assert: manager homeServices deployedComponents isEmpty.
 	
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
 	self assert: manager homeServices deployedComponents size equals: 1.
 	
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl2.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl2.
 	self assert: manager homeServices deployedComponents size equals: 2.
 	
-	manager deploymentServices deployComponentImplementation: MolBasicSubComponentImpl2.
+	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl2.
 	self assert: manager homeServices deployedComponents size equals: 2.
 	
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl2.
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl2.
+	manager deploymentServices undeployComponentImplementation: MolBasicComponentImpl.
+	manager deploymentServices undeployComponentImplementation: MolBasicComponentImpl2.
+	manager deploymentServices undeployComponentImplementation: MolBasicComponentImpl2.
 	self assert: manager homeServices deployedComponents isEmpty.
 	
 ]
@@ -101,14 +101,14 @@ MolDeploymentServicesTest >> testIsDeployedComponentImplementation [
 	self assert: isError equals: true.	
 		
 	isError := false.
-	[manager deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl new] on: NotAComponentClassError do:[ :e | isError := true ].
+	[manager deploymentServices isDeployedComponentImplementation: MolBasicComponentImpl new] on: NotAComponentClassError do:[ :e | isError := true ].
 	self assert: isError equals: true.	
 		
 	isError := false.
 	[manager deploymentServices isDeployedComponentImplementation: MolAugmentedClassToAComponentWithoutType] on: NotATypedComponentClassError do:[ :e | isError := true ].
 	self assert: isError equals: true.	
 	
-	self assert: (manager deploymentServices isDeployedComponentImplementation: MolBasicSubComponentImpl) equals: false.
+	self assert: (manager deploymentServices isDeployedComponentImplementation: MolBasicComponentImpl) equals: false.
 	
 ]
 
@@ -118,7 +118,7 @@ MolDeploymentServicesTest >> testUndeployANotDeployComponent [
 	
 	manager := MolComponentManager default.
 	
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl. "No error"
+	manager deploymentServices undeployComponentImplementation: MolBasicComponentImpl. "No error"
 	
 ]
 
@@ -137,12 +137,12 @@ MolDeploymentServicesTest >> testUndeployComponentImplementation [
 	self assert: isError equals: true.	
 
 	isError := false.
-	[manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl new] on: NotAComponentClassError do:[ :e | isError := true ].
+	[manager deploymentServices undeployComponentImplementation: MolBasicComponentImpl new] on: NotAComponentClassError do:[ :e | isError := true ].
 	self assert: isError equals: true.	
 		
 	isError := false.
 	[manager deploymentServices undeployComponentImplementation: MolAugmentedClassToAComponentWithoutType] on: NotATypedComponentClassError do:[ :e | isError := true ].
 	self assert: isError equals: true.	
 	
-	manager deploymentServices undeployComponentImplementation: MolBasicSubComponentImpl.
+	manager deploymentServices undeployComponentImplementation: MolBasicComponentImpl.
 ]

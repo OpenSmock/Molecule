@@ -52,6 +52,23 @@ MolLocatorServices >> resolveWaitingSubscriptions: aComponent [
 ]
 
 { #category : #searching }
+MolLocatorServices >> searchComponentTypeImplementorFor: aComponentType [
+	^self searchComponentTypeImplementorFor: aComponentType named: #default
+]
+
+{ #category : #searching }
+MolLocatorServices >> searchComponentTypeImplementorFor: aComponentType named: aSymbol [
+	| comps |
+	
+	comps := MolComponentManager default homeServices deployedComponents.
+	comps keysDo: 
+			[:comp | 
+			((comp componentType = aComponentType) and: [(comps at: comp) includesKey: aSymbol]) 
+				ifTrue: [^(comps at: comp) at: aSymbol]].
+	^nil
+]
+
+{ #category : #searching }
 MolLocatorServices >> searchEventsSubscriberFor: anEventsTrait [
 	^self searchEventsSubscriberFor: anEventsTrait named: #default
 ]

@@ -7,7 +7,7 @@ Trait {
 
 { #category : #'accessing - events' }
 MolCompleteComponentChild classSide >> consumedComponentEvents [
-<componentContract>	
+	<componentContract>	
 	^{ MolUsedChildEvents } 
 ]
 
@@ -19,13 +19,13 @@ MolCompleteComponentChild classSide >> producedComponentEvents [
 
 { #category : #'accessing - events' }
 MolCompleteComponentChild classSide >> providedComponentParameters [
-<componentContract>		
+	<componentContract>		
 	^{ MolUsedChildParameters }
 ]
 
 { #category : #'accessing - services' }
 MolCompleteComponentChild classSide >> providedComponentServices [
-<componentContract>	
+	<componentContract>	
 	^{ MolUsedChildServices } 
 ]
 
