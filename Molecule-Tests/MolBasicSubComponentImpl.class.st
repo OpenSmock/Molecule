@@ -1,11 +1,10 @@
 "
-I represent an implementation of a BasicComponent.
-I am a component implementation because I am a subclass of AbstractComponentImpl.
+I represent a subclass of  a BasicComponent.
+I am a component implementation because I am a subclass of BasicComponentImpl.
 "
 Class {
 	#name : #MolBasicSubComponentImpl,
-	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolBasicComponent',
+	#superclass : #MolBasicComponentImpl,
 	#classTraits : 'MolBasicComponent classTrait',
 	#category : #'Molecule-Tests-Resources - Components'
 }

@@ -1,9 +1,6 @@
-"
-I am  an other basic component implementation, used to test behavior of some global methods. 
-"
 Class {
 	#name : #MolBasicSubComponentImpl2,
-	#superclass : #MolAbstractComponentImpl,
+	#superclass : #MolBasicComponentImpl2,
 	#traits : 'MolBasicComponent',
 	#classTraits : 'MolBasicComponent classTrait',
 	#category : #'Molecule-Tests-Resources - Components'
