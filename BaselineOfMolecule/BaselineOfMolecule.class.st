@@ -1,12 +1,3 @@
-"
-Core
-	Molecule
-	
-All
-	Molecule
-	Molecule-Examples
-	Molecule-Tests
-"
 Class {
 	#name : #BaselineOfMolecule,
 	#superclass : #BaselineOf,
@@ -40,9 +31,9 @@ BaselineOfMolecule >> baseline: spec [
 BaselineOfMolecule >> postload: loader package: packageSpec [
 	"Reload new Molecule tools"
 
-	(Smalltalk includesKey: #MolComponentManager) ifFalse:[ ^self ].
-	(Smalltalk classNamed: #MolComponentManager) cleanUp.
-	(previousDynamicContractUpdateActivated == false) ifFalse:[
+	(Smalltalk globals includesKey: #MolComponentManager) ifFalse:[ ^self ].
+	(Smalltalk globals classNamed: #MolComponentManager) cleanUp.
+	previousDynamicContractUpdateActivated ifFalse:[
 		MolComponentFactory default activateDynamicContractUpdate.	
 	].
 ]
@@ -51,18 +42,19 @@ BaselineOfMolecule >> postload: loader package: packageSpec [
 BaselineOfMolecule >> preload: loader package: packageSpec [
 	"If a Molecule component system is running, confirm loading and cleanUp before installation of the new version"
 	
-	(Smalltalk includesKey: #MolComponentManager) ifFalse:[ ^self ].
-	(Smalltalk classNamed: #MolComponentManager) isRunningComponents ifTrue:[ 
-		(UITheme current
+	(Smalltalk globals includesKey: #MolComponentManager) ifFalse:[ ^self ].
+	previousDynamicContractUpdateActivated := false.
+	(Smalltalk globals classNamed: #MolComponentManager) isRunningComponents ifTrue:[ 
+		(Smalltalk ui theme
 		proceedIn: Morph new 
 		text: 'Warning, you are going to modify Molecule then components are started, do you want to continue ?'
 		title: 'Molecule - Loading a baseline') ifFalse:[ 
-			self flag:'PLA : How to stop the loading ? For the moment you should close the debug windows openend when Halt is call'.	
+			self flag:'PLA : How to stop the loading ? For the moment you should close the debug windows opened when Halt is call'.	
 			Halt now.
 		].
 	].
  
-	(Smalltalk classNamed: #MolComponentManager) cleanUp.
+	(Smalltalk globals classNamed: #MolComponentManager) cleanUp.
 	previousDynamicContractUpdateActivated := MolComponentFactory default isDynamicContractUpdateActivated.
 	MolComponentFactory default deactivateDynamicContractUpdate.
 ]
