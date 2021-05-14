@@ -452,15 +452,6 @@ MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass
 	traitList := self collectComponentConnectionTraits: aComponentClass.
 	missingTraits := aTraitList reject: [ :e | traitList includes: e ].
 	missingTraits ifNotEmpty: [self rebuildComponent: aComponentClass traitsAdding: missingTraits].
-
-	"eventParametersAndServices := self collectComponentConnectionTraits: aComponentClass."
-	"bool := false.
-	aTraitList do: [:e | (eventAndServices includes: e) ifFalse: [
-			bool := UIManager default
-								confirm:
-									'Used trait is not declared (' , e printString
-										, '), do you want to browse class ?']].
-	bool ifTrue: [aComponentClass browse]"
 ]
 
 { #category : #'dirty components' }
@@ -589,7 +580,7 @@ MolComponentFactory >> defineComponentTypeImplementors: aComponentType [
 
 	aComponentType isTrait ifFalse: [ ^ self ].
 	aComponentType isComponentType ifFalse: [ ^ self ].
-	aComponentType users do: [ :user | self defineComponent: user ].
+	aComponentType users copy do: [ :user | self defineComponent: user ].
 ]
 
 { #category : #'dirty components' }
@@ -814,6 +805,7 @@ MolComponentFactory >> initializePragmaAnnouncements [
 	"Component Implementation Observer"
 	SystemAnnouncer uniqueInstance when: ClassAdded send: #componentAddedAnnouncement: to: self.
 	SystemAnnouncer uniqueInstance when: ClassModifiedClassDefinition send: #componentChangedAnnouncement: to: self.
+	SystemAnnouncer uniqueInstance when: MethodAnnouncement send: #methodAnnouncement: to: self.
 ]
 
 { #category : #'initalize-release' }
@@ -842,6 +834,20 @@ MolComponentFactory >> isDynamicContractUpdateActivated [
 MolComponentFactory >> isDynamicContractUpdateActivated: aBoolean [
 
 	isDynamicContractUpdateActivated := aBoolean
+]
+
+{ #category : #'system annoucements' }
+MolComponentFactory >> methodAnnouncement: aMessage [
+
+	self flag:'PLA : tests pour supprimer les forks'.
+
+	(aMessage isKindOf:  MethodAdded) ifFalse:[^self].
+	aMessage classAffected isObsolete ifTrue:[^self].
+	aMessage classAffected isTrait ifFalse:[^self].
+	(aMessage classAffected traitComposition allTraits includes: MolComponentType classTrait) ifFalse:[^self].
+
+	"Adding new component contract pragma"
+	self contractChanged: (aMessage classAffected instanceSide).
 ]
 
 { #category : #'private - code generation' }
