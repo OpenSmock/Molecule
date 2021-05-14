@@ -11,17 +11,22 @@ Class {
 MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 	<script: 'self new cleanGeneratedClassesAndTraits'>
 
-	| removed |
-	removed := false.
+	| edited |
+	edited := false.
 
-	self class environment at: self generatedComponentClassSymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
-	self class environment at: self generatedComponentClass2SymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
-	self class environment at: self generatedComponentTypeSymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
-	self class environment at: self generatedComponentServicesSymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
-	self class environment at: self generatedComponentParametersSymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
-	self class environment at: self generatedComponentEventsSymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
+	self class environment at: self generatedComponentClassSymbolName ifPresent: [ :c | c removeFromSystem. edited := true].
+	self class environment at: self generatedComponentClass2SymbolName ifPresent: [ :c | c removeFromSystem. edited := true].
+	self class environment at: self generatedComponentTypeSymbolName ifPresent: [ :c | c removeFromSystem. edited := true].
+	self class environment at: self generatedComponentServicesSymbolName ifPresent: [ :c | c removeFromSystem. edited := true].
+	self class environment at: self generatedComponentParametersSymbolName ifPresent: [ :c | c removeFromSystem. edited := true].
+	self class environment at: self generatedComponentEventsSymbolName ifPresent: [ :c | c removeFromSystem. edited := true].
 	
-	removed ifTrue:[(Delay forMilliseconds: 100) wait].
+	(MolCompleteComponent usedComponentServices includes: MolUsedServices) ifFalse:[
+		MolComponentFactory addUsedServices: MolUsedServices in: MolCompleteComponent.
+		edited := true.
+	].
+	
+	edited ifTrue:[(Delay forMilliseconds: 100) wait].
 ]
 
 { #category : #utils }
@@ -119,46 +124,46 @@ MolComponentFactoryTest >> setUp [
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUpComponentAndType [
 	<script: 'self new setUpComponentAndType'>
-	| generated |
-	generated := false.
+	| edited |
+	edited := false.
 	
 	"Prepare or reset required test classes"
 	self class environment at: self generatedComponentTypeSymbolName ifAbsent: [ 
 		MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
-		generated := true.
+		edited := true.
 	].
  
 	self class environment at: self generatedComponentServicesSymbolName ifAbsent: [ 
 		MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: self generationTag.
-		generated := true.
+		edited := true.
 	].
 
 	self class environment at: self generatedComponentParametersSymbolName ifAbsent: [ 
 		MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: self generationTag.
-		generated := true.
+		edited := true.
 	].
 
 	self class environment at: self generatedComponentEventsSymbolName ifAbsent: [ 
 		MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: self generationTag.
-		generated := true.
+		edited := true.
 	].
 
 	self class environment at: self generatedComponentClassSymbolName ifAbsent: [
 		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationTag.
-		generated := true.
+		edited := true.
 	].
 
 	self class environment at: self generatedComponentClass2SymbolName ifAbsent: [
 		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClass2SymbolName in: self generationTag.
-		generated := true.
+		edited := true.
 	].
 
 	(MolCompleteComponent usedComponentServices includes: MolUsedServices) ifFalse:[
 		MolComponentFactory addUsedServices: MolUsedServices in: MolCompleteComponent.
-		generated := true.
+		edited := true.
 	].
 	
-	generated ifTrue:[(Delay forMilliseconds: 100) wait].
+	edited ifTrue:[(Delay forMilliseconds: 100) wait].
 ]
 
 { #category : #utils }
