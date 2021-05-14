@@ -9,11 +9,19 @@ Class {
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
-	self class environment at: #MolTestGeneratedComponentImpl ifPresent: [ :c | c removeFromSystem].
-	self class environment at: self generatedComponentTypeSymbolName ifPresent: [ :c | c removeFromSystem].
-	self class environment at: self generatedComponentServicesSymbolName ifPresent: [ :c | c removeFromSystem].
-	self class environment at: self generatedComponentParametersSymbolName ifPresent: [ :c | c removeFromSystem].
-	self class environment at: self generatedComponentEventsSymbolName ifPresent: [ :c | c removeFromSystem].
+	<script: 'self new cleanGeneratedClassesAndTraits'>
+
+	| removed |
+	removed := false.
+
+	self class environment at: self generatedComponentClassSymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
+	self class environment at: self generatedComponentClass2SymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
+	self class environment at: self generatedComponentTypeSymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
+	self class environment at: self generatedComponentServicesSymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
+	self class environment at: self generatedComponentParametersSymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
+	self class environment at: self generatedComponentEventsSymbolName ifPresent: [ :c | c removeFromSystem. removed := true].
+	
+	removed ifTrue:[(Delay forMilliseconds: 100) wait].
 ]
 
 { #category : #utils }
@@ -34,6 +42,16 @@ MolComponentFactoryTest >> createInstanceMethod: aSelector in: aClassOrTrait pro
 { #category : #accessing }
 MolComponentFactoryTest >> generatedComponentClass [
 	^self class environment at: self generatedComponentClassSymbolName
+]
+
+{ #category : #accessing }
+MolComponentFactoryTest >> generatedComponentClass2 [
+	^self class environment at: self generatedComponentClass2SymbolName
+]
+
+{ #category : #accessing }
+MolComponentFactoryTest >> generatedComponentClass2SymbolName [
+	^ #MolTestGeneratedComponentImpl
 ]
 
 { #category : #accessing }
@@ -89,34 +107,48 @@ MolComponentFactoryTest >> longWait [
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUp [
-	self setUpComponentAndType 
+	self cleanGeneratedClassesAndTraits.
+	self setUpComponentAndType.
 ]
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUpComponentAndType [
 	<script: 'self new setUpComponentAndType'>
+	| generated |
+	generated := false.
+	
 	"Prepare or reset required test classes"
 	self class environment at: self generatedComponentTypeSymbolName ifAbsent: [ 
 		MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
+		generated := true.
 	].
  
 	self class environment at: self generatedComponentServicesSymbolName ifAbsent: [ 
 		MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: 'Molecule-Tests-Resources - Generated'.
+		generated := true.
 	].
 
 	self class environment at: self generatedComponentParametersSymbolName ifAbsent: [ 
 		MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: 'Molecule-Tests-Resources - Generated'.
+		generated := true.
 	].
 
 	self class environment at: self generatedComponentEventsSymbolName ifAbsent: [ 
 		MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: 'Molecule-Tests-Resources - Generated'.
+		generated := true.
 	].
 
 	self class environment at: self generatedComponentClassSymbolName ifAbsent: [
 		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
+		generated := true.
 	].
 
-	MolComponentFactory addUsedServices: MolUsedServices in: MolCompleteComponent.
+	(MolCompleteComponent usedComponentServices includes: MolUsedServices) ifFalse:[
+		MolComponentFactory addUsedServices: MolUsedServices in: MolCompleteComponent.
+		generated := true.
+	].
+	
+	generated ifTrue:[(Delay forMilliseconds: 100) wait].
 ]
 
 { #category : #utils }
@@ -127,7 +159,7 @@ MolComponentFactoryTest >> smallWait [
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> tearDown [
-	self setUpComponentAndType
+	self cleanGeneratedClassesAndTraits.
 ]
 
 { #category : #test }
@@ -746,7 +778,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 	| class componentClassNameSymbol |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
-	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
+	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 
 	class := MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	class := self class environment at: componentClassNameSymbol.
@@ -775,7 +807,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
-	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
+	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	componentClass := self class environment at: componentClassNameSymbol.
@@ -819,7 +851,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlt
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
-	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
+	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	componentClass := self class environment at: componentClassNameSymbol.
@@ -864,7 +896,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
-	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
+	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
 	componentClass := self class environment at: componentClassNameSymbol.
@@ -920,7 +952,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
-	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
+	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	
@@ -972,7 +1004,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative3 [
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
-	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
+	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	
@@ -1018,7 +1050,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	| componentClassNameSymbol componentClass | 
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	self cleanGeneratedClassesAndTraits.
-	componentClassNameSymbol := #MolTestGeneratedComponentImpl.
+	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
 	
