@@ -230,7 +230,7 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	MolComponentFactory default dirtyComponents removeAll.
 	
 	"remove the testing class, and create a new component with Type, check if the component in on the dirty components list"
-	self class environment at: self generatedComponentClassSymbolName removeFromSystem.
+ 	(self class environment at: self generatedComponentClassSymbolName) removeFromSystem.
 	self smallWait.
 	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationTag.
 	
@@ -302,7 +302,7 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	"
 	"self timeLimit: (Duration seconds: 15)."
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
-	self cleanGeneratedClassesAndTraits.
+
 	MolTestComponentImplA setTraitComposition: #().
 	MolTestComponentImplB setTraitComposition: #().
 	MolTestComponentImplC setTraitComposition: #().
@@ -794,7 +794,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 	"
 	| class componentClassNameSymbol |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
-	self cleanGeneratedClassesAndTraits.
+
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 
 	class := MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
@@ -823,7 +823,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	- Add a Trait"
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
-	self cleanGeneratedClassesAndTraits.
+
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
@@ -867,7 +867,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlt
 	"
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
-	self cleanGeneratedClassesAndTraits.
+
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
@@ -912,7 +912,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	- Add API into Services, Events and Parameters"
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
-	self cleanGeneratedClassesAndTraits.
+
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
@@ -968,7 +968,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 	- Create Component Class directly with the Type"
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
-	self cleanGeneratedClassesAndTraits.
+
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
@@ -1020,7 +1020,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative3 [
 	
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
-	self cleanGeneratedClassesAndTraits.
+
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
@@ -1066,7 +1066,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	
 	| componentClassNameSymbol componentClass | 
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
-	self cleanGeneratedClassesAndTraits.
+
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
 	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
