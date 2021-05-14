@@ -9,6 +9,7 @@ Class {
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
+	"Smalltalk fixObsoleteReferences."
 	<script: 'self new cleanGeneratedClassesAndTraits'>
 
 	| edited |
@@ -117,8 +118,8 @@ MolComponentFactoryTest >> longWait [
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUp [
+	MolComponentManager cleanUp.
 	self cleanGeneratedClassesAndTraits.
-	self setUpComponentAndType.
 ]
 
 { #category : #'setUp-tearDown' }
@@ -175,6 +176,7 @@ MolComponentFactoryTest >> smallWait [
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> tearDown [
 	self cleanGeneratedClassesAndTraits.
+	MolComponentManager cleanUp.
 ]
 
 { #category : #test }
@@ -213,7 +215,6 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	MolComponentFactory default deactivateDynamicContractUpdate: false.
 	
 	"remove the testing class, and create a new component without Type, when the type is added check if the component in on the dirty components list"
-	self class environment at: self generatedComponentClassSymbolName ifPresent: [ (self class environment at: self generatedComponentClassSymbolName) removeFromSystem ].
 	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: self generationTag.
 	
 	"Waiting for event callback"
@@ -229,7 +230,8 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	MolComponentFactory default dirtyComponents removeAll.
 	
 	"remove the testing class, and create a new component with Type, check if the component in on the dirty components list"
-	self class environment at: self generatedComponentClassSymbolName ifPresent: [ (self class environment at: self generatedComponentClassSymbolName) removeFromSystem ].
+	self class environment at: self generatedComponentClassSymbolName removeFromSystem.
+	self smallWait.
 	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationTag.
 	
 	"Waiting for event callback"
