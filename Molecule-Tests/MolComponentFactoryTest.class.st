@@ -317,7 +317,7 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	MolComponentFactory addProvidedServices: self generatedComponentServicesTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addUsedServices: self generatedComponentServicesTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProvidedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait. 
-	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait. 
+	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait. 
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	
@@ -848,7 +848,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	"Add a trait"
 	componentClass addToComposition: MolTestNoComponentTraitA.
 	self assert: (componentClass canPerform: #methodOfNoComponentTrait).
-	self assert: (componentClass traitComposition members size = 5).
+	self assert: (componentClass traitComposition members size) equals: 5.
 	self assert: (componentClass traitComposition includesTrait: MolTestNoComponentTraitA).
 	self assert: (componentClass traitComposition includesTrait: MolComponentType).
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentServicesTrait).

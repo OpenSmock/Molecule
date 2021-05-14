@@ -488,10 +488,15 @@ MolComponentFactory >> componentAddedAnnouncement: aClassAddedAnnouncement [
 MolComponentFactory >> componentChanged: aChangedClass [
 	"Update a ComponentClass triggered by a class description change"
 	aChangedClass isTrait ifTrue:[^self].
+	aChangedClass isObsolete ifTrue:[^self].
 	aChangedClass isComponentClass ifTrue:[		
 		self isDynamicContractUpdateActivated ifTrue: [ 
-			"need to fork the definition because new traits are not already injected here to the component"
-			[self defineComponent: aChangedClass] fork. 
+			('Pharo8.*.*' match: Smalltalk version) ifTrue:[
+				"need to fork the definition because new traits are not already injected here to the component"
+				[self defineComponent: aChangedClass] fork.
+			] ifFalse:[
+				self defineComponent: aChangedClass.
+			]. 
 		] ifFalse: [ dirtyComponents add: aChangedClass].
 	].
 ]
@@ -508,11 +513,16 @@ MolComponentFactory >> contractChanged: aComponentType [
 	
 	aComponentType ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
 	aComponentType isTrait ifFalse:[ "Only Component Type are supported" ^ self ].
+	aComponentType isObsolete ifTrue:[^self].
 	aComponentType = MolComponentType ifTrue:[ "Exception for the ComponentType Trait (Abstract ComponentType)" ^ self ].
 
 	self isDynamicContractUpdateActivated ifTrue: [ 
-		"need to fork the definition because new traits are not already injected here to the component"
-		[ self defineComponentTypeImplementors: aComponentType ] fork 
+		('Pharo8.*.*' match: Smalltalk version) ifTrue:[
+			"need to fork the definition because new traits are not already injected here to the component"
+			[self defineComponentTypeImplementors: aComponentType] fork.
+		] ifFalse:[
+			self defineComponentTypeImplementors: aComponentType.
+		]. 
 	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
 ]
 
