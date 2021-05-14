@@ -99,6 +99,11 @@ MolComponentFactoryTest >> generatedComponentTypeTrait [
 	^self class environment at: self generatedComponentTypeSymbolName
 ]
 
+{ #category : #accessing }
+MolComponentFactoryTest >> generationTag [
+	^'Molecule-Tests-Resources - Generated'
+]
+
 { #category : #utils }
 MolComponentFactoryTest >> longWait [
 
@@ -119,32 +124,32 @@ MolComponentFactoryTest >> setUpComponentAndType [
 	
 	"Prepare or reset required test classes"
 	self class environment at: self generatedComponentTypeSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
+		MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
 		generated := true.
 	].
  
 	self class environment at: self generatedComponentServicesSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: 'Molecule-Tests-Resources - Generated'.
+		MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: self generationTag.
 		generated := true.
 	].
 
 	self class environment at: self generatedComponentParametersSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: 'Molecule-Tests-Resources - Generated'.
+		MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: self generationTag.
 		generated := true.
 	].
 
 	self class environment at: self generatedComponentEventsSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: 'Molecule-Tests-Resources - Generated'.
+		MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: self generationTag.
 		generated := true.
 	].
 
 	self class environment at: self generatedComponentClassSymbolName ifAbsent: [
-		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
+		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationTag.
 		generated := true.
 	].
 
 	self class environment at: self generatedComponentClass2SymbolName ifAbsent: [
-		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClass2SymbolName in: 'Molecule-Tests-Resources - Generated'.
+		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClass2SymbolName in: self generationTag.
 		generated := true.
 	].
 
@@ -204,7 +209,7 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	
 	"remove the testing class, and create a new component without Type, when the type is added check if the component in on the dirty components list"
 	self class environment at: self generatedComponentClassSymbolName ifPresent: [ (self class environment at: self generatedComponentClassSymbolName) removeFromSystem ].
-	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: self generationTag.
 	
 	"Waiting for event callback"
 	self smallWait.
@@ -220,7 +225,7 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	
 	"remove the testing class, and create a new component with Type, check if the component in on the dirty components list"
 	self class environment at: self generatedComponentClassSymbolName ifPresent: [ (self class environment at: self generatedComponentClassSymbolName) removeFromSystem ].
-	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationTag.
 	
 	"Waiting for event callback"
 	self smallWait.
@@ -352,7 +357,7 @@ MolComponentFactoryTest >> testCreateComponentClassWithType [
 		(self class environment at: self generatedComponentClassSymbolName) removeFromSystem 
 	].
 
-	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationTag.
 
 	class := self class environment at: self generatedComponentClassSymbolName.
 	self assert: class notNil.
@@ -371,7 +376,7 @@ MolComponentFactoryTest >> testCreateComponentClassWithoutType [
 		(self class environment at: self generatedComponentClassSymbolName) removeFromSystem.
 	].
 
-	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: self generationTag.
 
 	class := self class environment at: self generatedComponentClassSymbolName.
 	self assert: class notNil.
@@ -588,7 +593,7 @@ MolComponentFactoryTest >> testCreateComponentType [
 		(self class environment at: self generatedComponentTypeSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
 
 	trait := self class environment at: self generatedComponentTypeSymbolName.
 	self assert: trait notNil.
@@ -612,7 +617,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentEvents [
 		(self class environment at: self generatedComponentEventsSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: self generationTag.
 
 	trait := self class environment at: self generatedComponentEventsSymbolName.
 	self assert: trait notNil.
@@ -636,7 +641,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentParameters [
 		(self class environment at: self generatedComponentParametersSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: self generationTag.
 
 	trait := self class environment at: self generatedComponentParametersSymbolName.
 	self assert: trait notNil.
@@ -660,7 +665,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentServices [
 		(self class environment at: self generatedComponentServicesSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: self generationTag.
 
 	trait := self class environment at: self generatedComponentServicesSymbolName.
 	self assert: trait notNil.
@@ -785,7 +790,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 
-	class := MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
+	class := MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
 	class := self class environment at: componentClassNameSymbol.
 	class comment: 'I am added and removed by test: ', self printString.
 	
@@ -794,7 +799,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 	self assert: (class canPerform: #methodOfNoComponentTrait).
 	
 	"Set the component type and check if the existing Trait is already functionnal"
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
 	class addToComposition: self generatedComponentTypeTrait.
 	
 	self smallWait.
@@ -814,10 +819,10 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
 	componentClass setTraitComposition: self generatedComponentTypeTrait.
 	
 	self testCreateEmptyComponentServices.
@@ -858,13 +863,13 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlt
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	"Add a trait"
 	componentClass setTraitComposition: MolTestNoComponentTraitA.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
 	componentClass addToComposition: self generatedComponentTypeTrait.
 	
 	self testCreateEmptyComponentServices.
@@ -903,10 +908,10 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentNamed: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
 	componentClass setTraitComposition: self generatedComponentTypeTrait.
 	
 	self testCreateEmptyComponentServices.
@@ -959,7 +964,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
 	
 	self testCreateEmptyComponentServices.
 	self testCreateEmptyComponentParameters.
@@ -979,7 +984,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 	self createInstanceMethod: 'testGeneratedEventA' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 	self createInstanceMethod: 'testGeneratedEventB' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 
-	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationTag.
 	componentClass := self class environment at: componentClassNameSymbol.
 
 	self longWait.
@@ -1011,9 +1016,9 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative3 [
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
 	
-	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationTag.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	self testCreateComponentServices.
@@ -1057,9 +1062,9 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	self cleanGeneratedClassesAndTraits.
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
 	
-	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: 'Molecule-Tests-Resources - Generated'.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationTag.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	self testCreateComponentServices.
