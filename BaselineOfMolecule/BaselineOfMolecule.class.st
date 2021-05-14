@@ -33,7 +33,7 @@ BaselineOfMolecule >> postload: loader package: packageSpec [
 
 	(Smalltalk globals includesKey: #MolComponentManager) ifFalse:[ ^self ].
 	(Smalltalk globals classNamed: #MolComponentManager) cleanUp.
-	previousDynamicContractUpdateActivated ifFalse:[
+	(previousDynamicContractUpdateActivated ifNil:[false]) ifFalse:[
 		MolComponentFactory default activateDynamicContractUpdate.	
 	].
 ]
