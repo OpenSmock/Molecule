@@ -143,6 +143,11 @@ MolComponentFactoryTest >> setUpComponentAndType [
 		generated := true.
 	].
 
+	self class environment at: self generatedComponentClass2SymbolName ifAbsent: [
+		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClass2SymbolName in: 'Molecule-Tests-Resources - Generated'.
+		generated := true.
+	].
+
 	(MolCompleteComponent usedComponentServices includes: MolUsedServices) ifFalse:[
 		MolComponentFactory addUsedServices: MolUsedServices in: MolCompleteComponent.
 		generated := true.
