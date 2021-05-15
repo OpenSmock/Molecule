@@ -467,17 +467,18 @@ MolComponentFactory >> collectComponentConnectionTraits: aComponentOrAComponentC
 	]
 ]
 
-{ #category : #'system annoucements' }
+{ #category : #announcements }
 MolComponentFactory >> componentAddedAnnouncement: aClassAddedAnnouncement [
-	
+
 	| classOrTraitAdded |
 	classOrTraitAdded := aClassAddedAnnouncement classAdded.
-	self componentChanged: classOrTraitAdded.
+	self componentChanged: classOrTraitAdded
 ]
 
-{ #category : #'system annoucements' }
+{ #category : #announcements }
 MolComponentFactory >> componentChanged: aChangedClass [
 	"Update a ComponentClass triggered by a class description change"
+	
 	aChangedClass isTrait ifTrue:[^self].
 	aChangedClass isObsolete ifTrue:[^self].
 	aChangedClass isComponentClass ifTrue:[		
@@ -492,14 +493,16 @@ MolComponentFactory >> componentChanged: aChangedClass [
 	].
 ]
 
-{ #category : #'system annoucements' }
+{ #category : #announcements }
 MolComponentFactory >> componentChangedAnnouncement: aClassModifiedClassDefinitionAnnouncement [
 
-	aClassModifiedClassDefinitionAnnouncement ifNil: [ ^ self error: '[Molecule] Error on Component changed notification.' ].
-	self componentChanged: aClassModifiedClassDefinitionAnnouncement newClassDefinition.
+	aClassModifiedClassDefinitionAnnouncement ifNil: [ 
+		^ self error: '[Molecule] Error on modified Component notification.'.
+	].
+	self componentChanged: aClassModifiedClassDefinitionAnnouncement newClassDefinition
 ]
 
-{ #category : #'system annoucements' }
+{ #category : #announcements }
 MolComponentFactory >> contractChanged: aComponentType [
 	
 	aComponentType ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
@@ -513,16 +516,15 @@ MolComponentFactory >> contractChanged: aComponentType [
 	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
 ]
 
-{ #category : #'system annoucements' }
-MolComponentFactory >> contractChangedAnnouncement: aMessage [
+{ #category : #announcements }
+MolComponentFactory >> contractChangedAnnouncement: aPragmaAnnouncement [
 	| aComponentType |
 	
-	aMessage ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
-	aMessage pragma ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
-	aMessage pragma method ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
-	aMessage pragma method methodClass ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
+	(aPragmaAnnouncement isNil or:[aPragmaAnnouncement pragma isNil or:[aPragmaAnnouncement pragma method isNil or:[aPragmaAnnouncement pragma method methodClass isNil]]]) ifTrue:[
+		^ self error: '[Molecule] Error on changed contract announcement.' 		
+	].
 
-	aComponentType := aMessage pragma method methodClass instanceSide.
+	aComponentType := aPragmaAnnouncement pragma method methodClass instanceSide.
 	self contractChanged: aComponentType.
 ]
 
@@ -781,7 +783,7 @@ MolComponentFactory >> getUsedServicesSourceCodeFor: aTrait selector: selector [
 	^ writeStream
 ]
 
-{ #category : #'initalize-release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> initialize [
 
 	super initialize.
@@ -792,14 +794,14 @@ MolComponentFactory >> initialize [
 	self initializeSystemAnnouncements
 ]
 
-{ #category : #'initalize-release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> initializePragmaAnnouncements [
 	"Component Type Observer"
 	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = #componentContract ]) reset.
 	pragmaCollector announcer when: PragmaAnnouncement send: #contractChangedAnnouncement: to: self.
 ]
 
-{ #category : #'initalize-release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> initializeSystemAnnouncements [
 	"Activate (or desactivate) component contract update when iceberge is used (or not)"
 	| announcer |
@@ -853,7 +855,7 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsAdding: aTraitsLi
 	].
 ]
 
-{ #category : #'initalize-release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> release [
 
 	self releaseSystemAnnouncements.
@@ -865,18 +867,20 @@ MolComponentFactory >> release [
 	super release
 ]
 
-{ #category : #'initalize-release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> releasePragmaAnnouncements [
+
 	pragmaCollector release.
-	pragmaCollector := nil.
+	pragmaCollector := nil
 ]
 
-{ #category : #'initalize-release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> releaseSystemAnnouncements [
+
 	| announcer |
 	announcer := SystemAnnouncer uniqueInstance.
 	announcer ifNil: [ ^ self ].
-	announcer unsubscribe: self.
+	announcer unsubscribe: self
 ]
 
 { #category : #'code generation' }
