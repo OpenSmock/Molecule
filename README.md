@@ -22,7 +22,7 @@ Pharo 8 and Pharo 9 :
 ```smalltalk
 Metacello new
    baseline: 'Molecule';
-   repository: 'github://OpenSmock/Molecule/src';
+   repository: 'github://OpenSmock/Molecule';
    load.
 ```
 Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
