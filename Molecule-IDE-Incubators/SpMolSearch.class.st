@@ -91,14 +91,19 @@ SpMolSearch >> elements [
 
 { #category : #accessing }
 SpMolSearch >> elements: someElements [
-	elements := someElements collect: 
-		[ :m | 
-		RSBitmap new 
-		model:m; 
-		"form: (Smalltalk ui icons iconNamed: #systemIcon); "
-		form: (ImageReadWriter formFromStream: './assets/miniComp.png' asFileReference binaryReadStream);
-		size: 10.
-		 ] as: RSGroup. 
+	| imgFileRef img |
+
+	"Load Component schema image"
+	imgFileRef := './assets/miniComp.png' asFileReference.
+	imgFileRef exists ifTrue:[
+		img := ImageReadWriter formFromStream: imgFileRef binaryReadStream
+	] ifFalse:[
+		img := Smalltalk ui icons iconNamed: #systemIcon.
+	].
+	
+	elements := someElements collect: [ :m | 
+		RSBitmap new model: m; form: img; size: 10.
+	] as: RSGroup. 
 	
 	"RSEllipse new size: 10; model: m."
 	popup := RSMolPopup new.
