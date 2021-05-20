@@ -102,41 +102,64 @@ MolMenu >> open: menu [
 			| usedComponentServices usedComponentParameters consumedComponentEvents providedComponentServices
 			providedComponentParameters producedComponentEvents | 
 			showComponent := SpMolShowComponent new. 
-			(component == MolAbstractComponentImpl) | (component ==MolTestComponentImplA) | 
-			(component == MolTestComponentImplB) | (component == MolTestComponentImplC)
-				ifFalse:[
-			usedComponentServices := OrderedCollection new.
-			component usedComponentServices do: [:compo| compo users do: [:comp | comp == comp ifTrue:[ usedComponentServices add: comp ]]].
+			component haveComponentType
+				ifTrue:[
+					usedComponentServices := OrderedCollection new.
+					component usedComponentServices do: [:compo| compo users 
+						do: [:comp | comp == component ifFalse: [ usedComponentServices add: comp ] ]].
 			
-			showComponent providedServices: component.
-			showComponent usedServices: component.
-			showComponent consumedEvents: component.
-			showComponent producedEvents: component.
-			showComponent providedParameters: component.
-			showComponent usedParameters: component."
-			"usedComponentParameters := OrderedCollection new.
-			component usedComponentParameters do: [:compo| compo users do: [:comp | usedComponentParameters add: comp]].
-			consumedComponentEvents := OrderedCollection new.
-			component consumedComponentEvents do: [:compo| compo users do: [:comp | consumedComponentEvents add: comp]].
-			providedComponentServices := OrderedCollection new.
-			component providedComponentServices do: [:compo| compo users do: [:comp | providedComponentServices add: comp]].
-			providedComponentParameters := OrderedCollection new.
-			component providedComponentParameters do: [:compo| compo users do: [:comp | providedComponentParameters add: comp]].
-			producedComponentEvents := OrderedCollection new.
-			component producedComponentEvents do: [:compo| compo users do: [:comp | producedComponentEvents add: comp]].
+					usedComponentParameters := OrderedCollection new.
+					component usedComponentParameters do: [:compo| compo users 
+					do: [:comp | comp == component ifFalse: [ usedComponentParameters add: comp]]].
 			
-			showComponent usedComponentServicesConnected: usedComponentServices.
-			showComponent usedComponentParametersConnected: usedComponentParameters.
-			showComponent providedComponentServicesConnected: providedComponentServices.
-			showComponent providedComponentParametersConnected: providedComponentParameters.
-			showComponent producedComponentEventsConnected: producedComponentEvents.
-			showComponent consumedComponentEventsConnected: consumedComponentEvents.
+					consumedComponentEvents := OrderedCollection new.
+					component consumedComponentEvents do: [:compo| compo users
+				 	do: [:comp | comp == component ifFalse: [ consumedComponentEvents add: comp]]].
 			
-			showComponent component: component.
-			showComponent openWithSpec
-				].
+					providedComponentServices := OrderedCollection new.
+					component providedComponentServices do: [:compo| compo users 
+					do: [:comp | comp == component ifFalse: [ providedComponentServices add: comp] ]].
+			
+					providedComponentParameters := OrderedCollection new.
+					component providedComponentParameters do: [:compo| compo users 
+					do: [:comp | comp == component ifFalse: [ providedComponentParameters add: comp]]].
+			
+					producedComponentEvents := OrderedCollection new.
+					component producedComponentEvents do: [:compo| compo users 
+					do: [:comp | comp == component ifFalse: [ producedComponentEvents add: comp]]].
+			
+					showComponent usedComponentServicesConnected: usedComponentServices.
+					showComponent usedComponentParametersConnected: usedComponentParameters.
+					showComponent providedComponentServicesConnected: providedComponentServices.
+					showComponent providedComponentParametersConnected: providedComponentParameters.
+					showComponent producedComponentEventsConnected: producedComponentEvents.
+					showComponent consumedComponentEventsConnected: consumedComponentEvents.
+					
+					showComponent component: component.
+					showComponent openWithSpec
+					]
+			ifFalse:[
+				showComponent component: component.
+				showComponent openWithSpec.].
 			]  selector: #value)
 		icon: (self iconNamed: 'objects').
+		
+	menu
+		add: 'Show all Component Instances'
+		action: (MessageSend receiver: [ 
+			|componentInstances |
+			componentInstances := component allSubInstances.
+			
+			componentInstances isEmpty 
+				ifTrue:[SpMolModalPresenter new openModalWithSpec.]
+				ifFalse:[
+				showComponent := SpMolShowComponentInstances new. 
+				showComponent instances: componentInstances.
+				showComponent component: component.
+				showComponent openWithSpec].
+			]  selector: #value)
+		icon: (self iconNamed: 'objects').
+		
 	menu
 		add: 'Show UML Class'
 		action: (MessageSend receiver: 
