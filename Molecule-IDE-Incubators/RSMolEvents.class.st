@@ -19,38 +19,50 @@ RSMolEvents >> initialize [
 RSMolEvents >> onShape: aShape [
 	aShape 
 		when: RSMouseDoubleLeftClick
-		do: [ :evt | | usedComponentServices usedComponentParameters consumedComponentEvents providedComponentServices
+		do: [ :evt |
+			| usedComponentServices usedComponentParameters consumedComponentEvents providedComponentServices
 			providedComponentParameters producedComponentEvents showComponent | 
-			
 			showComponent := SpMolShowComponent new. 
+			aShape model haveComponentType
+				ifTrue:[
+					usedComponentServices := OrderedCollection new.
+					aShape model usedComponentServices do: [:compo| compo users 
+						do: [:comp | comp == aShape model ifFalse: [ usedComponentServices add: comp ] ]].
 			
-			(aShape model == MolAbstractComponentImpl) | (aShape model ==MolTestComponentImplA) | 
-			(aShape model == MolTestComponentImplB) | (aShape model == MolTestComponentImplC)
-				ifFalse:[
-			usedComponentServices := OrderedCollection new.
-			aShape model usedComponentServices do: [:compo| compo users do: [:comp | comp == comp ifTrue:[ usedComponentServices add: comp ]]].
-			usedComponentParameters := OrderedCollection new.
-			aShape model usedComponentParameters do: [:compo| compo users do: [:comp | usedComponentParameters add: comp]].
-			consumedComponentEvents := OrderedCollection new.
-			aShape model consumedComponentEvents do: [:compo| compo users do: [:comp | consumedComponentEvents add: comp]].
-			providedComponentServices := OrderedCollection new.
-			aShape model providedComponentServices do: [:compo| compo users do: [:comp | providedComponentServices add: comp]].
-			providedComponentParameters := OrderedCollection new.
-			aShape model providedComponentParameters do: [:compo| compo users do: [:comp | providedComponentParameters add: comp]].
-			producedComponentEvents := OrderedCollection new.
-			aShape model producedComponentEvents do: [:compo| compo users do: [:comp | producedComponentEvents add: comp]].
+					usedComponentParameters := OrderedCollection new.
+					aShape model usedComponentParameters do: [:compo| compo users 
+					do: [:comp | comp == aShape model ifFalse: [ usedComponentParameters add: comp]]].
 			
-			showComponent usedComponentServicesConnected: usedComponentServices.
-			showComponent usedComponentParametersConnected: usedComponentParameters.
-			showComponent providedComponentServicesConnected: providedComponentServices.
-			showComponent providedComponentParametersConnected: providedComponentParameters.
-			showComponent producedComponentEventsConnected: producedComponentEvents.
-			showComponent consumedComponentEventsConnected: consumedComponentEvents.
-			].
-			showComponent component: aShape model.
-			showComponent openWithSpec
+					consumedComponentEvents := OrderedCollection new.
+					aShape model consumedComponentEvents do: [:compo| compo users
+				 	do: [:comp | comp == aShape model ifFalse: [ consumedComponentEvents add: comp]]].
 			
-			].
+					providedComponentServices := OrderedCollection new.
+					aShape model providedComponentServices do: [:compo| compo users 
+					do: [:comp | comp == aShape model ifFalse: [ providedComponentServices add: comp] ]].
+			
+					providedComponentParameters := OrderedCollection new.
+					aShape model providedComponentParameters do: [:compo| compo users 
+					do: [:comp | comp == aShape model ifFalse: [ providedComponentParameters add: comp]]].
+			
+					producedComponentEvents := OrderedCollection new.
+					aShape model producedComponentEvents do: [:compo| compo users 
+					do: [:comp | comp == aShape model ifFalse: [ producedComponentEvents add: comp]]].
+			
+					showComponent usedComponentServicesConnected: usedComponentServices.
+					showComponent usedComponentParametersConnected: usedComponentParameters.
+					showComponent providedComponentServicesConnected: providedComponentServices.
+					showComponent providedComponentParametersConnected: providedComponentParameters.
+					showComponent producedComponentEventsConnected: producedComponentEvents.
+					showComponent consumedComponentEventsConnected: consumedComponentEvents.
+					
+					showComponent component: aShape model.
+					showComponent openWithSpec
+					]
+			ifFalse:[
+				showComponent component: aShape model.
+				showComponent openWithSpec.]].
+	
 		
 	"aShape 
 		when: RSMouseLeftClick  

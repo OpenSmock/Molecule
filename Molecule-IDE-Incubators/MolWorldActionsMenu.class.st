@@ -10,6 +10,11 @@ Class {
 	#category : #'Molecule-IDE-Incubators-Menus'
 }
 
+{ #category : #accessing }
+MolWorldActionsMenu class >> icon [
+	^moleculeIcon ifNil: [ moleculeIcon := Form fromBinaryStream: self moleculeIcon base64Decoded readStream ]
+]
+
 { #category : #menu }
 MolWorldActionsMenu class >> menuActionsOn: aBuilder [
 	<worldMenu>
@@ -17,7 +22,8 @@ MolWorldActionsMenu class >> menuActionsOn: aBuilder [
 		parent: #Molecule;
 		label: 'Actions on a component';
 		help: 'Actions';
-		icon: (self iconNamed: #glamorousExample);
+		"icon: (self iconNamed: #glamorousExample);"
+		icon: MolIcon new icon;
 		order: 1.2
 ]
 
@@ -28,7 +34,10 @@ MolWorldActionsMenu class >> menuCreateOn: aBuilder [
 		parent: #MoleculeTools;
 		label: 'Create a component';
 		help: 'Create a component via system browser';
-		icon: (self iconNamed: 'add').
+		icon: (self iconNamed: 'add');
+		action: [ | spMolCreate |
+					spMolCreate := SpMolCreateComponent new.
+					spMolCreate openWithSpec ]
 ]
 
 { #category : #'menu actions' }
@@ -85,4 +94,9 @@ MolWorldActionsMenu class >> menuSearchOn: aBuilder [
 		action: [ | spMolSearch |
 					spMolSearch := SpMolSearch new.
 					spMolSearch openWithSpec ]
+]
+
+{ #category : #'as yet unclassified' }
+MolWorldActionsMenu class >> moleculeIcon [
+	^ 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABcElEQVQ4jaWTTUsCURSG3zvOTEzawPSBRbQpRWiZtQwki7bSIiJXLqOFQe2CmB/gH4ggWlQSgQtbJxYEES1apgtXUbQxndJ0nHtvi8oEv6Z6lpfznHNfDgf4J6TV49LG7lSZy9cMgtROdBBGJaEyQ/ZCIT95NW4JpzCdavDZ70+nHt1UG/UB4B1GExQeMhAU8/3Uq7rgUVWolXJS12MDsuLiHWUA4ByS0scEwpkA/l3MCfDm5Yx2i15HMBQlnC0UkSsaMAfdKwFdvyGCaL/BWiJ5xTQtamraTiQeP7NtfkH2FuZOxpXeZQC4LxrZ9YtL33z0kDn7R1puqJFS/omJLlFadAiftUM98gSAY2qZXeV6BMOiiRqloIwhz3gGwKpDlLusoCECAMSCgTDhkDZT6YOArovii8e0HQEAts7TR3YnNkX4q9i2QQBgVrXE2pzJD4TAqpZoy6rI9v5YLl+7k2Sno51fM8t0dnJ4+pcfbuYD4niENW2FlpcAAAAASUVORK5CYII='
 ]

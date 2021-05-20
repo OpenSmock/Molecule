@@ -13,7 +13,8 @@ Class {
 		'popup',
 		'droplist',
 		'label',
-		'showComponent'
+		'showComponent',
+		'legend'
 	],
 	#category : #'Molecule-IDE-Incubators-Windows Spec2'
 }
@@ -36,6 +37,7 @@ SpMolSearch class >> open [
 
 { #category : #initialization }
 SpMolSearch >> configure: canvas [
+	| icon |
 	self models: SystemNavigation default allClasses select: [ :c | 
 		        c isTrait not and: [ (c allSuperclasses includes: Object) and: [ c isComponentClass ] ] ].
 	
@@ -57,7 +59,15 @@ SpMolSearch >> configure: canvas [
 	RSForceBasedLayout on: elements.
 	
 	inspectable := RSMolEvents new.
-
+	
+	icon := RSBitmap new 
+		model: 'component'; 
+		"form: (Smalltalk ui icons iconNamed: #systemIcon); "
+		form: MolIcon new icon;
+		size: 10.
+		
+	legend := MolLegend new. legend legend: RSLegend new container: canvas items:{icon} title: 'Shapes Legend' onDemand: 'Legend of graphic' .
+	
 	elements @ inspectable .
 	canvas @ RSCanvasController.
 	
@@ -93,19 +103,16 @@ SpMolSearch >> elements [
 SpMolSearch >> elements: someElements [
 	elements := someElements collect: 
 		[ :m | 
-		RSBitmap new 
+		|icon |
+		icon := RSBitmap new 
 		model:m; 
 		"form: (Smalltalk ui icons iconNamed: #systemIcon); "
-		form: (ImageReadWriter formFromStream: './assets/miniComp.png' asFileReference binaryReadStream);
+		form: MolIcon new icon;
 		size: 10.
+		self popup:m.
+		icon @ RSDraggable @ popup
 		 ] as: RSGroup. 
 	
-	"RSEllipse new size: 10; model: m."
-	popup := RSMolPopup new.
-	popup text: [ :selection | selection asString  ].
-	popup textColor: '01665E' fontSize: 10.
-	
-	elements @ RSDraggable @ popup .
 	
 ]
 
@@ -157,6 +164,17 @@ SpMolSearch >> models [
 SpMolSearch >> models: someObjects select: aBlock [
 	models := someObjects select: aBlock
 	
+]
+
+{ #category : #accessing }
+SpMolSearch >> popup: aComponent [
+
+	| molPopup |
+	
+	molPopup := MolPopup new.
+	popup := RSPopup new.
+	molPopup popup: popup title: aComponent.
+		
 ]
 
 { #category : #'as yet unclassified' }

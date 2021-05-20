@@ -16,7 +16,43 @@ Class {
 		'producedComponentEvents',
 		'consumedComponentEvents',
 		'toProvidedServices',
-		'fromUsedServices'
+		'molPopup',
+		'molContract',
+		'ellipseProvidedServices',
+		'polygonProducedEvents',
+		'boxProvidedParameters',
+		'svgUsedParameters',
+		'svgUsedServices',
+		'svgConsumedEvents',
+		'toProducedEvents',
+		'toUsedParameters',
+		'toProvidedParameters',
+		'toConsumedEvents',
+		'toUsedServices',
+		'componentShape',
+		'ellipseType',
+		'lineProvidedParameters',
+		'componentImplementation',
+		'lineType',
+		'lineProvidedServices',
+		'lineProducedEvents',
+		'lineUsedParameters',
+		'lineUsedServices',
+		'lineConsumedEvents',
+		'svgRelationConsumedEvents',
+		'svgRelationProvidedParameters',
+		'svgRelationUsedServices',
+		'svgRelationUsedParameters',
+		'svgRelationProducedEvents',
+		'svgRelationProvidedServices',
+		'legend',
+		'ellipseTypeLegend',
+		'ellipseProvidedServicesLegend',
+		'svgUsedServicesLegend',
+		'polygonProducedEventsLegend',
+		'svgConsumedEventsLegend',
+		'svgUsedParametersLegend',
+		'boxProvidedParametersLegend'
 	],
 	#category : #'Molecule-IDE-Incubators-Windows Spec2'
 }
@@ -35,30 +71,47 @@ SpMolShowComponent class >> open [
 ]
 
 { #category : #'as yet unclassified' }
-SpMolShowComponent >> arrayName: array arrayOfComponents: interfaces [ 
-	| composable  |
-	toProvidedServices := OrderedCollection new.
-	
+SpMolShowComponent >> arrayOfComponents: interfaces shape: aShape collection: collection [ 
+	| composable array |
+	array := RSComposite new.
 	interfaces notNil ifTrue: [ 
-		array shapes: ((1 to: interfaces size) collect: [ :n | 
-			self model: (interfaces at:n). 
+		array shapes: ((1 to: interfaces size) collect: [ :n |  
 			composable := RSComposite new.
 			composable 	
 				model: (interfaces at:n);
 				draggable;
-				browseable;
 				shapes: (self shapeModel: (interfaces at:n))
 				yourself.	
-			self labelComponent: (interfaces at:n).
+			self popup: (interfaces at:n).
+			self event: composable.
 			
-			composable position: (-240)+(n*(60))@(n*(-70)+50).
-			
-			(composable shapes shapesFromModel: (self providedServices:(interfaces at:n))) nodes do: [:aShape | toProvidedServices add: aShape].
-			"(composable shapes shapesFromModel: (self producedEvents:(interfaces at:n))) nodes do: [:aShape | toProducedEvents add: aShape]."
-			composable @popup
+			collection == toProvidedServices ifTrue: [ 
+			composable position: (-250)+(n*(70))@(n*(-50)).
+			composable shapes do: [:node | (node == ellipseProvidedServices) ifTrue: [ toProvidedServices add: node ]]].
+		
+			collection == toProducedEvents ifTrue: [ 
+			composable position: (-250)+(n*(70))@(n*(-50) + 140).
+			composable shapes do: [:node | (node == polygonProducedEvents) ifTrue: [ toProducedEvents add: node ]]].
+		
+			collection == toProvidedParameters ifTrue: [ 
+			composable position: (-160)+(n*(70))@(n*(-50) + 200).
+			composable shapes do: [:node | (node == boxProvidedParameters) ifTrue: [ toProvidedParameters add: node ]]].
+		
+			collection == toUsedParameters ifTrue: [ 
+			composable position: (n*(70))@(n*(50) + 50).
+			composable shapes do: [:node | (node == svgUsedParameters ) ifTrue: [ toUsedParameters add: node ]]].
+		
+			collection == toConsumedEvents ifTrue: [ 
+			composable position: (50)+(n*(70))@(n*(50) - 30).
+			composable shapes do: [:node | (node == svgConsumedEvents) ifTrue: [ toConsumedEvents add: node ]]].
+		
+			collection == toUsedServices ifTrue: [ 
+			composable position: (50)+(n*(70))@(n*(50) - 150).
+			composable shapes do: [:node | (node == svgUsedServices) ifTrue: [ toUsedServices add: node ]]].
+			composable @ popup
 		]).
 	 ].
-	
+	^array
 ]
 
 { #category : #'as yet unclassified' }
@@ -132,6 +185,21 @@ SpMolShowComponent >> component: aComponent [
 	component := aComponent
 ]
 
+{ #category : #accessing }
+SpMolShowComponent >> componentShape [
+	^componentShape
+]
+
+{ #category : #accessing }
+SpMolShowComponent >> componentShape: aComponent [
+	componentShape := aComponent .
+	componentShape
+		position: 50@10;
+		draggable;
+		model: component;
+		shapes: (self shapeModel: component) .
+]
+
 { #category : #'as yet unclassified' }
 SpMolShowComponent >> composable: aComposable shapes: aRSGroup [
 	aComposable
@@ -141,73 +209,72 @@ SpMolShowComponent >> composable: aComposable shapes: aRSGroup [
 
 { #category : #initialization }
 SpMolShowComponent >> configure: canvas [
-	|  componentsInstances numbersOfComponentsInstances arrayOfUsedComponentServices componentShape lineServices |
+	|  componentsInstances numbersOfComponentsInstances arrayOfUsedComponentServices  fromConsumedEvents  arrayOfConsumedComponentEvents arrayOfUsedComponentParameters fromUsedParameters   arrayOfProvidedComponentParameters fromProvidedParameters  arrayOfProducedComponentEvents  arrayOfProvidedComponentServices fromProvidedServices   fromProducedEvents  fromUsedServices |
 	
-	"test := component class.
-	test2 := component allTraits."
-	"components := OrderedCollection new.
-	MolAbstractComponentImpl allSubInstancesDo:[ :comp | components add: comp ].
-	MolComponentImpl users do: [:impl | impl allInstances do: [:comp | components add: comp ]]."
-	
+	molContract := MolContract new.
+
 	componentsInstances := component allSubInstances.
 	numbersOfComponentsInstances := componentsInstances size.
 	
-	self model: component. 
 	componentShape := RSComposite new.
-	componentShape
-		position: 50@10;
-		draggable;
-		browseable;
-		model: component;
-		shapes: (self shapeModel: component) .
+	self componentShape: componentShape.
 		
-	arrayOfUsedComponentServices := RSComposite new.
-	self arrayName: arrayOfUsedComponentServices arrayOfComponents: usedComponentServices.
+	fromUsedServices := (componentShape shapes shapesFromModel: (molContract usedServices: component))
+	detect: [:svg | svg isKindOf: RSSVGPath ].
+	fromConsumedEvents := (componentShape shapes shapesFromModel: (molContract consumedEvents: component))
+	detect: [:svg | svg isKindOf: RSSVGPath ].
+	fromUsedParameters := (componentShape shapes shapesFromModel: (molContract usedParameters: component))
+	detect: [:svg | svg isKindOf: RSSVGPath ].
+	fromProvidedParameters := (componentShape shapes shapesFromModel: (molContract providedParameters: component))
+	detect: [:aBox | aBox isKindOf: RSBox ].
+	fromProducedEvents := (componentShape shapes shapesFromModel: (molContract producedEvents: component))
+	detect: [:aPolygon | aPolygon isKindOf: RSPolygon ].
+	fromProvidedServices := (componentShape shapes shapesFromModel: (molContract providedServices: component))
+	detect: [:ellipse | ellipse isKindOf: RSEllipse  ].
+	
+	toProducedEvents := OrderedCollection new.
+	toProvidedServices := OrderedCollection new.
+	toProvidedParameters := OrderedCollection new.
+	toUsedParameters := OrderedCollection new.
+	toConsumedEvents := OrderedCollection new.
+	toUsedServices := OrderedCollection new.
 	
 	
-	fromUsedServices := (componentShape shapes shapesFromModel: (self usedServices:component)) nodes at:1.
-		
-	toProvidedServices isNotNil 
-	ifTrue: [ 
-	lineServices := ((1 to: toProvidedServices size) collect: [:n | 
-			RSBezier new
-					withBorderAttachPoint;
-					from: fromUsedServices;
-					borderColor: Color blue;
-					controlPointsController: RSVerticalCPAPController new;
-					width: 0.5;
-					to: (toProvidedServices at:n).
-				]as:RSGroup).
-		].
+	arrayOfUsedComponentServices := self arrayOfComponents: usedComponentServices 
+	shape: ellipseProvidedServices collection: toProvidedServices.
 	
-	"fromConsumedEvents := (componentShape shapes shapesFromModel: (self consumedEvents: component)) nodes at:1.
-		
-	toProducedEvents isNotNil 
-	ifTrue: [ 
-	lineEvents := ((1 to: to size) collect: [:n | 
-			RSBezier new
-					withBorderAttachPoint;
-					from: fromConsumedEvents;
-					borderColor: Color red;
-					controlPointsController: RSVerticalCPAPController new;
-					width: 0.5;
-					to: (to at:n).
-				]as:RSGroup).
-		]."
+	arrayOfConsumedComponentEvents := self arrayOfComponents: consumedComponentEvents 
+	shape: polygonProducedEvents collection: toProducedEvents.
 	
-	self labelComponent: component.
+	arrayOfUsedComponentParameters := self arrayOfComponents: usedComponentParameters 
+	shape: boxProvidedParameters collection: toProvidedParameters.
+	
+	arrayOfProvidedComponentParameters := self arrayOfComponents: providedComponentParameters 
+	shape: svgUsedParameters collection: toUsedParameters.
+	
+	arrayOfProducedComponentEvents :=  self arrayOfComponents: producedComponentEvents 
+	shape: svgConsumedEvents collection: toConsumedEvents.
+	
+	arrayOfProvidedComponentServices := self arrayOfComponents: providedComponentServices 
+	shape: svgUsedServices collection: toUsedServices.
+	
+	
+	lineUsedServices := self from: fromUsedServices to: toProvidedServices color: Color blue.
+	lineConsumedEvents := self from: fromConsumedEvents to: toProducedEvents color: Color red.
+	lineUsedParameters :=  self from: fromUsedParameters to: toProvidedParameters color: Color green.
+	lineProvidedParameters := self from: fromProvidedParameters to: toUsedParameters color: Color pink.
+	lineProducedEvents :=  self from: fromProducedEvents to: toConsumedEvents color: Color purple.
+	lineProvidedServices := self from: fromProvidedServices to: toUsedServices color: Color orange.
+	
+	self popup: component.
 	self legend: canvas.
 	
-	"arrayOfComponent := RSComposite new
-		shapes: { componentShape. arrayOfUsedComponentServices}."
-	
 	componentShape @ popup.
-	canvas add: arrayOfUsedComponentServices ; add: componentShape; addAll:lineServices.
+	canvas add: arrayOfUsedComponentServices ; add: arrayOfConsumedComponentEvents ; add: arrayOfUsedComponentParameters ; add: arrayOfProvidedComponentParameters ; add: arrayOfProducedComponentEvents ; add: arrayOfProvidedComponentServices ; add: componentShape; addAll:lineUsedServices ; addAll:lineConsumedEvents ; addAll: lineUsedParameters; addAll: lineProvidedParameters ; addAll: lineProducedEvents ; addAll: lineProvidedServices .
 	canvas @ RSCanvasController.
 	
 	self canvas: canvas. 
-
-	
+	self event: componentShape.
 ]
 
 { #category : #initialization }
@@ -221,12 +288,40 @@ SpMolShowComponent >> consumedComponentEventsConnected: consumedEvents [
 	consumedComponentEvents :=  consumedEvents
 ]
 
-{ #category : #'as yet unclassified' }
-SpMolShowComponent >> consumedEvents: aComponent [
-		(aComponent == MolAbstractComponentImpl) | (aComponent ==MolTestComponentImplA) | 
-			(aComponent == MolTestComponentImplB) | (aComponent == MolTestComponentImplC)
-		ifFalse: [ ^aComponent consumedComponentEvents   .]
-		ifTrue: [ ^nil ]
+{ #category : #accessing }
+SpMolShowComponent >> event: aComponent [
+	aComponent 
+		when: RSMouseRightClick
+		do: [ :evt | | molMenu |
+				molMenu := MolMenu new.
+				molMenu selectedComponent: aComponent model.
+				molMenu open: molMenu. ].
+	
+	aComponent 
+		when: RSMouseLeftClick  
+		do: [ :evt | 
+			| zoom | 
+			zoom := RSMolZoomCanvas new. 
+			zoom scale: aComponent.
+			zoom scale > 3
+				ifTrue:  [ zoom zoomOut: aComponent ]
+				ifFalse: [ zoom zoomIn: aComponent ].
+			 ].
+]
+
+{ #category : #'instance creation' }
+SpMolShowComponent >> from: from to: to color: aColor [
+	to isNotNil ifTrue: [ 
+	^((1 to: to size) collect: [:n | 
+			RSBezier new
+					withBorderAttachPoint;
+					from: from;
+					borderColor: aColor;
+					controlPointsController: RSVerticalCPAPController new;
+					width: 0.5;
+					to: (to at:n).
+				]as:RSGroup).
+		]
 ]
 
 { #category : #'as yet unclassified' }
@@ -257,40 +352,6 @@ aWindowPresenter
 ]
 
 { #category : #'as yet unclassified' }
-SpMolShowComponent >> labelComponent: aComponent [
-
-	| labelRequired labelComponentType labelUsedComponentServices labelConsumedComponentEvents labelUsedComponentParameters labelOffered labelProvidedComponentServices labelProvidedComponentParameters labelProducedComponentEvents |
-	
-	labelComponentType := RSLabel new  model: 'ComponentType : ', (self type: aComponent) asString.
-	labelRequired := RSLabel new  model: 'REQUIRED'.
-	labelUsedComponentServices := RSLabel new model: 'UsedServices : ', (self usedServices: aComponent) asString.
-	labelConsumedComponentEvents := RSLabel new model: 'ConsumedEvents : ', (self consumedEvents: aComponent) asString.
-	labelUsedComponentParameters := RSLabel new  model: 'UsedParameters : ', (self usedParameters: aComponent) asString.
-	labelOffered := RSLabel new  model: 'OFFERED'.
-	labelProvidedComponentServices := RSLabel new model: 'ProvidedServices : ', (self providedServices: aComponent) asString.
-	labelProvidedComponentParameters := RSLabel new  model: 'ProvidedParameters : ', (self providedParameters: aComponent) asString.
-	labelProducedComponentEvents := RSLabel new model: 'ProducedEvents : ' , (self producedEvents: aComponent) asString.
-	
-	popup := RSPopup new.
-	popup shapeBuilder: [
-	|  composite lb |
-		composite := RSComposite new.
-		lb := RSLegend new.
-		lb container: composite.
-		lb title: aComponent.
-		{ labelComponentType. labelRequired.
-		 labelUsedComponentServices.labelConsumedComponentEvents.labelUsedComponentParameters. 
-		labelOffered. labelProvidedComponentServices. labelProducedComponentEvents.
-		labelProvidedComponentParameters } do: [ :selector | lb text: selector model ].
-		lb build.
-		composite
-			color: Color white;
-			withBorder;
-			padding: 5.
-	].
-]
-
-{ #category : #'as yet unclassified' }
 SpMolShowComponent >> labeled [
 	|labeled |
 	labeled := RSLabeled new.
@@ -303,8 +364,6 @@ SpMolShowComponent >> labeled [
 { #category : #'as yet unclassified' }
 SpMolShowComponent >> legend: aCanvas [
 
-	| ellipseTypeLegend ellipseProvidedServicesLegend svgUsedServicesLegend polygonProducedEventsLegend
-	svgConsumedEventsLegend svgUsedParametersLegend boxProvidedParametersLegend legend |
 	
 	ellipseTypeLegend := RSEllipse new color: Color black; model: 'ComponentType'.
 	
@@ -343,21 +402,42 @@ SpMolShowComponent >> legend: aCanvas [
 		svgPath: 'M 5 10 l 0 -7 l 9 0 l 0 7';
 		model: 'UsedParameters'.
 		
+	svgRelationConsumedEvents := RSSVGPath new
+		border: (RSBorder new color: Color red; width:1);
+		svgPath: 'M 5 10 l 9 0';
+		model: 'ConsumedEvents relation'.
+		
+	svgRelationProvidedParameters := RSSVGPath new
+		border: (RSBorder new color: Color pink; width:1);
+		svgPath: 'M 5 10 l 9 0';
+		model: 'ProvidedParameters relation'.
+		
+	svgRelationUsedServices := RSSVGPath new
+		border: (RSBorder new color: Color blue; width:1);
+		svgPath: 'M 5 10 l 9 0';
+		model: 'UsedServices relation'.
+		
+	svgRelationUsedParameters := RSSVGPath new
+		border: (RSBorder new color: Color green; width:1);
+		svgPath: 'M 5 10 l 9 0';
+		model: 'UsedParameters relation'.
+	
+	svgRelationProducedEvents := RSSVGPath new
+		border: (RSBorder new color: Color purple; width:1);
+		svgPath: 'M 5 10 l 9 0';
+		model: 'ProducedEvents relation'.
+	
+	svgRelationProvidedServices := RSSVGPath new
+		border: (RSBorder new color: Color orange; width:1);
+		svgPath: 'M 5 10 l 9 0';
+		model: 'ProvidedServices relation'.
+		
 	boxProvidedParametersLegend := RSBox new
-		color: Color white; borderColor: Color white;borderColor: Color black; model: 'ProvidedParameters'.
+		color: Color white; borderColor: Color white; borderColor: Color black; model: 'ProvidedParameters'.
 	self borderWith: boxProvidedParametersLegend.
 	
-	legend := RSLegend new.
-	legend container: aCanvas.
-	"legend defaultTitle fontSize: 4."
-	legend title: 'Shapes Legend'.
-	{ellipseTypeLegend. ellipseProvidedServicesLegend. polygonProducedEventsLegend.boxProvidedParametersLegend.
-	svgUsedServicesLegend.svgConsumedEventsLegend. svgUsedParametersLegend} do: [ :selector |
-		legend onDemand: 'Legend of components'.
-		legend text: selector model withShape: selector.
-		 ].
-	legend legendDo: [ : border | border border:(RSBorder new color: 'C7EAE5'; width: 0.5); padding: 5. ].
-	legend build.
+	legend := MolLegend new. 
+	legend legend: RSLegend new container: aCanvas items: {ellipseTypeLegend. ellipseProvidedServicesLegend. polygonProducedEventsLegend.boxProvidedParametersLegend. svgUsedServicesLegend.svgConsumedEventsLegend. svgUsedParametersLegend. svgRelationUsedServices.svgRelationConsumedEvents.svgRelationUsedParameters.svgRelationProvidedParameters.svgRelationProducedEvents.svgRelationProvidedServices} title: 'Shapes Legend' onDemand: 'Legend of components' .
 	
 ]
 
@@ -372,31 +452,18 @@ SpMolShowComponent >> line: aLine to: to [
 		yourself.
 ]
 
-{ #category : #accessing }
-SpMolShowComponent >> model: aComponent [ 
+{ #category : #'as yet unclassified' }
+SpMolShowComponent >> popup: aComponent [
 
-aComponent componentType isNotNil ifTrue: [ 
-		self usedServices: aComponent.
-		self providedServices: aComponent.
-		self consumedEvents: aComponent.
-		self providedParameters: aComponent.
-		self usedParameters: aComponent.
-		self producedEvents: aComponent.
-		].
-	
+	molPopup := MolPopup new.
+	popup := RSPopup new.
+	molPopup popup: popup title: aComponent.
+		
 ]
 
 { #category : #'as yet unclassified' }
 SpMolShowComponent >> producedComponentEventsConnected: producedEvents [
 	producedComponentEvents :=  producedEvents
-]
-
-{ #category : #'as yet unclassified' }
-SpMolShowComponent >> producedEvents: aComponent [
-	(aComponent == MolAbstractComponentImpl) | (aComponent ==MolTestComponentImplA) | 
-			(aComponent == MolTestComponentImplB) | (aComponent == MolTestComponentImplC)
-		ifFalse: [ ^aComponent producedComponentEvents   .]
-		ifTrue: [ ^nil ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -407,22 +474,6 @@ SpMolShowComponent >> providedComponentParametersConnected: providedParameters [
 { #category : #'as yet unclassified' }
 SpMolShowComponent >> providedComponentServicesConnected: providedServices [
 	providedComponentServices := providedServices
-]
-
-{ #category : #'as yet unclassified' }
-SpMolShowComponent >> providedParameters: aComponent [
-	(aComponent == MolAbstractComponentImpl) | (aComponent ==MolTestComponentImplA) | 
-			(aComponent == MolTestComponentImplB) | (aComponent == MolTestComponentImplC)
-		ifFalse: [ ^aComponent providedComponentParameters  .]
-		ifTrue: [ ^nil ]
-]
-
-{ #category : #'as yet unclassified' }
-SpMolShowComponent >> providedServices: aComponent [
-		(aComponent == MolAbstractComponentImpl) | (aComponent ==MolTestComponentImplA) | 
-			(aComponent == MolTestComponentImplB) | (aComponent == MolTestComponentImplC)
-		ifFalse: [ ^aComponent providedComponentServices .]
-		ifTrue: [ ^nil ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -449,8 +500,6 @@ SpMolShowComponent >> shape: aShape color: aColor model: aModel translateTo: aPo
 { #category : #'as yet unclassified' }
 SpMolShowComponent >> shapeModel: aComponent [ 
 	
-	|componentImplementation lineType ellipseType lineConsumedEvents lineUsedServices boxProvidedParameters ellipseProvidedServices lineProvidedServices polygonProducedEvents lineProducedEvents lineProvidedParametersTest svgUsedParameters lineUsedParameters svgUsedServices svgConsumedEvents |
-	
 	componentImplementation := RSLabel new
 			fontSize: 1.5;
 			model: aComponent
@@ -461,9 +510,9 @@ SpMolShowComponent >> shapeModel: aComponent [
 	
 	ellipseType := RSEllipse new.
 	self 
-		shape: ellipseType 
+		shape: ellipseType
 		color: Color black 
-		model: (self type: aComponent)
+		model: (molContract type: aComponent)
 		translateTo: 0@(-35).
 		ellipseType @ (self labeled).
 	
@@ -474,7 +523,7 @@ SpMolShowComponent >> shapeModel: aComponent [
 	self 
 		shape: ellipseProvidedServices 
 		color: Color white 
-		model: (self providedServices: aComponent)
+		model: (molContract providedServices: aComponent)
 		translateTo: 35@(-15)
 		borderColor: Color black.
 	self borderWith: ellipseProvidedServices.
@@ -495,7 +544,7 @@ SpMolShowComponent >> shapeModel: aComponent [
 		borderColor: Color black
 		yourself.
 	polygonProducedEvents border width: 0.5.
-	polygonProducedEvents model: (self producedEvents: aComponent).
+	polygonProducedEvents model: (molContract producedEvents: aComponent).
 	polygonProducedEvents @ (self labeled).
 	
 	lineProducedEvents := RSLine new.
@@ -505,7 +554,7 @@ SpMolShowComponent >> shapeModel: aComponent [
 	self
 		shape: boxProvidedParameters 
 		color: Color white 
-		model: (self providedParameters: aComponent)
+		model: (molContract providedParameters: aComponent)
 		translateTo: 15@35
 		borderColor: Color black.
 	self borderWith: boxProvidedParameters.
@@ -513,14 +562,14 @@ SpMolShowComponent >> shapeModel: aComponent [
 	
 	"ellipseLifeCycleComponent := RSEllipse new color: Color black; translateTo: 10@20; size: 5."
 	
-	lineProvidedParametersTest := RSLine new.
-	self line: lineProvidedParametersTest to: boxProvidedParameters.
+	lineProvidedParameters := RSLine new.
+	self line: lineProvidedParameters to: boxProvidedParameters.
 		
 	svgUsedParameters := RSSVGPath new
 		paint: nil;
 		border: (RSBorder new color: Color black; width:0.5);
 		svgPath: 'M -19 39 l 0 -7 l 9 0 l 0 7'.
-	svgUsedParameters model: (self usedParameters: aComponent).
+	svgUsedParameters model: (molContract usedParameters: aComponent).
 	svgUsedParameters @(self labeled).
 	
 	lineUsedParameters := RSSVGPath new
@@ -534,7 +583,7 @@ SpMolShowComponent >> shapeModel: aComponent [
 		border: (RSBorder new color: Color black; width:0.5);
 		svgPath: 'M -37 -22 q 10 7 -1 11';
 		yourself.
-	svgUsedServices model: (self usedServices: aComponent).
+	svgUsedServices model: (molContract usedServices: aComponent).
 	svgUsedServices @(self labeled).
 	
 	lineUsedServices := RSSVGPath new
@@ -550,7 +599,7 @@ SpMolShowComponent >> shapeModel: aComponent [
 		paint: nil;
 		border: (RSBorder new color: Color black; width:0.5);
 		svgPath: 'M -37 18 l 5 -5 l -5 -5'.
-	svgConsumedEvents model: (self consumedEvents: aComponent).
+	svgConsumedEvents model: (molContract consumedEvents: aComponent).
 	svgConsumedEvents @ (self labeled).
 	
 	lineConsumedEvents := RSSVGPath new
@@ -559,13 +608,7 @@ SpMolShowComponent >> shapeModel: aComponent [
 		svgPath: 'M -32 13 l 7 -3';
 		yourself.
 		
-	^{box.lineType .ellipseType .componentImplementation.lineConsumedEvents.svgConsumedEvents.lineUsedParameters.svgUsedParameters.lineProvidedParametersTest.boxProvidedParameters.lineProducedEvents.polygonProducedEvents. lineProvidedServices.ellipseProvidedServices.lineUsedServices.svgUsedServices }
-]
-
-{ #category : #accessing }
-SpMolShowComponent >> type: aComponent [
-	"^component allTraits detect: [ :aClass | aClass usesTrait: MolComponentType ] ifNone: nil."
-	^aComponent componentType
+	^{box.lineType .ellipseType .componentImplementation.lineConsumedEvents.svgConsumedEvents.lineUsedParameters.svgUsedParameters.lineProvidedParameters.boxProvidedParameters.lineProducedEvents.polygonProducedEvents. lineProvidedServices.ellipseProvidedServices.lineUsedServices.svgUsedServices }
 ]
 
 { #category : #accessing }
@@ -576,20 +619,4 @@ SpMolShowComponent >> usedComponentParametersConnected: usedParameters [
 { #category : #accessing }
 SpMolShowComponent >> usedComponentServicesConnected: usedServices [
 	usedComponentServices := usedServices
-]
-
-{ #category : #'as yet unclassified' }
-SpMolShowComponent >> usedParameters: aComponent [
-	(aComponent == MolAbstractComponentImpl) | (aComponent ==MolTestComponentImplA) | 
-			(aComponent == MolTestComponentImplB) | (aComponent == MolTestComponentImplC)
-		ifFalse: [ ^aComponent usedComponentParameters.]
-		ifTrue: [ ^nil ]
-]
-
-{ #category : #accessing }
-SpMolShowComponent >> usedServices: aComponent [
-	 (aComponent == MolAbstractComponentImpl) | (aComponent ==MolTestComponentImplA) | 
-			(aComponent == MolTestComponentImplB) | (aComponent == MolTestComponentImplC)
-		ifFalse: [ ^aComponent usedComponentServices.]
-		ifTrue: [ ^nil ]
 ]
