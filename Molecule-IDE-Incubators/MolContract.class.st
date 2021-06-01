@@ -10,8 +10,12 @@ Class {
 { #category : #'as yet unclassified' }
 MolContract >> consumedEvents: aComponent [
 		(self hasContract: aComponent )
-		ifTrue: [ ^aComponent consumedComponentEvents.]
-		ifFalse: [ ^nil ]
+		ifTrue: [ 
+			aComponent consumedComponentEvents isEmpty 
+			ifFalse: [^aComponent consumedComponentEvents]
+			ifTrue: [^'--'].
+			]
+		ifFalse: [^'--' ]
 ]
 
 { #category : #testing }
@@ -24,40 +28,61 @@ MolContract >> hasContract: aComponent [
 { #category : #'as yet unclassified' }
 MolContract >> producedEvents: aComponent [
 	(self hasContract: aComponent )
-		ifTrue: [ ^aComponent producedComponentEvents   .]
-		ifFalse: [ ^nil ]
+		ifTrue: [ 
+			aComponent producedComponentEvents isEmpty 
+			ifFalse: [^aComponent producedComponentEvents]
+			ifTrue: [^'--'].
+			]
+		ifFalse: [ ^'--']
 ]
 
 { #category : #'as yet unclassified' }
 MolContract >> providedParameters: aComponent [
 	(self hasContract: aComponent )
-		ifTrue: [ ^aComponent providedComponentParameters  .]
-		ifFalse: [ ^nil ]
+		ifTrue: [ 
+			aComponent providedComponentParameters isEmpty 
+			ifFalse: [^aComponent providedComponentParameters]
+			ifTrue: [^'--'].
+			]
+		ifFalse: [ ^'--'  ]
 ]
 
 { #category : #'as yet unclassified' }
 MolContract >> providedServices: aComponent [
 		(self hasContract: aComponent )
-		ifTrue: [ ^aComponent providedComponentServices .]
-		ifFalse: [ ^nil ]
+		ifTrue: [ 
+			aComponent providedComponentServices isEmpty 
+			ifFalse: [^aComponent providedComponentServices]
+			ifTrue: [^'--'].
+			]
+		ifFalse: [^'--' ]
 ]
 
 { #category : #'accessing structure variables' }
 MolContract >> type: aComponent [
 	"^component allTraits detect: [ :aClass | aClass usesTrait: MolComponentType ] ifNone: nil."
-	^aComponent componentType
+	aComponent componentType isNotNil ifTrue: [ ^aComponent componentType  ]
+	ifFalse: [ ^'--' ]
 ]
 
 { #category : #'as yet unclassified' }
 MolContract >> usedParameters: aComponent [
 	(self hasContract: aComponent )
-		ifTrue: [ ^aComponent usedComponentParameters.]
-		ifFalse: [ ^nil ]
+		ifTrue: [ 
+			aComponent usedComponentParameters isEmpty 
+			ifFalse: [^aComponent usedComponentParameters]
+			ifTrue: [^'--'].
+			]
+		ifFalse: [ ^'--' ]
 ]
 
 { #category : #accessing }
 MolContract >> usedServices: aComponent [
 	 (self hasContract: aComponent )
-		ifTrue: [ ^aComponent usedComponentServices.]
-		ifFalse: [ ^nil ]
+		ifTrue: [ 
+			aComponent usedComponentServices isEmpty 
+			ifFalse: [^aComponent usedComponentServices]
+			ifTrue: [^'--'].
+			]
+		ifFalse: [ ^'--' ]
 ]

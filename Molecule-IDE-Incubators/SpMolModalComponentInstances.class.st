@@ -2,23 +2,23 @@
 class to show model presenter if there is no instances of component
 "
 Class {
-	#name : #SpMolModalPresenter,
+	#name : #SpMolModalComponentInstances,
 	#superclass : #SpDemoAbstractModalPresenter,
-	#category : #'Molecule-IDE-Incubators'
+	#category : #'Molecule-IDE-Incubators-Windows Spec2'
 }
 
 { #category : #specs }
-SpMolModalPresenter class >> title [
+SpMolModalComponentInstances class >> title [
 	^'Infos'
 ]
 
 { #category : #initialization }
-SpMolModalPresenter >> content [
+SpMolModalComponentInstances >> content [
 	^ 'No instances find for this component'
 ]
 
 { #category : #initialization }
-SpMolModalPresenter >> initializeDialogWindow: aDialog [
+SpMolModalComponentInstances >> initializeDialogWindow: aDialog [
 	super initializeDialogWindow: aDialog.
 	aDialog
 		closeOnBackdropClick: true;

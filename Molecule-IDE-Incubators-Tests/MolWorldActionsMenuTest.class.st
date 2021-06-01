@@ -24,4 +24,6 @@ MolWorldActionsMenuTest >> testWorldActionsMenuBuilding [
 	MolWorldActionsMenu menuInspectOn: menuBuilder.
 	MolWorldActionsMenu menuReuseOn: menuBuilder.
 	MolWorldActionsMenu menuSearchOn: menuBuilder.
+	MolWorldActionsMenu menuCreateOn: menuBuilder.
+	MolWorldActionsMenu menuDeleteOn: menuBuilder.
 ]

@@ -6,7 +6,6 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'table1',
-		'initializedPresenters',
 		'items',
 		'list',
 		'table2',
@@ -32,15 +31,9 @@ SpMolInfoTools class >> defaultSpec [
 ]
 
 { #category : #initialization }
-SpMolInfoTools >> connectPresenters [
-	
-
-	
-]
-
-{ #category : #initialization }
 SpMolInfoTools >> initializePresenters [ 
-	
+
+	"define tables and trees in window"
 	
 	table1 := self newTable.
 	table1 addColumn: ((SpImageTableColumn title: 'icon' evaluated: #systemIcon) width: 50).
@@ -73,7 +66,6 @@ SpMolInfoTools >> initializePresenters [
 	table2 roots: { [list  methodDict ]  }. 
 	table2 children:  [ :variable | list  methodDict array].
 	table2 beResizable.
-	table2 contextMenu: self menu.
 	table2 activateOnDoubleClick.
 	table2 whenActivatedDo: [ :selection | selection selectedItem browse ].
 	
@@ -83,7 +75,6 @@ SpMolInfoTools >> initializePresenters [
 	table3 displayIcon: [ :aClass | aClass systemIcon ].
 	table3 display: [ :aClass | aClass value ].
 	table3 beResizable.
-	table3 contextMenu: self menu.
 	table3 activateOnDoubleClick.
 	table3 whenActivatedDo: [ :selection | selection selectedItem browse ].
 	
@@ -118,24 +109,4 @@ SpMolInfoTools >> list [
 { #category : #accessing }
 SpMolInfoTools >> list: aList [
 	list := aList
-]
-
-{ #category : #api }
-SpMolInfoTools >> menu [
-	^ self newMenu
-		title: 'Context menu example';
-		addGroup: [ :aGroup | 
-			aGroup
-				addItem: [ :anItem | 
-					anItem
-						name: 'Print in transcript';
-						shortcut: $p meta;
-						description: 'Print the selected class on Transcript';
-						action: [ table2 selectedItem traceCr ] ] ].
-		
-]
-
-{ #category : #accessing }
-SpMolInfoTools >> table1 [
-	^table1
 ]

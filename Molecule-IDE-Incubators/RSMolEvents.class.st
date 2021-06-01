@@ -56,32 +56,19 @@ RSMolEvents >> onShape: aShape [
 					showComponent producedComponentEventsConnected: producedComponentEvents.
 					showComponent consumedComponentEventsConnected: consumedComponentEvents.
 					
-					showComponent component: aShape model.
-					showComponent openWithSpec
-					]
-			ifFalse:[
+					].
 				showComponent component: aShape model.
-				showComponent openWithSpec.]].
-	
-		
-	"aShape 
-		when: RSMouseLeftClick  
-		do: [ :evt | 
-			| zoom | 
-			zoom := RSMolZoomCanvas new. 
-			zoom scale: aShape.
-			zoom scale > 3
-				ifTrue:  [ zoom zoomOut: aShape ]
-				ifFalse: [ zoom zoomIn: aShape ].
-			 ]."
+				showComponent openWithSpec.].
 	
 	aShape 
 		when: RSMouseRightClick
-		do: [ :evt | | molMenu |
+		do: [ :evt | 
+			| molMenu |
 				self selectedShape: aShape model. 
 				molMenu := MolMenu new.
 				molMenu selectedComponent: selectedShape.
-				molMenu open: molMenu. ].
+				molMenu open: molMenu. 
+				].
 		
 	
 ]

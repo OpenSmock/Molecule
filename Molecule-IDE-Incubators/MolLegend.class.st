@@ -4,18 +4,38 @@ class for the legend
 Class {
 	#name : #MolLegend,
 	#superclass : #Object,
+	#instVars : [
+		'legend'
+	],
 	#category : #'Molecule-IDE-Incubators-Legend'
 }
 
 { #category : #'as yet unclassified' }
-MolLegend >> legend: aLegend container: aCanvas items: items title: title onDemand: onDemand [
-	aLegend container: aCanvas.
-	aLegend title: title.
+MolLegend >> container: aCanvas items: items title: title onDemand: onDemand [
+	self legend: RSLegend new.
+	legend container: aCanvas.
+	legend title: title.
 	items do: [ :selector |
-		aLegend text: selector model withShape: selector.
+		legend text: selector model withShape: selector.
 		 ].
-	aLegend onDemand: onDemand.
-	aLegend withFrame.
-	"legend legendDo: [ : border | border border:(RSBorder new color: 'C7EAE5'; width: 0.5); padding: 5. ]."
-	^aLegend build.
+	legend onDemand: onDemand.
+	legend withFrame.
+	^legend build.
+]
+
+{ #category : #accessing }
+MolLegend >> items: items [
+	items do: [ :selector |
+		legend text: selector model withShape: selector.
+		 ].
+]
+
+{ #category : #accessing }
+MolLegend >> legend [
+	^legend.
+]
+
+{ #category : #accessing }
+MolLegend >> legend: anObject [
+	legend := anObject.
 ]

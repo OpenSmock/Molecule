@@ -6,7 +6,7 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'items',
-		'table2'
+		'table'
 	],
 	#category : #'Molecule-IDE-Incubators-Windows Spec2'
 }
@@ -14,34 +14,27 @@ Class {
 { #category : #example }
 SpMolInspect class >> defaultSpec [
 	^ SpBoxLayout newTopToBottom 
-		add: #table2 expand: true
+		add: #table expand: true
 			fill: true padding: 10;
 	yourself.
 ]
 
 { #category : #initialization }
-SpMolInspect >> connectPresenters [
-	
-
-	
-]
-
-{ #category : #initialization }
 SpMolInspect >> initializePresenters [ 
-	table2 := self newTreeTable.
-	table2 addColumn: (SpCompositeTableColumn new
+	"add table"
+	table := self newTreeTable.
+	table addColumn: (SpCompositeTableColumn new
 			title: 'Component';
 			addColumn: ((SpImageTableColumn evaluated: #systemIcon)
 				width: 20;
 				yourself);
 			addColumn: (SpStringTableColumn evaluated: #name);
 			yourself).
-	table2 roots: { MolAbstractComponentImpl  }. 
-	table2 children:  [ :class | class subclasses ].
-	table2 beResizable.
-	table2 contextMenu: self menu.
-	table2 activateOnDoubleClick.
-	table2 whenActivatedDo: [ :selection | selection selectedItem browse ].
+	table roots: { MolAbstractComponentImpl  }. 
+	table children:  [ :class | class subclasses ].
+	table beResizable.
+	table activateOnDoubleClick.
+	table whenActivatedDo: [ :selection | selection selectedItem browse ].
 	
 	
 ]
@@ -64,19 +57,4 @@ SpMolInspect >> items [
 { #category : #accessing }
 SpMolInspect >> items: anObject [
 	items := anObject
-]
-
-{ #category : #api }
-SpMolInspect >> menu [
-	^ self newMenu
-		title: 'Context menu example';
-		addGroup: [ :aGroup | 
-			aGroup
-				addItem: [ :anItem | 
-					anItem
-						name: 'Print in transcript';
-						shortcut: $p meta;
-						description: 'Print the selected class on Transcript';
-						action: [ table2 selectedItem traceCr ] ] ].
-		
 ]

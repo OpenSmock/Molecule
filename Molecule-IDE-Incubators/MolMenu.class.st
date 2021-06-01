@@ -8,9 +8,7 @@ Class {
 		'label',
 		'items',
 		'parentMenu',
-		'component',
-		'icon',
-		'showComponent'
+		'component'
 	],
 	#category : #'Molecule-IDE-Incubators-Menus'
 }
@@ -45,15 +43,20 @@ MolMenu >> addSeparator [
 	self items last separator: true
 ]
 
-{ #category : #accessing }
-MolMenu >> icon [
-	"Answer a form with an icon to represent the receiver"
-	^ self valueOfProperty: #icon
+{ #category : #converting }
+MolMenu >> asMenuMorph [
+	^ self asMenuMorphOfKind: self morphClass
 ]
 
-{ #category : #accessing }
-MolMenu >> icon: aForm [
-	icon := aForm
+{ #category : #converting }
+MolMenu >> asMenuMorphOfKind: aMorphClass [
+	| prior menu myitems |
+	prior := parentMenu.
+	parentMenu := menu := aMorphClass new.
+	myitems := self items.
+	myitems do: [ :each | each asMenuItemMorphFrom: parentMenu isLast: each = myitems last ].
+	parentMenu := prior.
+	^ menu
 ]
 
 { #category : #accessing }
@@ -71,6 +74,11 @@ MolMenu >> label: aString [
 	label := aString.
 ]
 
+{ #category : #factory }
+MolMenu >> morphClass [
+	^ MenuMorph
+]
+
 { #category : #construction }
 MolMenu >> newMenuItem [
 	^ PluggableMenuItemSpec new
@@ -78,6 +86,9 @@ MolMenu >> newMenuItem [
 
 { #category : #protocol }
 MolMenu >> open: menu [
+
+	" menu when right click on a component"
+
 	menu
 		add: 'System Browser'
 		action: (MessageSend receiver: [  component browse ]  selector: #value)
@@ -91,7 +102,7 @@ MolMenu >> open: menu [
 			spInfo openWithSpec. ]  selector: #value)
 		icon: (self iconNamed: 'smallInfo').
 	menu
-		add: 'Inspect the Component'
+		add: 'Inspect the Class'
 		action: (MessageSend receiver: [  component inspect ]  selector: #value)
 		icon: (self iconNamed: 'glamorousInspect').
 	menu 	
@@ -100,10 +111,13 @@ MolMenu >> open: menu [
 		add: 'Show the Component'
 		action: (MessageSend receiver: [ 
 			| usedComponentServices usedComponentParameters consumedComponentEvents providedComponentServices
-			providedComponentParameters producedComponentEvents | 
+			providedComponentParameters producedComponentEvents showComponent | 
 			showComponent := SpMolShowComponent new. 
 			component haveComponentType
 				ifTrue:[
+					
+					"find and add component connected to the component by interfaces"
+					
 					usedComponentServices := OrderedCollection new.
 					component usedComponentServices do: [:compo| compo users 
 						do: [:comp | comp == component ifFalse: [ usedComponentServices add: comp ] ]].
@@ -134,29 +148,27 @@ MolMenu >> open: menu [
 					showComponent providedComponentParametersConnected: providedComponentParameters.
 					showComponent producedComponentEventsConnected: producedComponentEvents.
 					showComponent consumedComponentEventsConnected: consumedComponentEvents.
-					
-					showComponent component: component.
-					showComponent openWithSpec
-					]
-			ifFalse:[
+					].
 				showComponent component: component.
-				showComponent openWithSpec.].
+				showComponent openWithSpec.
 			]  selector: #value)
 		icon: (self iconNamed: 'objects').
 		
 	menu
 		add: 'Show all Component Instances'
 		action: (MessageSend receiver: [ 
+			"find instances of component"
 			|componentInstances |
 			componentInstances := component allSubInstances.
 			
 			componentInstances isEmpty 
-				ifTrue:[SpMolModalPresenter new openModalWithSpec.]
+				ifTrue:[ SpMolModalComponentInstances new openModalWithSpec. ]
 				ifFalse:[
-				showComponent := SpMolShowComponentInstances new. 
-				showComponent instances: componentInstances.
-				showComponent component: component.
-				showComponent openWithSpec].
+					|showComponentInstances|
+					showComponentInstances := SpMolShowComponentInstances new. 
+					showComponentInstances instances: componentInstances.
+					showComponentInstances component: component.
+					showComponentInstances openWithSpec ].
 			]  selector: #value)
 		icon: (self iconNamed: 'objects').
 		
@@ -181,9 +193,4 @@ MolMenu >> selectedComponent [
 { #category : #'as yet unclassified' }
 MolMenu >> selectedComponent: anObject [
 	component := anObject
-]
-
-{ #category : #accessing }
-MolMenu >> showComponent [
-	^showComponent
 ]
