@@ -4,12 +4,13 @@ class to edit component for the creation
 Class {
 	#name : #RSMolTransformable,
 	#superclass : #RSTransformable,
-	#category : #'Molecule-IDE-Incubators'
+	#category : #'Molecule-IDE-Incubators-Events'
 }
 
 { #category : #'accessing - shapes' }
 RSMolTransformable >> createHandleFor: association [
 	| handle |
+	"change the size of ellipse"
 	handle := RSEllipse new
 		size: 5;
 		model: association;

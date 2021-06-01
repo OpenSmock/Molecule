@@ -35,7 +35,7 @@ RSComponentCalypso class >> shouldBeActivatedInContext: aBrowserContext [
 		        c isTrait not and: [ 
 			        (c allSuperclasses includes: Object) and: [ c isComponentClass ] ] ].
 	
-	^list includes: selected asClass .
+	^list includes: selected asClass.
 	
 	
 ]
@@ -53,14 +53,14 @@ RSComponentCalypso >> activationPriority [
 { #category : #accessing }
 RSComponentCalypso >> buildComponentCanvas [
 	| canvas |
-	canvas := self targetClass.
+	canvas := self targetClass buildUMLCanvasWithBrowserTool: self.
 	canvas ifNil: [ canvas := super buildComponentCanvas ].
 	^ canvas
 ]
 
 { #category : #initialization }
 RSComponentCalypso >> defaultTitle [
-	^'Component'
+	^'Graph'
 ]
 
 { #category : #initialization }
@@ -71,15 +71,16 @@ RSComponentCalypso >> isSimilarTo: anotherBrowserTool [
 
 { #category : #initialization }
 RSComponentCalypso >> setUpModelFromContext [
-	self targetClass: context lastSelectedClass
+	self targetClass: context lastSelectedClass.
+	
 ]
 
-{ #category : #initialization }
+{ #category : #accessing }
 RSComponentCalypso >> targetClass [
-	^ targetClass
+	^targetClass 
 ]
 
-{ #category : #initialization }
-RSComponentCalypso >> targetClass: aClass [
-	targetClass := aClass
+{ #category : #accessing }
+RSComponentCalypso >> targetClass: aTargetClass [
+	targetClass := aTargetClass 
 ]

@@ -4,6 +4,9 @@ Class for calypso for component tab in browser system
 Class {
 	#name : #RSAbstractComponentCalypso,
 	#superclass : #ClyBrowserToolMorph,
+	#instVars : [
+		'morph'
+	],
 	#category : #'Molecule-IDE-Incubators-Tab Calypso'
 }
 
@@ -21,17 +24,17 @@ RSAbstractComponentCalypso >> applyTheme: builder [
 	theme := Smalltalk ui theme.
 	builder canvas color: theme backgroundColor.
 	renderer := builder renderer.
-	renderer border color: theme textColor.
-	renderer marker shape color: theme backgroundColor.
-	renderer textColor: theme textColor.
-	renderer boxColor: theme classBoxBackgroundColor.
-	builder modelDescriptor methodsLimit: theme methodsLimitUML.
 ]
 
 { #category : #building }
 RSAbstractComponentCalypso >> build [
 	| canvas |
 	canvas := self buildComponentCanvas.
+	morph := canvas createMorph.
+	morph onAnnouncement: MorphDeleted 
+		do: [ self containerTab owner ifNotNil: [ self containerTab delete]].
+	canvas when: RSMouseEnter do: [ morph takeKeyboardFocus].
+	self addMorph: morph fullFrame: LayoutFrame identity
 	
 ]
 
@@ -58,9 +61,23 @@ RSAbstractComponentCalypso >> canvasController [
 RSAbstractComponentCalypso >> componentBuilder [
 	| builder |
 	builder := RSComponentBuilder new.
+	builder renderer: RSComponentRenderer new.
 	builder container: RSCanvas new.
+	builder renderer target: context lastSelectedClass.
 	self applyTheme: builder.
 	^ builder
+]
+
+{ #category : #accessing }
+RSAbstractComponentCalypso >> computeClasses [
+	^ self subclassResponsibility
+]
+
+{ #category : #initialization }
+RSAbstractComponentCalypso >> defaultIcon [
+	self defaultIconName ifNil: [ ^nil ].
+	
+	^self iconNamed: self defaultIconName
 ]
 
 { #category : #building }

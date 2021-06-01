@@ -11,10 +11,9 @@ Class {
 		'transformable',
 		'label',
 		'componentModelShape',
-		'menu',
-		'aMenu1'
+		'menu'
 	],
-	#category : #'Molecule-IDE-Incubators'
+	#category : #'Molecule-IDE-Incubators-Windows Spec2'
 }
 
 { #category : #specs }
@@ -37,12 +36,7 @@ canvas when: RSKeyDown do:
 	[  :evt | 
 		(evt keyName == #A)
 		ifTrue: [
-			componentModelShape := RSComposite new.
-			componentModelShape
-				draggable;
-				model: 'component';
-				shapes: (self shapeModel).
-			componentModelShape @ transformable.
+			self componentModelShape.
 			componentModelShape @ menu.
 			
 			self canvas: canvas delete: componentModelShape. 
@@ -123,173 +117,14 @@ line
 ^{line.from.to} asGroup asShape
 ]
 
-{ #category : #'as yet unclassified' }
-SpMolCreateComponent >> canvas: canvas transformable: aTransformable [
-"à revoir"
-componentShape when: RSMouseLeftClick do:
-[  :evt | aTransformable showHandles: evt.
-	componentShape when: RSKeyDown do: [  :evt2 | (evt2 keyName == #C)
-		ifTrue: [ |componentShapeCopy|
-			componentShapeCopy := componentShape copy.
-			componentShapeCopy draggable.
-			componentShapeCopy position: componentShape position + 50.
-			componentShapeCopy @transformable.
-			canvas add: componentShapeCopy.
-			componentShape := componentShapeCopy ] ] ]
-]
-
-{ #category : #'as yet unclassified' }
-SpMolCreateComponent >> canvas: canvas transformable: aTransformable component: aComponent [
-"à revoir"
-aComponent when: RSMouseLeftClick do:
-[  :evt | aTransformable showHandles: evt.
-	aComponent when: RSKeyDown do: [  :evt2 | (evt2 keyName == #C)
-		ifTrue: [ |componentShapeCopy|
-			componentShapeCopy := componentShape copy.
-			componentShapeCopy draggable.
-			componentShapeCopy position: aComponent position + 50.
-			componentShapeCopy @transformable.
-			canvas add: componentShapeCopy.] ] ]
-]
-
-{ #category : #initialization }
-SpMolCreateComponent >> configure: canvas [
-
-"à revoir"
-
-| line circle1 circle2 |
-
-componentShape := RSComposite new.
-componentShape
-		isFixed: true;
-    	position: 50@25;
-		draggable;
-		model: 'component';
-		shapes: (self shapeModel).
-		
-"componentShapeNew := RSComposite new.
-componentShapeNew
-		position: 0@0;
-		draggable;
-		model: component;
-		shapes: (super shapeModel: component)."
-		
-circle2 := RSEllipse new
-		color: Color green;
-		 translateBy: 150 @ 50;
-		draggable;
-		size: 10.
-circle1 := RSEllipse new
-		color: Color red;
-		translateBy: 100 @ 50;
-		size: 10.
-		
-line := RSBezier new
-	withBorderAttachPoint;
-	borderColor: Color green;
-	from: circle1;
-	to: circle2;
-	draggable ;
-	controlPointsController: RSVerticalCPAPController new;
-	width: 0.5.
-	
-
-transformable := RSMolTransformable new.
-
-
-componentShape when: RSMouseDragStart do: 
-[ canvas  add: componentShape copy.].
-
-
-componentShape when: RSMouseDragEnd do: 
-[ :evt |
-	transformable showHandles: evt.
-	componentShapeNew := RSComposite new.
-	componentShapeNew
-		draggable;
-		model: 'component';
-		shapes: (self shapeModel).
-	componentShapeNew position: componentShape position.
-	componentShapeNew @ transformable.
-	canvas  add: componentShapeNew .
-	canvas  removeShape: componentShape .
-	self configure: canvas
-	"componentShape @ transformable" ].
-	
-	
-canvas  add: componentShape .
-canvas add: circle1 ; add: circle2 ; add: line .
-canvas @ RSCanvasController.
-]
-
-{ #category : #initialization }
-SpMolCreateComponent >> configure: canvas boolean: aBoolean [
-
-"à revoir"
-
-| line circle1 circle2 |
-
-boolean := aBoolean. 
-
-componentShape := RSComposite new.
-componentShape
-		position: 0@0;
-		draggable;
-		model: 'component';
-		shapes: (self shapeModel).
-		
-circle2 := RSEllipse new
-		color: Color green;
-		 translateBy: 50 @ 50;
-		draggable;
-		size: 10.
-circle1 := RSEllipse new
-		color: Color red;
-		translateBy: 100 @ 50;
-		size: 10.
-		
-line := RSBezier new
-	withBorderAttachPoint;
-	borderColor: Color green;
-	from: circle1;
-	to: circle2;
-	draggable ;
-	controlPointsController: RSVerticalCPAPController new;
-	width: 0.5.
-	
-
-transformable := RSMolTransformable new.
-
-
-componentShape when: RSMouseDragEnd do: 
-[ :evt |transformable showHandles: evt.
-	componentShapeNew := RSComposite new.
-	componentShapeNew
-		draggable;
-		model: 'component';
-		shapes: (self shapeModel).
-	componentShapeNew position: componentShape position.
-	componentShapeNew @ transformable.
-	canvas  add: componentShapeNew .
-	self canvas: canvas transformable: transformable component: componentShapeNew. 
-	canvas  removeShape: componentShape ].
-
-
-componentShape when: RSMouseDragStart do: 
-[canvas  add: componentShape copy. ].
-
-
-boolean == false ifTrue: [ canvas  add: componentShape . ].
-
-canvas add: circle1 ; add: circle2 ; add: line .
-
-"canvas camera scale: 0.5.
-canvas camera position extent: 10000@10000.
-canvas camera zoomToFit: canvas extent * 0.9."
-
-canvas @ RSCanvasController.
-
-"canvas zoomToFit."
+{ #category : #accessing }
+SpMolCreateComponent >> componentModelShape [
+componentModelShape := RSComposite new.
+		componentModelShape
+				draggable;
+				model: 'component';
+				shapes: (self shapeModel).
+		componentModelShape @ transformable.
 ]
 
 { #category : #initialization }
@@ -297,8 +132,7 @@ SpMolCreateComponent >> connectPresenters [
 
 currentCanvas script: [ :canvas |
 		self create: canvas. 
-		self legendShape: canvas.
-		"self configure: canvas boolean:false." ].
+		self legendShape: canvas. ].
 	
 modelCanvas script: [ :canvas |
 		self model:canvas .
@@ -312,19 +146,8 @@ canvas when: RSMouseRightClick do: [
 		:evt | 
 		| molCreateComponentMenu |
 
-		componentModelShape := RSComposite new.
-		componentModelShape
-				draggable;
-				model: 'component';
-				shapes: (self shapeModel).
-		componentModelShape @ transformable.
-		
-		label := RSLabel new.
-		label
-			draggable;
-			model: 'label';
-			text: 'Text here'.
-		label @ transformable.
+		self componentModelShape.
+		self label.
 		
 		molCreateComponentMenu := MolCreateComponentMenu new.
 		molCreateComponentMenu canvas: canvas.
@@ -347,12 +170,7 @@ canvas when: RSKeyDown do:
 [  :evt | 
 	(evt keyName == #T)
 		ifTrue: [
-			label := RSLabel new.
-			label
-				draggable;
-				model: 'label';
-				text: 'Text here'.
-			label @ transformable.
+			self label.
 			
 			self canvas: canvas delete: label. 
 			self canvas: canvas duplicate: label.
@@ -363,12 +181,7 @@ canvas when: RSKeyDown do:
 	] .
 	(evt keyName == #A)
 		ifTrue: [
-		componentModelShape := RSComposite new.
-		componentModelShape
-				draggable;
-				model: 'component';
-				shapes: (self shapeModel).
-		componentModelShape @ transformable.
+			self componentModelShape.
 		
 			self canvas: canvas delete: componentModelShape. 
 			self canvas: canvas duplicate: componentModelShape.
@@ -408,38 +221,18 @@ aWindowPresenter
 		
 ]
 
+{ #category : #accessing }
+SpMolCreateComponent >> label [
+	label := RSLabel new.
+	label
+		draggable;
+		model: 'label';
+		text: 'Text here'.
+	label @ transformable.
+]
+
 { #category : #'as yet unclassified' }
 SpMolCreateComponent >> legendModel: canvas [
-
-	svgRelationConsumedEvents := RSSVGPath new
-		border: (RSBorder new color: Color red; width:1);
-		svgPath: 'M 5 10 l 9 0';
-		model: 'ConsumedEvents relation'.
-		
-	svgRelationProvidedParameters := RSSVGPath new
-		border: (RSBorder new color: Color pink; width:1);
-		svgPath: 'M 5 10 l 9 0';
-		model: 'ProvidedParameters relation'.
-		
-	svgRelationUsedServices := RSSVGPath new
-		border: (RSBorder new color: Color blue; width:1);
-		svgPath: 'M 5 10 l 9 0';
-		model: 'UsedServices relation'.
-		
-	svgRelationUsedParameters := RSSVGPath new
-		border: (RSBorder new color: Color green; width:1);
-		svgPath: 'M 5 10 l 9 0';
-		model: 'UsedParameters relation'.
-	
-	svgRelationProducedEvents := RSSVGPath new
-		border: (RSBorder new color: Color purple; width:1);
-		svgPath: 'M 5 10 l 9 0';
-		model: 'ProducedEvents relation'.
-	
-	svgRelationProvidedServices := RSSVGPath new
-		border: (RSBorder new color: Color orange; width:1);
-		svgPath: 'M 5 10 l 9 0';
-		model: 'ProvidedServices relation'.
 		
 	label := RSLabel new
 		text: 'text';
@@ -451,7 +244,8 @@ SpMolCreateComponent >> legendModel: canvas [
 		shapes: (self shapeModel).
 	
 	legend := MolLegend new. 
-	legend legend: RSLegend new container: canvas items: {.svgRelationConsumedEvents.svgRelationUsedParameters.svgRelationProvidedParameters.svgRelationProducedEvents.svgRelationProvidedServices.label.componentModelShape } title: 'Legend' onDemand: 'Legend of drawing' .
+	legend container: canvas items: {label.componentModelShape } title: 'Legend' onDemand: 'Legend of drawing' .
+	super addRelationLegend: canvas.
 ]
 
 { #category : #'as yet unclassified' }
@@ -466,7 +260,7 @@ SpMolCreateComponent >> legendShape: aCanvas [
 	labelDelete text: 'Select an element and Press D or SUPPR to delete'.
 	
 	legendShape := MolLegend new.
-	legendShape legend: RSLegend new container: aCanvas items: {labelCopy.labelDelete} title: 'Help Keyboard' onDemand: 'Legend of Keyboard tools' .
+	legendShape container: aCanvas items: {labelCopy.labelDelete} title: 'Help Keyboard' onDemand: 'Legend of Keyboard tools' .
 ]
 
 { #category : #accessing }
@@ -561,77 +355,32 @@ SpMolCreateComponent >> popup: aPopup touch: touch element: element [
 { #category : #'as yet unclassified' }
 SpMolCreateComponent >> shapeModel [
 
-	componentImplementation := RSLabel new
-			fontSize: 1.5;
-			model: 'implementation'
-			yourself.
+	self componentImplementation: 'implementation'.
 	
 	self box: self box.
 	self borderWith: box.
 	
-	ellipseType := RSEllipse new.
-	self 
-		shape: ellipseType
-		color: Color black 
-		model: 'type'
-		translateTo: 0@(-35).
-		ellipseType @ (self labeled).
+	self ellipseType: 'type'.
 	
 	lineType := RSLine new.
 	self line: lineType to: ellipseType.
 	
-	ellipseProvidedServices := RSEllipse new.
-	self 
-		shape: ellipseProvidedServices 
-		color: Color white 
-		model: 'providedServices'
-		translateTo: 35@(-15)
-		borderColor: Color black.
-	self borderWith: ellipseProvidedServices.
-	ellipseProvidedServices @ (self labeled).
+	self ellipseProvidedServices: 'providedServices'.
 	
 	lineProvidedServices := RSLine new.
 	self line: lineProvidedServices to: ellipseProvidedServices.
 		
-	polygonProducedEvents := RSPolygon new.
-	polygonProducedEvents 
-		points: (Array
-		with: 0 @ 5
-		with: 5 @ 0
-		with: 0 @ -5
-		with: -5 @ 0);
-		translateTo: 35@15;
-		color: Color white;
-		borderColor: Color black
-		yourself.
-	polygonProducedEvents border width: 0.5.
-	polygonProducedEvents model: 'producedEvents'.
-	polygonProducedEvents @ (self labeled).
+	self polygonProducedEvents: 'producedEvents'.
 	
 	lineProducedEvents := RSLine new.
 	self line: lineProducedEvents to: polygonProducedEvents.
 		
-	boxProvidedParameters := RSBox new.
-	self
-		shape: boxProvidedParameters 
-		color: Color white 
-		model: 'providedParameters'
-		translateTo: 15@35
-		borderColor: Color black.
-	self borderWith: boxProvidedParameters.
-	boxProvidedParameters @ (self labeled).
-	
-	"ellipseLifeCycleComponent := RSEllipse new color: Color black; translateTo: 10@20; size: 5."
+	self boxProvidedParameters: 'providedParameters'.
 	
 	lineProvidedParameters := RSLine new.
 	self line: lineProvidedParameters to: boxProvidedParameters.
 		
-	svgUsedParameters := RSSVGPath new
-		paint: nil;
-		border: (RSBorder new color: Color black; width:0.5);
-		svgPath: 'M -19 39 l 0 -7 l 9 0 l 0 7'.
-	svgUsedParameters model: 'usedParameters'.
-	svgUsedParameters @(self labeled).
+	self svgUsedParameters: 'usedParameters'.
 	
 	lineUsedParameters := RSSVGPath new
 		paint: nil;
@@ -639,13 +388,7 @@ SpMolCreateComponent >> shapeModel [
 		svgPath: 'M -13 25 l -3 7';
 		yourself.
 		
-	svgUsedServices := RSSVGPath new
-		paint: nil;
-		border: (RSBorder new color: Color black; width:0.5);
-		svgPath: 'M -37 -22 q 10 7 -1 11';
-		yourself.
-	svgUsedServices model: 'usedServices'.
-	svgUsedServices @(self labeled).
+	self svgUsedServices: 'usedServices'.
 	
 	lineUsedServices := RSSVGPath new
 		paint: nil;
@@ -653,15 +396,7 @@ SpMolCreateComponent >> shapeModel [
 		svgPath: 'M -32 -16 l 7 3';
 		yourself.
 		
-	"usedServices := RSComposite new.
-	usedServices shapes: { lineUsedServices. svgUsedServices }."
-
-	svgConsumedEvents := RSSVGPath new
-		paint: nil;
-		border: (RSBorder new color: Color black; width:0.5);
-		svgPath: 'M -37 18 l 5 -5 l -5 -5'.
-	svgConsumedEvents model: 'consumedEvents'.
-	svgConsumedEvents @ (self labeled).
+	self svgConsumedEvents: 'consumedEvents'.
 	
 	lineConsumedEvents := RSSVGPath new
 		paint: nil;

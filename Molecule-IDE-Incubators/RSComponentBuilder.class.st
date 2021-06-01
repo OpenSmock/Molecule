@@ -10,4 +10,11 @@ Class {
 { #category : #initialization }
 RSComponentBuilder >> initialize [
 	super initialize.
+	self renderer: RSComponentRenderer new.
+]
+
+{ #category : #hooks }
+RSComponentBuilder >> renderIn: aCanvas [
+
+	renderer setUpCanvas: aCanvas.
 ]

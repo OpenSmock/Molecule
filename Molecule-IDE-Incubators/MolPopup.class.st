@@ -13,19 +13,22 @@ Class {
 { #category : #'accessing structure variables' }
 MolPopup >> popup: aPopup title: aComponent [ 
 
-| labelRequired labelComponentType labelUsedComponentServices labelConsumedComponentEvents labelUsedComponentParameters labelOffered labelProvidedComponentServices labelProvidedComponentParameters labelProducedComponentEvents molContract |
+"define component popup"
+
+| labelRequired labelComponentType labelUsedComponentServices labelConsumedComponentEvents labelUsedComponentParameters labelOffered labelProvidedComponentServices labelProvidedComponentParameters labelProducedComponentEvents molContract label|
 
 	molContract := MolContract new.
 	
-	labelComponentType := RSLabel new  model: 'ComponentType : ', (molContract type: aComponent) asString.
-	labelRequired := RSLabel new  model: 'REQUIRED'.
-	labelUsedComponentServices := RSLabel new model: 'UsedServices : ', (molContract usedServices: aComponent) asString.
-	labelConsumedComponentEvents := RSLabel new model: 'ConsumedEvents : ', (molContract consumedEvents: aComponent) asString.
-	labelUsedComponentParameters := RSLabel new  model: 'UsedParameters : ', (molContract usedParameters: aComponent) asString.
-	labelOffered := RSLabel new  model: 'OFFERED'.
-	labelProvidedComponentServices := RSLabel new model: 'ProvidedServices : ', (molContract providedServices: aComponent) asString.
-	labelProvidedComponentParameters := RSLabel new  model: 'ProvidedParameters : ',(molContract providedParameters: aComponent) asString.
-	labelProducedComponentEvents := RSLabel new model: 'ProducedEvents : ' , (molContract producedEvents: aComponent) asString.
+	labelComponentType := RSLabel new  model: 'Type : ', (molContract type: aComponent) asString.
+	label := RSLabel new  model: ' '.
+	labelRequired := RSLabel new  model: 'Required'.
+	labelUsedComponentServices := RSLabel new model: 'Used Services : ', (molContract usedServices: aComponent) asString.
+	labelConsumedComponentEvents := RSLabel new model: 'Consumed Events : ', (molContract consumedEvents: aComponent) asString.
+	labelUsedComponentParameters := RSLabel new  model: 'Used Parameters : ', (molContract usedParameters: aComponent) asString.
+	labelOffered := RSLabel new  model: 'Offered'.
+	labelProvidedComponentServices := RSLabel new model: 'Provided Services : ', (molContract providedServices: aComponent) asString.
+	labelProvidedComponentParameters := RSLabel new  model: 'Provided Parameters : ',(molContract providedParameters: aComponent) asString.
+	labelProducedComponentEvents := RSLabel new model: 'Produced Events : ' , (molContract producedEvents: aComponent) asString.
 	
 	popup := aPopup.
 	popup shapeBuilder: [
@@ -34,8 +37,9 @@ MolPopup >> popup: aPopup title: aComponent [
 		lb := RSLegend new.
 		lb container: composite.
 		lb title: aComponent.
-		{labelComponentType. labelRequired.
+		{labelComponentType. label. labelRequired.
 		 labelUsedComponentServices.labelConsumedComponentEvents.labelUsedComponentParameters. 
+		label.
 		labelOffered. labelProvidedComponentServices. labelProducedComponentEvents.
 		labelProvidedComponentParameters} do: [ :selector | lb text: selector model ].
 		lb build.
@@ -48,6 +52,7 @@ MolPopup >> popup: aPopup title: aComponent [
 
 { #category : #'as yet unclassified' }
 MolPopup >> popup: aPopup title: aComponent items: items [
+	"create a popup with a lengend inside"
 	popup := aPopup.
 	popup shapeBuilder: [
 	|  composite lb |
