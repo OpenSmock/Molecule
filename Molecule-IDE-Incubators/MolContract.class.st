@@ -7,6 +7,11 @@ Class {
 	#category : #'Molecule-IDE-Incubators-Contract'
 }
 
+{ #category : #testing }
+MolContract class >> isDeprecated [
+	^ true
+]
+
 { #category : #'as yet unclassified' }
 MolContract >> consumedEvents: aComponent [
 		(aComponent haveComponentType)
