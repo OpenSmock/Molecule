@@ -19,7 +19,7 @@ MolPopup >> popup: aPopup title: aComponent [
 
 	molContract := MolContract new.
 	
-	labelComponentType := RSLabel new  model: 'Type : ', (molContract type: aComponent) asString.
+	labelComponentType := RSLabel new  model: 'Type : ', (aComponent componentType ifNil:['--']) asString.
 	label := RSLabel new  model: ' '.
 	labelRequired := RSLabel new  model: 'Required'.
 	labelUsedComponentServices := RSLabel new model: 'Used Services : ', (molContract usedServices: aComponent) asString.

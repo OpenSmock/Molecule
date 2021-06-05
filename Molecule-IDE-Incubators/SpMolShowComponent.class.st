@@ -546,7 +546,7 @@ SpMolShowComponent >> shapeModel: aComponent [
 	self box: self box.
 	self borderWith: box.
 	
-	self ellipseType: (molContract type: aComponent).
+	self ellipseType: (aComponent componentType ifNil:['--']).
 	
 	lineType := RSLine new.
 	self line: lineType to: ellipseType.

@@ -9,7 +9,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 MolContract >> consumedEvents: aComponent [
-		(self hasContract: aComponent )
+		(aComponent haveComponentType)
 		ifTrue: [ 
 			aComponent consumedComponentEvents isEmpty 
 			ifFalse: [^aComponent consumedComponentEvents]
@@ -20,6 +20,7 @@ MolContract >> consumedEvents: aComponent [
 
 { #category : #testing }
 MolContract >> hasContract: aComponent [
+	self deprecated:'User haveComponentType'.
 	aComponent haveComponentType
 			ifTrue: [ ^true ]
 			ifFalse: [ ^false ]
@@ -27,7 +28,7 @@ MolContract >> hasContract: aComponent [
 
 { #category : #'as yet unclassified' }
 MolContract >> producedEvents: aComponent [
-	(self hasContract: aComponent )
+	(aComponent haveComponentType)
 		ifTrue: [ 
 			aComponent producedComponentEvents isEmpty 
 			ifFalse: [^aComponent producedComponentEvents]
@@ -38,7 +39,7 @@ MolContract >> producedEvents: aComponent [
 
 { #category : #'as yet unclassified' }
 MolContract >> providedParameters: aComponent [
-	(self hasContract: aComponent )
+	(aComponent haveComponentType)
 		ifTrue: [ 
 			aComponent providedComponentParameters isEmpty 
 			ifFalse: [^aComponent providedComponentParameters]
@@ -49,7 +50,7 @@ MolContract >> providedParameters: aComponent [
 
 { #category : #'as yet unclassified' }
 MolContract >> providedServices: aComponent [
-		(self hasContract: aComponent )
+		(aComponent haveComponentType)
 		ifTrue: [ 
 			aComponent providedComponentServices isEmpty 
 			ifFalse: [^aComponent providedComponentServices]
@@ -60,6 +61,7 @@ MolContract >> providedServices: aComponent [
 
 { #category : #'accessing structure variables' }
 MolContract >> type: aComponent [
+	self deprecated:'Use componentType'.
 	"^component allTraits detect: [ :aClass | aClass usesTrait: MolComponentType ] ifNone: nil."
 	aComponent componentType isNotNil ifTrue: [ ^aComponent componentType  ]
 	ifFalse: [ ^'--' ]
@@ -67,7 +69,7 @@ MolContract >> type: aComponent [
 
 { #category : #'as yet unclassified' }
 MolContract >> usedParameters: aComponent [
-	(self hasContract: aComponent )
+	(aComponent haveComponentType)
 		ifTrue: [ 
 			aComponent usedComponentParameters isEmpty 
 			ifFalse: [^aComponent usedComponentParameters]
@@ -78,7 +80,7 @@ MolContract >> usedParameters: aComponent [
 
 { #category : #accessing }
 MolContract >> usedServices: aComponent [
-	 (self hasContract: aComponent )
+	 (aComponent haveComponentType)
 		ifTrue: [ 
 			aComponent usedComponentServices isEmpty 
 			ifFalse: [^aComponent usedComponentServices]

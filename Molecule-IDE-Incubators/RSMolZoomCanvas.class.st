@@ -3,7 +3,7 @@ Class for Interaction : zoom in canvas
 "
 Class {
 	#name : #RSMolZoomCanvas,
-	#superclass : #RSKeyNavigationCanvas,
+	#superclass : #RSKeyNavigationCanvasInteraction,
 	#instVars : [
 		'scale',
 		'newScale'
@@ -56,7 +56,7 @@ RSMolZoomCanvas >> scale [
 	^scale
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 RSMolZoomCanvas >> scale:  aShape [
 	scale := aShape parent camera scale
 ]

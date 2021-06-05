@@ -23,13 +23,6 @@ MolContractTest >> testConsumedEvents [
 	equals: MolGPSDataImpl consumedComponentEvents .
 ]
 
-{ #category : #'as yet unclassified' }
-MolContractTest >> testHasContract [
-	self assert: (molContract hasContract: MolAbstractComponentImpl) equals: false.
-	self assert: (molContract hasContract: MolGPSDataImpl) equals: true.
-	
-]
-
 { #category : #tests }
 MolContractTest >> testProducedEvents [
 	self assert: (molContract producedEvents: MolAbstractComponentImpl) equals:nil.
@@ -51,13 +44,6 @@ MolContractTest >> testProvidedServices [
 	self assert: (molContract providedServices: MolAbstractComponentImpl) equals:nil.
 	self assert: (molContract providedServices: MolGPSDataImpl) 
 	equals: MolGPSDataImpl providedComponentServices.
-]
-
-{ #category : #tests }
-MolContractTest >> testType [
-	self assert: (molContract type: MolAbstractComponentImpl) 
-	equals:MolAbstractComponentImpl componentType .
-	
 ]
 
 { #category : #tests }

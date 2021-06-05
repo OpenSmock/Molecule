@@ -20,10 +20,7 @@ MolWorldActionsMenuTest >> testWorldActionsMenuBuilding [
 	menuBuilder := WorldState new menuBuilder.
 	
 	MolWorldActionsMenu menuActionsOn: menuBuilder.
-	MolWorldActionsMenu menuEditOn: menuBuilder.
 	MolWorldActionsMenu menuInspectOn: menuBuilder.
-	MolWorldActionsMenu menuReuseOn: menuBuilder.
 	MolWorldActionsMenu menuSearchOn: menuBuilder.
 	MolWorldActionsMenu menuCreateOn: menuBuilder.
-	MolWorldActionsMenu menuDeleteOn: menuBuilder.
 ]
