@@ -102,8 +102,6 @@ aCanvas addAll: buttons.
 { #category : #initialization }
 SpMolShowComponentInstances >> configure: canvas [
 	| componentsShape listcomponentInstancesName  |
-	
-	molContract := MolContract new.
 		
 	listcomponentInstancesName := OrderedCollection new.
 	componentInstances do: [ :item | listcomponentInstancesName add: item componentName ].
@@ -131,7 +129,7 @@ SpMolShowComponentInstances >> configure: canvas [
 	self legend: canvas.
 	
 	canvas addAll: componentsShape.
-	canvas @ RSCanvasController.
+	canvas @ RSCanvasControllerInteraction.
 	
 	self canvas: canvas.
 	

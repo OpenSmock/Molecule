@@ -38,6 +38,37 @@ MolUtilsTest >> testAllComponentInstancesOfType [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testComponentType [
+
+	self assert: (MolUtils componentType: nil) isNil.
+	self assert: (MolUtils componentType: 45) isNil.
+	self assert: (MolUtils componentType: Integer) isNil.
+	self assert: (MolUtils componentType: MolComponentImpl) isNil.
+	self assert: (MolUtils componentType: MolCompleteComponentImpl) equals: MolCompleteComponent.
+	self assert: (MolUtils componentType: MolCompleteComponentImpl new) equals: MolCompleteComponent.
+	self assert: (MolUtils componentType: MolCompleteComponent) isNil.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testConsumedComponentEvents [
+
+	self assert: (MolUtils consumedComponentEvents: nil) isEmpty.
+	self assert: (MolUtils consumedComponentEvents: 45) isEmpty.
+	self assert: (MolUtils consumedComponentEvents: Integer) isEmpty.
+	self assert: (MolUtils consumedComponentEvents: MolComponentImpl) isEmpty.
+	self assert: (MolUtils consumedComponentEvents: MolCompleteComponentImpl) notEmpty.
+	self assert: ((MolUtils consumedComponentEvents: MolCompleteComponentImpl) first) equals: MolUsedEvents.
+	self assert: (MolUtils consumedComponentEvents: MolCompleteComponentImpl new) notEmpty.
+	self assert: ((MolUtils consumedComponentEvents: MolCompleteComponentImpl new) first) equals: MolUsedEvents.
+	self assert: (MolUtils consumedComponentEvents: MolCompleteComponent) notEmpty.
+	self assert: ((MolUtils consumedComponentEvents: MolCompleteComponent) first) equals: MolUsedEvents.
+	
+	self assert: (MolUtils consumedComponentEvents: MolComponentServices) isEmpty.
+	self assert: (MolUtils consumedComponentEvents: MolComponentParameters) isEmpty.
+	self assert: (MolUtils consumedComponentEvents: MolComponentEvents) isEmpty.
+]
+
+{ #category : #tests }
 MolUtilsTest >> testCreateAllComponents [
 "MolUtils>createAllComponents instanciate and activate all deployed components"
 
@@ -77,6 +108,21 @@ MolUtilsTest >> testInstanceOf [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testIsComponentOrComponentClass [
+
+	self assert: (MolUtils isComponentOrComponentClass: nil) equals: false.
+	self assert: (MolUtils isComponentOrComponentClass: 45) equals: false.
+	self assert: (MolUtils isComponentOrComponentClass: Integer) equals: false. 
+	self assert: (MolUtils isComponentOrComponentClass: MolComponentImpl) equals: false.
+	self assert: (MolUtils isComponentOrComponentClass: MolCompleteComponentImpl) equals: true.
+	self assert: (MolUtils isComponentOrComponentClass: MolCompleteComponentImpl new) equals: true.
+	self assert: (MolUtils isComponentOrComponentClass: MolCompleteComponent) equals: false.
+	self assert: (MolUtils isComponentOrComponentClass: MolComponentServices) equals: false.
+	self assert: (MolUtils isComponentOrComponentClass: MolComponentParameters) equals: false.
+	self assert: (MolUtils isComponentOrComponentClass: MolComponentEvents) equals: false.
+]
+
+{ #category : #tests }
 MolUtilsTest >> testLog [
 
 	| activate |
@@ -98,6 +144,63 @@ MolUtilsTest >> testLog2 [
 	MolUtils  isLogActive: (MolUtils  isLogActive not).
 	self assert: MolUtils isLogActive equals: activate.
 	MolUtils  isLogActive: (activate).
+]
+
+{ #category : #tests }
+MolUtilsTest >> testProducedComponentEvents [
+
+	self assert: (MolUtils producedComponentEvents: nil) isEmpty.
+	self assert: (MolUtils producedComponentEvents: 45) isEmpty.
+	self assert: (MolUtils producedComponentEvents: Integer) isEmpty.
+	self assert: (MolUtils producedComponentEvents: MolComponentImpl) isEmpty.
+	self assert: (MolUtils producedComponentEvents: MolCompleteComponentImpl) notEmpty.
+	self assert: ((MolUtils producedComponentEvents: MolCompleteComponentImpl) first) equals: MolUsedEvents.
+	self assert: (MolUtils producedComponentEvents: MolCompleteComponentImpl new) notEmpty.
+	self assert: ((MolUtils producedComponentEvents: MolCompleteComponentImpl new) first) equals: MolUsedEvents.
+	self assert: (MolUtils producedComponentEvents: MolCompleteComponent) notEmpty.
+	self assert: ((MolUtils producedComponentEvents: MolCompleteComponent) first) equals: MolUsedEvents.
+	
+	self assert: (MolUtils producedComponentEvents: MolComponentServices) isEmpty.
+	self assert: (MolUtils producedComponentEvents: MolComponentParameters) isEmpty.
+	self assert: (MolUtils producedComponentEvents: MolComponentEvents) isEmpty.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testProvidedComponentParameters [
+
+	self assert: (MolUtils providedComponentParameters: nil) isEmpty.
+	self assert: (MolUtils providedComponentParameters: 45) isEmpty.
+	self assert: (MolUtils providedComponentParameters: Integer) isEmpty.
+	self assert: (MolUtils providedComponentParameters: MolComponentImpl) isEmpty.
+	self assert: (MolUtils providedComponentParameters: MolCompleteComponentImpl) notEmpty.
+	self assert: ((MolUtils providedComponentParameters: MolCompleteComponentImpl) first) equals: MolUsedParameters.
+	self assert: (MolUtils providedComponentParameters: MolCompleteComponentImpl new) notEmpty.
+	self assert: ((MolUtils providedComponentParameters: MolCompleteComponentImpl new) first) equals: MolUsedParameters.
+	self assert: (MolUtils providedComponentParameters: MolCompleteComponent) notEmpty.
+	self assert: ((MolUtils providedComponentParameters: MolCompleteComponent) first) equals: MolUsedParameters.
+	
+	self assert: (MolUtils providedComponentParameters: MolComponentServices) isEmpty.
+	self assert: (MolUtils providedComponentParameters: MolComponentParameters) isEmpty.
+	self assert: (MolUtils providedComponentParameters: MolComponentEvents) isEmpty.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testProvidedComponentServices [
+
+	self assert: (MolUtils providedComponentServices: nil) isEmpty.
+	self assert: (MolUtils providedComponentServices: 45) isEmpty.
+	self assert: (MolUtils providedComponentServices: Integer) isEmpty.
+	self assert: (MolUtils providedComponentServices: MolComponentImpl) isEmpty.
+	self assert: (MolUtils providedComponentServices: MolCompleteComponentImpl) notEmpty.
+	self assert: ((MolUtils providedComponentServices: MolCompleteComponentImpl) first) equals: MolUsedServices.
+	self assert: (MolUtils providedComponentServices: MolCompleteComponentImpl new) notEmpty.
+	self assert: ((MolUtils providedComponentServices: MolCompleteComponentImpl new) first) equals: MolUsedServices.
+	self assert: (MolUtils providedComponentServices: MolCompleteComponent) notEmpty.
+	self assert: ((MolUtils providedComponentServices: MolCompleteComponent) first) equals: MolUsedServices.
+	
+	self assert: (MolUtils providedComponentServices: MolComponentServices) isEmpty.
+	self assert: (MolUtils providedComponentServices: MolComponentParameters) isEmpty.
+	self assert: (MolUtils providedComponentServices: MolComponentEvents) isEmpty.
 ]
 
 { #category : #tests }
@@ -196,4 +299,42 @@ MolUtilsTest >> testStopComponents [
 	self assert: (MolUtils isInstanciateComponentOf: MolCompleteComponentImpl) equals: false.
 	self assert: (homeServices isWaitingForActivation: MolBasicComponentImpl) equals: false.
 self assert: (homeServices isWaitingForActivation: MolCompleteComponentImpl) equals: false.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testUsedComponentParameters [
+
+	self assert: (MolUtils usedComponentParameters: nil) isEmpty.
+	self assert: (MolUtils usedComponentParameters: 45) isEmpty.
+	self assert: (MolUtils usedComponentParameters: Integer) isEmpty.
+	self assert: (MolUtils usedComponentParameters: MolComponentImpl) isEmpty.
+	self assert: (MolUtils usedComponentParameters: MolCompleteComponentImpl) notEmpty.
+	self assert: ((MolUtils usedComponentParameters: MolCompleteComponentImpl) first) equals: MolUsedParameters.
+	self assert: (MolUtils usedComponentParameters: MolCompleteComponentImpl new) notEmpty.
+	self assert: ((MolUtils usedComponentParameters: MolCompleteComponentImpl new) first) equals: MolUsedParameters.
+	self assert: (MolUtils usedComponentParameters: MolCompleteComponent) notEmpty.
+	self assert: ((MolUtils usedComponentParameters: MolCompleteComponent) first) equals: MolUsedParameters.
+	
+	self assert: (MolUtils usedComponentParameters: MolComponentServices) isEmpty.
+	self assert: (MolUtils usedComponentParameters: MolComponentParameters) isEmpty.
+	self assert: (MolUtils usedComponentParameters: MolComponentEvents) isEmpty.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testUsedComponentServices [
+
+	self assert: (MolUtils usedComponentServices: nil) isEmpty.
+	self assert: (MolUtils usedComponentServices: 45) isEmpty.
+	self assert: (MolUtils usedComponentServices: Integer) isEmpty.
+	self assert: (MolUtils usedComponentServices: MolComponentImpl) isEmpty.
+	self assert: (MolUtils usedComponentServices: MolCompleteComponentImpl) notEmpty.
+	self assert: ((MolUtils usedComponentServices: MolCompleteComponentImpl) first) equals: MolUsedServices.
+	self assert: (MolUtils usedComponentServices: MolCompleteComponentImpl new) notEmpty.
+	self assert: ((MolUtils usedComponentServices: MolCompleteComponentImpl new) first) equals: MolUsedServices.
+	self assert: (MolUtils usedComponentServices: MolCompleteComponent) notEmpty.
+	self assert: ((MolUtils usedComponentServices: MolCompleteComponent) first) equals: MolUsedServices.
+	
+	self assert: (MolUtils usedComponentServices: MolComponentServices) isEmpty.
+	self assert: (MolUtils usedComponentServices: MolComponentParameters) isEmpty.
+	self assert: (MolUtils usedComponentServices: MolComponentEvents) isEmpty.
 ]

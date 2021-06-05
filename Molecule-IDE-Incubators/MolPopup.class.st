@@ -12,23 +12,19 @@ Class {
 
 { #category : #'accessing structure variables' }
 MolPopup >> popup: aPopup title: aComponent [ 
-
-"define component popup"
-
-| labelRequired labelComponentType labelUsedComponentServices labelConsumedComponentEvents labelUsedComponentParameters labelOffered labelProvidedComponentServices labelProvidedComponentParameters labelProducedComponentEvents molContract label|
-
-	molContract := MolContract new.
+	"Component info popup"
+	| labelRequired labelComponentType labelUsedComponentServices labelConsumedComponentEvents labelUsedComponentParameters labelOffered labelProvidedComponentServices labelProvidedComponentParameters labelProducedComponentEvents label|
 	
 	labelComponentType := RSLabel new  model: 'Type : ', (aComponent componentType ifNil:['--']) asString.
 	label := RSLabel new  model: ' '.
 	labelRequired := RSLabel new  model: 'Required'.
-	labelUsedComponentServices := RSLabel new model: 'Used Services : ', (molContract usedServices: aComponent) asString.
-	labelConsumedComponentEvents := RSLabel new model: 'Consumed Events : ', (molContract consumedEvents: aComponent) asString.
-	labelUsedComponentParameters := RSLabel new  model: 'Used Parameters : ', (molContract usedParameters: aComponent) asString.
+	labelUsedComponentServices := RSLabel new model: 'Used Services : ', ((MolUtils usedComponentServices: aComponent) ifEmpty:['--']) asString.
+	labelConsumedComponentEvents := RSLabel new model: 'Consumed Events : ', ((MolUtils consumedComponentEvents: aComponent) ifEmpty:['--']) asString.
+	labelUsedComponentParameters := RSLabel new  model: 'Used Parameters : ', ((MolUtils usedComponentParameters: aComponent) ifEmpty:['--']) asString.
 	labelOffered := RSLabel new  model: 'Offered'.
-	labelProvidedComponentServices := RSLabel new model: 'Provided Services : ', (molContract providedServices: aComponent) asString.
-	labelProvidedComponentParameters := RSLabel new  model: 'Provided Parameters : ',(molContract providedParameters: aComponent) asString.
-	labelProducedComponentEvents := RSLabel new model: 'Produced Events : ' , (molContract producedEvents: aComponent) asString.
+	labelProvidedComponentServices := RSLabel new model: 'Provided Services : ', ((MolUtils providedComponentServices: aComponent) ifEmpty:['--']) asString.
+	labelProvidedComponentParameters := RSLabel new  model: 'Provided Parameters : ',((MolUtils providedComponentParameters: aComponent) ifEmpty:['--']) asString.
+	labelProducedComponentEvents := RSLabel new model: 'Produced Events : ' , ((MolUtils producedComponentEvents: aComponent) ifEmpty:['--']) asString.
 	
 	popup := aPopup.
 	popup shapeBuilder: [

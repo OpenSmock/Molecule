@@ -29,6 +29,26 @@ MolUtils class >> allComponentInstancesOfType: aComponentType [
 	^oc
 ]
 
+{ #category : #'component contract' }
+MolUtils class >> componentType: aComponentOrComponentClass [
+	"Get component type of a component or a component class, return nil if no type was found"
+	
+	(self isComponentOrComponentClass: aComponentOrComponentClass) ifFalse: [ ^ nil ].
+	^aComponentOrComponentClass isClass 
+		ifTrue: [ aComponentOrComponentClass componentType ]
+		ifFalse: [ aComponentOrComponentClass class componentType ]
+]
+
+{ #category : #'component contract' }
+MolUtils class >> consumedComponentEvents: anObject [
+	"Get consumed events of an object, return nil if no events was found"
+	
+	| componentType |
+	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
+	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
+	^ componentType ifNotNil: [ :e | ^ e consumedComponentEvents ] ifNil: [ ^ {} ]
+]
+
 { #category : #'component creation' }
 MolUtils class >> createAllComponents [
 	"instanciate and activate all deployed components"
@@ -67,6 +87,14 @@ MolUtils class >> instanceOf: aClass named: aName [
 ]
 
 { #category : #testing }
+MolUtils class >> isComponentOrComponentClass: anObject [
+
+	anObject ifNil: [  ^ false ].
+	anObject isClass ifTrue: [ ^ anObject isComponentClass ].
+	^anObject isComponent
+]
+
+{ #category : #testing }
 MolUtils class >> isInstanciateComponentOf: aClass [
 	^ self isInstanciateComponentOf: aClass named: #default
 ]
@@ -97,6 +125,36 @@ MolUtils class >> log: aString [
 	self isLogActive ifFalse: [ ^ self ].
 	string := aString ifNil: [ 'Unkown information to log.' ].
 	self traceCr: '[Molecule] ' , string
+]
+
+{ #category : #'component contract' }
+MolUtils class >> producedComponentEvents: anObject [
+	"Get produced events of an object, return nil if no events was found"
+	
+	| componentType |
+	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
+	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
+	^ componentType ifNotNil: [ :e | ^ e producedComponentEvents ] ifNil: [ ^ {} ]
+]
+
+{ #category : #'component contract' }
+MolUtils class >> providedComponentParameters: anObject [
+	"Get provided parameters of an object, return nil if no parameters was found"
+	
+	| componentType |
+	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
+	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
+	^ componentType ifNotNil: [ :e | ^ e providedComponentParameters ] ifNil: [ ^ {} ]
+]
+
+{ #category : #'component contract' }
+MolUtils class >> providedComponentServices: anObject [
+	"Get provided services of an object, return nil if no services was found"
+	
+	| componentType |
+	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
+	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
+	^ componentType ifNotNil: [ :e | ^ e providedComponentServices ] ifNil: [ ^ {} ]
 ]
 
 { #category : #log }
@@ -182,4 +240,24 @@ MolUtils class >> toggleLog [
 	self isLogActive
 		ifTrue: [ MolUtils showInformation: 'Logs are active' ]
 		ifFalse: [ MolUtils showInformation: 'Logs are not active' ]
+]
+
+{ #category : #'component contract' }
+MolUtils class >> usedComponentParameters: anObject [
+	"Get used parameters of an object, return nil if no parameters was found"
+	
+	| componentType |
+	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
+	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
+	^ componentType ifNotNil: [ :e | ^ e usedComponentParameters ] ifNil: [ ^ {} ]
+]
+
+{ #category : #'component contract' }
+MolUtils class >> usedComponentServices: anObject [
+	"Get used services of an object, return nil if no services was found"
+	
+	| componentType |
+	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
+	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
+	^ componentType ifNotNil: [ :e | ^ e usedComponentServices ] ifNil: [ ^ {} ]
 ]

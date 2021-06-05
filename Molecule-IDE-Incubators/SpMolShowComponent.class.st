@@ -17,7 +17,6 @@ Class {
 		'consumedComponentEvents',
 		'toProvidedServices',
 		'molPopup',
-		'molContract',
 		'ellipseProvidedServices',
 		'polygonProducedEvents',
 		'boxProvidedParameters',
@@ -261,26 +260,24 @@ SpMolShowComponent >> composable: aComposable shapes: aRSGroup [
 SpMolShowComponent >> configure: canvas [
 	|  componentsInstances numbersOfComponentsInstances arrayOfUsedComponentServices fromConsumedEvents arrayOfConsumedComponentEvents arrayOfUsedComponentParameters fromUsedParameters arrayOfProvidedComponentParameters fromProvidedParameters arrayOfProducedComponentEvents arrayOfProvidedComponentServices fromProvidedServices fromProducedEvents fromUsedServices |
 	
-	self molContract: MolContract new.
-	
 	componentsInstances := component allSubInstances.
 	numbersOfComponentsInstances := componentsInstances size.
 	
 	componentShape := RSComposite new.
 	self componentShape: componentShape.
 		
-	fromUsedServices := (componentShape shapes shapesFromModel: (molContract usedServices: component))
-	detect: [:svg | svg isKindOf: RSSVGPath ].
-	fromConsumedEvents := (componentShape shapes shapesFromModel: (molContract consumedEvents: component))
-	detect: [:svg | svg isKindOf: RSSVGPath ].
-	fromUsedParameters := (componentShape shapes shapesFromModel: (molContract usedParameters: component))
-	detect: [:svg | svg isKindOf: RSSVGPath ].
-	fromProvidedParameters := (componentShape shapes shapesFromModel: (molContract providedParameters: component))
-	detect: [:aBox | aBox isKindOf: RSBox ].
-	fromProducedEvents := (componentShape shapes shapesFromModel: (molContract producedEvents: component))
-	detect: [:aPolygon | aPolygon isKindOf: RSPolygon ].
-	fromProvidedServices := (componentShape shapes shapesFromModel: (molContract providedServices: component))
-	detect: [:ellipse | ellipse isKindOf: RSEllipse  ].
+	fromUsedServices := (componentShape shapes shapesFromModel: (MolUtils usedComponentServices: component))
+	detect: [:svg | svg isKindOf: RSSVGPath ] ifNone:[nil].
+	fromConsumedEvents := (componentShape shapes shapesFromModel: (MolUtils consumedComponentEvents: component))
+	detect: [:svg | svg isKindOf: RSSVGPath ] ifNone:[nil].
+	fromUsedParameters := (componentShape shapes shapesFromModel: (MolUtils usedComponentParameters: component))
+	detect: [:svg | svg isKindOf: RSSVGPath ] ifNone:[nil].
+	fromProvidedParameters := (componentShape shapes shapesFromModel: (MolUtils providedComponentParameters: component))
+	detect: [:aBox | aBox isKindOf: RSBox ] ifNone:[nil].
+	fromProducedEvents := (componentShape shapes shapesFromModel: (MolUtils producedComponentEvents: component))
+	detect: [:aPolygon | aPolygon isKindOf: RSPolygon ] ifNone:[nil].
+	fromProvidedServices := (componentShape shapes shapesFromModel: (MolUtils providedComponentServices: component))
+	detect: [:ellipse | ellipse isKindOf: RSEllipse  ] ifNone:[nil].
 	
 	toProducedEvents := OrderedCollection new.
 	toProvidedServices := OrderedCollection new.
@@ -467,11 +464,6 @@ SpMolShowComponent >> line: aLine to: to [
 ]
 
 { #category : #accessing }
-SpMolShowComponent >> molContract: aMolContrat [
-	molContract := aMolContrat 
-]
-
-{ #category : #accessing }
 SpMolShowComponent >> polygonProducedEvents: model [
 polygonProducedEvents := RSPolygon new.
 	polygonProducedEvents 
@@ -551,24 +543,24 @@ SpMolShowComponent >> shapeModel: aComponent [
 	lineType := RSLine new.
 	self line: lineType to: ellipseType.
 	
-	self ellipseProvidedServices: (molContract providedServices: aComponent).
+	self ellipseProvidedServices: (MolUtils providedComponentServices: aComponent).
 	
-	test := molContract providedServices: aComponent.
+	test := MolUtils providedComponentServices: aComponent.
 	
 	lineProvidedServices := RSLine new.
 	self line: lineProvidedServices to: ellipseProvidedServices.
 	
-	self polygonProducedEvents: (molContract producedEvents: aComponent).
+	self polygonProducedEvents: (MolUtils producedComponentEvents: aComponent).
 
 	lineProducedEvents := RSLine new.
 	self line: lineProducedEvents to: polygonProducedEvents.
 		
-	self boxProvidedParameters: (molContract providedParameters: aComponent).
+	self boxProvidedParameters: (MolUtils providedComponentServices: aComponent).
 	
 	lineProvidedParameters := RSLine new.
 	self line: lineProvidedParameters to: boxProvidedParameters.
 		
-	self svgUsedParameters: (molContract usedParameters: aComponent).
+	self svgUsedParameters: (MolUtils usedComponentParameters: aComponent).
 	
 	lineUsedParameters := RSSVGPath new
 		paint: nil;
@@ -576,7 +568,7 @@ SpMolShowComponent >> shapeModel: aComponent [
 		svgPath: 'M -13 25 l -3 7';
 		yourself.
 		
-	self svgUsedServices: (molContract usedServices: aComponent).
+	self svgUsedServices: (MolUtils usedComponentServices: aComponent).
 	
 	lineUsedServices := RSSVGPath new
 		paint: nil;
@@ -584,7 +576,7 @@ SpMolShowComponent >> shapeModel: aComponent [
 		svgPath: 'M -32 -16 l 7 3';
 		yourself.
 		
-	self svgConsumedEvents: (molContract consumedEvents: aComponent).
+	self svgConsumedEvents: (MolUtils consumedComponentEvents: aComponent).
 	
 	lineConsumedEvents := RSSVGPath new
 		paint: nil;
