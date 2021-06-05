@@ -7,6 +7,11 @@ Class {
 	#category : #'Molecule-IDE-Incubators-Tests'
 }
 
+{ #category : #testing }
+MolContractTest class >> isDeprecated [
+	^ true
+]
+
 { #category : #running }
 MolContractTest >> setUp [
 	super setUp.

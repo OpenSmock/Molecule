@@ -66,7 +66,7 @@ MolComponentImplTest >> testAugmentedClassToAComponentUsesAsAClassicWay [
 	self assert: myInstance existingInterfaceC.
 ]
 
-{ #category : #tests }
+{ #category : #'test - contract' }
 MolComponentImplTest >> testComponentType [ 
 
 	self assert: MolComponentImpl componentType equals: nil.
@@ -121,19 +121,19 @@ MolComponentImplTest >> testFoundSubscriber [
 	self assert: component getMolUsedEventsSubscriber isNotFoundEventsSubscriber not.
 ]
 
-{ #category : #tests }
+{ #category : #'test - contract' }
 MolComponentImplTest >> testHaveComponentType [ 
 
 	self assert: MolComponentImpl haveComponentType equals: false.
 ]
 
-{ #category : #tests }
+{ #category : #'test - contract' }
 MolComponentImplTest >> testIsComponent [
 
 	self assert: MolComponentImpl isComponentClass.
 ]
 
-{ #category : #tests }
+{ #category : #'test - contract' }
 MolComponentImplTest >> testIsOverrideComponentType [
 
 	self assert: MolCompleteComponentImpl isOverrideComponentType equals: false.
@@ -188,7 +188,7 @@ MolComponentImplTest >> testNotFoundSubscriber [
 	component getMolUsedEventsSubscriber unsubscribe: self.
 ]
 
-{ #category : #tests }
+{ #category : #'test - contract' }
 MolComponentImplTest >> testOverridedComponentTypes [
 
 	self assert: MolCompleteComponentImpl overridedComponentTypes isEmpty.

@@ -92,6 +92,7 @@ MolComponentType classSide >> consumedComponentEvents [
 
 { #category : #actions }
 MolComponentType classSide >> isConsumeEvents: anEventsTrait [
+	anEventsTrait ifNil:[ ^ false ].
 	anEventsTrait isComponentEvents
 		ifFalse: [ ^ false ]
 		ifTrue: [ ^ self allConsumedEvents includes: anEventsTrait ]
@@ -99,6 +100,7 @@ MolComponentType classSide >> isConsumeEvents: anEventsTrait [
 
 { #category : #actions }
 MolComponentType classSide >> isProduceEvents: anEventsTrait [
+	anEventsTrait ifNil: [ ^ false ].
 	anEventsTrait isComponentEvents
 		ifFalse: [ ^ false ]
 		ifTrue: [ ^ self allProducedEvents includes: anEventsTrait ]
@@ -106,6 +108,7 @@ MolComponentType classSide >> isProduceEvents: anEventsTrait [
 
 { #category : #actions }
 MolComponentType classSide >> isProvideParameters: aParametersTrait [
+	aParametersTrait ifNil: [ ^false ].
 	aParametersTrait isComponentParameters
 		ifFalse: [ ^ false ]
 		ifTrue: [ ^ self allProvidedParameters includes: aParametersTrait ]
@@ -113,6 +116,7 @@ MolComponentType classSide >> isProvideParameters: aParametersTrait [
 
 { #category : #actions }
 MolComponentType classSide >> isProvideServices: aServicesTrait [
+	aServicesTrait ifNil: [ ^ false ].
 	aServicesTrait isComponentServices
 		ifFalse: [ ^ false ]
 		ifTrue: [ ^ self allProvidedServices includes: aServicesTrait ]
@@ -120,6 +124,7 @@ MolComponentType classSide >> isProvideServices: aServicesTrait [
 
 { #category : #actions }
 MolComponentType classSide >> isUseParameters: aParametersTrait [
+	aParametersTrait ifNil: [ ^ false ].
 	aParametersTrait isComponentParameters
 		ifFalse: [ ^ false ]
 		ifTrue: [ ^ self allUsedParameters includes: aParametersTrait ]
@@ -127,6 +132,7 @@ MolComponentType classSide >> isUseParameters: aParametersTrait [
 
 { #category : #actions }
 MolComponentType classSide >> isUseServices: aServicesTrait [
+	aServicesTrait ifNil: [ ^ false ].
 	aServicesTrait isComponentServices
 		ifFalse: [ ^ false ]
 		ifTrue: [ ^ self allUsedServices includes: aServicesTrait ]
