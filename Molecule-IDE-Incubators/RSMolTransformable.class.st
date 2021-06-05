@@ -4,7 +4,7 @@ class to edit component for the creation
 Class {
 	#name : #RSMolTransformable,
 	#superclass : #RSTransformable,
-	#category : #'Molecule-IDE-Incubators-Events'
+	#category : #'Molecule-IDE-Incubators-Deprecated'
 }
 
 { #category : #'accessing - shapes' }

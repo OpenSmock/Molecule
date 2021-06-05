@@ -1,7 +1,7 @@
 Class {
 	#name : #SpMolFilteringList,
 	#superclass : #SpFilteringListPresenter,
-	#category : #'Molecule-IDE-Incubators'
+	#category : #'Molecule-IDE-Incubators-Windows Spec2'
 }
 
 { #category : #specs }

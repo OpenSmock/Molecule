@@ -11,11 +11,6 @@ Class {
 }
 
 { #category : #hooks }
-RSMolEvents >> initialize [
-	super initialize.
-]
-
-{ #category : #hooks }
 RSMolEvents >> onShape: aShape [
 	aShape 
 		when: RSMouseDoubleLeftClick

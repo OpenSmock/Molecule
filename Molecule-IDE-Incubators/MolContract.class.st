@@ -4,7 +4,7 @@ class for the component contract
 Class {
 	#name : #MolContract,
 	#superclass : #Object,
-	#category : #'Molecule-IDE-Incubators-Contract'
+	#category : #'Molecule-IDE-Incubators-Deprecated'
 }
 
 { #category : #testing }
