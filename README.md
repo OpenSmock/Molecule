@@ -130,6 +130,7 @@ Molecule includes more than 175 unit tests, we have also written tests that simu
 * **Eric Le Pors** - *Initial work* - [ELePors](https://github.com/ELePors)
 * **Nolwenn Fournier** - *Initial work* - [nolwennfournier](https://github.com/nolwennfournier)
 * **Alain Plantec** - *Initial work* - [plantec](https://github.com/plantec)
+* **Lisa Doyen** - *UI Components Tools* - [lisadoyen](https://github.com/lisadoyen)
 
 ![Molecule Logo](MoleculeLogotype.svg)
 
