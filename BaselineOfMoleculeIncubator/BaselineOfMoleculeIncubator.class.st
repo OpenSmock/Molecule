@@ -46,7 +46,7 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 BaselineOfMoleculeIncubator >> loadRoassal: spec [
 
 	spec
-		baseline: 'Roassal3'
+		baseline: 'Roassal3' 
 		with: [ spec repository: 'github://ObjectProfile/Roassal3' ]
 ]
 
