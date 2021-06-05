@@ -863,11 +863,12 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
-	
 	self longWait.
 	
 	"Add a trait"
 	componentClass addToComposition: MolTestNoComponentTraitA.
+	self longWait.
+	
 	self assert: (componentClass canPerform: #methodOfNoComponentTrait).
 	self assert: (componentClass traitComposition members size) equals: 5.
 	self assert: (componentClass traitComposition includesTrait: MolTestNoComponentTraitA).

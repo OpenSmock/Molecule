@@ -33,13 +33,15 @@ MolComponentImpl classSide >> activate: aComponentName [
 
 { #category : #testing }
 MolComponentImpl classSide >> componentType [
-	| traits |
 
-	traits := Set new.
+	"get all hierarchy traits and try to detect a component type"
 	self withAllSuperclassesDo: [ :c | 
-		(c  ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[traits addAll: c traitComposition allTraits].
+		(c  ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[
+			(c traitComposition allTraits) do:[ :t | t isComponentType ifTrue:[ ^t ] ].
+		].
 	].
-	^(traits detect:[ :t | t isComponentType] ifNone:[nil])
+	"^(traits detect:[ :t | t isComponentType] ifNone:[nil])"
+	^ nil
 ]
 
 { #category : #'component definition' }
