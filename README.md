@@ -10,11 +10,6 @@ Molecule support completely transparent class augmentation into component (not n
 
 ## Getting Started
 
-### Prerequisites
-
-Molecule Core has no dependencies.
-Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark), this package contains benchmarks for working on performances.
-
 ### Installing Molecule
 
 Pharo 8 and Pharo 9 : 
@@ -26,6 +21,26 @@ Metacello new
    load.
 ```
 Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
+
+### Prerequisites
+
+Molecule Core has no dependencies.
+Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark), this package contains benchmarks for working on performances.
+
+## UI Tools overview
+
+UI Tools are comming in next versions of Molecule. They are currently in development in Incubators packages but are ready to use.
+
+![moleculeUITools](https://user-images.githubusercontent.com/49183340/120898493-5eb8e100-c62b-11eb-86c6-021dc25e5dd0.PNG)
+
+Installing Incubators packages for Pharo 9 (not tested on Pharo 8) :
+
+```smalltalk
+Metacello new
+   baseline: 'MoleculeIncubator';
+   repository: 'github://OpenSmock/Molecule';
+   load.
+```
 
 ## Using Components
 
