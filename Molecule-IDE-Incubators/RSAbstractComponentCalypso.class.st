@@ -20,9 +20,8 @@ RSAbstractComponentCalypso class >> shouldBeActivatedInContext: aBrowserContext 
 
 { #category : #building }
 RSAbstractComponentCalypso >> applyTheme: builder [
-	| theme renderer |
-	theme := Smalltalk ui theme.
-	builder canvas color: theme backgroundColor.
+	| renderer |
+	builder canvas color: self theme backgroundColor.
 	renderer := builder renderer.
 ]
 
@@ -50,7 +49,7 @@ RSAbstractComponentCalypso >> buildComponentCanvas [
 { #category : #building }
 RSAbstractComponentCalypso >> canvasController [
 	| controls |
-	controls := RSCanvasController new.
+	controls := RSCanvasControllerInteraction new.
 	controls configuration 
 		useBasicZoom;
 		maxScale: 2.

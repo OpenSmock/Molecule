@@ -13,7 +13,7 @@ Class {
 { #category : #defaults }
 RSComponentAbstractBuilder >> defaultContainer [
 	^RSCanvas new 
-		addInteraction: RSCanvasController new;
+		addInteraction: RSCanvasControllerInteraction new;
 		yourself.
 ]
 
