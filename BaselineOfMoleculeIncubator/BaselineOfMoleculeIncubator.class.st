@@ -1,3 +1,12 @@
+"
+Baseline of Molecule Incubator
+Some UI tools to enhanced Component development, these tools are currently in development.
+---
+Metacello new
+   baseline: 'MoleculeIncubator';
+   repository: 'github://OpenSmock/Molecule';
+   load.
+"
 Class {
 	#name : #BaselineOfMoleculeIncubator,
 	#superclass : #BaselineOf,
@@ -16,6 +25,10 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 			"Pre and post load scripts"
 			spec preLoadDoIt: #'preload:package:'.
 			spec postLoadDoIt: #'postload:package:'.
+			
+			"Load dependencies"
+			"Molecule IDE incubator use SVG capacities of Roassal not included in the Pharo image"
+			self loadRoassal: spec.
 						
 			"Packages"
 			spec
@@ -24,8 +37,17 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 				package: 'Molecule-Examples' with: [ spec requires: #('Molecule') ];
 				package: 'Molecule-Tests' with: [ spec requires: #('Molecule') ];
 				package: 'Molecule-IDE-Tests' with: [ spec requires: #('Molecule-IDE') ];
-				package: 'Molecule-IDE-Incubators' with: [ spec requires: #('Molecule-IDE') ].
+				package: 'Molecule-IDE-Incubators' with: [ spec requires: #('Molecule-IDE') ];
+				package: 'Molecule-IDE-Incubators-Tests' with: [ spec requires: #('Molecule-IDE-Incubators') ].
 		 ]
+]
+
+{ #category : #'load scripts' }
+BaselineOfMoleculeIncubator >> loadRoassal: spec [
+
+	spec
+		baseline: 'Roassal3'
+		with: [ spec repository: 'github://ObjectProfile/Roassal3' ]
 ]
 
 { #category : #'load scripts' }
