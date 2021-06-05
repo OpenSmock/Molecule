@@ -190,7 +190,7 @@ SpMolSearch >> elements: someElements [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 SpMolSearch >> initialize [
 	super initialize.
 	
@@ -280,7 +280,7 @@ SpMolSearch >> popup: aComponent [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SpMolSearch >> relation: aBlock [
 	relation := aBlock
 ]

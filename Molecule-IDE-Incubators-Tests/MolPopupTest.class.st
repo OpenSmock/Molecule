@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'popup'
 	],
-	#category : #'Molecule-IDE-Incubators-Tests'
+	#category : #'Molecule-IDE-Incubators-Tests-Cases'
 }
 
 { #category : #running }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'molContract'
 	],
-	#category : #'Molecule-IDE-Incubators-Tests'
+	#category : #'Molecule-IDE-Incubators-Tests-Deprecated'
 }
 
 { #category : #testing }

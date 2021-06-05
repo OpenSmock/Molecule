@@ -185,12 +185,12 @@ MolMenu >> open: menu [
 	menu asMenuMorph popUpInWorld
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MolMenu >> selectedComponent [
 	^component 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MolMenu >> selectedComponent: anObject [
 	component := anObject
 ]

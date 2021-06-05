@@ -46,7 +46,7 @@ MolPopup >> popup: aPopup title: aComponent [
 	].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing structure variables' }
 MolPopup >> popup: aPopup title: aComponent items: items [
 	"create a popup with a lengend inside"
 	popup := aPopup.

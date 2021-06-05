@@ -10,7 +10,7 @@ Class {
 	#category : #'Molecule-IDE-Incubators-Legend'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #interface }
 MolLegend >> container: aCanvas items: items title: title onDemand: onDemand [
 	self legend: RSLegend new.
 	legend container: aCanvas.

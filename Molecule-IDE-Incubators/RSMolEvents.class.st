@@ -68,7 +68,7 @@ RSMolEvents >> onShape: aShape [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 RSMolEvents >> selectedShape [
 	^selectedShape 
 ]
