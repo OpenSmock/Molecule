@@ -94,21 +94,13 @@ MolMenu >> open: menu [
 		action: (MessageSend receiver: [  component browse ]  selector: #value)
 		icon: (self iconNamed: 'nautilus').
 	menu
-		add: 'Info Tools Component'
-		action: (MessageSend receiver: 
-		[  | spInfo |
-			spInfo := SpMolInfoTools new.
-			spInfo list: component.
-			spInfo openWithSpec. ]  selector: #value)
-		icon: (self iconNamed: 'smallInfo').
-	menu
 		add: 'Inspect the Class'
 		action: (MessageSend receiver: [  component inspect ]  selector: #value)
 		icon: (self iconNamed: 'glamorousInspect').
 	menu 	
 		addSeparator.
 	menu
-		add: 'Show the Component'
+		add: 'Show Component map'
 		action: (MessageSend receiver: [ 
 			| usedComponentServices usedComponentParameters consumedComponentEvents providedComponentServices
 			providedComponentParameters producedComponentEvents showComponent | 
@@ -155,7 +147,7 @@ MolMenu >> open: menu [
 		icon: (self iconNamed: 'objects').
 		
 	menu
-		add: 'Show all Component Instances'
+		add: 'Show running instances'
 		action: (MessageSend receiver: [ 
 			"find instances of component"
 			|componentInstances |

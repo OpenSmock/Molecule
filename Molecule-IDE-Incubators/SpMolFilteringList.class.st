@@ -1,3 +1,6 @@
+"
+class to define the filter of the list
+"
 Class {
 	#name : #SpMolFilteringList,
 	#superclass : #SpFilteringListPresenter,

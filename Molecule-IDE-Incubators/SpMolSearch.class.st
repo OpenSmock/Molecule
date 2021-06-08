@@ -100,7 +100,7 @@ SpMolSearch >> configure: canvas type: aType [
 	legend := MolLegend new. legend container: canvas items:{icon} title: 'Shapes Legend' onDemand: 'Legend of graphic' .
 	
 	elements @ inspectable .
-	canvas @ RSCanvasController.
+	canvas @ RSCanvasControllerInteraction .
 	^canvas
 ]
 
@@ -184,7 +184,7 @@ SpMolSearch >> elements: someElements [
 		form: MolIcon new icon;
 		size: 10.
 		self popup:m.
-		icon @ RSDraggable @ popup
+		icon @ RSDraggableInteraction  @ popup
 		 ] as: RSGroup. 
 	
 	
@@ -316,7 +316,7 @@ SpMolSearch >> updateLabel: anItem [
 
 { #category : #initialization }
 SpMolSearch >> updateLabel: anItem title: aTitle [
-	| component consumedEvents producedEvents providedServices usedServices providedParameters usedParameters someInterfaces test |
+	| component consumedEvents producedEvents providedServices usedServices providedParameters usedParameters someInterfaces  |
 	component := listPresenter selectedItem.
 	component isNotNil ifTrue:[
 		component haveComponentType ifTrue: [ 

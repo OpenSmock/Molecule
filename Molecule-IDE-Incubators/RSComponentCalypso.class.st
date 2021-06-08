@@ -17,7 +17,7 @@ Class {
 { #category : #accessing }
 RSComponentCalypso class >> classComponentTapActivation [
 	<classAnnotation>
-	^ ClyTabActivationStrategy for: ClyClass asCalypsoItemContext
+	^ ClyTabActivationStrategyAnnotation  for: ClyClass asCalypsoItemContext
 ]
 
 { #category : #testing }
