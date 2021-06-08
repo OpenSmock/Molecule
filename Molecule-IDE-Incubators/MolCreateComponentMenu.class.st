@@ -31,7 +31,7 @@ MolCreateComponentMenu >> open: menu [
 		action: (MessageSend receiver: 
 		[  
 			canvas add: componentShape.
-			canvas @ RSCanvasController. 
+			canvas @ RSCanvasControllerInteraction . 
 			canvas signalUpdate.
 			]  
 		selector: #value)
@@ -42,7 +42,7 @@ MolCreateComponentMenu >> open: menu [
 		action: (MessageSend receiver: 
 		[  
 			canvas add: label.
-			canvas @ RSCanvasController. 
+			canvas @ RSCanvasControllerInteraction . 
 			canvas signalUpdate. 
 			]  
 		selector: #value)
