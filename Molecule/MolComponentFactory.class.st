@@ -450,7 +450,7 @@ MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass
 	| traitList missingTraits |
 	
 	traitList := self collectComponentConnectionTraits: aComponentClass.
-	missingTraits := aTraitList reject: [ :e | traitList includes: e ].
+	missingTraits := aTraitList reject: [ :e | (traitList includes: e) and:[ e isObsolete ] ].
 	missingTraits ifNotEmpty: [self rebuildComponent: aComponentClass traitsAdding: missingTraits].
 ]
 
@@ -479,18 +479,13 @@ MolComponentFactory >> componentAddedAnnouncement: aClassAddedAnnouncement [
 MolComponentFactory >> componentChanged: aChangedClass [
 	"Update a ComponentClass triggered by a class description change"
 	
-	aChangedClass isTrait ifTrue:[^self].
-	aChangedClass isObsolete ifTrue:[^self].
-	aChangedClass isComponentClass ifTrue:[		
-		self isDynamicContractUpdateActivated ifTrue: [ 
-			('Pharo8.*.*' match: Smalltalk version) ifTrue:[
-				"need to fork the definition because new traits are not already injected here to the component"
-				[self defineComponent: aChangedClass] fork.
-			] ifFalse:[
-				self defineComponent: aChangedClass.
-			]. 
-		] ifFalse: [ dirtyComponents add: aChangedClass].
-	].
+	(aChangedClass isTrait or:[aChangedClass isObsolete]) ifTrue:[^self].
+	aChangedClass isComponentClass ifFalse:[^self].
+	
+	self isDynamicContractUpdateActivated ifTrue: [ 
+		"We need to wait because of the changedClass should be removed and become obsolete"
+		[(Delay forMilliseconds: 25) wait. aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]] fork.
+	] ifFalse: [ dirtyComponents add: aChangedClass].
 ]
 
 { #category : #announcements }
@@ -499,7 +494,10 @@ MolComponentFactory >> componentChangedAnnouncement: aClassModifiedClassDefiniti
 	aClassModifiedClassDefinitionAnnouncement ifNil: [ 
 		^ self error: '[Molecule] Error on modified Component notification.'.
 	].
-	self componentChanged: aClassModifiedClassDefinitionAnnouncement newClassDefinition
+	
+	aClassModifiedClassDefinitionAnnouncement newClassDefinition ifNotNil: [ :c |
+		c isObsolete ifFalse:[self componentChanged: c].
+	].
 ]
 
 { #category : #announcements }
@@ -512,7 +510,7 @@ MolComponentFactory >> contractChanged: aComponentType [
 
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"need to fork the definition because new traits are not already injected here to the component"
-		[self defineComponentTypeImplementors: aComponentType] fork.
+		[(Delay forMilliseconds: 25) wait. aComponentType isObsolete ifFalse:[self defineComponentTypeImplementors: aComponentType]] fork.
 	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
 ]
 
@@ -607,27 +605,28 @@ MolComponentFactory >> dirtyComponents [
 { #category : #'private - code generation' }
 MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollection in: aComponent suffix: suffix [
 	| selector sourceCode sourceMethod method |
-	aCollection do: [ :trait | 
+	
+	aCollection copy do: [ :trait |
+		
 		selector := ('get' , trait printString , suffix) asSymbol.
-		sourceCode := self
-			              getSourceCodeFor: aSymbol
-			              trait: trait
-			              selector: selector.
-		(aComponent allSelectors includes: selector)
-			ifFalse: [ 
-				aComponent
-					compile: sourceCode contents
-					classified: self class protocolForComponentAccess ]
-			ifTrue: [ "if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
-				"the selector must not be a parent"
-				(aComponent selectors includes: selector) ifTrue: [ 
-					method := aComponent >> selector.
-					sourceMethod := method sourceCode.
-					sourceMethod ifNotNil: [ 
-						sourceMethod ~= sourceCode contents ifTrue: [ "rewrite the method"
-							aComponent
-								compile: sourceCode contents
-								classified: self class protocolForComponentAccess ] ] ] ] ]
+		sourceCode := self getSourceCodeFor: aSymbol trait: trait selector: selector.
+		(aComponent allSelectors includes: selector) ifFalse: [ 
+			aComponent compile: sourceCode contents classified: self class protocolForComponentAccess
+		] ifTrue: [ 
+			"if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
+			"the selector must not be a parent"
+			(aComponent selectors includes: selector) ifTrue: [ 
+				method := aComponent >> selector.
+				sourceMethod := method sourceCode.
+				sourceMethod ifNotNil: [ 
+					sourceMethod ~= sourceCode contents ifTrue: [ 
+					"rewrite the method"
+						aComponent compile: sourceCode contents classified: self class protocolForComponentAccess 
+					]. 
+				]. 
+			]. 
+		]. 
+	]
 ]
 
 { #category : #'code generation' }
