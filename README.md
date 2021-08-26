@@ -12,7 +12,7 @@ Molecule support completely transparent class augmentation into component (not n
 
 ### Installing Molecule
 
-Pharo 8 and Pharo 9 : 
+Pharo 8, Pharo 9 and Pharo 10 : 
 
 ```smalltalk
 Metacello new
