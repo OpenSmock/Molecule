@@ -484,6 +484,7 @@ MolComponentFactory >> componentChanged: aChangedClass [
 	
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"We need to wait because of the changedClass should be removed and become obsolete"
+		self flag:'PLA : This is a patch because of Molecule need not yet existing pharo system flags, warning : if a new fork is started on the same object there is a concurrency access risk, if necessary write some code to control a fork stack for each objects'.
 		[(Delay forMilliseconds: 25) wait. aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]] fork.
 	] ifFalse: [ dirtyComponents add: aChangedClass].
 ]
@@ -510,6 +511,7 @@ MolComponentFactory >> contractChanged: aComponentType [
 
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"need to fork the definition because new traits are not already injected here to the component"
+		self flag:'PLA : This is a patch because of Molecule need not yet existing pharo system flags, warning : if a new fork is started on the same object there is a concurrency access risk, if necessary write some code to control a fork stack for each objects'.
 		[(Delay forMilliseconds: 25) wait. aComponentType isObsolete ifFalse:[self defineComponentTypeImplementors: aComponentType]] fork.
 	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
 ]
