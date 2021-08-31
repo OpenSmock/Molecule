@@ -12,7 +12,7 @@ Molecule support completely transparent class augmentation into component (not n
 
 ### Installing Molecule
 
-Pharo 8 and Pharo 9 : 
+Pharo 8, Pharo 9 and Pharo 10 : 
 
 ```smalltalk
 Metacello new
@@ -137,7 +137,7 @@ To do so, we augment this class with component behavior.
 
 ## Test coverage
 
-Molecule includes more than 175 unit tests, we have also written tests that simulate the work of a developer when creating and modifying components. Test coverage is detailed in the release notes.
+Molecule includes more than 200 unit tests, we have also written tests that simulate the work of a developer when creating and modifying components. Test coverage is detailed in the release notes.
 
 ## Credits
 
