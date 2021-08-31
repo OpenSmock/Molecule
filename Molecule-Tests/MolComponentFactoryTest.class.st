@@ -10,6 +10,7 @@ Class {
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 	"Smalltalk fixObsoleteReferences."
+	
 	<script: 'self new cleanGeneratedClassesAndTraits'>
 
 	| edited |
