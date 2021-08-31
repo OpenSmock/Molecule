@@ -19,6 +19,7 @@ MolComponentImplTest >> tearDown [
 { #category : #tests }
 MolComponentImplTest >> testAugmentedClassToAComponentProperties [
 	| component |
+
 	component := MolAugmentedClassToAComponentWithoutType new.
 
 	self assert: component class isComponentClass.
