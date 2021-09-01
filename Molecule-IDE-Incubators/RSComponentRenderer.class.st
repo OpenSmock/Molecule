@@ -26,7 +26,7 @@ RSComponentRenderer >> setUpCanvas: aCanvas [
 	showComponent componentShape @ showComponent popup.
 	showComponent legend: aCanvas.
 	aCanvas add: showComponent componentShape.
-	aCanvas @ RSCanvasControllerInteraction.
+	aCanvas @ RSCanvasController.
 	
 	"add zoom in tab"
 	zoom := RSZoomToFitCanvasInteraction new.

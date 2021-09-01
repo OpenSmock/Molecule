@@ -100,7 +100,7 @@ SpMolSearch >> configure: canvas type: aType [
 	legend := MolLegend new. legend container: canvas items:{icon} title: 'Shapes Legend' onDemand: 'Legend of graphic' .
 	
 	elements @ inspectable .
-	canvas @ RSCanvasControllerInteraction .
+	canvas @ RSCanvasController.
 	^canvas
 ]
 
@@ -184,7 +184,7 @@ SpMolSearch >> elements: someElements [
 		form: MolIcon new icon;
 		size: 10.
 		self popup:m.
-		icon @ RSDraggableInteraction  @ popup
+		icon @ RSDraggableCanvasInteraction @ popup
 		 ] as: RSGroup. 
 	
 	

@@ -49,7 +49,7 @@ RSAbstractComponentCalypso >> buildComponentCanvas [
 { #category : #building }
 RSAbstractComponentCalypso >> canvasController [
 	| controls |
-	controls := RSCanvasControllerInteraction new.
+	controls := RSCanvasController new.
 	controls configuration 
 		useBasicZoom;
 		maxScale: 2.

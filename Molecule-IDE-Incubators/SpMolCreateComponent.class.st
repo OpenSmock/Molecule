@@ -191,7 +191,7 @@ canvas when: RSKeyDown do:
 			canvas signalUpdate.
 	]] .
 
-canvas @RSCanvasControllerInteraction  .
+canvas @RSCanvasController.
 ]
 
 { #category : #'as yet unclassified' }
@@ -199,7 +199,7 @@ SpMolCreateComponent >> initialize [
 	super initialize.
 	
 	transformable := RSMolTransformable new.
-	menu := RSMenuActivableInteraction new.
+	menu := RSMenuActivable new.
 	self menu.
 
 ]
@@ -334,7 +334,7 @@ label @ popupLabel.
 
 canvas  add: componentModelShape ; add: label; add: lines.
 canvas color: 'E0E0E0'.
-canvas @ RSCanvasControllerInteraction.
+canvas @ RSCanvasController.
 ]
 
 { #category : #accessing }

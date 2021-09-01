@@ -320,7 +320,7 @@ SpMolShowComponent >> configure: canvas [
 	componentShape @ popup.
 	
 	canvas add: arrayOfUsedComponentServices ; add: arrayOfConsumedComponentEvents ; add: arrayOfUsedComponentParameters ; add: arrayOfProvidedComponentParameters ; add: arrayOfProducedComponentEvents ; add: arrayOfProvidedComponentServices ; add: componentShape; addAll:lineUsedServices ; addAll:lineConsumedEvents ; addAll: lineUsedParameters; addAll: lineProvidedParameters ; addAll: lineProducedEvents ; addAll: lineProvidedServices.
-	canvas @ RSCanvasControllerInteraction .
+	canvas @ RSCanvasController.
 	
 	self canvas: canvas. 
 	self event: componentShape.

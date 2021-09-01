@@ -82,7 +82,7 @@ SpMolShowComponentInstances >> canvas: aCanvas [
 			
 			aCanvas newAnimation
 				duration: 1 second;
-				easing: RSEasing circleOut;
+				easing: RSEasingInterpolator circleOut;
 				onStepDo: [ :t | 
 					
 					self updateLabelName: (componentInstances at: current) componentName.
@@ -129,7 +129,7 @@ SpMolShowComponentInstances >> configure: canvas [
 	self legend: canvas.
 	
 	canvas addAll: componentsShape.
-	canvas @ RSCanvasControllerInteraction.
+	canvas @ RSCanvasController.
 	
 	self canvas: canvas.
 	

@@ -75,7 +75,7 @@ RSMolZoomCanvas >> zoomMove: aShape delta: delta [
 	test2 := test value.
 	newScale := self scaleFor: delta * scale. 
 	aShape newAnimation 
-		easing: RSEasing backOut;
+		easing: RSEasingInterpolator backOut;
 		duration: 1000 milliSeconds;
 		from: scale;
 		to: newScale;
@@ -85,7 +85,7 @@ RSMolZoomCanvas >> zoomMove: aShape delta: delta [
 		scale: newScale.
 	correct = camera position ifTrue: [ ^ self ].
 	aShape newAnimation 
-		easing: RSEasing backOut;
+		easing: RSEasingInterpolator backOut;
 		duration: 1000 milliSeconds;
 		from: camera position;
 		to: correct;
