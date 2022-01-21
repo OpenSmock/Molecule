@@ -193,9 +193,15 @@ MolWorld class >> inspectDirtyComponents: aBuilder [
 ]
 
 { #category : #menu }
-MolWorld class >> menuCommandOn: aBuilder [
+MolWorld class >> menu00MoleculeOn: aBuilder [
+
 	<worldMenu>
-	(aBuilder item: #Molecule) order: 100
+	(aBuilder item: #Molecule)
+		parent: #Tools;
+		label: 'Molecule';
+		icon: MolIcon moleculeIcon;
+		help: 'A component framework';
+		order: 777
 ]
 
 { #category : #menu }

@@ -15,11 +15,6 @@ MolIconTest >> setUp [
 ]
 
 { #category : #tests }
-MolIconTest >> testIcon [
-	self assert: (molIcon icon) equals: (molIcon moleculeIconStream)
-]
-
-{ #category : #tests }
 MolIconTest >> testIconSelectedSearch [
 	self assert: (molIcon iconSelectedSearch) equals: (molIcon moleculeIconSelectedSearchStream)
 ]

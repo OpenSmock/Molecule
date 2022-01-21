@@ -1,15 +1,4 @@
-"
-Class for the icon of a component
-"
-Class {
-	#name : #MolIcon,
-	#superclass : #Object,
-	#instVars : [
-		'moleculeIcon',
-		'moleculeIconSelectedSearch'
-	],
-	#category : #'Molecule-IDE-Incubators-Icon'
-}
+Extension { #name : #MolIcon }
 
 { #category : #'*Molecule-IDE-Incubators' }
 MolIcon >> icon [
