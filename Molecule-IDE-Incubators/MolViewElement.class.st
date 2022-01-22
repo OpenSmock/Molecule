@@ -7,12 +7,28 @@ Class {
 	#name : #MolViewElement,
 	#superclass : #Object,
 	#instVars : [
-		'rsobject'
+		'rsobject',
+		'space'
 	],
 	#category : #'Molecule-IDE-Incubators-Mol View'
 }
 
+{ #category : #testing }
+MolViewElement >> isViewComponent [
+	^true.
+]
+
 { #category : #accessing }
 MolViewElement >> rsobject [
 	^ rsobject
+]
+
+{ #category : #accessing }
+MolViewElement >> space [
+	^space.
+]
+
+{ #category : #accessing }
+MolViewElement >> space: aSpace [
+	space := aSpace.
 ]

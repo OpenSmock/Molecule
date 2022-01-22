@@ -1,6 +1,11 @@
 "
 This is the component element for Molecule View.
 
+- cin: contains all the in connexions
+- cout: contains all the out connexions
+
+To initialize do `MolViewComponent new initializeComponent: #yourComponent#`.
+
 "
 Class {
 	#name : #MolViewComponent,
@@ -12,6 +17,17 @@ Class {
 	],
 	#category : #'Molecule-IDE-Incubators-Mol View'
 }
+
+{ #category : #colors }
+MolViewComponent >> backgroundColor [
+	^ Color white.
+]
+
+{ #category : #'as yet unclassified' }
+MolViewComponent >> changePortsColor: aColor [ 
+	cin do: [ :connector | connector changePortColor: aColor ].
+	cout do: [ :connector | connector changePortColor: aColor ].
+]
 
 { #category : #accessing }
 MolViewComponent >> cin [
@@ -29,80 +45,92 @@ MolViewComponent >> component: aComponent [
 ]
 
 { #category : #accessing }
+MolViewComponent >> componentName [
+	^(MolUtils componentType: (self component)) asString.
+]
+
+{ #category : #accessing }
 MolViewComponent >> cout [
 	^ cout
 ]
 
-{ #category : #initialization }
-MolViewComponent >> createConnectorInPara: inParameters inEvents: inEvents inServices: inServices [
-	"add the view connectors in to the view component"
-	inParameters do: [ :parameter | cin add: (MolViewConnectorIn new fromParameter: parameter) ].
-	inEvents do: [ :event | cin add: (MolViewConnectorIn new fromEvent: event) ].
-	inServices do: [ :service | cin add: (MolViewConnectorIn new fromService: service) ].
-]
-
-{ #category : #initialization }
-MolViewComponent >> createConnectorOutPara: outParameters outEvents: outEvents outServices: outServices [
-	"add the view connectors in to the view component"
-	outParameters do: [ :parameter | cout add: (MolViewConnectorOut new fromParameter: parameter) ].
-	outEvents do: [ :event | cout add: (MolViewConnectorOut new fromEvent: event) ].
-	outServices do: [ :service | cout add: (MolViewConnectorOut new fromService: service) ].
-]
-
-{ #category : #'as yet unclassified' }
-MolViewComponent >> drawConnectorsIn [
+{ #category : #drawing }
+MolViewComponent >> drawConnectors: aCollection withLayout: aLayout [
 	| panel |
 	panel := RSComposite new.
-	self cin do: [ :each | panel add: (each rsobject)].
-	RSVerticalLineLayout new alignLeft on: panel nodes.
+	aCollection collect: [ :each | each rsobject] thenDo: [ :connector | panel add: connector ].
+
+	"this is to add a small ammount of padding"
+	panel add: (RSBox new extent: (0@0); color: Color transparent).
+
+	aLayout on: panel nodes.
 	panel adjustToChildren.
 	^ panel.
 ]
 
-{ #category : #'as yet unclassified' }
-MolViewComponent >> drawConnectorsOut [
-	| panel |
-	panel := RSComposite new.
-	self cout do: [ :each | panel add: (each rsobject)].
-	RSVerticalLineLayout new alignRight on: panel nodes.
-	panel adjustToChildren.
-	^ panel.
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 MolViewComponent >> drawLabel [
-	^RSLabel new
+	| panelLabel |
+	panelLabel := RSComposite new.
+	panelLabel add: (RSLabel new
 			color: (Color black);
 			fontName: 'Source Sans Pro';
 			fontSize: 20;
-			text: ((MolUtils componentType: (self component)) asString);
-			yourself.
+			text: self componentName;
+			yourself).
+	panelLabel adjustToChildren.
+	^panelLabel.
 ]
 
-{ #category : #layouts }
-MolViewComponent >> drawRsObject [
-	| panelLabel panelBoth panelIn panelOut |
-	rsobject := RSComposite new.
-	panelBoth := RSComposite new.
+{ #category : #drawing }
+MolViewComponent >> drawPanelConnectors: aRSBoxForGap [
+	"draw the panel containing the MolViewConnectors."
+	| panelIn panelOut panelInOut |
+	panelInOut := RSComposite new.
 	
-	panelIn := self drawConnectorsIn.
-	panelOut := self drawConnectorsOut.
-	panelBoth add: panelIn ; add: panelOut.
-	RSHorizontalLineLayout new alignTop on: panelBoth nodes.
-	panelBoth adjustToChildren.
-	
-	panelLabel := RSComposite new.
-	panelLabel add: (self drawLabel).
-	panelLabel adjustToChildren.
+	panelIn := self drawConnectors: cin withLayout: (RSVerticalLineLayout new alignLeft).
+	panelOut := self drawConnectors: cout withLayout: (RSVerticalLineLayout new alignRight).
+	panelInOut add: panelIn ; add: aRSBoxForGap ; add: panelOut.
+	RSHorizontalLineLayout new alignTop on: panelInOut nodes.
+	panelInOut adjustToChildren.
+	^panelInOut.
+]
 
-	rsobject add: panelLabel ; add: panelBoth.
+{ #category : #drawing }
+MolViewComponent >> drawRsObject [
+	| panelLabel panelInOut panelInOutGap |
+	rsobject := (RSComposite new 
+		paint: self backgroundColor;
+		border: (RSBorder new
+			width: 1;
+			color: (Color black));
+		yourself).
+	panelInOutGap := RSBox new extent: (0@0); color: Color transparent; yourself.
+	panelInOut := self drawPanelConnectors: panelInOutGap.
+	panelLabel := self drawLabel.
+	
+	"if label width > connectors panel width : we increase the gap between the connectors in and out"
+	((panelLabel width) > (panelInOut width)) ifTrue: [ 
+		panelInOutGap width: (panelLabel width - panelInOut width). 
+		RSHorizontalLineLayout new alignTop on: panelInOut nodes.
+		panelInOut adjustToChildren ].
+	
+	rsobject add: panelLabel ; add: panelInOut.
 	RSVerticalLineLayout new alignCenter on: rsobject nodes.
 	rsobject adjustToChildren.
-	rsobject border: (RSBorder new
-				width: 1;
-				color: (Color black)).
-	
 	^rsobject.
+]
+
+{ #category : #'as yet unclassified' }
+MolViewComponent >> highlightInPortIfConnect: aConnector [
+	"hightlight in port -> trigger the hightlight on out port"
+	cout select: [ :connector | connector isSameTraitAs: aConnector ] thenDo: [ :connector | connector highlightPort ].
+]
+
+{ #category : #'as yet unclassified' }
+MolViewComponent >> highlightOutPortIfConnect: aConnector [
+	"hightlight out port -> trigger the hightlight on in port"
+	cin select: [ :connector | connector isSameTraitAs: aConnector ] thenDo: [ :connector | connector highlightPort ].
 ]
 
 { #category : #initialization }
@@ -121,17 +149,35 @@ MolViewComponent >> initializeComponent: aComponent [
 
 { #category : #initialization }
 MolViewComponent >> initializeConnectors: aComponent [
-	"create array for in and out connector for the parameters, the events, and the services"	
+	"create MolViewConnector for in and out for the parameters, the events, and the services"	
 	| inParameters inEvents inServices outParameters outEvents outServices |
 	inParameters := MolUtils usedComponentParameters: aComponent.
 	inEvents := MolUtils consumedComponentEvents: aComponent.
 	inServices := MolUtils usedComponentServices: aComponent.
-	self createConnectorInPara: inParameters inEvents: inEvents inServices: inServices.
+	self initializeConnectors: cin class: MolViewConnectorIn parameters: inParameters events: inEvents services: inServices.
 
 	outParameters := MolUtils providedComponentParameters: aComponent.
 	outEvents := MolUtils producedComponentEvents: aComponent.
 	outServices := MolUtils providedComponentServices: aComponent.
-	self createConnectorOutPara: outParameters outEvents: outEvents outServices: outServices.
+	self initializeConnectors: cout class: MolViewConnectorOut parameters: outParameters events: outEvents services: outServices.
+]
+
+{ #category : #initialization }
+MolViewComponent >> initializeConnectors: aCollection class: aClass parameters: parameters events: events services: services [
+	"add the view connectors in to the view component"
+	parameters collect: [ :parameter | aClass new fromParameter: parameter ] into: aCollection.
+	events collect: [ :event | aClass new fromEvent: event ] into: aCollection.
+	services collect: [ :service | aClass new fromService: service ] into: aCollection.
+]
+
+{ #category : #testing }
+MolViewComponent >> isViewComponent [
+	^true.
+]
+
+{ #category : #initialization }
+MolViewComponent >> resetPortsColor [
+	self changePortsColor: Color transparent.
 ]
 
 { #category : #deprecated }
@@ -143,4 +189,11 @@ MolViewComponent >> scriptTest [
 	c @ RSCanvasController.
 	c zoomToFit.
 	^ c
+]
+
+{ #category : #accessing }
+MolViewComponent >> space: aSpace [
+	space := aSpace.
+	cin do: [ :element | element space: aSpace ].
+	cout do: [ :element | element space: aSpace ].
 ]
