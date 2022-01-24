@@ -1,3 +1,9 @@
+"
+A space that contain every MolViewElement that should be display.
+
+Will in the future probably be a super-class of more specific space.
+Will also contain a cursor variable, that will be use to trigger action when used on an MolViewElement.
+"
 Class {
 	#name : #MolViewSpace,
 	#superclass : #Object,
@@ -13,26 +19,34 @@ MolViewSpace >> addComponent: aComponent [
 	| element |
 	element := MolViewComponent new initializeComponent: aComponent.
 	self addElement: element.
+	"TODO: Un element doit etre en charge de sa propre politique. A changer !"
+	element rsobject draggable; when: RSMouseDragStart do: [ canvas pushFront: element rsobject ].
+]
+
+{ #category : #adding }
+MolViewSpace >> addConnectorsRelation: aRelation [ 
+	canvas add: (aRelation rsobject).
 ]
 
 { #category : #adding }
 MolViewSpace >> addElement: anElement [
-	| rselement |
-	
-	"TODO: Un element doit etre en charge de sa propre politique. A changer !"
-	rselement := anElement rsobject.
-	rselement draggable.
-	rselement when: RSMouseDragStart do: [ canvas pushFront: rselement ].
-	
 	anElement space: self.
 	elements add: anElement.
 	canvas add: (anElement rsobject).
-	(RSGridLayout new gapSize: 70) on: (canvas nodes).
+	(RSGridLayout new gapSize: 300) on: (canvas nodes).
 ]
 
 { #category : #accessing }
 MolViewSpace >> canvas [
 	^canvas.
+]
+
+{ #category : #'finding/searching' }
+MolViewSpace >> findShape: aRSComposite [
+	| visitor |
+	visitor := MolViewVisitorElementByShape new find: aRSComposite.
+	elements do: [ :element | element visitedBy: visitor ].
+	^(visitor found).
 ]
 
 { #category : #initialization }
@@ -42,7 +56,7 @@ MolViewSpace >> initialize [
 		addComponent: (MolMyClockComponentImpl new);
 		addComponent: (MolMyUserFacadeComponentImpl new);
 		addComponent: (MolMyAlarmComponentImpl new);
-		canvas) open.'>
+		canvas) open extent: 800@600.'>
 
 	elements := LinkedList new.
 	canvas := RSCanvas new.
@@ -50,17 +64,22 @@ MolViewSpace >> initialize [
 	canvas zoomToFit.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
+MolViewSpace >> removeRelation: aRelation [ 
+	canvas removeShape: aRelation rsobject.
+]
+
+{ #category : #interactions }
 MolViewSpace >> triggerHighlightInPortPolicy: aConnector [ 
 	elements select: [ :element | (element isViewComponent) ] thenDo: [ :component | component highlightInPortIfConnect: aConnector ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interactions }
 MolViewSpace >> triggerHighlightOutPortPolicy: aConnector [ 
 	elements select: [ :element | (element isViewComponent) ] thenDo: [ :component | component highlightOutPortIfConnect: aConnector ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interactions }
 MolViewSpace >> triggerUnhighlightPortPolicy [
 	elements collect: [ :element |
 		element isViewComponent ifTrue: [ 

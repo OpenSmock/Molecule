@@ -23,7 +23,7 @@ MolViewComponent >> backgroundColor [
 	^ Color white.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #coloring }
 MolViewComponent >> changePortsColor: aColor [ 
 	cin do: [ :connector | connector changePortColor: aColor ].
 	cout do: [ :connector | connector changePortColor: aColor ].
@@ -83,28 +83,9 @@ MolViewComponent >> drawLabel [
 ]
 
 { #category : #drawing }
-MolViewComponent >> drawPanelConnectors: aRSBoxForGap [
-	"draw the panel containing the MolViewConnectors."
-	| panelIn panelOut panelInOut |
-	panelInOut := RSComposite new.
-	
-	panelIn := self drawConnectors: cin withLayout: (RSVerticalLineLayout new alignLeft).
-	panelOut := self drawConnectors: cout withLayout: (RSVerticalLineLayout new alignRight).
-	panelInOut add: panelIn ; add: aRSBoxForGap ; add: panelOut.
-	RSHorizontalLineLayout new alignTop on: panelInOut nodes.
-	panelInOut adjustToChildren.
-	^panelInOut.
-]
-
-{ #category : #drawing }
-MolViewComponent >> drawRsObject [
+MolViewComponent >> drawMain [
 	| panelLabel panelInOut panelInOutGap |
-	rsobject := (RSComposite new 
-		paint: self backgroundColor;
-		border: (RSBorder new
-			width: 1;
-			color: (Color black));
-		yourself).
+
 	panelInOutGap := RSBox new extent: (0@0); color: Color transparent; yourself.
 	panelInOut := self drawPanelConnectors: panelInOutGap.
 	panelLabel := self drawLabel.
@@ -121,30 +102,56 @@ MolViewComponent >> drawRsObject [
 	^rsobject.
 ]
 
-{ #category : #'as yet unclassified' }
-MolViewComponent >> highlightInPortIfConnect: aConnector [
-	"hightlight in port -> trigger the hightlight on out port"
-	cout select: [ :connector | connector isSameTraitAs: aConnector ] thenDo: [ :connector | connector highlightPort ].
+{ #category : #drawing }
+MolViewComponent >> drawPanelConnectors: aRSBoxForGap [
+	"draw the panel containing the MolViewConnectors."
+	| panelIn panelOut panelInOut |
+	panelInOut := RSComposite new.
+	
+	panelIn := self drawConnectors: cin withLayout: (RSVerticalLineLayout new alignLeft).
+	panelOut := self drawConnectors: cout withLayout: (RSVerticalLineLayout new alignRight).
+	panelInOut add: panelIn ; add: aRSBoxForGap ; add: panelOut.
+	RSHorizontalLineLayout new alignTop on: panelInOut nodes.
+	panelInOut adjustToChildren.
+	^panelInOut.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interactions }
+MolViewComponent >> highlightInPortIfConnect: aConnector [
+	"hightlight in port -> trigger the hightlight on out port"
+	cout select: [ :connector | connector canConnectWith: aConnector ] thenDo: [ :connector | connector highlightPort ].
+]
+
+{ #category : #interactions }
 MolViewComponent >> highlightOutPortIfConnect: aConnector [
 	"hightlight out port -> trigger the hightlight on in port"
-	cin select: [ :connector | connector isSameTraitAs: aConnector ] thenDo: [ :connector | connector highlightPort ].
+	cin select: [ :connector | connector canConnectWith: aConnector ] thenDo: [ :connector | connector highlightPort ].
 ]
 
 { #category : #initialization }
-MolViewComponent >> initialize [ 
+MolViewComponent >> initialize [
+	| interaction |
 	super initialize.
 	cin := LinkedList new.
 	cout := LinkedList new.
+	rsobject := (RSComposite new 
+		paint: self backgroundColor;
+		border: (RSBorder new
+			width: 1;
+			color: (Color black));
+		yourself).
+	interaction := RSHighlightable new.
+	interaction highlightBorder: (RSBorder new width: 5; color: Color blue translucent).
+	rsobject @ interaction.
+	
+	
 ]
 
 { #category : #initialization }
 MolViewComponent >> initializeComponent: aComponent [ 
 	self component: aComponent.
 	self initializeConnectors: aComponent.
-	self drawRsObject.
+	self drawMain.
 ]
 
 { #category : #initialization }
@@ -175,20 +182,9 @@ MolViewComponent >> isViewComponent [
 	^true.
 ]
 
-{ #category : #initialization }
+{ #category : #coloring }
 MolViewComponent >> resetPortsColor [
 	self changePortsColor: Color transparent.
-]
-
-{ #category : #deprecated }
-MolViewComponent >> scriptTest [
-	<script: '(self new initializeComponent: (MolMyAlarmComponentImpl new)) scriptTest open.'>
-	| c |
-	c := RSCanvas new.
-	c add: self drawRsObject.
-	c @ RSCanvasController.
-	c zoomToFit.
-	^ c
 ]
 
 { #category : #accessing }
@@ -196,4 +192,11 @@ MolViewComponent >> space: aSpace [
 	space := aSpace.
 	cin do: [ :element | element space: aSpace ].
 	cout do: [ :element | element space: aSpace ].
+]
+
+{ #category : #'as yet unclassified' }
+MolViewComponent >> visitedBy: aVisitor [ 
+	aVisitor visit: self.
+	cin do: [ :connector | connector visitedBy: aVisitor ].
+	cout do: [ :connector | connector visitedBy: aVisitor ].
 ]

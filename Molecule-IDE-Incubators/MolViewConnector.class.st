@@ -8,14 +8,25 @@ Class {
 	#superclass : #MolViewElement,
 	#instVars : [
 		'trait',
-		'port'
+		'port',
+		'relations'
 	],
 	#category : #'Molecule-IDE-Incubators-Mol View'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
+MolViewConnector >> addRelation: aRelation [ 
+	relations add: aRelation.
+]
+
+{ #category : #testing }
+MolViewConnector >> canConnectWith: aConnector [
+	self subclassResponsibility
+]
+
+{ #category : #coloring }
 MolViewConnector >> changePortColor: aColor [ 
-	port portShape paint: aColor.
+	port rsobject paint: aColor.
 ]
 
 { #category : #drawing }
@@ -46,14 +57,39 @@ MolViewConnector >> eventColor [
 	^ Color purple translucent.
 ]
 
-{ #category : #defaults }
+{ #category : #colors }
 MolViewConnector >> highlightColor [
 	^Color green translucent.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interactions }
 MolViewConnector >> highlightPort [
 	self changePortColor: self highlightColor.
+]
+
+{ #category : #'instance creation' }
+MolViewConnector >> initialize [ 
+	relations := Set new.
+]
+
+{ #category : #testing }
+MolViewConnector >> isAlreadyInRelation: aConnector [
+	^(relations select: [ :relation | relation existFor: self and: aConnector ]) isNotEmpty.
+]
+
+{ #category : #testing }
+MolViewConnector >> isConnector [
+	^true
+]
+
+{ #category : #testing }
+MolViewConnector >> isConnectorIn [ 
+	self subclassResponsibility
+]
+
+{ #category : #testing }
+MolViewConnector >> isConnectorOut [
+	self subclassResponsibility
 ]
 
 { #category : #testing }
@@ -61,9 +97,27 @@ MolViewConnector >> isSameTraitAs: aConnector [
 	^(self trait) = (aConnector trait). 
 ]
 
+{ #category : #links }
+MolViewConnector >> makeRelationWith: aConnector [
+	| relation |
+	relation := (MolViewRelation new with: self and: aConnector).
+	self addRelation: relation.
+	aConnector addRelation: relation.
+]
+
 { #category : #colors }
 MolViewConnector >> parameterColor [
 	^ Color red translucent.
+]
+
+{ #category : #accessing }
+MolViewConnector >> port [
+	^ port
+]
+
+{ #category : #removing }
+MolViewConnector >> removeRelation: aRelation [
+	relations remove: aRelation.
 ]
 
 { #category : #colors }
@@ -86,7 +140,18 @@ MolViewConnector >> traitName [
 	^trait name.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interactions }
 MolViewConnector >> triggerUnhighlightPortPolicy [
 	self space triggerUnhighlightPortPolicy.
+]
+
+{ #category : #testing }
+MolViewConnector >> tryConnectWith: aConnector [ 
+	(self canConnectWith: aConnector) ifTrue: [ self makeRelationWith: aConnector ].
+]
+
+{ #category : #visitor }
+MolViewConnector >> visitedBy: aVisitor [ 
+	aVisitor visit: self.
+	aVisitor visit: port.
 ]

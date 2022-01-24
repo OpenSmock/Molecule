@@ -7,14 +7,23 @@ Class {
 	#category : #'Molecule-IDE-Incubators-Mol View'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
+MolViewConnectorOut >> canConnectWith: aConnector [
+	aConnector ifNil: [ ^false ].
+	(aConnector isConnector)  ifFalse: [ ^false ].
+	(aConnector isConnectorIn) ifFalse: [ ^false ].
+	(aConnector isAlreadyInRelation: self) ifTrue: [ ^false ].
+	^(self isSameTraitAs: aConnector).
+]
+
+{ #category : #drawing }
 MolViewConnectorOut >> drawConnectorOut [
 	"create and add the little shape in front of the connector"
 	| positionOrigin |
 	positionOrigin := (0.5 * (self rsobject width))@0.
-	port := MolViewConnectorPort new initializeFrom: self.
-	port createOutPort; position: positionOrigin + (20@0).
-	self rsobject add: (port portShape).
+	port := MolViewPort new initializeFrom: self.
+	port drawOutPort; position: positionOrigin + (20@0).
+	self rsobject add: (port rsobject).
 ]
 
 { #category : #'instance creation' }
@@ -38,7 +47,17 @@ MolViewConnectorOut >> fromService: aTrait [
 	self drawConnectorOut.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
+MolViewConnectorOut >> isConnectorIn [
+	^false
+]
+
+{ #category : #testing }
+MolViewConnectorOut >> isConnectorOut [
+	^true
+]
+
+{ #category : #interactions }
 MolViewConnectorOut >> triggerHighlightPortPolicy [
 	self space triggerHighlightOutPortPolicy: self.
 ]

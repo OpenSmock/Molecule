@@ -14,8 +14,18 @@ Class {
 }
 
 { #category : #testing }
+MolViewElement >> isConnector [
+	^false
+]
+
+{ #category : #testing }
+MolViewElement >> isPort [
+	^false
+]
+
+{ #category : #testing }
 MolViewElement >> isViewComponent [
-	^true.
+	^false.
 ]
 
 { #category : #accessing }
@@ -31,4 +41,9 @@ MolViewElement >> space [
 { #category : #accessing }
 MolViewElement >> space: aSpace [
 	space := aSpace.
+]
+
+{ #category : #visitor }
+MolViewElement >> visitedBy: aVisitor [ 
+	self subclassResponsibility.
 ]
