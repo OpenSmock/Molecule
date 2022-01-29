@@ -7,9 +7,6 @@ To encode icons :
 Class {
 	#name : #MolIcon,
 	#superclass : #Object,
-	#instVars : [
-		'moleculeIconSelectedSearch'
-	],
 	#classInstVars : [
 		'moleculeIcon',
 		'moleculeComponentIcon',

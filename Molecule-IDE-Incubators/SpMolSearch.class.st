@@ -94,7 +94,7 @@ SpMolSearch >> configure: canvas type: aType [
 	
 	icon := RSBitmap new 
 		model: 'component'; 
-		form: MolIcon new icon;
+		form: MolIcon moleculeIcon;
 		size: 10.
 		
 	legend := MolLegend new. legend container: canvas items:{icon} title: 'Shapes Legend' onDemand: 'Legend of graphic' .
@@ -114,7 +114,7 @@ SpMolSearch >> configure: canvas type: aType selected: anItem [
 	component := canvas nodes shapeFromModel: anItem.
 	
 	"this bitmap change a form and become orange"
-	component form: MolIcon new iconSelectedSearch.
+	component form: MolIcon moleculeSelectedSearchIcon.
 	
 	
 ]
@@ -184,7 +184,7 @@ SpMolSearch >> elements: someElements [
 		icon := RSBitmap new 
 		model:m; 
 		"form: (Smalltalk ui icons iconNamed: #systemIcon); "
-		form: MolIcon new icon;
+		form: MolIcon moleculeIcon;
 		size: 10.
 		self popup:m.
 		icon @ RSDraggableCanvasInteraction @ popup
