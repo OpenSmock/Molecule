@@ -27,7 +27,7 @@ MolWorld class >> menu212SearchOn: aBuilder [
 		icon: (self iconNamed: 'glamorousSearch');
 		action: [ 
 			| spMolSearch |
-			spMolSearch := SpMolSearch new.
+			spMolSearch := MolSearchPresenter new.
 			spMolSearch open ]
 ]
 

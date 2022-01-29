@@ -130,6 +130,8 @@ componentModelShape := RSComposite new.
 { #category : #initialization }
 SpMolCreateComponent >> connectPresenters [
 
+	super connectPresenters.
+
 currentCanvas script: [ :canvas |
 		self create: canvas. 
 		self legendShape: canvas. ].
@@ -206,6 +208,9 @@ SpMolCreateComponent >> initialize [
 
 { #category : #initialization }
 SpMolCreateComponent >> initializePresenters [
+
+	super initializePresenters.
+
 	currentCanvas := self instantiate: SpRoassalPresenter.
 	modelCanvas := self instantiate: SpRoassalPresenter.
 	
@@ -213,6 +218,8 @@ SpMolCreateComponent >> initializePresenters [
 
 { #category : #initialization }
 SpMolCreateComponent >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
 
 aWindowPresenter
 	title: 'Create Component';
