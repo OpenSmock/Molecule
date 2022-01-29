@@ -35,7 +35,7 @@ MolCreateComponentMenu >> open: menu [
 			canvas signalUpdate.
 			]  
 		selector: #value)
-		icon: MolIcon new icon.
+		icon: MolIcon moleculeIcon.
 		
 	menu
 		add: 'Create a Label'

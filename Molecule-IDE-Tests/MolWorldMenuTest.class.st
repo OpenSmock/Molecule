@@ -6,32 +6,35 @@ Class {
 
 { #category : #tests }
 MolWorldMenuTest >> testWorldMenu [
-	| menuElements menuRegistration |
-	menuElements := WorldState new menuBuilder itemList.
+	| menuElements moleculeMenuEntry libraryMenu |
+	menuElements := self currentWorld worldState menuBuilder menuSpec items.
+	libraryMenu := menuElements detect:[ :e | e name = #Tools ].
 	
 	"Find Molecule entry"
-	menuRegistration := menuElements detect:[ :e | e name = #Molecule].
-	self assert: menuRegistration notNil.
+	moleculeMenuEntry := libraryMenu subMenu items detect:[ :e | e name = #Molecule].
+	self assert: moleculeMenuEntry notNil.
 ]
 
 { #category : #tests }
 MolWorldMenuTest >> testWorldMenuBuilding [
 	| menuBuilder |
 	menuBuilder := WorldState new menuBuilder.
+
+	MolWorld menu00MoleculeOn: menuBuilder.
 	
-	MolWorld currentComponentSystem: menuBuilder.
-	MolWorld componentManagerCleanUp: menuBuilder.
-	MolWorld deepCleanUp: menuBuilder.
-	MolWorld defineComponentOn: menuBuilder.
-	MolWorld defineDirtyComponentsOn: menuBuilder.
-	MolWorld inspectAllComponentInstances: menuBuilder.
-	MolWorld inspectDirtyComponentTypes: menuBuilder.
-	MolWorld inspectDirtyComponents: menuBuilder.
-	MolWorld menuCommandOn: menuBuilder.
-	MolWorld menuDebugOn: menuBuilder.
-	MolWorld menuExamplesOn: menuBuilder.
-	MolWorld menuGithubOn: menuBuilder.
-	MolWorld menuReportBugOn: menuBuilder.
-	MolWorld toggleDynamicContractUpdate: menuBuilder.
-	MolWorld toggleMolLogsOn: menuBuilder.
+	MolWorld menu10SystemStatusOn: menuBuilder.
+	MolWorld menu20DebugOn: menuBuilder.
+	MolWorld menu30ComponentManagerCleanUpOn: menuBuilder.
+	MolWorld menu40ExamplesOn: menuBuilder.
+	MolWorld menu50GithubOn: menuBuilder.
+	MolWorld menu60ReportBugOn: menuBuilder.
+	
+	MolWorld toolsMenu110DeepCleanUp: menuBuilder.
+	MolWorld toolsMenu10DefineComponentOn: menuBuilder.
+	MolWorld toolsMenu90DefineDirtyComponentsOn: menuBuilder.
+	MolWorld toolsMenu40InspectAllComponentInstances: menuBuilder.
+	MolWorld toolsMenu80InspectDirtyComponentTypes: menuBuilder.
+	MolWorld toolsMenu70InspectDirtyComponents: menuBuilder.
+	MolWorld toolsMenu30ToggleDynamicContractUpdate: menuBuilder.
+	MolWorld toolsMenu20ToggleLogsOn: menuBuilder.
 ]

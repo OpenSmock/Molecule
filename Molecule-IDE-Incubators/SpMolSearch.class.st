@@ -43,7 +43,7 @@ SpMolSearch class >> defaultSpec [
 
 { #category : #specs }
 SpMolSearch class >> open [
-	<script: 'self new openWithSpec'>
+	<script: 'self new open'>
 ]
 
 { #category : #accessing }
@@ -122,6 +122,9 @@ SpMolSearch >> configure: canvas type: aType selected: anItem [
 { #category : #initialization }
 SpMolSearch >> connectPresenters [
 |class component |
+
+	super connectPresenters.
+
 	componentCanvas script: [ :canvas |
 		self configure: canvas type: 'component' . ].
 	
@@ -191,17 +194,9 @@ SpMolSearch >> elements: someElements [
 ]
 
 { #category : #initialization }
-SpMolSearch >> initialize [
-	super initialize.
-	
-	
-	
-	
-	
-]
-
-{ #category : #initialization }
 SpMolSearch >> initializePresenters [
+	
+	super initializePresenters.
 	
 	"define canvas"
 	componentCanvas := self instantiate: SpRoassalPresenter.
@@ -251,11 +246,11 @@ SpMolSearch >> initializePresenters [
 { #category : #initialization }
 SpMolSearch >> initializeWindow: aWindowPresenter [
 
-aWindowPresenter
-	title: 'Search';
-	initialExtent: 900@650.
-			
-		
+	super initializeWindow: aWindowPresenter.
+
+	aWindowPresenter
+		title: 'Molecule Search';
+		initialExtent: 900 @ 650
 ]
 
 { #category : #accessing }

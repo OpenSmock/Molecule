@@ -26,7 +26,7 @@ SpMolCreateComponent class >> defaultSpec [
 
 { #category : #'instance creation' }
 SpMolCreateComponent class >> open [
-	<script: 'self new openWithSpec'>
+	<script: 'self new open'>
 ]
 
 { #category : #'as yet unclassified' }

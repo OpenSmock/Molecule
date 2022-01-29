@@ -20,10 +20,7 @@ Class {
 SpMolShowComponentInstances class >> defaultSpec [
 	<spec: #default>
 	^ SpBoxLayout newVertical
-	add: (SpBoxLayout newHorizontal 
-	"add: #btnPrev withConstraints: [ :c | c height: 10 ];"
-	add: #currentCanvas) ;
-	"add: #btnNext withConstraints: [ :c | c height: 10 ]);"
+	add: (SpBoxLayout newHorizontal add: #currentCanvas) ;
 	add: #labelInfosName withConstraints: [ :c | c height: 40 ; padding: 10 ];
 	add: #labelInfosNbInst withConstraints: [ :c | c height: 40 ; padding: 5 ];
 	add: #labelInfosListInst withConstraints: [ :c | c height: 40 ; padding: 5 ];
@@ -34,6 +31,8 @@ SpMolShowComponentInstances class >> defaultSpec [
 { #category : #accessing }
 SpMolShowComponentInstances >> canvas: aCanvas [
 	| nodesSize current buttons |
+
+	super canvas: aCanvas.
 
 	nodesSize := aCanvas nodes size.
 	current := 0.
@@ -103,6 +102,8 @@ aCanvas addAll: buttons.
 SpMolShowComponentInstances >> configure: canvas [
 	| componentsShape listcomponentInstancesName  |
 		
+	super configure: canvas.
+		
 	listcomponentInstancesName := OrderedCollection new.
 	componentInstances do: [ :item | listcomponentInstancesName add: item componentName ].
 	
@@ -140,18 +141,11 @@ SpMolShowComponentInstances >> configure: canvas [
 	
 ]
 
-{ #category : #'as yet unclassified' }
-SpMolShowComponentInstances >> initialize [
-	super initialize.
-	
-	
-	
-	
-	
-]
-
 { #category : #initialization }
 SpMolShowComponentInstances >> initializePresenters [
+
+	super initializePresenters.
+
 	currentCanvas := self instantiate: SpRoassalPresenter.
 	
 	btnNext := self newButton.
@@ -173,7 +167,9 @@ SpMolShowComponentInstances >> initializePresenters [
 { #category : #initialization }
 SpMolShowComponentInstances >> initializeWindow: aWindowPresenter [
 
-aWindowPresenter
+	super initializeWindow: aWindowPresenter.
+
+	aWindowPresenter
 	title: ('Show instances of ', self component asString);
 	initialExtent: 1000@700.
 ]
@@ -193,7 +189,7 @@ SpMolShowComponentInstances >> legend: aCanvas [
 
 	| ellipseComponentStart ellipseComponentStop |
 	
-	super legend:aCanvas.
+	super legend: aCanvas.
 	
 	ellipseComponentStart := RSEllipse new 
 		color: Color green; 
