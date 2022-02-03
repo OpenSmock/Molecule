@@ -177,6 +177,9 @@ SpMolShowComponent >> boxProvidedParameters:model [
 SpMolShowComponent >> canvas: aCanvas [ 
 	"focus on the component"
 	| camera |
+	
+	super canvas: aCanvas.
+	
 	camera := aCanvas camera.
 	aCanvas when: RSExtentChangedEvent do: [ :evt |
     | prevPoint prevScale |
@@ -328,6 +331,9 @@ SpMolShowComponent >> configure: canvas [
 
 { #category : #initialization }
 SpMolShowComponent >> connectPresenters [
+
+	super connectPresenters.
+
 	currentCanvas script: [ :canvas |
 		self configure: canvas. ]
 ]
@@ -398,18 +404,11 @@ SpMolShowComponent >> from: from to: to color: aColor [
 		]
 ]
 
-{ #category : #'as yet unclassified' }
-SpMolShowComponent >> initialize [
-	super initialize.
-	
-	
-	
-	
-	
-]
-
 { #category : #initialization }
 SpMolShowComponent >> initializePresenters [
+
+	super initializePresenters.
+
 	currentCanvas := self instantiate: SpRoassalPresenter.
 	
 	
@@ -419,6 +418,8 @@ SpMolShowComponent >> initializePresenters [
 
 { #category : #initialization }
 SpMolShowComponent >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
 
 aWindowPresenter
 	title: ('Show ', self component asString);

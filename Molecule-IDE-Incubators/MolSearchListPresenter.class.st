@@ -2,13 +2,13 @@
 class to define the filter of the list
 "
 Class {
-	#name : #SpMolFilteringList,
+	#name : #MolSearchListPresenter,
 	#superclass : #SpFilteringListPresenter,
 	#category : #'Molecule-IDE-Incubators-Windows Spec2'
 }
 
 { #category : #specs }
-SpMolFilteringList class >> bottomLayout [
+MolSearchListPresenter class >> bottomLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  add: #listPresenter;
@@ -17,13 +17,13 @@ SpMolFilteringList class >> bottomLayout [
 ]
 
 { #category : #specs }
-SpMolFilteringList class >> defaultSpec [
+MolSearchListPresenter class >> defaultLayout [
 
 	^ self bottomLayout
 ]
 
 { #category : #specs }
-SpMolFilteringList class >> topLayout [
+MolSearchListPresenter class >> topLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  add: #filterInputPresenter expand: false;
@@ -32,11 +32,11 @@ SpMolFilteringList class >> topLayout [
 ]
 
 { #category : #initialization }
-SpMolFilteringList >> initializePresenters [
+MolSearchListPresenter >> initializePresenters [
 
-	filterInputPresenter := self newSearchInput 
-		placeholder: 'Search...';
-		yourself.
+	super initializePresenters.
+
+	filterInputPresenter := self newSearchInput placeholder: 'Search...'; yourself.
 	listPresenter := self newListToFilter.
 	self matchSubstring
 ]

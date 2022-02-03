@@ -21,7 +21,7 @@ CmdMoleculeMenuGroup >> description [
 
 { #category : #accessing }
 CmdMoleculeMenuGroup >> icon [
-	^MolIcon new icon.
+	^MolIcon moleculeIcon.
 ]
 
 { #category : #accessing }

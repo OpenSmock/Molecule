@@ -11,8 +11,8 @@ Class {
 	#category : #'Molecule-IDE-Incubators-Windows Spec2'
 }
 
-{ #category : #example }
-SpMolInspect class >> defaultSpec [
+{ #category : #layout }
+SpMolInspect class >> defaultLayout [
 	^ SpBoxLayout newTopToBottom 
 		add: #table expand: true
 			fill: true padding: 10;

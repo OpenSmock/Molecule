@@ -2,7 +2,7 @@
 window spec after click on search in MolActionMenu
 "
 Class {
-	#name : #SpMolSearch,
+	#name : #MolSearchPresenter,
 	#superclass : #SpRoassalPresenter,
 	#instVars : [
 		'models',
@@ -25,7 +25,7 @@ Class {
 }
 
 { #category : #specs }
-SpMolSearch class >> defaultSpec [
+MolSearchPresenter class >> defaultLayout [
 	<spec: #default>
 	^ SpBoxLayout newTopToBottom 
 		add:#toolbar withConstraints: [ :c | c height: self toolbarHeight ];
@@ -42,18 +42,19 @@ SpMolSearch class >> defaultSpec [
 ]
 
 { #category : #specs }
-SpMolSearch class >> open [
-	<script: 'self new openWithSpec'>
+MolSearchPresenter class >> open [
+	<script:'self new open'>
+	
 ]
 
 { #category : #accessing }
-SpMolSearch >> components [
+MolSearchPresenter >> components [
 	^SystemNavigation default allClasses select: [ :c | 
 		        c isTrait not and: [ (c allSuperclasses includes: Object) and: [ c isComponentClass ] ] ].
 ]
 
 { #category : #initialization }
-SpMolSearch >> configure: canvas type: aType [
+MolSearchPresenter >> configure: canvas type: aType [
 	| icon type |
 	"componentHierarchyTitle"
 	type := RSLabel new bold
@@ -64,7 +65,7 @@ SpMolSearch >> configure: canvas type: aType [
 	
 	aType = 'class' 
 	ifTrue: [ 
-		type text: 'Augmented Class Component'.
+		type text: 'Augmented class Component'.
 		self models: SystemNavigation default allClasses select: [ :c | 
 		        c isTrait not and: [ (c allSuperclasses includes: Object ) and: [c isComponentClass ]] ].
 		models removeAllSuchThat: [ :class | class allSuperclasses includes: MolAbstractComponentImpl ]. ]
@@ -94,10 +95,11 @@ SpMolSearch >> configure: canvas type: aType [
 	
 	icon := RSBitmap new 
 		model: 'component'; 
-		form: MolIcon new icon;
-		size: 10.
+		form: MolIcon moleculeComponent2Icon;
+		size: 16.
 		
-	legend := MolLegend new. legend container: canvas items:{icon} title: 'Shapes Legend' onDemand: 'Legend of graphic' .
+	legend := MolLegend new. 
+	legend container: canvas items:{icon} title: '' onDemand: 'Legend' .
 	
 	elements @ inspectable .
 	canvas @ RSCanvasController.
@@ -105,7 +107,7 @@ SpMolSearch >> configure: canvas type: aType [
 ]
 
 { #category : #initialization }
-SpMolSearch >> configure: canvas type: aType selected: anItem [
+MolSearchPresenter >> configure: canvas type: aType selected: anItem [
 	| component  |
 	
 	self configure: canvas type: aType.
@@ -113,20 +115,20 @@ SpMolSearch >> configure: canvas type: aType selected: anItem [
 	"find the selected component as a Bitmap"
 	component := canvas nodes shapeFromModel: anItem.
 	
-	"this bitmap change a form and become orange"
-	component form: MolIcon new iconSelectedSearch.
+	"this bitmap change a form to highlight the selected element"
+	component form: ((MolIcon moleculeComponent2Icon copy) mapColor: Color white to: Color orange).
 	
 	
 ]
 
 { #category : #initialization }
-SpMolSearch >> connectPresenters [
+MolSearchPresenter >> connectPresenters [
 |class component |
-	componentCanvas script: [ :canvas |
-		self configure: canvas type: 'component' . ].
-	
-	classAugmentedCanvas script: [ :canvas |
-		self configure: canvas type: 'class'. ].
+
+	super connectPresenters.
+
+	componentCanvas script: [ :canvas | self configure: canvas type: 'component' . ].
+	classAugmentedCanvas script: [ :canvas | self configure: canvas type: 'class'. ].
 	
 	"list of component from existing class"
 	class := SystemNavigation default allClasses select: [ :c | 
@@ -161,7 +163,7 @@ SpMolSearch >> connectPresenters [
 ]
 
 { #category : #accessing }
-SpMolSearch >> edges: someEdges [
+MolSearchPresenter >> edges: someEdges [
 	edges := someEdges.
 	edges moveBehind.
 	edges borderColor: '80CDC1'.
@@ -169,19 +171,18 @@ SpMolSearch >> edges: someEdges [
 ]
 
 { #category : #accessing }
-SpMolSearch >> elements [
+MolSearchPresenter >> elements [
 	^elements
 ]
 
 { #category : #accessing }
-SpMolSearch >> elements: someElements [
+MolSearchPresenter >> elements: someElements [
 	elements := someElements collect: 
 		[ :m | 
 		|icon |
 		icon := RSBitmap new 
 		model:m; 
-		"form: (Smalltalk ui icons iconNamed: #systemIcon); "
-		form: MolIcon new icon;
+		form: MolIcon moleculeComponent2Icon;
 		size: 10.
 		self popup:m.
 		icon @ RSDraggableCanvasInteraction @ popup
@@ -191,28 +192,23 @@ SpMolSearch >> elements: someElements [
 ]
 
 { #category : #initialization }
-SpMolSearch >> initialize [
-	super initialize.
+MolSearchPresenter >> initializePresenters [
 	
-	
-	
-	
-	
-]
-
-{ #category : #initialization }
-SpMolSearch >> initializePresenters [
+	super initializePresenters.
 	
 	"define canvas"
 	componentCanvas := self instantiate: SpRoassalPresenter.
 	classAugmentedCanvas := self instantiate: SpRoassalPresenter.
+	
 	"define label"
 	updatelabel := self newLabel.
+	
 	"define list and filtering input"
-	droplist := self instantiate: SpMolFilteringList.
+	droplist := self instantiate: MolSearchListPresenter.
 	filterInputPresenter := droplist filterInputPresenter.
 	filterInputPresenter cursorPositionIndex.
 	listPresenter := droplist listPresenter.
+	
 	"define toolbar"
 	toolbar := self instantiate: SpToolbarPresenter.
 	
@@ -220,13 +216,13 @@ SpMolSearch >> initializePresenters [
 	toolbar 
 		add: (SpToolbarButtonPresenter new 
 			icon: (self iconNamed: #glamorousRefresh);
-			help: 'Refresh';
+			help: 'Clear search';
 			"refresh canvas and list"
 			action: [ componentCanvas refresh. classAugmentedCanvas refresh. droplist items: self components. ];
 			yourself);
 		add: (SpToolbarButtonPresenter new
-			icon: (self iconNamed: #glamorousTrash);
-			help: 'Reset search selection';
+			icon: (self iconNamed: #glamorousGrayCircleEmpty);
+			help: 'Clear selection';
 			"reset a selection from the list"
 			action: [ listPresenter resetListSelection. self updateLabel: listPresenter selectedItem.
 				"refresh canvas whithout selection"
@@ -237,7 +233,10 @@ SpMolSearch >> initializePresenters [
 			yourself).
 			
 	"add icon in list"
-	listPresenter displayIcon: [ :e | self iconNamed: #systemIcon ].
+	listPresenter displayIcon: [ :e |
+		self flag:'PLA : mettre une icone si composant natif ou pas'.
+		self iconNamed: #classIcon. 
+	].
 	
 	"add text to label"
 	self updateLabel: listPresenter selectedItem.
@@ -249,28 +248,28 @@ SpMolSearch >> initializePresenters [
 ]
 
 { #category : #initialization }
-SpMolSearch >> initializeWindow: aWindowPresenter [
+MolSearchPresenter >> initializeWindow: aWindowPresenter [
 
-aWindowPresenter
-	title: 'Search';
-	initialExtent: 900@650.
-			
-		
+	super initializeWindow: aWindowPresenter.
+
+	aWindowPresenter title: 'Molecule Search'.
+	aWindowPresenter initialExtent: 900 @ 650.
+	aWindowPresenter windowIcon: MolIcon moleculeIcon.
 ]
 
 { #category : #accessing }
-SpMolSearch >> models [
+MolSearchPresenter >> models [
 	^models 
 ]
 
 { #category : #accessing }
-SpMolSearch >> models: someObjects select: aBlock [
+MolSearchPresenter >> models: someObjects select: aBlock [
 	models := someObjects select: aBlock
 	
 ]
 
 { #category : #accessing }
-SpMolSearch >> popup: aComponent [
+MolSearchPresenter >> popup: aComponent [
 
 	| molPopup |
 	
@@ -281,12 +280,12 @@ SpMolSearch >> popup: aComponent [
 ]
 
 { #category : #accessing }
-SpMolSearch >> relation: aBlock [
+MolSearchPresenter >> relation: aBlock [
 	relation := aBlock
 ]
 
 { #category : #initialization }
-SpMolSearch >> updateLabel: anItem [
+MolSearchPresenter >> updateLabel: anItem [
 	| component consumedEvents producedEvents providedServices usedServices providedParameters usedParameters someInterfaces |
 	component := listPresenter selectedItem.
 	component isNotNil ifTrue:[
@@ -315,7 +314,7 @@ SpMolSearch >> updateLabel: anItem [
 ]
 
 { #category : #initialization }
-SpMolSearch >> updateLabel: anItem title: aTitle [
+MolSearchPresenter >> updateLabel: anItem title: aTitle [
 	| component consumedEvents producedEvents providedServices usedServices providedParameters usedParameters someInterfaces  |
 	component := listPresenter selectedItem.
 	component isNotNil ifTrue:[
