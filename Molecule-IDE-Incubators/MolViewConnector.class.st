@@ -54,12 +54,12 @@ MolViewConnector >> drawLabelWithColor: aColor [
 
 { #category : #colors }
 MolViewConnector >> eventColor [
-	^ Color purple translucent.
+	^self theme connectorEvent.
 ]
 
 { #category : #colors }
 MolViewConnector >> highlightColor [
-	^Color green translucent.
+	^self theme portOnHoverComplements.
 ]
 
 { #category : #interactions }
@@ -107,7 +107,7 @@ MolViewConnector >> makeRelationWith: aConnector [
 
 { #category : #colors }
 MolViewConnector >> parameterColor [
-	^ Color red translucent.
+	^self theme connectorParameter.
 ]
 
 { #category : #accessing }
@@ -122,7 +122,7 @@ MolViewConnector >> removeRelation: aRelation [
 
 { #category : #colors }
 MolViewConnector >> serviceColor [
-	^ Color green translucent.
+	^self theme connectorService.
 ]
 
 { #category : #accessing }

@@ -17,13 +17,18 @@ Class {
 
 { #category : #action }
 MolViewPortHover >> doHoverPolicy [
-	port rsobject paint: Color blue translucent.
+	port rsobject paint: self hoverColor.
 	port connector triggerHighlightPortPolicy.
 ]
 
 { #category : #action }
 MolViewPortHover >> doUnhoverPolicy [
 	port connector triggerUnhighlightPortPolicy.
+]
+
+{ #category : #colors }
+MolViewPortHover >> hoverColor [
+	^theme portOnHoverSelf.
 ]
 
 { #category : #hooks }

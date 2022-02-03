@@ -13,7 +13,12 @@ Class {
 
 { #category : #colors }
 MolViewPortDrag >> color [
-	^Color blue translucent.
+	^theme portOnDragGhost.
+]
+
+{ #category : #colors }
+MolViewPortDrag >> colorLine [
+	^theme portOnDragLine.
 ]
 
 { #category : #drawing }
@@ -26,7 +31,7 @@ MolViewPortDrag >> createGhost: evt [
 		border: (RSBorder new joinMiter; color: self color; dashArray: #(7 5));
 		connectedLines: nil;
 		resetChildren;
-		paint: Color blue lighter translucent;
+		paint: self color;
 		yourself.
 	shape propertyAt: #ghost put: ghost.
 	shape parent add: ghost.
@@ -35,6 +40,7 @@ MolViewPortDrag >> createGhost: evt [
 		width: 5;
 		from: shape;
 		to: ghost;
+		color: self colorLine;
 		yourself).
 	shape propertyAt: #link put: link.
 	shape parent add: link.

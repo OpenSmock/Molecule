@@ -21,7 +21,7 @@ MolViewConnectorOut >> drawConnectorOut [
 	"create and add the little shape in front of the connector"
 	| positionOrigin |
 	positionOrigin := (0.5 * (self rsobject width))@0.
-	port := MolViewPort new initializeFrom: self.
+	port := (MolViewPort new: self space) initializeFrom: self.
 	port drawOutPort; position: positionOrigin + (20@0).
 	self rsobject add: (port rsobject).
 ]

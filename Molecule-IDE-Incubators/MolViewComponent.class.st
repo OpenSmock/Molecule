@@ -18,9 +18,22 @@ Class {
 	#category : #'Molecule-IDE-Incubators-Mol View'
 }
 
+{ #category : #'instance creation' }
+MolViewComponent class >> new: aComponent from: aSpace [
+	| component |
+	component := MolViewComponent new.
+	component component: aComponent.
+	component initializeVariables.
+	component initializeSpace: aSpace.
+	component initializeConnectors: aComponent.
+	component drawMain.
+	component initializeInteractions.
+	^component.
+]
+
 { #category : #colors }
 MolViewComponent >> backgroundColor [
-	^ Color white.
+	^self theme componentBackground.
 ]
 
 { #category : #coloring }
@@ -86,6 +99,13 @@ MolViewComponent >> drawLabel [
 MolViewComponent >> drawMain [
 	| panelLabel panelInOut panelInOutGap |
 
+	rsobject := (RSComposite new 
+		paint: self backgroundColor;
+		border: (RSBorder new
+			width: 1;
+			color: (Color black));
+		yourself).
+
 	panelInOutGap := RSBox new extent: (0@0); color: Color transparent; yourself.
 	panelInOut := self drawPanelConnectors: panelInOutGap.
 	panelLabel := self drawLabel.
@@ -116,6 +136,11 @@ MolViewComponent >> drawPanelConnectors: aRSBoxForGap [
 	^panelInOut.
 ]
 
+{ #category : #colors }
+MolViewComponent >> highlightColor [
+	^self theme componentHighLight.
+]
+
 { #category : #interactions }
 MolViewComponent >> highlightInPortIfConnect: aConnector [
 	"hightlight in port -> trigger the hightlight on out port"
@@ -132,7 +157,7 @@ MolViewComponent >> highlightOutPortIfConnect: aConnector [
 MolViewComponent >> initialize [
 	| interaction |
 	super initialize.
-	cin := LinkedList new.
+	"cin := LinkedList new.
 	cout := LinkedList new.
 	rsobject := (RSComposite new 
 		paint: self backgroundColor;
@@ -142,7 +167,7 @@ MolViewComponent >> initialize [
 		yourself).
 	interaction := RSHighlightable new.
 	interaction highlightBorder: (RSBorder new width: 5; color: Color blue translucent).
-	rsobject @ interaction.
+	rsobject @ interaction."
 	
 	
 ]
@@ -172,9 +197,30 @@ MolViewComponent >> initializeConnectors: aComponent [
 { #category : #initialization }
 MolViewComponent >> initializeConnectors: aCollection class: aClass parameters: parameters events: events services: services [
 	"add the view connectors in to the view component"
-	parameters collect: [ :parameter | aClass new fromParameter: parameter ] into: aCollection.
-	events collect: [ :event | aClass new fromEvent: event ] into: aCollection.
-	services collect: [ :service | aClass new fromService: service ] into: aCollection.
+	parameters collect: [ :parameter | aClass new space: self space; fromParameter: parameter ] into: aCollection.
+	events collect: [ :event | aClass new space: self space; fromEvent: event ] into: aCollection.
+	services collect: [ :service | aClass new space: self space; fromService: service ] into: aCollection.
+]
+
+{ #category : #initialization }
+MolViewComponent >> initializeInteractions [
+	| interaction |
+	interaction := RSHighlightable new.
+	interaction highlightBorder: (RSBorder new width: 5; color: self highlightColor).
+	rsobject @ interaction.
+
+]
+
+{ #category : #initialization }
+MolViewComponent >> initializeSpace: aSpace [ 
+	space := aSpace.
+]
+
+{ #category : #initialization }
+MolViewComponent >> initializeVariables [
+	cin := LinkedList new.
+	cout := LinkedList new.
+
 ]
 
 { #category : #testing }
@@ -194,7 +240,7 @@ MolViewComponent >> space: aSpace [
 	cout do: [ :element | element space: aSpace ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visitor }
 MolViewComponent >> visitedBy: aVisitor [ 
 	aVisitor visit: self.
 	cin do: [ :connector | connector visitedBy: aVisitor ].

@@ -15,11 +15,16 @@ Class {
 	#category : #'Molecule-IDE-Incubators-Mol View'
 }
 
+{ #category : #colors }
+MolViewRelation >> color [
+	^self theme relation.
+]
+
 { #category : #drawing }
 MolViewRelation >> drawRelation [
 	rsobject := (RSLine new
 		width: 10;
-		color: Color darkGray;
+		color: self color;
 		from: connectorIn port rsobject;
 		to: connectorOut port rsobject;
 		perform: 'capRound' asSymbol;
@@ -32,6 +37,11 @@ MolViewRelation >> existFor: aConnector1 and: aConnector2 [
 	(aConnector1 isConnectorIn)
 	ifTrue: [ ^(aConnector1 = connectorIn) and: (aConnector2 = connectorOut) ]
 	ifFalse:  [ ^(aConnector2 = connectorIn) and: (aConnector1 = connectorOut) ].
+]
+
+{ #category : #colors }
+MolViewRelation >> highlightColor [
+	^Color red lighter.
 ]
 
 { #category : #removing }
@@ -51,7 +61,7 @@ MolViewRelation >> with: aConnector1 and: aConnector2 [
 	self drawRelation.
 
 	interaction := RSHighlightable new.
-	interaction highlightColor: Color red lighter.
+	interaction highlightColor: self highlightColor.
 	rsobject @ interaction.
 	rsobject when: RSMouseLeftClick do: [ self removeRelation ].
 ]

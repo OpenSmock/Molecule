@@ -14,6 +14,11 @@ Class {
 	#category : #'Molecule-IDE-Incubators-Mol View'
 }
 
+{ #category : #'instance creation' }
+MolViewPort class >> new: aSpace [
+	^MolViewPort new space: aSpace; initializeInteractions.
+]
+
 { #category : #accessing }
 MolViewPort >> connector [
 	^connector.
@@ -46,14 +51,20 @@ MolViewPort >> drawOutPort [
 MolViewPort >> initialize [
 	rsobject := RSComposite new.
 	rsobject extent: (32@32).
-	rsobject @ (MolViewPortHover new applyOn: self).
-	rsobject @ (MolViewPortDrag new applyOn: self).
+	
 	
 ]
 
 { #category : #initialization }
 MolViewPort >> initializeFrom: aConnector [
 	connector := aConnector.
+	self space: aConnector space.
+]
+
+{ #category : #initialization }
+MolViewPort >> initializeInteractions [
+	rsobject @ (MolViewPortHover new applyOn: self).
+	rsobject @ (MolViewPortDrag new applyOn: self).
 ]
 
 { #category : #testing }

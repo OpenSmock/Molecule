@@ -9,7 +9,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'canvas',
-		'elements'
+		'elements',
+		'theme'
 	],
 	#category : #'Molecule-IDE-Incubators-Mol View'
 }
@@ -17,7 +18,7 @@ Class {
 { #category : #adding }
 MolViewSpace >> addComponent: aComponent [
 	| element |
-	element := MolViewComponent new initializeComponent: aComponent.
+	element := MolViewComponent new: aComponent from: self.
 	self addElement: element.
 	"TODO: Un element doit etre en charge de sa propre politique. A changer !"
 	element rsobject draggable; when: RSMouseDragStart do: [ canvas pushFront: element rsobject ].
@@ -58,6 +59,7 @@ MolViewSpace >> initialize [
 		addComponent: (MolMyAlarmComponentImpl new);
 		canvas) open extent: 800@600.'>
 
+	theme := MolViewUITheme new.
 	elements := LinkedList new.
 	canvas := RSCanvas new.
 	canvas @ RSCanvasController.
@@ -67,6 +69,16 @@ MolViewSpace >> initialize [
 { #category : #removing }
 MolViewSpace >> removeRelation: aRelation [ 
 	canvas removeShape: aRelation rsobject.
+]
+
+{ #category : #accessing }
+MolViewSpace >> theme [
+	^theme
+]
+
+{ #category : #accessing }
+MolViewSpace >> theme: aUiTheme [
+	theme := aUiTheme
 ]
 
 { #category : #interactions }

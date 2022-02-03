@@ -5,7 +5,8 @@ Class {
 	#name : #MolViewPortInteraction,
 	#superclass : #RSInteraction,
 	#instVars : [
-		'port'
+		'port',
+		'theme'
 	],
 	#category : #'Molecule-IDE-Incubators-Mol View'
 }
@@ -13,6 +14,7 @@ Class {
 { #category : #initialization }
 MolViewPortInteraction >> applyOn: aPort [
 	port := aPort.
+	theme := aPort theme.
 ]
 
 { #category : #hooks }

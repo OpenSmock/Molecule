@@ -43,6 +43,11 @@ MolViewElement >> space: aSpace [
 	space := aSpace.
 ]
 
+{ #category : #accessing }
+MolViewElement >> theme [
+	^self space theme.
+]
+
 { #category : #visitor }
 MolViewElement >> visitedBy: aVisitor [ 
 	self subclassResponsibility.
