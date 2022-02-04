@@ -17,7 +17,7 @@ Class {
 	#category : #'Molecule-Core'
 }
 
-{ #category : #'initialize-release' }
+{ #category : #cleanup }
 MolComponentManager class >> cleanUp [
 	<script: 'self cleanUp'>
 	| notifiers subscribers |
@@ -46,7 +46,13 @@ MolComponentManager class >> cleanUp [
 	
 ]
 
-{ #category : #'initialize-release' }
+{ #category : #cleanup }
+MolComponentManager class >> cleanUp: aBoolean [
+	
+	self deepCleanUp.
+]
+
+{ #category : #cleanup }
 MolComponentManager class >> deepCleanUp [
 	<script: 'self deepCleanUp'>
 	| i j |

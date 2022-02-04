@@ -111,6 +111,22 @@ MolComponentManagerTest >> testHomeServices [
 ]
 
 { #category : #tests }
+MolComponentManagerTest >> testImageCleanUp [
+	"Test the Do Image Cleanup Pharo function"
+	
+	| manager factory |
+	manager := MolComponentManager default.	
+	factory := MolComponentFactory default.
+	MolComponentManager cleanUp: true.
+	
+	self assert: manager deploymentServices isNil.
+	self assert: manager homeServices isNil.
+	self assert: manager locatorServices isNil.
+	self assert: factory == MolComponentFactory default equals: false.
+	
+]
+
+{ #category : #tests }
 MolComponentManagerTest >> testInitialize [
 	| manager |
 	self assert: MolComponentManager isInitialized equals: false.
