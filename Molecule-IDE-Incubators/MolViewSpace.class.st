@@ -15,6 +15,17 @@ Class {
 	#category : #'Molecule-IDE-Incubators-Mol View'
 }
 
+{ #category : #'as yet unclassified' }
+MolViewSpace class >> openTest [
+	<script>
+	(MolViewSpace new 
+		addComponent: (MolMyServerTimeComponentImpl new);
+		addComponent: (MolMyClockComponentImpl new);
+		addComponent: (MolMyUserFacadeComponentImpl new);
+		addComponent: (MolMyAlarmComponentImpl new);
+		canvas) open extent: 800@600.
+]
+
 { #category : #adding }
 MolViewSpace >> addComponent: aComponent [
 	| element |
@@ -52,13 +63,9 @@ MolViewSpace >> findShape: aRSComposite [
 
 { #category : #initialization }
 MolViewSpace >> initialize [
-	<script: '(MolViewSpace new 
-		addComponent: (MolMyServerTimeComponentImpl new);
-		addComponent: (MolMyClockComponentImpl new);
-		addComponent: (MolMyUserFacadeComponentImpl new);
-		addComponent: (MolMyAlarmComponentImpl new);
-		canvas) open extent: 800@600.'>
-
+	
+	super initialize.
+	
 	theme := MolViewUITheme new.
 	elements := LinkedList new.
 	canvas := RSCanvas new.

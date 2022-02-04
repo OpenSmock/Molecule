@@ -37,13 +37,25 @@ MolWorld class >> menu213CreateOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Create)
 		parent: #MoleculeIncubator;
-		label: 'Component editor';
-		help: 'Open Component editor to create new Components';
+		label: 'Component editor A';
+		help: 'Open Component editor A to create new Components';
 		icon: MolIcon moleculeIcon;
 		action: [ 
 			| spMolCreate |
 			spMolCreate := SpMolCreateComponent new.
 			spMolCreate open ]
+]
+
+{ #category : #'*Molecule-IDE-Incubators' }
+MolWorld class >> menu214EditorBOn: aBuilder [
+
+	<worldMenu>
+	(aBuilder item: #Editor)
+		parent: #MoleculeIncubator;
+		label: 'Component editor B';
+		help: 'Open Component editor B to create new Components';
+		icon: MolIcon moleculeIcon;
+		action: [MolViewSpace openTest]
 ]
 
 { #category : #'*Molecule-IDE-Incubators' }
