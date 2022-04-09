@@ -223,16 +223,37 @@ MolComponentImpl >> eventsSubscribers [
 MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 
 	| producers |
-	producers := self eventsSubscribers at: anEventsTrait.
-	producers isArray
-		ifTrue: [ producers remove: aComponentName ifAbsent: [ nil ] ]
-		ifFalse: [ self eventsSubscribers removeKey: anEventsTrait ifAbsent: [ nil ] ]
+	
+	(anEventsTrait traits includes: MolComponentEvents) ifTrue: [
+		
+		producers := self eventsSubscribers at: anEventsTrait.
+		producers ifNil:[ ^self ].
+		producers = aComponentName ifTrue:[ self eventsSubscribers at: anEventsTrait put: nil. ^ self ].
+		(producers isArray and:[producers includes: aComponentName]) ifTrue: [
+			producers := producers asOrderedCollection.
+			producers remove: aComponentName. 
+			^ self forEvents: anEventsTrait useAllProducers: producers
+		].
+		
+	] ifFalse: [ MolUtils log: self printString , '>forEvent:useProducer: try to link a non event trait for an event ' ].
 ]
 
 { #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait useAllProducers: aComponentNameList [
 
-	self eventsSubscribers at: anEventsTrait put: aComponentNameList
+	| anArrayOrComponentName |
+	
+	(anEventsTrait traits includes: MolComponentEvents) ifTrue: [
+			
+		anArrayOrComponentName := (aComponentNameList isCollection and:[aComponentNameList notEmpty]) 
+			ifTrue:[ aComponentNameList size = 1 ifTrue: [ aComponentNameList asOrderedCollection first ] ifFalse: [ aComponentNameList asArray ]] 
+			ifFalse:[ nil ].
+	
+		self eventsSubscribers at: anEventsTrait put: anArrayOrComponentName
+			
+	] ifFalse: [ MolUtils log: self printString , '>forEvent:useAllProducers: try to link a non event trait for an event ' ].
+	
+	
 ]
 
 { #category : #'connecting - events producers' }

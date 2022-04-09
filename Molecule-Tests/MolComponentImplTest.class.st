@@ -16,7 +16,7 @@ MolComponentImplTest >> tearDown [
 	MolComponentManager cleanUp
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testAugmentedClassToAComponentProperties [
 	| component |
 
@@ -36,7 +36,7 @@ MolComponentImplTest >> testAugmentedClassToAComponentProperties [
 	self assert: component componentConnector equals: nil.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testAugmentedClassToAComponentRemoveAndReuseAsNormalWay [
 	"Use an existing class to a component, remove the component and reuse the instance as a normal way"
 
@@ -56,7 +56,7 @@ MolComponentImplTest >> testAugmentedClassToAComponentRemoveAndReuseAsNormalWay 
 	myInstance getMolUsedEventsSubscriber unsubscribe: myInstance.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testAugmentedClassToAComponentUsesAsAClassicWay [
 	"Use existing API outside a Component system but with component capacities use inside (get services, parameters and notify events)"
 
@@ -80,7 +80,7 @@ MolComponentImplTest >> testComponentType [
 	
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testDefineComponent [
 
 	self assert: MolComponentImpl defineComponent equals: MolComponentImpl.
@@ -146,18 +146,93 @@ MolComponentImplTest >> testEventsSubscribers [
 	self assert: component eventsSubscribers isEmpty.
 ]
 
-{ #category : #test }
+{ #category : #'test - connecting - events producers' }
+MolComponentImplTest >> testForEventsRemoveProducer [
+
+	| component |
+	component := MolCompleteComponentImpl start: #myComponentA.
+	
+	component forEvents: MolUsedEvents useAllProducers: #(#producerA #producerB #producerC).	
+		
+	component forEvents: MolUsedEvents removeProducer: #producerA.
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#producerB #producerC).
+	
+	component forEvents: MolUsedEvents removeProducer: #producerB.
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #producerC.
+	
+	component forEvents: MolUsedEvents removeProducer: #producerC.
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
+]
+
+{ #category : #'test - connecting - events producers' }
+MolComponentImplTest >> testForEventsUseAllProducers [
+
+	| component |
+	component := MolCompleteComponentImpl start: #myComponentA.
+
+	component forEvents: MolUsedEvents useAllProducers: #(#producerA #producerB #producerC).
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#producerA #producerB #producerC).
+	
+	component forEvents: MolUsedEvents useAllProducers: #(#producerD #producerE #producerF).
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#producerD #producerE #producerF).
+	
+	component forEvents: MolUsedEvents useAllProducers: #().
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
+	
+	component forEvents: MolUsedEvents useAllProducers: nil.
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
+	
+	component forEvents: MolUsedEvents useAllProducers: #(#producerA).
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #producerA.
+]
+
+{ #category : #'test - connecting - events producers' }
 MolComponentImplTest >> testForEventsUseProducer [
 
 	| component |
 	component := MolCompleteComponentImpl start: #myComponentA.
 	
-	"Test initial events producer contents : default component name"
+	"Test set a specific producer"
+	component forEvents: MolUsedEvents useProducer: #producerA. 
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #producerA.
+	
+	component forEvents: MolUsedEvents useProducer: #producerB. 
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #producerB.
+	
+	component forEvents: MolUsedEvents useProducer: nil. 
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
+	
+	component forEvents: MolUsedEvents useProducer: #default. 
 	self assert: component eventsSubscribers size equals: 1.
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #default.
 ]
 
-{ #category : #tests }
+{ #category : #'test - connecting - events producers' }
+MolComponentImplTest >> testForEventsUseProducer2 [
+
+	| component |
+	component := MolCompleteComponentImpl start: #myComponentA.
+	component forEvents: MolUsedEvents useAllProducers: #(#producerA #producerB #producerC). 
+	
+	component forEvents: MolUsedEvents useProducer: #producerD. 
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #producerD.
+	
+	
+]
+
+{ #category : #test }
 MolComponentImplTest >> testFoundNotifier [
 
 	| component |
@@ -166,7 +241,7 @@ MolComponentImplTest >> testFoundNotifier [
 	self assert: component getMolUsedEventsNotifier isNotFoundEventsNotifier not.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testFoundParameters [
 
 	| component |
@@ -175,7 +250,7 @@ MolComponentImplTest >> testFoundParameters [
 	self assert: component getMolUsedParametersProvider isNotFoundParameters not.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testFoundServices [
 
 	| component |
@@ -184,7 +259,7 @@ MolComponentImplTest >> testFoundServices [
 	self assert: component getMolUsedServicesProvider isNotFoundServices not.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testFoundSubscriber [
 
 	| component |
@@ -212,7 +287,7 @@ MolComponentImplTest >> testIsOverrideComponentType [
 	self assert: MolCompleteComponentChildImpl isOverrideComponentType equals: true.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testNotFoundNotifier [
 
 	| component result |
@@ -224,7 +299,7 @@ MolComponentImplTest >> testNotFoundNotifier [
 	self assert: result isNil.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testNotFoundParameters [
 
 	| component result |
@@ -236,7 +311,7 @@ MolComponentImplTest >> testNotFoundParameters [
 	self assert: result isNil.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testNotFoundServices [
 
 	| component result |
@@ -248,7 +323,7 @@ MolComponentImplTest >> testNotFoundServices [
 	self assert: result isNil.
 ]
 
-{ #category : #tests }
+{ #category : #test }
 MolComponentImplTest >> testNotFoundSubscriber [
 
 	| component |
@@ -328,7 +403,7 @@ MolComponentImplTest >> testServicesProviders [
 	self assert: component servicesProviders isEmpty.
 ]
 
-{ #category : #'tests - component creation' }
+{ #category : #'test - component creation' }
 MolComponentImplTest >> testStart [
 	MolCompleteComponentImpl deploy.
 	MolCompleteComponentImpl instanciate.
@@ -340,7 +415,7 @@ MolComponentImplTest >> testStart [
 	MolCompleteComponentImpl undeploy.
 ]
 
-{ #category : #'tests - component creation' }
+{ #category : #'test - component creation' }
 MolComponentImplTest >> testStart2 [
 	| component |
 	component := MolCompleteComponentImpl start.
@@ -354,7 +429,7 @@ MolComponentImplTest >> testStart2 [
 	self assert: component componentName equals: #compA.
 ]
 
-{ #category : #'tests - component creation' }
+{ #category : #'test - component creation' }
 MolComponentImplTest >> testStartWithName [
 	MolCompleteComponentImpl deploy.
 	MolCompleteComponentImpl instanciate: #myComponent.
@@ -366,7 +441,7 @@ MolComponentImplTest >> testStartWithName [
 	MolCompleteComponentImpl undeploy.
 ]
 
-{ #category : #'tests - component creation' }
+{ #category : #'test - component creation' }
 MolComponentImplTest >> testStop [
 	MolCompleteComponentImpl start.
 	MolCompleteComponentImpl stop.
