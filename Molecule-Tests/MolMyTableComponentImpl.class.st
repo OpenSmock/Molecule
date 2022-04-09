@@ -27,7 +27,7 @@ MolMyTableComponentImpl >> addRow: aName attribute1: aNumber1 attribute2: aNumbe
 		
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolMyTableComponentImpl >> componentInitialize [
 	"here write the code corresponding to component initialisation phase"
 	

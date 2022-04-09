@@ -9,7 +9,7 @@ Class {
 	#category : #'Molecule-Examples-GPS Example'
 }
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolGPSHardware >> componentActivate [ 
 
 	"Start a thread to simulate sending of a fixed geo position each 2 seconds"
@@ -23,7 +23,7 @@ MolGPSHardware >> componentActivate [
 	] forkAt: Processor userBackgroundPriority.
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolGPSHardware >> componentPassivate [ 
 	
 	sendCurrentPositionThread ifNotNil:[ :e | e terminate ].
