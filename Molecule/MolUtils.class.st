@@ -49,7 +49,7 @@ MolUtils class >> consumedComponentEvents: anObject [
 	^ componentType ifNotNil: [ :e | ^ e consumedComponentEvents ] ifNil: [ ^ {} ]
 ]
 
-{ #category : #'component creation' }
+{ #category : #'quick creation' }
 MolUtils class >> createAllComponents [
 	"instanciate and activate all deployed components"
 	| homeServices components |
@@ -58,6 +58,34 @@ MolUtils class >> createAllComponents [
 	components := homeServices deployedComponents.
 	components keysDo: [ :aClass | homeServices instanciateComponent: aClass ].
 	components keysDo: [ :aClass | homeServices activateComponent: aClass ]
+]
+
+{ #category : #'quick lifecycle' }
+MolUtils class >> deployAndInitializeComponent: aComponentClass named: aName [
+	"auto deploy, and instanciate quickly a component and return the instance"
+
+	(MolComponentManager default deploymentServices isDeployedComponentImplementation: aComponentClass) ifFalse:[
+		MolComponentManager default deploymentServices deployComponentImplementation: aComponentClass.
+	].
+
+	^ MolComponentManager default homeServices instanciateComponent: aComponentClass named: aName
+]
+
+{ #category : #'quick lifecycle' }
+MolUtils class >> deployAndInitializeComponents: aComponentClassList [
+	"deploy and instanciate quickly a list of components and return all instances"
+	| components |
+
+	components := OrderedCollection new.	
+	aComponentClassList ifNil:[^components].
+	aComponentClassList do:[ :componentClass | 		
+		MolComponentManager default deploymentServices deployComponentImplementation: componentClass.
+	].
+	aComponentClassList do:[ :componentClass | 
+		(MolComponentManager default homeServices instanciateComponent: componentClass) ifNotNil:[ :c | components add: c].
+	].
+
+	^components
 ]
 
 { #category : #accessing }
@@ -167,40 +195,31 @@ MolUtils class >> showInformation: aString [
 	self inform: '[Molecule] ' , string
 ]
 
-{ #category : #'component easy start and stop' }
+{ #category : #'quick start and stop' }
 MolUtils class >> startComponent: aComponentClass [
-	"deploy, instanciate and activate quickly a component and return the instance"
+	"deploy, initialize and activate quickly a component and return the instance"
 	
 	^ self startComponent: aComponentClass named: #default
 ]
 
-{ #category : #'component easy start and stop' }
+{ #category : #'quick start and stop' }
 MolUtils class >> startComponent: aComponentClass named: aName [
-	"auto deploy, instanciate and activate quickly a component and return the instance"
+	"auto deploy, initialize and activate quickly a component and return the instance"
 	| component |
 
-	(MolComponentManager default deploymentServices isDeployedComponentImplementation: aComponentClass) ifFalse:[
-		MolComponentManager default deploymentServices deployComponentImplementation: aComponentClass.
-	].
-	component := MolComponentManager default homeServices instanciateComponent: aComponentClass named: aName.
+	component := self deployAndInitializeComponent: aComponentClass named: aName.
 	MolComponentManager default homeServices activateComponent: aComponentClass named: aName.
 	
 	^ component
 ]
 
-{ #category : #'component easy start and stop' }
+{ #category : #'quick start and stop' }
 MolUtils class >> startComponents: aComponentClassList [
-	"deploy, instanciate and activate quickly a list of components and return all instances"
+	"deploy, initialize and activate quickly a list of components and return all instances"
 	| startedComponents |
 
-	startedComponents := OrderedCollection new.	
-	aComponentClassList ifNil:[^startedComponents].
-	aComponentClassList do:[ :componentClass | 		
-		MolComponentManager default deploymentServices deployComponentImplementation: componentClass.
-	].
-	aComponentClassList do:[ :componentClass | 
-		(MolComponentManager default homeServices instanciateComponent: componentClass) ifNotNil:[ :c | startedComponents add: c].
-	].
+	startedComponents := self deployAndInitializeComponents: aComponentClassList.	
+	
 	aComponentClassList do:[ :componentClass | 
 		MolComponentManager default homeServices activateComponent: componentClass.
 	].
@@ -208,21 +227,21 @@ MolUtils class >> startComponents: aComponentClassList [
 	^startedComponents
 ]
 
-{ #category : #'component easy start and stop' }
+{ #category : #'quick start and stop' }
 MolUtils class >> stopComponent: aComponentClass [
 	"passivate, remove and undeploy quickly a component"
 	
 	^ self stopComponent: aComponentClass named: #default
 ]
 
-{ #category : #'component easy start and stop' }
+{ #category : #'quick start and stop' }
 MolUtils class >> stopComponent: aComponentClass named: aName [
 	"passivate and remove quickly a component"
 
 	MolComponentManager default homeServices removeComponent: aComponentClass named: aName.
 ]
 
-{ #category : #'component easy start and stop' }
+{ #category : #'quick start and stop' }
 MolUtils class >> stopComponents: aComponentClassList [
 	"remove quickly a list of components"
 

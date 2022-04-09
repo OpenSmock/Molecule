@@ -87,6 +87,36 @@ MolUtilsTest >> testCreateAllComponents [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testDeployAndInitializeComponentNamed [
+
+	| homeServices deploymentServices |
+	MolUtils deployAndInitializeComponent: MolBasicComponentImpl named: #myComponent.
+	
+	homeServices := MolComponentManager default homeServices.	
+	deploymentServices := MolComponentManager default deploymentServices. 
+	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #myComponent).
+	self assert: (homeServices isWaitingForActivation: MolBasicComponentImpl named: #myComponent) equals: true.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testDeployAndInitializeComponents [
+
+	| homeServices deploymentServices componentList |
+	componentList := OrderedCollection with: MolBasicComponentImpl with: MolCompleteComponentImpl.
+	MolUtils deployAndInitializeComponents: componentList.
+
+	homeServices := MolComponentManager default homeServices.	
+	deploymentServices := MolComponentManager default deploymentServices. 
+	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicComponentImpl).
+	self assert: (deploymentServices isDeployedComponentImplementation: MolCompleteComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolCompleteComponentImpl).
+	self assert: (homeServices isWaitingForActivation: MolBasicComponentImpl) equals: true.
+	self assert: (homeServices isWaitingForActivation: MolCompleteComponentImpl) equals: true.
+]
+
+{ #category : #tests }
 MolUtilsTest >> testInstanceKindOf [
 "Test method instanceKindOf: of Utils"
 
@@ -226,7 +256,7 @@ MolUtilsTest >> testStartComponent [
 ]
 
 { #category : #tests }
-MolUtilsTest >> testStartComponentWithName [
+MolUtilsTest >> testStartComponentNamed [
 
 	| homeServices deploymentServices |
 	MolUtils startComponent: MolBasicComponentImpl named: #myComponent.
@@ -270,7 +300,7 @@ MolUtilsTest >> testStopComponent [
 ]
 
 { #category : #tests }
-MolUtilsTest >> testStopComponentWithName [
+MolUtilsTest >> testStopComponentNamed [
 
 	| homeServices deploymentServices |
 	MolUtils startComponent: MolBasicComponentImpl named: #myComponent.

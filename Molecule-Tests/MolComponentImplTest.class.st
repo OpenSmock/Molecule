@@ -86,6 +86,28 @@ MolComponentImplTest >> testDefineComponent [
 	self assert: MolComponentImpl defineComponent equals: MolComponentImpl.
 ]
 
+{ #category : #test }
+MolComponentImplTest >> testEventsSubscribers [
+
+	| component |
+	component := MolUtils deployAndInitializeComponent: MolCompleteComponentImpl named: #myComponentA.
+	
+	"Test initial events producer contents : default component name"
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #default.
+]
+
+{ #category : #test }
+MolComponentImplTest >> testForEventsUseProducer [
+
+	| component |
+	component := MolCompleteComponentImpl start: #myComponentA.
+	
+	"Test initial events producer contents : default component name"
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #default.
+]
+
 { #category : #tests }
 MolComponentImplTest >> testFoundNotifier [
 
