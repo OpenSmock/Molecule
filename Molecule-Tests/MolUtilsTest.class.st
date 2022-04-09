@@ -20,6 +20,34 @@ MolUtilsTest >> tearDown [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testActivateComponentNamed [
+
+	| homeServices deploymentServices |
+	
+	MolUtils deployAndInitializeComponent: MolBasicComponentImpl named: #myComponent.
+	MolUtils activateComponent: MolBasicComponentImpl named: #myComponent.
+	
+	homeServices := MolComponentManager default homeServices.	
+	deploymentServices := MolComponentManager default deploymentServices. 
+	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #myComponent).
+	self assert: (homeServices isWaitingForActivation: MolBasicComponentImpl named: #myComponent) equals: false.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testActivateComponents [
+
+	| homeServices componentList |
+	componentList := OrderedCollection with: MolBasicComponentImpl with: MolCompleteComponentImpl.
+	MolUtils deployAndInitializeComponents: componentList.
+	MolUtils activateComponents: componentList.
+
+	homeServices := MolComponentManager default homeServices.	
+	self assert: (homeServices isWaitingForActivation: MolBasicComponentImpl) equals: false.
+	self assert: (homeServices isWaitingForActivation: MolCompleteComponentImpl) equals: false.
+]
+
+{ #category : #tests }
 MolUtilsTest >> testAllComponentInstancesOfType [
 
 	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) isEmpty.
@@ -177,6 +205,34 @@ MolUtilsTest >> testLog2 [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testPassivateComponentNamed [
+
+	| homeServices deploymentServices |
+	
+	MolUtils startComponent: MolBasicComponentImpl named: #myComponent.
+	MolUtils passivateComponent: MolBasicComponentImpl named: #myComponent.
+	
+	homeServices := MolComponentManager default homeServices.	
+	deploymentServices := MolComponentManager default deploymentServices. 
+	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #myComponent) equals: true.
+	self assert: (homeServices isWaitingForActivation: MolBasicComponentImpl named: #myComponent) equals: true.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testPassivateComponents [
+
+	| homeServices componentList |
+	componentList := OrderedCollection with: MolBasicComponentImpl with: MolCompleteComponentImpl.
+	MolUtils startComponents: componentList.
+	MolUtils passivateComponents: componentList.
+
+	homeServices := MolComponentManager default homeServices.	
+	self assert: (homeServices isWaitingForActivation: MolBasicComponentImpl) equals: true.
+	self assert: (homeServices isWaitingForActivation: MolCompleteComponentImpl) equals: true.
+]
+
+{ #category : #tests }
 MolUtilsTest >> testProducedComponentEvents [
 
 	self assert: (MolUtils producedComponentEvents: nil) isEmpty.
@@ -231,6 +287,36 @@ MolUtilsTest >> testProvidedComponentServices [
 	self assert: (MolUtils providedComponentServices: MolComponentServices) isEmpty.
 	self assert: (MolUtils providedComponentServices: MolComponentParameters) isEmpty.
 	self assert: (MolUtils providedComponentServices: MolComponentEvents) isEmpty.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testRemoveComponentNamed [
+
+	| homeServices deploymentServices |
+	
+	MolUtils startComponent: MolBasicComponentImpl named: #myComponent.
+	MolUtils removeComponent: MolBasicComponentImpl named: #myComponent.
+	
+	homeServices := MolComponentManager default homeServices.	
+	deploymentServices := MolComponentManager default deploymentServices. 
+	self assert: (deploymentServices isDeployedComponentImplementation: MolBasicComponentImpl).
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #myComponent) equals: false.
+	self assert: (homeServices isWaitingForActivation: MolBasicComponentImpl named: #myComponent) equals: false.
+]
+
+{ #category : #tests }
+MolUtilsTest >> testRemoveComponents [
+
+	| homeServices componentList |
+	componentList := OrderedCollection with: MolBasicComponentImpl with: MolCompleteComponentImpl.
+	MolUtils startComponents: componentList.
+	MolUtils removeComponents: componentList.
+
+	homeServices := MolComponentManager default homeServices.	
+	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl) equals: false.
+	self assert: (MolUtils isInstanciateComponentOf: MolCompleteComponentImpl) equals: false.
+	self assert: (homeServices isWaitingForActivation: MolBasicComponentImpl) equals: false.
+	self assert: (homeServices isWaitingForActivation: MolCompleteComponentImpl) equals: false.
 ]
 
 { #category : #tests }

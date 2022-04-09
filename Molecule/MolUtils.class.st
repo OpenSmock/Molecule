@@ -12,6 +12,24 @@ Class {
 	#category : #'Molecule-Tools'
 }
 
+{ #category : #'quick lifecycle' }
+MolUtils class >> activateComponent: aComponentClass named: aName [
+	"activate quickly a component"
+
+	MolComponentManager default homeServices activateComponent: aComponentClass named: aName.
+
+]
+
+{ #category : #'quick lifecycle' }
+MolUtils class >> activateComponents: aComponentClassList [
+	"activate quickly a list of components"
+
+	aComponentClassList ifNil:[^self].
+	aComponentClassList do:[ :componentClass | 
+		MolComponentManager default homeServices activateComponent: componentClass.
+	].
+]
+
 { #category : #accessing }
 MolUtils class >> allComponentInstancesOfType: aComponentType [
 
@@ -155,6 +173,23 @@ MolUtils class >> log: aString [
 	self traceCr: '[Molecule] ' , string
 ]
 
+{ #category : #'quick lifecycle' }
+MolUtils class >> passivateComponent: aComponentClass named: aName [
+	"passivate quickly a component"
+
+	MolComponentManager default homeServices passivateComponent: aComponentClass named: aName.
+]
+
+{ #category : #'quick lifecycle' }
+MolUtils class >> passivateComponents: aComponentClassList [
+	"pâssivate quickly a list of components"
+
+	aComponentClassList ifNil:[^self].
+	aComponentClassList do:[ :componentClass | 
+		MolComponentManager default homeServices passivateComponent: componentClass.
+	].
+]
+
 { #category : #'component contract' }
 MolUtils class >> producedComponentEvents: anObject [
 	"Get produced events of an object, return nil if no events was found"
@@ -185,6 +220,23 @@ MolUtils class >> providedComponentServices: anObject [
 	^ componentType ifNotNil: [ :e | ^ e providedComponentServices ] ifNil: [ ^ {} ]
 ]
 
+{ #category : #'quick lifecycle' }
+MolUtils class >> removeComponent: aComponentClass named: aName [
+	"passivate quickly a component"
+
+	MolComponentManager default homeServices removeComponent: aComponentClass named: aName.
+]
+
+{ #category : #'quick lifecycle' }
+MolUtils class >> removeComponents: aComponentClassList [
+	"pâssivate quickly a list of components"
+
+	aComponentClassList ifNil:[^self].
+	aComponentClassList do:[ :componentClass | 
+		MolComponentManager default homeServices removeComponent: componentClass.
+	].
+]
+
 { #category : #log }
 MolUtils class >> showInformation: aString [
 	"Inform the user with a message into the Pharo UI"
@@ -208,7 +260,7 @@ MolUtils class >> startComponent: aComponentClass named: aName [
 	| component |
 
 	component := self deployAndInitializeComponent: aComponentClass named: aName.
-	MolComponentManager default homeServices activateComponent: aComponentClass named: aName.
+	self activateComponent: aComponentClass named: aName.
 	
 	^ component
 ]
@@ -219,10 +271,7 @@ MolUtils class >> startComponents: aComponentClassList [
 	| startedComponents |
 
 	startedComponents := self deployAndInitializeComponents: aComponentClassList.	
-	
-	aComponentClassList do:[ :componentClass | 
-		MolComponentManager default homeServices activateComponent: componentClass.
-	].
+	self activateComponents: aComponentClassList.
 
 	^startedComponents
 ]
@@ -238,17 +287,14 @@ MolUtils class >> stopComponent: aComponentClass [
 MolUtils class >> stopComponent: aComponentClass named: aName [
 	"passivate and remove quickly a component"
 
-	MolComponentManager default homeServices removeComponent: aComponentClass named: aName.
+	self removeComponent: aComponentClass named: aName.
 ]
 
 { #category : #'quick start and stop' }
 MolUtils class >> stopComponents: aComponentClassList [
 	"remove quickly a list of components"
 
-	aComponentClassList ifNil:[^self].
-	aComponentClassList do:[ :componentClass | 
-		MolComponentManager default homeServices removeComponent: componentClass.
-	].
+	self removeComponents: aComponentClassList
 ]
 
 { #category : #actions }
