@@ -16,6 +16,7 @@ Class {
 
 { #category : #constructor }
 MolEventSubscriber class >> events: aComponentEvents originators: aSubscribersList [
+
 	| eventSubscriber |
 	eventSubscriber := self new.
 	eventSubscriber events: aComponentEvents originators: aSubscribersList.
@@ -40,21 +41,27 @@ MolEventSubscriber >> addOriginators: aComponentList [
 
 { #category : #private }
 MolEventSubscriber >> connectAllOriginatorsTo: aComponent [
+
 	self mutex criticalReleasingOnError:[ | set |
+
 		set := self observersConnection at: aComponent ifAbsentPut: [ Set new ].
+		
 		self getOriginatorsConnectedKeys do: [ :e |
 			(set includes: e) ifFalse:[ 
 				set add: e.
 				self connectOriginator: e to: aComponent.
 			].
 		].	
+
 	].
 ]
 
 { #category : #private }
 MolEventSubscriber >> connectOriginator: componentName to: aComponent [
 	"Connect a component to event pipeline"
+
 	self events allSelectors do: [ :event | | originator |
+		
 		originator := self originatorsLinks at: componentName.
 		originator when: event send: event to: aComponent.
 	].
@@ -92,8 +99,11 @@ MolEventSubscriber >> events [
 
 { #category : #'initialize-release' }
 MolEventSubscriber >> events: aComponentEvents originators: aComponentList [
+
 	(aComponentEvents isNil and:[aComponentEvents isTrait not and:[aComponentEvents isComponentEvents not]]) ifTrue:[ ^ self ].
+
 	events := aComponentEvents.
+	
 	aComponentList ifNil:[ ^ self ].
 	aComponentList do: [ :c | self addOriginator: c].
 ]
@@ -104,12 +114,12 @@ MolEventSubscriber >> getObserversFrom: aComponent [
 	observers := OrderedCollection new.
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ observers ].
 
-	self observersConnection keysDo: [ :comp | 
-		(self observersConnection at: comp ifAbsent:[ nil ]) ifNotNil: [ :observersList |
-			(observersList includes: aComponent componentName) ifTrue: [ 
-				observers add: comp. 
-			]. 
-		]. 
+	self mutex criticalReleasingOnError:[
+
+		self observersConnection keysAndValuesDo: [ :component :observersList | 
+			(component class = aComponent class and:[(observersList includes: aComponent componentName)]) ifTrue: [ observers add: component ]. 
+		].
+
 	].
 
 	^ observers 
@@ -117,7 +127,8 @@ MolEventSubscriber >> getObserversFrom: aComponent [
 
 { #category : #private }
 MolEventSubscriber >> getOriginatorsConnectedKeys [
-	^ self originatorsLinks keys reject: [ :e | (self originatorsLinks at: e) isNil ]
+
+	^ (self originatorsLinks select:[ :v | v notNil ]) keys
 ]
 
 { #category : #originators }
@@ -139,6 +150,22 @@ MolEventSubscriber >> isAllOriginatorsLinked [
 { #category : #testing }
 MolEventSubscriber >> isNotFoundEventsSubscriber [ 
 	^false
+]
+
+{ #category : #API }
+MolEventSubscriber >> isSubscribed: aComponent [
+	
+	| isSubscribed |
+	isSubscribed := false.
+	self mutex criticalReleasingOnError:[
+		
+		isSubscribed := self observersConnection isEmpty 
+			ifTrue:[ false ] 
+			ifFalse:[ self observersConnection includesKey: aComponent ]
+		
+	].
+
+	^ isSubscribed
 ]
 
 { #category : #testing }
@@ -198,12 +225,13 @@ MolEventSubscriber >> originatorsLinks [
 
 { #category : #'initialize-release' }
 MolEventSubscriber >> release [
+
 	events := nil.
 	originators := nil.
 	originatorsLinks := nil.
 	observersConnection := nil.
 	mutex := nil.
-	super release.
+	super release
 ]
 
 { #category : #originators }
@@ -223,7 +251,11 @@ MolEventSubscriber >> removeOriginator: aComponent [
 
 { #category : #API }
 MolEventSubscriber >> subscribe: aComponent [
-	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ self ].
+
+	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ false ].
+	
+	"Check if the component is already subscribed"
+	(self isSubscribed: aComponent) ifTrue:[ ^ self ].
 	self connectAllOriginatorsTo: aComponent
 ]
 
@@ -248,6 +280,10 @@ MolEventSubscriber >> unlinkOriginator: aComponent [
 
 { #category : #API }
 MolEventSubscriber >> unsubscribe: aComponent [
-	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ self ].
+
+	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ false ].
+
+	"Check if the component is already subscribed"
+	(self isSubscribed: aComponent) ifFalse:[ ^ self ].
 	self disconnectAllOriginatorsFrom: aComponent.
 ]

@@ -67,6 +67,21 @@ MolComponentImplTest >> testAugmentedClassToAComponentUsesAsAClassicWay [
 	self assert: myInstance existingInterfaceC.
 ]
 
+{ #category : #'test - connecting - events producers' }
+MolComponentImplTest >> testChangeEventsProducersDuringSubscribe [
+
+	| component |
+	component := MolCompleteComponentImpl start: #myComponent.
+	component getMolUsedEventsSubscriber subscribe: component.
+	
+	"Change events producers"
+	component forEvents: MolUsedEvents addProducer: #componentA.
+	
+	
+	
+	
+]
+
 { #category : #'test - contract' }
 MolComponentImplTest >> testComponentType [ 
 

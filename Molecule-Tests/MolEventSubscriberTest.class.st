@@ -82,16 +82,17 @@ MolEventSubscriberTest >> testGetObserversFrom [
 	observer := MolCompleteComponentImpl start.
 	producer := MolCompleteComponentImpl start: #producer.
 
+	self assert: observer notNil.
+	self assert: producer notNil.
+
 	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: nil) isEmpty.
 	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) isEmpty.
+	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: observer) isEmpty.
 	
 	observer getMolUsedEventsSubscriber subscribe: observer.
 	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) isEmpty.
 	
 	observer forEvents: MolUsedEvents useProducer: #producer. 
-	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) isEmpty.
-	
-	observer getMolUsedEventsSubscriber subscribe: observer.
 	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) size equals: 1.
 	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) first identicalTo: observer.
 ]
@@ -140,6 +141,39 @@ MolEventSubscriberTest >> testIsNotFoundEventsSubscriber [
 	eventSubscriber := MolEventSubscriber events: componentEvents originators: subscribers.
 	
 	self assert: eventSubscriber isNotFoundEventsSubscriber equals: false.
+]
+
+{ #category : #test }
+MolEventSubscriberTest >> testIsSubscribed [
+	| component subscriber |
+	component := MolCompleteComponentImpl start: #myComponent.
+	subscriber := component getMolUsedEventsSubscriber.
+	self assert: (subscriber isSubscribed: component) equals: false.
+	
+	component getMolUsedEventsSubscriber subscribe: component.
+	self assert: subscriber equals: component getMolUsedEventsSubscriber.
+	self assert: (component getMolUsedEventsSubscriber isSubscribed: component) equals: true.
+	
+	component getMolUsedEventsSubscriber unsubscribe: component.
+	self assert: subscriber equals: component getMolUsedEventsSubscriber.
+	self assert: (component getMolUsedEventsSubscriber isSubscribed: component) equals: false.
+]
+
+{ #category : #test }
+MolEventSubscriberTest >> testIsSubscribed2 [
+	| component subscriber |
+	component := MolCompleteComponentImpl start: #myComponent.
+	subscriber := component getMolUsedEventsSubscriber.
+	component getMolUsedEventsSubscriber subscribe: component.
+	self assert: (component getMolUsedEventsSubscriber isSubscribed: component) equals: true.
+	
+	component forEvents: MolUsedEvents addProducer: #componentA.
+	self assert: subscriber equals: component getMolUsedEventsSubscriber.
+	self assert: (component getMolUsedEventsSubscriber isSubscribed: component) equals: true.
+	
+	component getMolUsedEventsSubscriber unsubscribe: component.
+	self assert: subscriber equals: component getMolUsedEventsSubscriber.
+	self assert: (component getMolUsedEventsSubscriber isSubscribed: component) equals: false.
 ]
 
 { #category : #test }
@@ -199,8 +233,8 @@ MolEventSubscriberTest >> testRemoveOriginatorWithObservers [
 	
 	observer := MolCompleteComponentImpl start.
 	producer := MolCompleteComponentImpl start: #producer.
+	
 	observer forEvents: MolUsedEvents useProducer: #producer. 
-
 	observer getMolUsedEventsSubscriber subscribe: observer.
 	self assert: (observer getMolUsedEventsSubscriber observersConnection at: observer) size equals: 1.
 
@@ -219,6 +253,12 @@ MolEventSubscriberTest >> testSubscribe [
 	
 	eventSubscriber subscribe: #key.
 	self assert: (eventSubscriber observersConnection includesKey: #key) equals: false.
+	
+	eventSubscriber subscribe: component.
+	self assert: (eventSubscriber observersConnection includesKey: component) equals: true.
+	self assert: (eventSubscriber observersConnection at: component) isEmpty.
+	self assert: eventSubscriber originators isEmpty.
+	self assert: eventSubscriber originatorsLinks isEmpty.
 	
 	eventSubscriber subscribe: component.
 	self assert: (eventSubscriber observersConnection includesKey: component) equals: true.
@@ -245,6 +285,14 @@ MolEventSubscriberTest >> testSubscribe2 [
 	self assert: eventSubscriber originators first equals: component.
 	self assert: (eventSubscriber originatorsLinks at: #default) equals: component.
 	
+	eventSubscriber subscribe: component.
+	self assert: (eventSubscriber observersConnection includesKey: component).
+	self assert: (eventSubscriber observersConnection at: component) size equals: 1.
+	self assert: ((eventSubscriber observersConnection at: component) includes: #default).
+	self assert: eventSubscriber originators size equals: 1.
+	self assert: eventSubscriber originators first equals: component.
+	self assert: (eventSubscriber originatorsLinks at: #default) equals: component.
+	
 ]
 
 { #category : #test }
@@ -253,8 +301,14 @@ MolEventSubscriberTest >> testUnsubscribe [
 	eventSubscriber := MolEventSubscriber events: MolUsedEvents originators: #(#default).
 	component := MolCompleteComponentImpl new.
 	
+	eventSubscriber unsubscribe: component.
+	self assert: (eventSubscriber observersConnection includesKey: component) equals: false.	
+
 	eventSubscriber subscribe: component.
 	self assert: (eventSubscriber observersConnection includesKey: component) equals: true.
+	
+	eventSubscriber unsubscribe: component.
+	self assert: (eventSubscriber observersConnection includesKey: component) equals: false.
 	
 	eventSubscriber unsubscribe: component.
 	self assert: (eventSubscriber observersConnection includesKey: component) equals: false.
@@ -266,8 +320,14 @@ MolEventSubscriberTest >> testUnsubscribe2 [
 	component := MolUtils startComponent: MolCompleteComponentImpl.
 	eventSubscriber := component getMolUsedEventsSubscriber.
 	eventSubscriber subscribe: component.
-	eventSubscriber unsubscribe: component.
 
+	eventSubscriber unsubscribe: component.
+	self assert: eventSubscriber observersConnection isEmpty.
+	self assert: eventSubscriber originators size equals: 1.
+	self assert: eventSubscriber originators first equals: component.
+	self assert: (eventSubscriber originatorsLinks at: #default) equals: component.
+	
+	eventSubscriber unsubscribe: component.
 	self assert: eventSubscriber observersConnection isEmpty.
 	self assert: eventSubscriber originators size equals: 1.
 	self assert: eventSubscriber originators first equals: component.

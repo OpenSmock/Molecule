@@ -321,6 +321,8 @@ MolHomeServices >> removeDeployedComponent: aComponentClass [
 MolHomeServices >> resetComponentConnection: aComponent withRemovedComponent: aRemovedComponent [
 	"Unlink component connections with a removed component, this action reset component connexion in case of a new instance appears"
 	| eventAndComponentNameAssocList eventsSubscribers |
+	
+	self flag:'PLA : test it'.
 	(aComponent isNil or:[aRemovedComponent isNil]) ifTrue:[ ^ self ].
 	eventsSubscribers := MolComponentManager default locatorServices eventsSubscribers.
 	eventsSubscribers ifEmpty: [ ^ self ].
@@ -330,19 +332,19 @@ MolHomeServices >> resetComponentConnection: aComponent withRemovedComponent: aR
 	].
 
 	eventAndComponentNameAssocList do: [ :eventAndComponentNameAssoc |
-		eventsSubscribers keysAndValuesDo:[ :k :eventSubscriber |
-			(k key = eventAndComponentNameAssoc key 
-			and:[k value = eventAndComponentNameAssoc value or: [k value includes: eventAndComponentNameAssoc value ]]) ifTrue:[ 
-				(eventSubscriber notNil "and:[eventSubscriber isWaitingForSubscription not]") ifTrue:[
-					"(eventSubscriber includesOriginator: aRemovedComponent) ifTrue:[" | newObserversSet |
-						"eventSubscriber getOriginators remove: aRemovedComponent."
-						eventSubscriber unlinkOriginator: aRemovedComponent.
-						newObserversSet := eventSubscriber observersConnection at: aComponent ifAbsent:[ nil ].
-						newObserversSet ifNotNil:[
-							newObserversSet remove: aComponent componentName ifAbsent:[ nil ].
-							eventSubscriber observersConnection at: aComponent put: newObserversSet.
-						].
-					"]."
+		
+		eventsSubscribers keysAndValuesDo:[ :anEventInterface :eventSubscriber |
+			
+			(anEventInterface = eventAndComponentNameAssoc key) ifTrue:[ 
+				
+				eventSubscriber notNil ifTrue:[ | newObserversSet |
+					
+					eventSubscriber unlinkOriginator: aRemovedComponent.
+					newObserversSet := eventSubscriber observersConnection at: aComponent ifAbsent:[ nil ].
+					newObserversSet ifNotNil:[
+						newObserversSet remove: aComponent componentName ifAbsent:[ nil ].
+						eventSubscriber observersConnection at: aComponent put: newObserversSet.
+					].
 				]. 
 			].	
 		].

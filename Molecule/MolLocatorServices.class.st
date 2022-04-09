@@ -25,28 +25,21 @@ MolLocatorServices >> eventsSubscribers: aDictionaryOrNil [
 
 { #category : #accessing }
 MolLocatorServices >> resolveWaitingSubscriptions: aComponent [
-	| eventsKey |
+	| eventsAndProviders |
 
 	self eventsSubscribers ifEmpty: [^self].
 	
-	eventsKey := aComponent class allProducedEvents collect: [ :event | event -> aComponent componentName ].
-	
-	eventsKey do: [ :eventKey | | eventsList |
+	eventsAndProviders := aComponent class allProducedEvents collect: [ :event | event -> aComponent componentName ].
+	eventsAndProviders do: [ :asso | | subscribers |
 		
-		eventsList := self eventsSubscribers keys select: [ :key | key key = eventKey key ].
-		eventsList := eventsList select: [ :event | 
-			event value = eventKey value or: [ event value includes: eventKey value ] 
-		].
+		subscribers := self eventsSubscribers at: asso key ifAbsent:[ nil ].
 	
-		eventsList := eventsList collect: [ :event | self eventsSubscribers at: event ].
-		eventsList do: [ :event |
-			(event notNil and:[event isWaitingForSubscription]) ifTrue:[
-				(event includesOriginator: aComponent) ifFalse:[ 
-					event 	addOriginator: aComponent.
-					event linkOriginator: aComponent.
-				].
-				event subscribeAllWaiting.
-			]. 
+		(subscribers notNil and:[subscribers isWaitingForSubscription]) ifTrue:[
+			(subscribers includesOriginator: aComponent) ifFalse:[ 
+				subscribers 	addOriginator: aComponent.
+				subscribers linkOriginator: aComponent.
+			].
+			subscribers subscribeAllWaiting.
 		].
 	]
 ]
@@ -95,9 +88,7 @@ MolLocatorServices >> searchEventsSubscriberFor: anEventsTrait named: aSymbolOrA
 		].
 	].
 
-	events := self eventsSubscribers
-		at: itf -> aSymbolOrArrayOfSymbols
-		ifAbsentPut: [ MolEventSubscriber events: itf originators: subscribers ].
+	events := self eventsSubscribers at: itf ifAbsentPut: [ MolEventSubscriber events: itf originators: subscribers ].
 	subscribers do: [ :e | events originatorsLinks at: e componentName put: e ].
 	remainingNames do: [ :e | events originatorsLinks at: e put: nil].
 	events addOriginators: subscribers.
