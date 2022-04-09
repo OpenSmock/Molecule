@@ -16,7 +16,7 @@ Class {
 	#category : #'Molecule-Core'
 }
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> activateAllComponents [
 	| waitingComponents |
 	
@@ -26,12 +26,12 @@ MolHomeServices >> activateAllComponents [
 	]
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> activateComponent: aComponentClass [
 	^ self activateComponent: aComponentClass named: #default
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> activateComponent: aComponentClass named: aName [
 	| component |
 	
@@ -135,17 +135,17 @@ MolHomeServices >> instanceOf: aClass named: aName [
 	^(self deployedComponents at: aClass ifAbsent: [^nil]) at: aName ifAbsent: [^nil]
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> instanciateAllComponents [
 	self deployedComponents keysDo: [ :aClass | self instanciateComponent: aClass ]
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> instanciateComponent: aComponentClass [
 	^ self instanciateComponent: aComponentClass named: #default
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 	| error component connector deployed |
 	
@@ -192,7 +192,7 @@ MolHomeServices >> isWaitingForActivation: aComponentClass named: aComponentName
 		ifTrue: [^false]
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> passivateAllComponents [
 	self deployedComponents do: [ :aDictionary | 
 		aDictionary keysAndValuesDo: [ :aName :aComponent | 
@@ -201,12 +201,12 @@ MolHomeServices >> passivateAllComponents [
 	]
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> passivateComponent: aComponentClass [
 	^ self passivateComponent: aComponentClass named: #default
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> passivateComponent: aComponentClass named: aName [
 	| component |
 	
@@ -242,7 +242,7 @@ MolHomeServices >> release [
 	super release.
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> removeAllComponents [
 	| components |
 	components := self deployedComponents.
@@ -251,12 +251,12 @@ MolHomeServices >> removeAllComponents [
 	]
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> removeComponent: aComponentClass [
 	^self removeComponent: aComponentClass named: #default
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolHomeServices >> removeComponent: aComponentClass named: aName [
 	| removedComponent deployedComponentsOfThisClass |
 	(aComponentClass isNil or:[aName isNil]) ifTrue:[^nil].
