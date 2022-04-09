@@ -237,6 +237,49 @@ MolComponentImpl >> eventsSubscribers [
 ]
 
 { #category : #'connecting - events producers' }
+MolComponentImpl >> forEvents: anEventsTrait addAllProducers: aComponentNameList [
+
+	(aComponentNameList isNil or:[aComponentNameList isCollection not]) ifTrue:[ ^ self ].	
+	aComponentNameList do:[ :name |
+		self forEvents: anEventsTrait addProducer: name. 	
+	].
+	
+]
+
+{ #category : #'connecting - events producers' }
+MolComponentImpl >> forEvents: anEventsTrait addProducer: aComponentName [
+
+	| producers |
+	
+	(anEventsTrait traits includes: MolComponentEvents) ifTrue: [
+		
+		producers := self eventsSubscribers at: anEventsTrait.
+		producers ifNil:[ ^self ].
+		producers = aComponentName ifTrue:[ ^ self ].
+		
+		producers isArray ifTrue:[
+			(producers includes: aComponentName) ifTrue:[ ^ self ].
+			producers := (producers asOrderedCollection) add: aComponentName; yourself.
+		] ifFalse:[
+			producers := Array with: producers with: aComponentName.
+		].
+	
+		^ self forEvents: anEventsTrait useAllProducers: producers
+		
+	] ifFalse: [ MolUtils log: self printString , '>forEvent:removeProducer: try to link a non event trait for an event ' ].
+]
+
+{ #category : #'connecting - events producers' }
+MolComponentImpl >> forEvents: anEventsTrait removeAllProducers: aComponentNameList [
+
+	(aComponentNameList isNil or:[aComponentNameList isCollection not]) ifTrue:[ ^ self ].	
+	aComponentNameList do:[ :name |
+		self forEvents: anEventsTrait removeProducer: name. 	
+	].
+	
+]
+
+{ #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 
 	| producers |
@@ -252,7 +295,7 @@ MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 			^ self forEvents: anEventsTrait useAllProducers: producers
 		].
 		
-	] ifFalse: [ MolUtils log: self printString , '>forEvent:useProducer: try to link a non event trait for an event ' ].
+	] ifFalse: [ MolUtils log: self printString , '>forEvent:removeProducer: try to link a non event trait for an event ' ].
 ]
 
 { #category : #'connecting - events producers' }
@@ -260,6 +303,7 @@ MolComponentImpl >> forEvents: anEventsTrait useAllProducers: aComponentNameList
 
 	| anArrayOrComponentName |
 	
+	aComponentNameList ifNil:[ ^ self ].
 	(anEventsTrait traits includes: MolComponentEvents) ifTrue: [
 			
 		anArrayOrComponentName := (aComponentNameList isCollection and:[aComponentNameList notEmpty]) 
@@ -294,7 +338,7 @@ MolComponentImpl >> forServices: aServicesTrait useProvider: aComponentName [
 
 	(aServicesTrait traits includes: MolComponentServices)
 		ifTrue: [self servicesProviders at: aServicesTrait put: aComponentName]
-		ifFalse: [ MolUtils log: self printString, '>forService:useProvider: try to link a non services trait for services ' ]
+		ifFalse: [ MolUtils log: self printString, '>forServices:useProvider: try to link a non services trait for services ' ]
 ]
 
 { #category : #testing }

@@ -156,6 +156,65 @@ MolComponentImplTest >> testEventsSubscribers [
 ]
 
 { #category : #'test - connecting - events producers' }
+MolComponentImplTest >> testForEventsAddAllProducers [
+
+	| component |
+	component := MolCompleteComponentImpl start: #myComponentA.
+
+	component forEvents: MolUsedEvents addAllProducers: #(#producerA #producerB #producerC).
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#default #producerA #producerB #producerC).
+	
+	component forEvents: MolUsedEvents addAllProducers: #(#producerA #producerB #producerC #producerD #producerE #producerF).
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#default #producerA #producerB #producerC #producerD #producerE #producerF).
+	
+	
+]
+
+{ #category : #test }
+MolComponentImplTest >> testForEventsAddProducer [
+
+	| component |
+	component := MolCompleteComponentImpl start: #myComponentA.
+	
+	component forEvents: MolUsedEvents addProducer: #producerA.
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#default #producerA).
+	
+	component forEvents: MolUsedEvents addProducer: #producerB.
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#default #producerA #producerB).
+	
+	component forEvents: MolUsedEvents addProducer: #default.
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#default #producerA #producerB).
+]
+
+{ #category : #'test - connecting - events producers' }
+MolComponentImplTest >> testForEventsRemoveAllProducers [
+
+	| component |
+	component := MolCompleteComponentImpl start: #myComponentA.
+
+	component forEvents: MolUsedEvents addAllProducers: #(#producerA #producerB #producerC).
+
+	component forEvents: MolUsedEvents removeAllProducers: #(#producerA #producerB #producerC #producerD #producerE #producerF).
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #default.
+	
+	component forEvents: MolUsedEvents addAllProducers: #(#producerA #producerB #producerC).
+	component forEvents: MolUsedEvents removeAllProducers: #(#producerA).
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#default #producerB #producerC).
+	
+	component forEvents: MolUsedEvents removeAllProducers: #(#default #producerB #producerC).
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
+	
+]
+
+{ #category : #'test - connecting - events producers' }
 MolComponentImplTest >> testForEventsRemoveProducer [
 
 	| component |
@@ -172,6 +231,17 @@ MolComponentImplTest >> testForEventsRemoveProducer [
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #producerC.
 	
 	component forEvents: MolUsedEvents removeProducer: #producerC.
+	self assert: component eventsSubscribers size equals: 1.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
+]
+
+{ #category : #'test - connecting - events producers' }
+MolComponentImplTest >> testForEventsRemoveProducer2 [
+
+	| component |
+	component := MolCompleteComponentImpl start: #myComponentA.
+	
+	component forEvents: MolUsedEvents removeProducer: #default.
 	self assert: component eventsSubscribers size equals: 1.
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
 ]
