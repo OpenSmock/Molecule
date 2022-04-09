@@ -70,6 +70,15 @@ MolComponentImplTest >> testAugmentedClassToAComponentUsesAsAClassicWay [
 { #category : #'test - contract' }
 MolComponentImplTest >> testComponentType [ 
 
+	self assert: MolBasicComponentImpl componentType equals: MolBasicComponent.
+	self assert: MolBasicSubComponentImpl componentType equals: MolBasicComponent.
+	
+	
+]
+
+{ #category : #'test - contract' }
+MolComponentImplTest >> testComponentType2 [
+
 	self assert: MolComponentImpl componentType equals: nil.
 	self assert: MolCompleteComponentImpl componentType equals: MolCompleteComponent.
 	self assert: MolTestComponentImplA componentType equals: nil.
@@ -272,6 +281,16 @@ MolComponentImplTest >> testFoundSubscriber [
 MolComponentImplTest >> testHaveComponentType [ 
 
 	self assert: MolComponentImpl haveComponentType equals: false.
+	self assert: MolBasicComponentImpl haveComponentType equals: true.
+	self assert: MolBasicSubComponentImpl haveComponentType equals: true.
+]
+
+{ #category : #'test - contract' }
+MolComponentImplTest >> testHaveOwnComponentType [ 
+
+	self assert: MolComponentImpl haveOwnComponentType equals: false.
+	self assert: MolBasicComponentImpl haveOwnComponentType equals: true.
+	self assert: MolBasicSubComponentImpl haveOwnComponentType equals: false.
 ]
 
 { #category : #'test - contract' }
@@ -285,6 +304,9 @@ MolComponentImplTest >> testIsOverrideComponentType [
 
 	self assert: MolCompleteComponentImpl isOverrideComponentType equals: false.
 	self assert: MolCompleteComponentChildImpl isOverrideComponentType equals: true.
+	
+	self assert: MolBasicComponentImpl isOverrideComponentType equals: false.
+	self assert: MolBasicSubComponentImpl isOverrideComponentType equals: false.
 ]
 
 { #category : #test }
@@ -341,6 +363,15 @@ MolComponentImplTest >> testOverridedComponentTypes [
 	self assert: MolCompleteComponentImpl overridedComponentTypes isEmpty.
 	self assert: MolCompleteComponentChildImpl overridedComponentTypes size equals: 1.
 	self assert: MolCompleteComponentChildImpl overridedComponentTypes first equals: MolCompleteComponent.
+]
+
+{ #category : #'test - contract' }
+MolComponentImplTest >> testOwnComponentType [ 
+
+	self assert: MolBasicComponentImpl ownComponentType equals: MolBasicComponent.
+	self assert: MolBasicSubComponentImpl ownComponentType equals: nil.
+	
+	
 ]
 
 { #category : #test }

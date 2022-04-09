@@ -119,6 +119,8 @@ MolComponentFactoryTest >> longWait [
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUp [
+
+	self timeLimit: 30 seconds.
 	MolComponentManager cleanUp.
 	self cleanGeneratedClassesAndTraits.
 ]
@@ -176,6 +178,7 @@ MolComponentFactoryTest >> smallWait [
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> tearDown [
+
 	(Delay forMilliseconds: 10) wait.
 	self cleanGeneratedClassesAndTraits.
 	MolComponentManager cleanUp.
@@ -1088,6 +1091,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	- Remove Component Type uses and check if Traits are removed"
 	
 	| componentClassNameSymbol componentClass | 
+	
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.

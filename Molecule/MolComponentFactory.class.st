@@ -449,6 +449,8 @@ MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass
 	"Check if a Component Class uses a list of Trait Class and do uses"
 	| traitList missingTraits |
 	
+	aTraitList isEmpty ifTrue:[ ^ self ].
+	
 	traitList := self collectComponentConnectionTraits: aComponentClass.
 	missingTraits := aTraitList reject: [ :e | (traitList includes: e) and:[ e isObsolete ] ].
 	missingTraits ifNotEmpty: [self rebuildComponent: aComponentClass traitsAdding: missingTraits].
@@ -485,7 +487,7 @@ MolComponentFactory >> componentChanged: aChangedClass [
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"We need to wait because of the changedClass should be removed and become obsolete"
 		self flag:'PLA : This is a patch because of Molecule need not yet existing pharo system flags, warning : if a new fork is started on the same object there is a concurrency access risk, if necessary write some code to control a fork stack for each objects'.
-		[(Delay forMilliseconds: 25) wait. aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]] fork.
+		[(Delay forMilliseconds: 25) wait. aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]] forkAt: Processor highIOPriority.
 	] ifFalse: [ dirtyComponents add: aChangedClass].
 ]
 
@@ -512,7 +514,7 @@ MolComponentFactory >> contractChanged: aComponentType [
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"need to fork the definition because new traits are not already injected here to the component"
 		self flag:'PLA : This is a patch because of Molecule need not yet existing pharo system flags, warning : if a new fork is started on the same object there is a concurrency access risk, if necessary write some code to control a fork stack for each objects'.
-		[(Delay forMilliseconds: 25) wait. aComponentType isObsolete ifFalse:[self defineComponentTypeImplementors: aComponentType]] fork.
+		[(Delay forMilliseconds: 25) wait. aComponentType isObsolete ifFalse:[self defineComponentTypeImplementors: aComponentType]] forkAt: Processor highIOPriority.
 	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
 ]
 
@@ -564,11 +566,13 @@ MolComponentFactory >> defineComponent: aComponentClass [
 		traitList do:[ :trait | aComponentClass removeFromComposition: trait ].
 		^ self
 	] ifTrue:[
-		"Check missing traits"
-		toUseTraitList := Set withAll: aComponentClass consumedComponentEvents.
-		toUseTraitList addAll: aComponentClass providedComponentServices.
-		toUseTraitList addAll: aComponentClass providedComponentParameters.
-		self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
+		aComponentClass haveOwnComponentType ifTrue:[
+			"Check missing traits"
+			toUseTraitList := Set withAll: aComponentClass consumedComponentEvents.
+			toUseTraitList addAll: aComponentClass providedComponentServices.
+			toUseTraitList addAll: aComponentClass providedComponentParameters.
+			self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
+		].
 	].
 ]
 
@@ -576,9 +580,15 @@ MolComponentFactory >> defineComponent: aComponentClass [
 MolComponentFactory >> defineComponentTypeImplementors: aComponentType [
 	"Check if the object is a trait"
 
+	| userList |
 	aComponentType isTrait ifFalse: [ ^ self ].
 	aComponentType isComponentType ifFalse: [ ^ self ].
-	aComponentType users copy do: [ :user | self defineComponent: user ].
+	aComponentType isUsed ifFalse:[ ^ self ].
+	
+	"Get Component Type users ordered by class hiearchy size : class with more subclasses are at the top of the list"
+	userList := aComponentType users copy asSortedCollection: [ :a :b | a subclasses size > b subclasses size ].
+	
+	userList do: [ :user | self defineComponent: user ].
 ]
 
 { #category : #'dirty components' }
@@ -635,7 +645,9 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aComponent [
 
 	self removeOldConsumedEventsComponentAccessorsFor: aComponent.
-	aComponent haveComponentType ifTrue:[
+	
+	"Cannot generate if parent class have the same type"  
+	(aComponent haveComponentType and:[aComponent haveOwnComponentType]) ifTrue:[
 		self generateComponentAccessorsFor: #consumedEvents withList: aComponent consumedComponentEvents in: aComponent suffix: 'Subscriber'.
 	].
 ]
@@ -644,7 +656,8 @@ MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aCom
 MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aComponent [
 
 	self removeOldProducedEventsComponentAccessorsFor: aComponent.
-	aComponent haveComponentType ifTrue:[
+	
+	(aComponent haveComponentType and:[aComponent haveOwnComponentType]) ifTrue:[
 		self generateComponentAccessorsFor: #producedEvents withList: aComponent producedComponentEvents in: aComponent suffix: 'Notifier'.
 	].
 ]
@@ -653,7 +666,8 @@ MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aCom
 MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aComponent [
 
 	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
-	aComponent haveComponentType ifTrue:[
+	
+	(aComponent haveComponentType and:[aComponent haveOwnComponentType]) ifTrue:[
 		self generateComponentAccessorsFor: #usedParameters withList: aComponent usedComponentParameters in: aComponent suffix: 'Provider'.
 	].
 ]
@@ -662,7 +676,8 @@ MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aCom
 MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aComponent [
  
 	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
-	aComponent haveComponentType ifTrue:[
+	
+	(aComponent haveComponentType and:[aComponent haveOwnComponentType]) ifTrue:[
 		self generateComponentAccessorsFor: #usedServices withList: aComponent usedComponentServices in: aComponent suffix: 'Provider'.
 	].
 ]

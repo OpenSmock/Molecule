@@ -36,7 +36,7 @@ MolComponentImpl classSide >> componentType [
 
 	"get all hierarchy traits and try to detect a component type"
 	self withAllSuperclassesDo: [ :c | 
-		(c  ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[
+		(c ~= MolAbstractComponentImpl and:[c ~= Object and:[c ~= ProtoObject]]) ifTrue:[
 			(c traitComposition allTraits) do:[ :t | t isComponentType ifTrue:[ ^t ] ].
 		].
 	].
@@ -62,6 +62,12 @@ MolComponentImpl classSide >> deploy [
 MolComponentImpl classSide >> haveComponentType [
 
 	^ self componentType notNil
+]
+
+{ #category : #testing }
+MolComponentImpl classSide >> haveOwnComponentType [
+
+	^ self ownComponentType notNil
 ]
 
 { #category : #'life cycle' }
@@ -98,6 +104,17 @@ MolComponentImpl classSide >> overridedComponentTypes [
 	].
 	componentType := self componentType.
 	^(traits select:[ :t | t isComponentType and:[t ~= componentType] ]) asOrderedCollection 
+]
+
+{ #category : #testing }
+MolComponentImpl classSide >> ownComponentType [
+
+	"get own traits and try to detect a component type"
+	(self ~= MolAbstractComponentImpl and:[(self ~= Object and:[self ~= ProtoObject])]) ifTrue:[
+		(self traitComposition allTraits) do:[ :t | t isComponentType ifTrue:[ ^ t ]].
+	].
+
+	^ nil
 ]
 
 { #category : #'life cycle' }
