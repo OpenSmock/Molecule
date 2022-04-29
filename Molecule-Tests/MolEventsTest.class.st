@@ -458,6 +458,33 @@ MolEventsTest >> testSubscribeNothing [
 ]
 
 { #category : #tests }
+MolEventsTest >> testSubscribeStopAndRestartProvider [
+	| warner listener |
+	"Deployment"
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
+	
+	"Instanciation"
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
+	
+	"Activation"
+	MolMyWarnerComponentImpl activate: #myWarner.
+	MolMyListenerComponentImpl activate: #myListener.
+
+	listener forEvents: MolMyStateChangeEvents addProducer: #myWarner.	
+
+	"Stop and restart, the Listner should be automaticaly reconnected"
+	MolMyWarnerComponentImpl stop: #myWarner.
+	
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	MolMyWarnerComponentImpl activate: #myWarner.
+
+	warner operationalEvent.
+	self assert: listener currentState equals: #operational.
+]
+
+{ #category : #tests }
 MolEventsTest >> testSubscriptionBeforeInstanciation [
 	"A component not activated send events."
 	| warner listener |

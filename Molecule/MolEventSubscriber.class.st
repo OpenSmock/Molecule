@@ -47,10 +47,8 @@ MolEventSubscriber >> connectAllOriginatorsTo: aComponent [
 		set := self observersConnection at: aComponent ifAbsentPut: [ Set new ].
 		
 		self getOriginatorsConnectedKeys do: [ :e |
-			(set includes: e) ifFalse:[ 
-				set add: e.
-				self connectOriginator: e to: aComponent.
-			].
+			(set includes: e) ifFalse:[ set add: e ].
+			self connectOriginator: e to: aComponent.
 		].	
 
 	].
