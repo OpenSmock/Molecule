@@ -222,6 +222,32 @@ MolComponentImpl >> componentRemove [
 	"here write the code corresponding to component remove phase"
 ]
 
+{ #category : #'private connecting' }
+MolComponentImpl >> connectSubscriptionFor: anEventsTrait [ 
+	
+	| providerOrProviders eventsSubscriber |
+	providerOrProviders := self eventsSubscribers at: anEventsTrait.
+	providerOrProviders ifNil:[ ^ self ].
+
+	eventsSubscriber := MolComponentManager default locatorServices searchEventsSubscriberFor: anEventsTrait named: providerOrProviders.
+	eventsSubscriber ifNil:[ ^ self ].
+	(self isSubscribed: anEventsTrait) ifTrue:[ eventsSubscriber connectAllOriginatorsTo: self ]
+
+]
+
+{ #category : #'private connecting' }
+MolComponentImpl >> disconnectSubscriptionFor: anEventsTrait [ 
+	| providerOrProviders eventsSubscriber |
+
+	"Check if a provider is already connected and disconnect it"
+	providerOrProviders := self eventsSubscribers at: anEventsTrait ifAbsent:[nil].
+	(providerOrProviders isCollection) ifFalse:[ ^ self ].
+
+	eventsSubscriber := MolComponentManager default locatorServices searchEventsSubscriberFor: anEventsTrait named: providerOrProviders.	
+	eventsSubscriber ifNil:[ ^ self ].		
+	(eventsSubscriber isSubscribed: self) ifTrue:[eventsSubscriber disconnectAllOriginatorsFrom: self].
+]
+
 { #category : #'private accessing' }
 MolComponentImpl >> eventsNotifiers [
 	^ self componentConnector
@@ -239,7 +265,7 @@ MolComponentImpl >> eventsSubscribers [
 { #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait addAllProducers: aComponentNameList [
 
-	(aComponentNameList isNil or:[aComponentNameList isCollection not]) ifTrue:[ ^ self ].	
+	(aComponentNameList isNil or:[aComponentNameList isString or:[aComponentNameList isCollection not]]) ifTrue:[ ^ self ].	
 	aComponentNameList do:[ :name |
 		self forEvents: anEventsTrait addProducer: name. 	
 	].
@@ -257,10 +283,10 @@ MolComponentImpl >> forEvents: anEventsTrait addProducer: aComponentName [
 		producers ifNil:[ ^self ].
 		producers = aComponentName ifTrue:[ ^ self ].
 		
-		producers isArray ifTrue:[
+		producers isString ifFalse:[
 			(producers includes: aComponentName) ifTrue:[ ^ self ].
-			producers := (producers asOrderedCollection) add: aComponentName; yourself.
-		] ifFalse:[
+			producers := (producers copy asOrderedCollection) add: aComponentName; yourself.
+		] ifTrue:[
 			producers := Array with: producers with: aComponentName.
 		].
 	
@@ -289,10 +315,10 @@ MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 		producers := self eventsSubscribers at: anEventsTrait.
 		producers ifNil:[ ^self ].
 		producers = aComponentName ifTrue:[ self eventsSubscribers at: anEventsTrait put: nil. ^ self ].
-		(producers isArray and:[producers includes: aComponentName]) ifTrue: [
-			producers := producers asOrderedCollection.
-			producers remove: aComponentName. 
-			^ self forEvents: anEventsTrait useAllProducers: producers
+		(producers isArray and:[producers includes: aComponentName]) ifTrue: [ | newProducers |
+			newProducers := producers asOrderedCollection copy.
+			newProducers remove: aComponentName. 
+			^ self forEvents: anEventsTrait useAllProducers: newProducers
 		].
 		
 	] ifFalse: [ MolUtils log: self printString , '>forEvent:removeProducer: try to link a non event trait for an event ' ].
@@ -300,29 +326,46 @@ MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 
 { #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait useAllProducers: aComponentNameList [
-
-	| anArrayOrComponentName |
+	| anArrayOrComponentName previousProducers eventsSubscriber |
 	
 	aComponentNameList ifNil:[ ^ self ].
-	(anEventsTrait traits includes: MolComponentEvents) ifTrue: [
-			
-		anArrayOrComponentName := (aComponentNameList isCollection and:[aComponentNameList notEmpty]) 
-			ifTrue:[ aComponentNameList size = 1 ifTrue: [ aComponentNameList asOrderedCollection first ] ifFalse: [ aComponentNameList asArray ]] 
-			ifFalse:[ nil ].
-	
-		self eventsSubscribers at: anEventsTrait put: anArrayOrComponentName
-			
-	] ifFalse: [ MolUtils log: self printString , '>forEvent:useAllProducers: try to link a non event trait for an event ' ].
-	
-	
+	(anEventsTrait traits includes: MolComponentEvents) ifFalse:[ 
+		MolUtils log: self printString , '>forEvent:useAllProducers: try to link a non event trait for an event '. 
+	] ifTrue:[
+		self disconnectSubscriptionFor: anEventsTrait.
+
+		anArrayOrComponentName := nil.
+		aComponentNameList isEmpty ifFalse:[
+			anArrayOrComponentName := aComponentNameList size = 1 ifTrue:[aComponentNameList first] ifFalse:[aComponentNameList asArray].
+		].
+				
+		"Remove old originators links"
+		previousProducers := self eventsSubscribers at: anEventsTrait.
+		previousProducers ifNotNil:[
+			eventsSubscriber := MolComponentManager default locatorServices searchEventsSubscriberFor: anEventsTrait named: previousProducers.
+			eventsSubscriber ifNotNil:[
+				previousProducers isSymbol 
+					ifFalse:[previousProducers do:[ :e | eventsSubscriber originatorsLinks removeKey: e ]] 
+					ifTrue:[eventsSubscriber originatorsLinks removeKey: previousProducers].
+			].
+		].
+		
+		self eventsSubscribers at: anEventsTrait put: anArrayOrComponentName.
+
+		self connectSubscriptionFor: anEventsTrait.
+	].
 ]
 
 { #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait useProducer: aComponentName [
 
-	(anEventsTrait traits includes: MolComponentEvents)
-		ifTrue: [ self eventsSubscribers at: anEventsTrait put: aComponentName ]
-		ifFalse: [ MolUtils log: self printString , '>forEvent:useProducer: try to link a non event trait for an event ' ]
+	(anEventsTrait traits includes: MolComponentEvents) ifFalse:[ 
+		MolUtils log: self printString , '>forEvent:useProducer: try to link a non event trait for an event '. 
+	] ifTrue:[
+		self disconnectSubscriptionFor: anEventsTrait.
+		self eventsSubscribers at: anEventsTrait put: aComponentName.
+		self connectSubscriptionFor: anEventsTrait.
+	].
 ]
 
 { #category : #'connecting - parameters providers' }
@@ -354,6 +397,12 @@ MolComponentImpl >> isNotFoundParameters [
 { #category : #testing }
 MolComponentImpl >> isNotFoundServices [
 	^false
+]
+
+{ #category : #testing }
+MolComponentImpl >> isSubscribed: aMolEvents [
+
+	^ self componentConnector ifNil:[ false ] ifNotNil: [ :e | e eventsSubscriptions at: aMolEvents ifAbsent: [ false ] ]
 ]
 
 { #category : #'private accessing' }

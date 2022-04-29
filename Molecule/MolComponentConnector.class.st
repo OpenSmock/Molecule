@@ -10,7 +10,8 @@ Class {
 		'servicesProviders',
 		'parametersProviders',
 		'eventsSubscribers',
-		'eventsNotifiers'
+		'eventsNotifiers',
+		'eventsSubscriptions'
 	],
 	#category : #'Molecule-Core'
 }
@@ -22,6 +23,11 @@ MolComponentConnector class >> defaultEventsNotifiers [
 
 { #category : #connectors }
 MolComponentConnector class >> defaultEventsSubscribers [
+	^ Dictionary new
+]
+
+{ #category : #connectors }
+MolComponentConnector class >> defaultEventsSubscriptions [
 	^ Dictionary new
 ]
 
@@ -45,6 +51,7 @@ MolComponentConnector >> connectComponent: aComponent [
 	
 	eventsNotifiers := self class defaultEventsNotifiers.
 	eventsSubscribers := self class defaultEventsSubscribers.
+	eventsSubscriptions := self class defaultEventsSubscriptions. 
 	servicesProviders := self class defaultServicesProviders.
 	parametersProviders := self class defaultParametersProviders.
 	
@@ -77,6 +84,12 @@ MolComponentConnector >> eventsSubscribers [
 ]
 
 { #category : #accessing }
+MolComponentConnector >> eventsSubscriptions [
+
+	^ eventsSubscriptions
+]
+
+{ #category : #accessing }
 MolComponentConnector >> parametersProviders [
 	^ parametersProviders 
 ]
@@ -90,6 +103,7 @@ MolComponentConnector >> passivateComponent [
 MolComponentConnector >> release [
 	eventsNotifiers := nil.
 	eventsSubscribers := nil.
+	eventsSubscriptions := nil.
 	servicesProviders := nil.
 	parametersProviders := nil.
 	super release.	

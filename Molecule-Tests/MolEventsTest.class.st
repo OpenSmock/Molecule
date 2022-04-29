@@ -318,6 +318,146 @@ MolEventsTest >> testSimpleWarningSystemNamedDelayed [
 ]
 
 { #category : #tests }
+MolEventsTest >> testSubscribeAndAddProviderAfter [
+	| warner listener |
+	"Deployment"
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
+	
+	"Instanciation"
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
+	
+	"Activation"
+	MolMyWarnerComponentImpl activate: #myWarner.
+	MolMyListenerComponentImpl activate: #myListener.
+
+	"Subscription : it should be done in SCMMyListenerComponentImpl > componentInitialize, this is done after subscription so the new provider should be automaticaly received by all listeners"
+	listener forEvents: MolMyStateChangeEvents addProducer: #myWarner.
+	
+	"Tests"
+	self assert: listener currentState equals: nil.
+	
+	warner operationalEvent.
+	self assert: listener currentState equals: #operational.
+	
+	warner failureEvent.
+	self assert: listener currentState equals: #failure.
+	self assert: listener failureLevel notNil.
+	
+]
+
+{ #category : #tests }
+MolEventsTest >> testSubscribeAndRemoveProviderAfter [
+	| warner listener |
+	"Deployment"
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
+	
+	"Instanciation"
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
+	
+	"Activation"
+	MolMyWarnerComponentImpl activate: #myWarner.
+	MolMyListenerComponentImpl activate: #myListener.
+
+	"Subscription : it should be done in SCMMyListenerComponentImpl > componentInitialize, this is done after subscription so the new provider should be automaticaly received by all listeners"
+	listener forEvents: MolMyStateChangeEvents addProducer: #myWarner.	
+	listener forEvents: MolMyStateChangeEvents removeProducer: #myWarner.
+	
+	warner operationalEvent.
+	self assert: listener currentState equals: nil.
+	
+	"Re add the provider"
+	listener forEvents: MolMyStateChangeEvents addProducer: #myWarner.	
+	
+	warner operationalEvent.
+	self assert: listener currentState equals: #operational.
+]
+
+{ #category : #tests }
+MolEventsTest >> testSubscribeAndUseProviderAfter [
+	| warner listener |
+	"Deployment"
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
+	
+	"Instanciation"
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
+	
+	"Activation"
+	MolMyWarnerComponentImpl activate: #myWarner.
+	MolMyListenerComponentImpl activate: #myListener.
+
+	"Subscription : it should be done in SCMMyListenerComponentImpl > componentInitialize, this is done after subscription so the new provider should be automaticaly received by all listeners"
+	listener forEvents: MolMyStateChangeEvents useProducer: #myWarner.
+	
+	"Tests"
+	self assert: listener currentState equals: nil.
+	
+	warner operationalEvent.
+	self assert: listener currentState equals: #operational.
+	
+	warner failureEvent.
+	self assert: listener currentState equals: #failure.
+	self assert: listener failureLevel notNil.
+	
+]
+
+{ #category : #tests }
+MolEventsTest >> testSubscribeAndUseProviderAfter2 [
+	| warner listener |
+	"Deployment"
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
+	
+	"Instanciation"
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
+	
+	"Activation"
+	MolMyWarnerComponentImpl activate: #myWarner.
+	MolMyListenerComponentImpl activate: #myListener.
+
+	"Subscription : it should be done in SCMMyListenerComponentImpl > componentInitialize, this is done after subscription so the new provider should be automaticaly received by all listeners"
+	listener forEvents: MolMyStateChangeEvents useProducer: nil.
+	listener forEvents: MolMyStateChangeEvents useProducer: #myWarner.
+	
+	"Tests"
+	self assert: listener currentState equals: nil.
+	
+	warner operationalEvent.
+	self assert: listener currentState equals: #operational.
+	
+	warner failureEvent.
+	self assert: listener currentState equals: #failure.
+	self assert: listener failureLevel notNil.
+	
+]
+
+{ #category : #tests }
+MolEventsTest >> testSubscribeNothing [
+	| warner listener |
+	"Deployment"
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
+	
+	"Instanciation"
+	warner := MolMyWarnerComponentImpl instanciate: #myWarner.
+	listener := MolMyListenerComponentImpl instanciate: #myListener.
+	
+	"Activation"
+	MolMyWarnerComponentImpl activate: #myWarner.
+	MolMyListenerComponentImpl activate: #myListener.
+	
+	warner operationalEvent.
+	self assert: listener currentState equals: nil.
+	
+]
+
+{ #category : #tests }
 MolEventsTest >> testSubscriptionBeforeInstanciation [
 	"A component not activated send events."
 	| warner listener |

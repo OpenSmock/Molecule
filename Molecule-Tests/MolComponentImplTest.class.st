@@ -395,6 +395,31 @@ MolComponentImplTest >> testIsOverrideComponentType [
 ]
 
 { #category : #test }
+MolComponentImplTest >> testIsSubscribed [
+
+	| component |
+	component := MolCompleteComponentImpl start.
+	self assert: (component isSubscribed: MolUsedEvents) equals: false. "can be true when subscribe"
+	self assert: (component isSubscribed: MolUsedChildEvents) equals: false. "never be true"
+	
+	component getMolUsedEventsSubscriber subscribe: component.
+	self assert: (component isSubscribed: MolUsedEvents) equals: true.
+	self assert: (component isSubscribed: MolUsedChildEvents) equals: false. "never be true"
+	
+	component getMolUsedEventsSubscriber unsubscribe: component.
+	self assert: (component isSubscribed: MolUsedEvents) equals: false.
+	self assert: (component isSubscribed: MolUsedChildEvents) equals: false. "never be true"
+	
+	component getMolUsedEventsSubscriber subscribe: component.
+	self assert: (component isSubscribed: MolUsedEvents) equals: true.
+	self assert: (component isSubscribed: MolUsedChildEvents) equals: false. "never be true"
+
+	MolCompleteComponentImpl stop.
+	self assert: (component isSubscribed: MolUsedEvents) equals: false.
+	self assert: (component isSubscribed: MolUsedChildEvents) equals: false. "never be true"
+]
+
+{ #category : #test }
 MolComponentImplTest >> testNotFoundNotifier [
 
 	| component result |

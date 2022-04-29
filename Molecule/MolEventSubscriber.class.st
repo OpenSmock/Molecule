@@ -63,6 +63,7 @@ MolEventSubscriber >> connectOriginator: componentName to: aComponent [
 	self events allSelectors do: [ :event | | originator |
 		
 		originator := self originatorsLinks at: componentName.
+		originator ifNil: [ ^ self error: 'Component originator is nil' ].
 		originator when: event send: event to: aComponent.
 	].
 ]
@@ -83,13 +84,15 @@ MolEventSubscriber >> disconnectAllOriginatorsFrom: aComponent [
 ]
 
 { #category : #private }
-MolEventSubscriber >> disconnectOriginator: componentName from: anObserver [
+MolEventSubscriber >> disconnectOriginator: componentName from: aComponent [
 	"private method, do not use directly"
-	self events allSelectors do: 
-			[:evt | | originator |
-			originator := self originatorsLinks at: componentName.
-			originator ifNil: [ ^ self error: 'Component originator is nil' ].
-			originator removeActionsWithReceiver: anObserver forEvent: evt]
+	
+	self events allSelectors do: [ :event | | originator |
+
+		originator := self originatorsLinks at: componentName.
+		originator ifNil: [ ^ self error: 'Component originator is nil' ].
+		originator removeActionsWithReceiver: aComponent forEvent: event.
+	]
 ]
 
 { #category : #accessing }
@@ -256,6 +259,11 @@ MolEventSubscriber >> subscribe: aComponent [
 	
 	"Check if the component is already subscribed"
 	(self isSubscribed: aComponent) ifTrue:[ ^ self ].
+	
+	"Register subcription is active"
+	aComponent componentConnector ifNil:[ ^ self].
+	aComponent componentConnector eventsSubscriptions at: self events put: true.
+	
 	self connectAllOriginatorsTo: aComponent
 ]
 
@@ -285,5 +293,9 @@ MolEventSubscriber >> unsubscribe: aComponent [
 
 	"Check if the component is already subscribed"
 	(self isSubscribed: aComponent) ifFalse:[ ^ self ].
+	
+	"Register subcription is not active"
+	aComponent componentConnector eventsSubscriptions at: self events put: false.
+	
 	self disconnectAllOriginatorsFrom: aComponent.
 ]
