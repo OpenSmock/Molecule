@@ -257,6 +257,7 @@ MolWorld class >> toolsMenu40InspectAllComponentInstances: aBuilder [
 		order: 4.0;
 		action: [ 
 			| components |
+			Smalltalk garbageCollect.
 			components := OrderedCollection new.
 			MolAbstractComponentImpl allSubInstancesDo:[ :component | components add: component ].
 			MolComponentImpl users do: [:impl | impl allInstances do: [:component | components add: component ]].
