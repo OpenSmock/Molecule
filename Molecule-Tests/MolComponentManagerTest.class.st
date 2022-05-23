@@ -21,7 +21,7 @@ MolComponentManagerTest >> tearDown [
 
 { #category : #tests }
 MolComponentManagerTest >> testCleanUp [
-	| manager1 manager2 |
+	| manager1 manager2 components |
 	manager1 := MolComponentManager default.
 	manager1 cleanUp.
 	
@@ -30,6 +30,13 @@ MolComponentManagerTest >> testCleanUp [
 	
 	self assert: manager1 ~= manager2.
 	
+	MolComponentManager cleanUp.
+	
+	components := OrderedCollection new.
+	MolAbstractComponentImpl allSubInstancesDo:[ :component | components add: component ].
+	MolComponentImpl users do: [:impl | impl allInstances do: [:component | components add: component ]].
+	
+	self assert: components isEmpty.
 ]
 
 { #category : #'tests - general' }
