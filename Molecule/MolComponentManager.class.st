@@ -42,7 +42,6 @@ MolComponentManager class >> cleanUp [
 
 	notifiers do: [:n | n release].
 	subscribers do: [:n | n release].
-	Smalltalk garbageCollect.
 	MolUtils log: 'End of the cleanUp.'.
 	
 ]
