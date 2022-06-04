@@ -56,6 +56,7 @@ MolComponentManager class >> cleanUp: aBoolean [
 MolComponentManager class >> deepCleanUp [
 	<script: 'self deepCleanUp'>
 	| i j |
+	
 	self cleanUp.
 	MolUtils log: 'Starting a deep cleanUp.'.
 	MolComponentFactory allInstancesDo: [ :factory | (factory == MolComponentFactory default) ifFalse:[factory release]].
