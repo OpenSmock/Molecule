@@ -140,8 +140,7 @@ MolComponentManager class >> isRunningComponents [
 { #category : #'initialize-release' }
 MolComponentManager >> cleanUp [
 
-	self class cleanUp.
-	
+	self class cleanUp
 ]
 
 { #category : #accessing }
