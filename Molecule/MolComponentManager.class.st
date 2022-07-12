@@ -45,12 +45,14 @@ MolComponentManager class >> cleanUp [
 	Default := nil.
 
 	notifiers do: [ :n | n release ].
-	subscribers do: [ :n | n release ].Smalltalk garbageCollect.
+	subscribers do: [ :n | n release ].
+	
 	MolUtils log: 'End of the cleanUp.'
 ]
 
 { #category : #cleanup }
 MolComponentManager class >> cleanUp: aBoolean [
+	"Pharo System CleanUp implementation"
 	
 	self deepCleanUp.
 ]
@@ -59,6 +61,9 @@ MolComponentManager class >> cleanUp: aBoolean [
 MolComponentManager class >> deepCleanUp [
 	<script: 'self deepCleanUp'>
 	| i j |
+	
+	"Try to remove non garbaged component instances"
+	Smalltalk garbageCollect.
 	
 	self cleanUp.
 	MolUtils log: 'Starting a deep cleanUp.'.

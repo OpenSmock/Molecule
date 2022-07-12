@@ -257,12 +257,17 @@ MolWorld class >> toolsMenu40InspectAllComponentInstances: aBuilder [
 		order: 4.0;
 		action: [ 
 			| components |
+			
+			"Clean the memory before opening component list in case of non garbaged components"
+			Smalltalk garbageCollect.
+
 			components := OrderedCollection new.
 			MolAbstractComponentImpl allSubInstancesDo:[ :component | components add: component ].
 			MolComponentImpl users do: [:impl | impl allInstances do: [:component | components add: component ]].
 			components inspect ];
-		icon: (self iconNamed: #glamorousInspect);
-		label: 'Inspect all component instances'
+		icon: (self iconNamed: #smallDebug);
+		label: '[Advanced] Inspect all component instances';
+		help:'Advanced function : Inspect all components including components not in the current running system. If you are not sure try to inspect current system running components.'
 ]
 
 { #category : #'menu - tools' }

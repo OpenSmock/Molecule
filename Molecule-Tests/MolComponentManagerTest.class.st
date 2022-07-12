@@ -32,25 +32,6 @@ MolComponentManagerTest >> testCleanUp [
 	
 ]
 
-{ #category : #'setUp - tearDown' }
-MolComponentManagerTest >> testCleanUp2 [
-
-	"Create some classics components to clean"
-
-	1 to: 10 do: [ :i | 
-		MolCompleteComponentImpl start: ('test' , i printString) asSymbol ].
-
-	"Check created instances"
-	self assert: MolCompleteComponentImpl allInstances size equals: 10.
-
-
-	1 to: 10 do: [ :i | 
-		MolCompleteComponentImpl stop: ('test' , i printString) asSymbol ].
-	MolComponentManager cleanUp.
-
-	self assert: MolCompleteComponentImpl allInstances size equals: 0
-]
-
 { #category : #'tests - general' }
 MolComponentManagerTest >> testCleanUpIgnoreErrors [
 	"Start a manuel tree of components and clean up, components are removed during the cleanUp but some componentRemove methods should remove again an already removed component : a error is reach but ignored during a cleanUp"
@@ -92,6 +73,21 @@ MolComponentManagerTest >> testDeepCleanUp [
 ]
 
 { #category : #tests }
+MolComponentManagerTest >> testDeepCleanUpGarbageCollect [
+
+	1 to: 10 do: [ :i | 
+		MolCompleteComponentImpl start: ('test' , i printString) asSymbol ].
+
+	"Check created instances"
+	self assert: MolCompleteComponentImpl allInstances size equals: 10.
+	
+	MolComponentManager deepCleanUp.
+	
+	"Check created instances"
+	self assert: MolCompleteComponentImpl allInstances size equals: 0.
+]
+
+{ #category : #tests }
 MolComponentManagerTest >> testDefault [
 	self assert: (MolComponentManager default isKindOf: MolComponentManager).
 	
@@ -120,6 +116,26 @@ MolComponentManagerTest >> testFlushComponents [
 	self assert: nb equals: 20.
 	self assert: MolCompleteComponentImpl allInstances size equals: 0.
 	self assert: MolAugmentedClassToAComponent allInstances size equals: 0.
+]
+
+{ #category : #'setUp - tearDown' }
+MolComponentManagerTest >> testGarbageCollect [
+
+	"Create some classics components to clean"
+
+	1 to: 10 do: [ :i | 
+		MolCompleteComponentImpl start: ('test' , i printString) asSymbol ].
+
+	"Check created instances"
+	self assert: MolCompleteComponentImpl allInstances size equals: 10.
+
+
+	1 to: 10 do: [ :i | 
+		MolCompleteComponentImpl stop: ('test' , i printString) asSymbol ].
+	
+	Smalltalk garbageCollect.
+
+	self assert: MolCompleteComponentImpl allInstances size equals: 0
 ]
 
 { #category : #tests }
