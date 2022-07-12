@@ -19,6 +19,7 @@ Class {
 
 { #category : #cleanup }
 MolComponentManager class >> cleanUp [
+
 	<script: 'self cleanUp'>
 	| notifiers subscribers |
 	MolUtils log: 'Starting a cleanUp.'.
@@ -26,24 +27,26 @@ MolComponentManager class >> cleanUp [
 	"CleanUp and initialize a new ComponentFactory instance"
 	MolComponentFactory cleanUp.
 	MolComponentFactory initialize.
-	
-	Default ifNil:[MolUtils log: 'End of the cleanUp.'. ^self].
+
+	Default ifNil: [ 
+		MolUtils log: 'End of the cleanUp.'.
+		^ self ].
 	Default locatorServices eventsSubscribers: nil.
 
 	notifiers := MolEventNotifier allInstances.
 	subscribers := MolEventSubscriber allInstances.
 
 	"Ignore some Error during the cleanUp because the clean process can be different of the start order"
-	[Default release] on: ComponentAlreadyPassivatedError, ComponentNotFoundError do:[ :e | 
-		"Just log"
-		MolUtils log: 'Error during the cleanUp : ', e printString , ', this error may be normal during a cleanUp.'. 
-	].
+	[ Default release ]
+		on: ComponentAlreadyPassivatedError , ComponentNotFoundError
+		do: [ :e | "Just log"
+			MolUtils log: 'Error during the cleanUp : ' , e printString
+				, ', this error may be normal during a cleanUp.' ].
 	Default := nil.
 
-	notifiers do: [:n | n release].
-	subscribers do: [:n | n release].
-	MolUtils log: 'End of the cleanUp.'.
-	
+	notifiers do: [ :n | n release ].
+	subscribers do: [ :n | n release ].Smalltalk garbageCollect.
+	MolUtils log: 'End of the cleanUp.'
 ]
 
 { #category : #cleanup }
