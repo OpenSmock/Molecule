@@ -22,7 +22,7 @@ MolGPSDataImpl >> accuracy: anObject [
 	accuracy := anObject
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolGPSDataImpl >> componentActivate [ 
 			
 	"Start a thread to simulate sending of the geo position each seconds and accuracy precision"
@@ -37,14 +37,15 @@ MolGPSDataImpl >> componentActivate [
 	] forkAt: Processor userBackgroundPriority.
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolGPSDataImpl >> componentInitialize [
-		
+
 	"Set starting accuracy"
-	self accuracy: 1000. 
+
+	self accuracy: 1000
 ]
 
-{ #category : #'component life cycle' }
+{ #category : #'life cycle' }
 MolGPSDataImpl >> componentPassivate [ 
 	
 	sendCurrentPositionThread ifNotNil:[ :e | e terminate ].

@@ -9,7 +9,7 @@ Class {
 
 { #category : #baselines }
 BaselineOfMolecule >> baseline: spec [
-	<baseline>
+	<baseline> 
 	spec
 		for: #common
 		do: [			

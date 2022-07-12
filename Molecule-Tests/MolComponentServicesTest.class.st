@@ -10,6 +10,7 @@ Class {
 { #category : #tests }
 MolComponentServicesTest >> testIsComponentServices [
 
+
 	self assert: MolComponentServices isComponentServices equals: false.
 	self assert: MolComponentParameters isComponentServices equals: false.
 	self assert: MolComponentEvents isComponentServices equals: false.

@@ -24,8 +24,8 @@ MolIcon class >> cleanIcons [
 
 { #category : #accessing }
 MolIcon class >> icons [
-	<script: 'self icons inspect'>
 
+	<script: 'self icons inspect'>
 	icons ifNil: [ icons := Dictionary new ].
 	^ icons
 ]

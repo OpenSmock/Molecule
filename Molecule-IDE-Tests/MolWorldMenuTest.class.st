@@ -7,6 +7,7 @@ Class {
 { #category : #tests }
 MolWorldMenuTest >> testWorldMenu [
 	| menuElements moleculeMenuEntry libraryMenu |
+	
 	menuElements := self currentWorld worldState menuBuilder menuSpec items.
 	libraryMenu := menuElements detect:[ :e | e name = #Tools ].
 	
