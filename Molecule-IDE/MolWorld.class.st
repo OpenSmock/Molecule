@@ -69,6 +69,18 @@ MolWorld class >> menu20DebugOn: aBuilder [
 ]
 
 { #category : #menu }
+MolWorld class >> menu21BrowseClassesOn: aBuilder [
+	<worldMenu>
+	(aBuilder item: #MoleculeBrowseClasses)
+		parent: #MoleculeTools;
+		label: 'Browse components classes';
+		help: 'Browse all components classes (native and augmented) in a Tree view';
+		icon: MolIcon moleculeIcon;
+		order: 1.1;
+		action: [ MolSpBrowseComponentClasses new open ]
+]
+
+{ #category : #menu }
 MolWorld class >> menu30ComponentManagerCleanUpOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeClearComponent)

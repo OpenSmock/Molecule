@@ -25,6 +25,7 @@ MolWorldMenuTest >> testWorldMenuBuilding [
 	
 	MolWorld menu10SystemStatusOn: menuBuilder.
 	MolWorld menu20DebugOn: menuBuilder.
+	MolWorld menu21BrowseClassesOn: menuBuilder.
 	MolWorld menu30ComponentManagerCleanUpOn: menuBuilder.
 	MolWorld menu40ExamplesOn: menuBuilder.
 	MolWorld menu50GithubOn: menuBuilder.
