@@ -59,12 +59,12 @@ MolMyClockComponentImpl >> getMolMyLocalTimeEventsNotifier [
 { #category : #'component accessing' }
 MolMyClockComponentImpl >> getMolMyServerTimeServicesProvider [
 	| servicesSymbol servicesProvider itf |
+
 	itf := MolMyServerTimeServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
-	servicesSymbol isSymbol
-	 	ifTrue: 
-			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolMyServerTimeServices named: servicesSymbol]. 
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [nil].
+	(servicesSymbol isNil or:[servicesSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundServicesProvider new interface: itf name: nil ].
+
+	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolMyServerTimeServices named: servicesSymbol.
 	^servicesProvider
 ]
 

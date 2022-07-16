@@ -362,6 +362,46 @@ MolComponentImplTest >> testFoundSubscriber [
 	self assert: component getMolUsedEventsSubscriber isNotFoundEventsSubscriber not.
 ]
 
+{ #category : #test }
+MolComponentImplTest >> testGetComponentUsedWithWrongName [
+	"Connect two components with different types of component name"
+	| providerComponent userComponent |
+	
+	providerComponent := MolCompleteComponentImpl start: #myComponentName.
+	userComponent := MolCompleteComponent2Impl start.
+	
+	userComponent forServices: MolUsedServices useProvider: #badComponentName.
+	userComponent forParameters: MolUsedParameters useProvider: #badComponentName.
+	self assert: userComponent getMolUsedServicesProvider isNotFoundServices.
+	self assert: userComponent getMolUsedParametersProvider isNotFoundParameters.
+
+	userComponent forServices: MolUsedServices useProvider: 'myComponentName'.
+	userComponent forParameters: MolUsedParameters useProvider: 'myComponentName'.
+	self assert: userComponent getMolUsedServicesProvider isNotFoundServices.
+	self assert: userComponent getMolUsedParametersProvider isNotFoundParameters.
+
+	userComponent forServices: MolUsedServices useProvider: 29.
+	userComponent forParameters: MolUsedParameters useProvider: 29.
+	self assert: userComponent getMolUsedServicesProvider isNotFoundServices.
+	self assert: userComponent getMolUsedParametersProvider isNotFoundParameters.
+
+	userComponent forServices: MolUsedServices useProvider: (OrderedCollection new).
+	userComponent forParameters: MolUsedParameters useProvider: (OrderedCollection new).
+	self assert: userComponent getMolUsedServicesProvider isNotFoundServices.
+	self assert: userComponent getMolUsedParametersProvider isNotFoundParameters.
+	
+	userComponent forServices: MolUsedServices useProvider: nil.
+	userComponent forParameters: MolUsedParameters useProvider: nil.
+	self assert: userComponent getMolUsedServicesProvider isNotFoundServices.
+	self assert: userComponent getMolUsedParametersProvider isNotFoundParameters.
+	
+	userComponent forServices: MolUsedServices useProvider: #myComponentName.
+	userComponent forParameters: MolUsedParameters useProvider: #myComponentName.
+	self assert: userComponent getMolUsedServicesProvider isNotFoundServices not.
+	self assert: userComponent getMolUsedParametersProvider isNotFoundParameters not.
+
+]
+
 { #category : #'test - contract' }
 MolComponentImplTest >> testHaveComponentType [ 
 
@@ -580,6 +620,39 @@ MolComponentImplTest >> testStartWithName [
 	MolCompleteComponentImpl remove: #myComponent.
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl named: #myComponent) isNil.
 	MolCompleteComponentImpl undeploy.
+]
+
+{ #category : #'test - component creation' }
+MolComponentImplTest >> testStartWithWrongNames [
+	"Start component with different types of component name"
+	| component error |
+	
+	[component := MolCompleteComponentImpl start: 'myComponentName'] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: WrongComponentNameError).
+	self assert: component isNil.
+
+	error := nil.
+	[component := MolCompleteComponentImpl start: 12] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: WrongComponentNameError).
+	self assert: component isNil.
+
+	error := nil.	
+	[component := MolCompleteComponentImpl start: (OrderedCollection new)] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: WrongComponentNameError).
+	self assert: component isNil.
+
+	error := nil.	
+	[component := MolCompleteComponentImpl start: nil] on: Error do:[ :e |
+		error := e.
+	].
+	self assert: (error isKindOf: WrongComponentNameError).
+	self assert: component isNil.
 ]
 
 { #category : #'test - component creation' }

@@ -26,23 +26,23 @@ MolCompleteComponentChildImpl >> getMolUsedChildEventsSubscriber [
 { #category : #'component accessing' }
 MolCompleteComponentChildImpl >> getMolUsedChildParametersProvider [
 	| parametersSymbol parametersProvider itf |
+
 	itf := MolUsedChildParameters.
-	parametersSymbol := self parametersProviders at: itf ifAbsent: [^MolNotFoundParametersProvider new interface: itf name: nil].
-	parametersSymbol isSymbol
-	 	ifTrue: 
-			[parametersProvider := MolComponentManager default locatorServices 
-						searchParametersProviderFor: MolUsedChildParameters named: parametersSymbol]. 
+	parametersSymbol := self parametersProviders at: itf ifAbsent: [nil].
+	(parametersSymbol isNil or:[parametersSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundParametersProvider new interface: itf name: nil ].
+
+	parametersProvider := MolComponentManager default locatorServices searchParametersProviderFor: MolUsedChildParameters named: parametersSymbol.
 	^parametersProvider
 ]
 
 { #category : #'component accessing' }
 MolCompleteComponentChildImpl >> getMolUsedChildServicesProvider [
 	| servicesSymbol servicesProvider itf |
+
 	itf := MolUsedChildServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
-	servicesSymbol isSymbol
-	 	ifTrue: 
-			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolUsedChildServices named: servicesSymbol]. 
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [nil].
+	(servicesSymbol isNil or:[servicesSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundServicesProvider new interface: itf name: nil ].
+
+	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolUsedChildServices named: servicesSymbol.
 	^servicesProvider
 ]

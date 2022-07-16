@@ -62,8 +62,8 @@ MolComponentFactory class >> addConsumedEvents: aComponentEvents in: aComponentT
 { #category : #'component - contract management' }
 MolComponentFactory class >> addProducedEvents: aComponentEvents in: aComponentType [
 	"Add a provided ComponentEvents in a ComponentType"
-	
 	| declaredProducedComponentEvents selector sourceCode |
+
 	(aComponentEvents isNil or:[aComponentEvents isTrait not]) ifTrue:[^self].
 	aComponentEvents isComponentEvents ifFalse:[^self].
 	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
@@ -101,8 +101,8 @@ MolComponentFactory class >> addProducedEvents: aComponentEvents in: aComponentT
 { #category : #'component - contract management' }
 MolComponentFactory class >> addProvidedParameters: aComponentParameters in: aComponentType [
 	"Add a provided ComponentParameters in a ComponentType"
-	
 	| declaredProvidedComponentParameters selector sourceCode |
+
 	(aComponentParameters isNil or:[aComponentParameters isTrait not]) ifTrue:[^self].
 	aComponentParameters isComponentParameters ifFalse:[^self].
 	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
@@ -140,8 +140,8 @@ MolComponentFactory class >> addProvidedParameters: aComponentParameters in: aCo
 { #category : #'component - contract management' }
 MolComponentFactory class >> addProvidedServices: aComponentServices in: aComponentType [
 	"Add a provided ComponentServices in a ComponentType"
-	
 	| declaredProvidedComponentServices selector sourceCode |
+	
 	(aComponentServices isNil or:[aComponentServices isTrait not]) ifTrue:[^self].
 	aComponentServices isComponentServices ifFalse:[^self].
 	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
@@ -179,8 +179,8 @@ MolComponentFactory class >> addProvidedServices: aComponentServices in: aCompon
 { #category : #'component - contract management' }
 MolComponentFactory class >> addUsedParameters: aComponentParameters in: aComponentType [
 	"Add a provided ComponentParameters in a ComponentType"
-	
 	| declaredUsedComponentParameters selector sourceCode |
+	
 	(aComponentParameters isNil or:[aComponentParameters isTrait not]) ifTrue:[^self].
 	aComponentParameters isComponentParameters ifFalse:[^self].
 	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
@@ -218,8 +218,8 @@ MolComponentFactory class >> addUsedParameters: aComponentParameters in: aCompon
 { #category : #'component - contract management' }
 MolComponentFactory class >> addUsedServices: aComponentServices in: aComponentType [
 	"Add a provided ComponentServices in a ComponentType"
-	
 	| declaredUsedComponentServices selector sourceCode |
+	
 	(aComponentServices isNil or:[aComponentServices isTrait not]) ifTrue:[^self].
 	aComponentServices isComponentServices ifFalse:[^self].
 	(aComponentType isNil or:[aComponentType isTrait not]) ifTrue:[^self].
@@ -256,10 +256,11 @@ MolComponentFactory class >> addUsedServices: aComponentServices in: aComponentT
 
 { #category : #accessing }
 MolComponentFactory class >> cleanUp [
+
 	<script: 'self cleanUp'>
 	Default ifNil: [ ^ self ].
 	Default release.
-	Default := nil 
+	Default := nil
 ]
 
 { #category : #'component - creation' }
@@ -282,6 +283,7 @@ MolComponentFactory class >> createComponentEvents: aSymbol in: aPackageName [
 
 { #category : #'component - creation' }
 MolComponentFactory class >> createComponentForType: aComponentType named: aSymbol in: aPackageName [
+
 	aComponentType ifNotNil: [ 
 		(aComponentType isTrait and:[aComponentType isComponentType]) ifFalse:[ ^ NotAComponentTypeError signal: 'Cannot create Component for a no ComponentType object.' ].
 	].
@@ -368,6 +370,7 @@ MolComponentFactory class >> createComponentType: aSymbol in: aPackageName [
 
 { #category : #accessing }
 MolComponentFactory class >> default [
+
 	<script: 'self default'>
 	Default ifNil: [ Default := self new ].
 	^ Default
@@ -385,17 +388,20 @@ MolComponentFactory class >> defineAllComponents [
 
 { #category : #accessing }
 MolComponentFactory class >> defineComponent: aComponentClass [
+
 	self default defineComponent: aComponentClass
 ]
 
 { #category : #accessing }
 MolComponentFactory class >> defineDirtyComponents [
+
 	<script>
 	self default defineDirtyComponents
 ]
 
 { #category : #'class initialization' }
 MolComponentFactory class >> initialize [
+
 	self default
 ]
 
@@ -409,21 +415,25 @@ MolComponentFactory class >> isInitialized [
 
 { #category : #protocol }
 MolComponentFactory class >> protocolForComponentAccess [
+
 	^ 'component accessing'
 ]
 
 { #category : #protocol }
 MolComponentFactory class >> protocolForComponentEvents [
+
 	^ 'accessing - events'
 ]
 
 { #category : #protocol }
 MolComponentFactory class >> protocolForComponentParameters [
+
 	^ 'accessing - parameters'
 ]
 
 { #category : #protocol }
 MolComponentFactory class >> protocolForComponentServices [
+
 	^ 'accessing - services'
 ]
 
@@ -747,23 +757,22 @@ MolComponentFactory >> getUsedParametersSourceCodeFor: aTrait selector: selector
 	writeStream nextPutAll: selector.
 	writeStream crtab: 1.
 	writeStream nextPutAll: '| parametersSymbol parametersProvider itf |'.
+	writeStream cr.
 	writeStream crtab: 1.
 	writeStream
 		nextPutAll: 'itf := ';
 		nextPutAll: aTrait asString;
 		nextPutAll: '.'.
 	writeStream crtab: 1.
-	writeStream	
-		nextPutAll: 'parametersSymbol := self parametersProviders at: itf ifAbsent: [^MolNotFoundParametersProvider new interface: itf name: nil].'.
+	writeStream	nextPutAll: 'parametersSymbol := self parametersProviders at: itf ifAbsent: [nil].'.
+	writeStream crtab: 1.	
+	writeStream	nextPutAll: '(parametersSymbol isNil or:[parametersSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundParametersProvider new interface: itf name: nil ].'.
+	writeStream cr.
 	writeStream crtab: 1.
 	writeStream
-		nextPutAll:
-			'parametersSymbol isSymbol
-	 	ifTrue: 
-			[parametersProvider := MolComponentManager default locatorServices 
-						searchParametersProviderFor: ';
+		nextPutAll: 'parametersProvider := MolComponentManager default locatorServices searchParametersProviderFor: ';
 		nextPutAll: aTrait asString;
-		nextPutAll: ' named: parametersSymbol]. '.
+		nextPutAll: ' named: parametersSymbol.'.
 	writeStream crtab: 1.
 	writeStream nextPutAll: '^parametersProvider'.
 	^ writeStream
@@ -777,23 +786,22 @@ MolComponentFactory >> getUsedServicesSourceCodeFor: aTrait selector: selector [
 	writeStream nextPutAll: selector.
 	writeStream crtab: 1.
 	writeStream nextPutAll: '| servicesSymbol servicesProvider itf |'.
+	writeStream cr.
 	writeStream crtab: 1.
 	writeStream
 		nextPutAll: 'itf := ';
 		nextPutAll: aTrait asString;
 		nextPutAll: '.'.
 	writeStream crtab: 1.
-	writeStream	
-		nextPutAll: 'servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].'.
+	writeStream	nextPutAll: 'servicesSymbol := self servicesProviders at: itf ifAbsent: [nil].'.
+	writeStream crtab: 1.	
+	writeStream	nextPutAll: '(servicesSymbol isNil or:[servicesSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundServicesProvider new interface: itf name: nil ].'.
+	writeStream cr.
 	writeStream crtab: 1.
 	writeStream
-		nextPutAll:
-			'servicesSymbol isSymbol
-	 	ifTrue: 
-			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: ';
+		nextPutAll: 'servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: ';
 		nextPutAll: aTrait asString;
-		nextPutAll: ' named: servicesSymbol]. '.
+		nextPutAll: ' named: servicesSymbol.'.
 	writeStream crtab: 1.
 	writeStream nextPutAll: '^servicesProvider'.
 	^ writeStream

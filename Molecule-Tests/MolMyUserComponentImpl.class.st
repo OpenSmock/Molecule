@@ -17,11 +17,11 @@ Class {
 { #category : #'component accessing' }
 MolMyUserComponentImpl >> getMolMyTableServicesProvider [
 	| servicesSymbol servicesProvider itf |
+
 	itf := MolMyTableServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
-	servicesSymbol isSymbol
-	 	ifTrue: 
-			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolMyTableServices named: servicesSymbol]. 
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [nil].
+	(servicesSymbol isNil or:[servicesSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundServicesProvider new interface: itf name: nil ].
+
+	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolMyTableServices named: servicesSymbol.
 	^servicesProvider
 ]

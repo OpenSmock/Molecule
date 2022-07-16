@@ -67,55 +67,56 @@ MolHomeServices >> addDeployedComponent: aComponentClass [
 ]
 
 { #category : #private }
-MolHomeServices >> checkInstanciationOfComponent: aComponentClass named: aName [
-	| deployed component |
-	
-	"check if the component can be instanciate"
-	deployed := self deployedComponents at: aComponentClass ifAbsent:[
-		^ComponentNotDeployedError new messageText: 'Can not instanciate a non deployed component'.	
-	].
-	
-	"check if a component instance with the same name is already exists"
-	deployed at: aName ifPresent:[ :c | c ifNotNil:[
-		^ComponentAlreadyExistsError new messageText: 'Can not instanciate a component with the same name of another component, please change the name of the component'.
-	]].
+MolHomeServices >> checkInstanciationOfComponent: arg1 named: arg2 [
 
-	"check if a component with the same type is not already existing with the same name"
-	component := MolComponentManager default locatorServices searchComponentTypeImplementorFor: aComponentClass componentType named: aName.
-	component ifNotNil:[
-		^ComponentAlreadyExistsError new messageText: 'Can not instanciate a component with the same type and name of another component, please change the name of the component'.	
-	].
-	
-	"check if a component with the same services or parameters interface is not already existing with the same name"
-	aComponentClass componentType allProvidedServices do:[ :e | 
-		(MolComponentManager default locatorServices searchServicesProviderFor: e named: aName) isNotFoundServices ifFalse:[
-			^ComponentProvidedServicesAlreadyExistsError new messageText: 'Can not instanciate a component with the same services and name of another component, please change the name of the component'.
-		].
-	].
-	aComponentClass componentType allProvidedParameters do:[ :e | 
-		(MolComponentManager default locatorServices searchParametersProviderFor: e named: aName) isNotFoundParameters ifFalse:[
-			^ComponentProvidedParametersAlreadyExistsError new messageText: 'Can not instanciate a component with the same parameters and name of another component, please change the name of the component'.
-		].
-	].
-
-	"check if the component override an instanciate component type with the same name, in this case the system cannot determine what services/parameters to use and it is necessary to instanciate the component with an another name"
-	aComponentClass isOverrideComponentType ifTrue:[ | overridedTypes |
-		overridedTypes := aComponentClass overridedComponentTypes.
-		overridedTypes do:[ :type |
-			type allProvidedServices do:[ :e | 
-				(MolComponentManager default locatorServices searchServicesProviderFor: e named: aName) isNotFoundServices ifFalse:[
-					^ComponentProvidedServicesAlreadyExistsError new messageText: '(Inheritance problem) Can not instanciate a component with the same services and name of another component, please change the name of the component'.
-				].
-			].
-			type allProvidedParameters do:[ :e | 
-				(MolComponentManager default locatorServices searchParametersProviderFor: e named: aName) isNotFoundParameters ifFalse:[
-					^ComponentProvidedServicesAlreadyExistsError new messageText: '(Inheritance problem) Can not instanciate a component with the same parameters and name of another component, please change the name of the component'.
-				].
-			].	
-		].
-	].
-	
-	^nil
+	| tmp1 tmp2 tmp3 |
+	arg2 ifNil: [ 
+		^ WrongComponentNameError new messageText:
+			  'Can not instanciate a component without name' ].
+	arg2 isSymbol ifFalse: [ 
+		^ WrongComponentNameError new messageText:
+			  'Can not instanciate a component with a name wish is not a symbol' ].
+	tmp1 := self deployedComponents at: arg1 ifAbsent: [ 
+		        ^ ComponentNotDeployedError new messageText:
+			          'Can not instanciate a non deployed component' ].
+	tmp1 at: arg2 ifPresent: [ :arg3 | 
+		arg3 ifNotNil: [ 
+			^ ComponentAlreadyExistsError new messageText:
+				  'Can not instanciate a component with the same name of another component, please change the name of the component' ] ].
+	tmp2 := MolComponentManager default locatorServices
+		        searchComponentTypeImplementorFor: arg1 componentType
+		        named: arg2.
+	tmp2 ifNotNil: [ 
+		^ ComponentAlreadyExistsError new messageText:
+			  'Can not instanciate a component with the same type and name of another component, please change the name of the component' ].
+	arg1 componentType allProvidedServices do: [ :arg4 | 
+		(MolComponentManager default locatorServices
+			 searchServicesProviderFor: arg4
+			 named: arg2) isNotFoundServices ifFalse: [ 
+			^ ComponentProvidedServicesAlreadyExistsError new messageText:
+				  'Can not instanciate a component with the same services and name of another component, please change the name of the component' ] ].
+	arg1 componentType allProvidedParameters do: [ :arg5 | 
+		(MolComponentManager default locatorServices
+			 searchParametersProviderFor: arg5
+			 named: arg2) isNotFoundParameters ifFalse: [ 
+			^ ComponentProvidedParametersAlreadyExistsError new messageText:
+				  'Can not instanciate a component with the same parameters and name of another component, please change the name of the component' ] ].
+	arg1 isOverrideComponentType ifTrue: [ 
+		tmp3 := arg1 overridedComponentTypes.
+		tmp3 do: [ :arg6 | 
+			arg6 allProvidedServices do: [ :arg7 | 
+				(MolComponentManager default locatorServices
+					 searchServicesProviderFor: arg7
+					 named: arg2) isNotFoundServices ifFalse: [ 
+					^ ComponentProvidedServicesAlreadyExistsError new messageText:
+						  '(Inheritance problem) Can not instanciate a component with the same services and name of another component, please change the name of the component' ] ].
+			arg6 allProvidedParameters do: [ :arg8 | 
+				(MolComponentManager default locatorServices
+					 searchParametersProviderFor: arg8
+					 named: arg2) isNotFoundParameters ifFalse: [ 
+					^ ComponentProvidedServicesAlreadyExistsError new messageText:
+						  '(Inheritance problem) Can not instanciate a component with the same parameters and name of another component, please change the name of the component' ] ] ] ].
+	^ nil
 ]
 
 { #category : #accessing }
@@ -149,7 +150,7 @@ MolHomeServices >> instanciateComponent: aComponentClass [
 MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 	| error component connector deployed |
 	
-	(aComponentClass isNil or:[aName isNil]) ifTrue:[^nil].
+	aComponentClass ifNil:[^nil].
 	error := self checkInstanciationOfComponent: aComponentClass named: aName.
 	error ifNotNil:[error signal. ^nil].
 	

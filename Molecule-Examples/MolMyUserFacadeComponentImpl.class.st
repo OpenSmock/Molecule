@@ -28,24 +28,24 @@ MolMyUserFacadeComponentImpl >> componentPassivate [
 { #category : #'component accessing' }
 MolMyUserFacadeComponentImpl >> getMolMyAlarmActivationServicesProvider [
 	| servicesSymbol servicesProvider itf |
+
 	itf := MolMyAlarmActivationServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
-	servicesSymbol isSymbol
-	 	ifTrue: 
-			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolMyAlarmActivationServices named: servicesSymbol]. 
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [nil].
+	(servicesSymbol isNil or:[servicesSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundServicesProvider new interface: itf name: nil ].
+
+	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolMyAlarmActivationServices named: servicesSymbol.
 	^servicesProvider
 ]
 
 { #category : #'component accessing' }
 MolMyUserFacadeComponentImpl >> getMolMyAlarmParametersProvider [
 	| parametersSymbol parametersProvider itf |
+
 	itf := MolMyAlarmParameters.
-	parametersSymbol := self parametersProviders at: itf ifAbsent: [^MolNotFoundParametersProvider new interface: itf name: nil].
-	parametersSymbol isSymbol
-	 	ifTrue: 
-			[parametersProvider := MolComponentManager default locatorServices 
-						searchParametersProviderFor: MolMyAlarmParameters named: parametersSymbol]. 
+	parametersSymbol := self parametersProviders at: itf ifAbsent: [nil].
+	(parametersSymbol isNil or:[parametersSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundParametersProvider new interface: itf name: nil ].
+
+	parametersProvider := MolComponentManager default locatorServices searchParametersProviderFor: MolMyAlarmParameters named: parametersSymbol.
 	^parametersProvider
 ]
 
@@ -64,24 +64,24 @@ MolMyUserFacadeComponentImpl >> getMolMyAlarmSoundsEventsSubscriber [
 { #category : #'component accessing' }
 MolMyUserFacadeComponentImpl >> getMolMyClockParametersProvider [
 	| parametersSymbol parametersProvider itf |
+
 	itf := MolMyClockParameters.
-	parametersSymbol := self parametersProviders at: itf ifAbsent: [^MolNotFoundParametersProvider new interface: itf name: nil].
-	parametersSymbol isSymbol
-	 	ifTrue: 
-			[parametersProvider := MolComponentManager default locatorServices 
-						searchParametersProviderFor: MolMyClockParameters named: parametersSymbol]. 
+	parametersSymbol := self parametersProviders at: itf ifAbsent: [nil].
+	(parametersSymbol isNil or:[parametersSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundParametersProvider new interface: itf name: nil ].
+
+	parametersProvider := MolComponentManager default locatorServices searchParametersProviderFor: MolMyClockParameters named: parametersSymbol.
 	^parametersProvider
 ]
 
 { #category : #'component accessing' }
 MolMyUserFacadeComponentImpl >> getMolMyClockServicesProvider [
 	| servicesSymbol servicesProvider itf |
+
 	itf := MolMyClockServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
-	servicesSymbol isSymbol
-	 	ifTrue: 
-			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolMyClockServices named: servicesSymbol]. 
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [nil].
+	(servicesSymbol isNil or:[servicesSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundServicesProvider new interface: itf name: nil ].
+
+	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolMyClockServices named: servicesSymbol.
 	^servicesProvider
 ]
 

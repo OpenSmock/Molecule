@@ -33,6 +33,9 @@ BaselineOfMolecule >> postload: loader package: packageSpec [
 
 	(Smalltalk globals includesKey: #MolComponentManager) ifFalse:[ ^self ].
 	(Smalltalk globals classNamed: #MolComponentManager) cleanUp.
+	"Rebuild all components"
+	MolComponentFactory defineAllComponents.
+	"Reactive dynamic contract update if necessary"
 	(previousDynamicContractUpdateActivated ifNil:[false]) ifFalse:[
 		MolComponentFactory default activateDynamicContractUpdate.	
 	].

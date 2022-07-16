@@ -44,12 +44,12 @@ MolGPSMapImpl >> getMolGPSDataEventsSubscriber [
 { #category : #'component accessing' }
 MolGPSMapImpl >> getMolGPSDataServicesProvider [
 	| servicesSymbol servicesProvider itf |
+
 	itf := MolGPSDataServices.
-	servicesSymbol := self servicesProviders at: itf ifAbsent: [^MolNotFoundServicesProvider new interface: itf name: nil].
-	servicesSymbol isSymbol
-	 	ifTrue: 
-			[servicesProvider := MolComponentManager default locatorServices 
-						searchServicesProviderFor: MolGPSDataServices named: servicesSymbol]. 
+	servicesSymbol := self servicesProviders at: itf ifAbsent: [nil].
+	(servicesSymbol isNil or:[servicesSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundServicesProvider new interface: itf name: nil ].
+
+	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolGPSDataServices named: servicesSymbol.
 	^servicesProvider
 ]
 
