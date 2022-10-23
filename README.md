@@ -21,7 +21,7 @@ Metacello new
    load.
 ```
 
-Pharo 8 : Last supported release for Pharo 8 is 1.2.6, newer versions are not supported but may be works. 
+Pharo 8 : Last supported release for Pharo 8 is [1.2.6](https://github.com/OpenSmock/Molecule/releases/tag/1.2.6), newer versions are not supported but may be works. 
 Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
 
 ### Prerequisites
