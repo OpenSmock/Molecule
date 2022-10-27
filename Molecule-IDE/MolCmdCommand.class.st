@@ -24,6 +24,8 @@ MolCmdCommand class >> browserMenuActivation [
 { #category : #testing }
 MolCmdCommand class >> canBeExecutedInContext: aToolContext [
 	| list |
+	aToolContext selectedItems isEmpty ifTrue:[^false].
+	
 	selectedItems := aToolContext selectedItems at:1.
 	selected := selectedItems browserItem actualObject name.
 	
@@ -33,7 +35,7 @@ MolCmdCommand class >> canBeExecutedInContext: aToolContext [
 			        (c allSuperclasses includes: Object) and: [ c isComponentClass ] ] ].
 	
 	"return if selected object is in list of component"
-	^list includes: selected asClass .
+	^list includes: (self class environment at: selected asSymbol) .
 ]
 
 { #category : #accessing }
