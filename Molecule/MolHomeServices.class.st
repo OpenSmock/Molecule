@@ -28,7 +28,8 @@ MolHomeServices >> activateAllComponents [
 
 { #category : #'life cycle' }
 MolHomeServices >> activateComponent: aComponentClass [
-	^ self activateComponent: aComponentClass named: #default
+
+	^ self activateComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
 { #category : #'life cycle' }
@@ -143,7 +144,8 @@ MolHomeServices >> instanciateAllComponents [
 
 { #category : #'life cycle' }
 MolHomeServices >> instanciateComponent: aComponentClass [
-	^ self instanciateComponent: aComponentClass named: #default
+
+	^ self instanciateComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
 { #category : #'life cycle' }
@@ -180,7 +182,8 @@ MolHomeServices >> isDeployedComponent: aComponentClass [
 
 { #category : #testing }
 MolHomeServices >> isWaitingForActivation: aComponentClass [
-	^ self isWaitingForActivation: aComponentClass named: #default
+
+	^ self isWaitingForActivation: aComponentClass named: MolUtils defaultComponentName
 ]
 
 { #category : #testing }
@@ -204,7 +207,8 @@ MolHomeServices >> passivateAllComponents [
 
 { #category : #'life cycle' }
 MolHomeServices >> passivateComponent: aComponentClass [
-	^ self passivateComponent: aComponentClass named: #default
+
+	^ self passivateComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
 { #category : #'life cycle' }
@@ -254,7 +258,8 @@ MolHomeServices >> removeAllComponents [
 
 { #category : #'life cycle' }
 MolHomeServices >> removeComponent: aComponentClass [
-	^self removeComponent: aComponentClass named: #default
+
+	^ self removeComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
 { #category : #'life cycle' }

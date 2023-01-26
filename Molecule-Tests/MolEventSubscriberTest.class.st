@@ -33,7 +33,7 @@ MolEventSubscriberTest >> testAddOriginator [
 	eventSubscriber addOriginator: nil.
 	self assert: eventSubscriber originators isEmpty.
 		
-	eventSubscriber addOriginator: #default.
+	eventSubscriber addOriginator: MolUtils defaultComponentName.
 	self assert: eventSubscriber originators isEmpty.
 		
 	eventSubscriber addOriginator: component.
@@ -51,7 +51,7 @@ MolEventSubscriberTest >> testAddOriginators [
 	componentB := MolCompleteComponentImpl new componentName: #compB.	
 	eventSubscriber := MolEventSubscriber new.
 
-	eventSubscriber addOriginators: (OrderedCollection with: #default with: nil).
+	eventSubscriber addOriginators: (OrderedCollection with: MolUtils defaultComponentName with: nil).
 	self assert: eventSubscriber originators isEmpty.	
 
 	eventSubscriber addOriginators: (OrderedCollection with: componentA with: componentB).
@@ -107,7 +107,7 @@ MolEventSubscriberTest >> testIncludesOriginator [
 	
 	eventSubscriber := MolEventSubscriber events: componentEvents originators: subscribers.
 	self assert: (eventSubscriber includesOriginator: nil) equals: false.
-	self assert: (eventSubscriber includesOriginator: #default) equals: false.
+	self assert: (eventSubscriber includesOriginator: MolUtils defaultComponentName) equals: false.
 	self assert: (eventSubscriber includesOriginator: component).
 ]
 
@@ -181,7 +181,7 @@ MolEventSubscriberTest >> testRelease [
 	| subscribers componentEvents eventSubscriber |
 	subscribers := OrderedCollection new.
 	componentEvents := MolUsedChildEvents.
-	subscribers := OrderedCollection with: #default.
+	subscribers := OrderedCollection with: MolUtils defaultComponentName.
 	eventSubscriber := MolEventSubscriber events: componentEvents originators: subscribers.
 	
 	eventSubscriber release.
@@ -201,25 +201,25 @@ MolEventSubscriberTest >> testSubscribe [
 	self assert: eventSubscriber observersConnection isEmpty.
 	self assert: eventSubscriber originators size equals: 1.
 	self assert: eventSubscriber originators first equals: component.
-	self assert: (eventSubscriber originatorsLinks at: #default) equals: component.
+	self assert: (eventSubscriber originatorsLinks at: MolUtils defaultComponentName) equals: component.
 	
 	eventSubscriber subscribe: component.
 	self assert: (component isSubscribed: MolUsedEvents) equals: true.
 	self assert: (eventSubscriber observersConnection includesKey: component).
 	self assert: (eventSubscriber observersConnection at: component) size equals: 1.
-	self assert: ((eventSubscriber observersConnection at: component) includes: #default).
+	self assert: ((eventSubscriber observersConnection at: component) includes: MolUtils defaultComponentName).
 	self assert: eventSubscriber originators size equals: 1.
 	self assert: eventSubscriber originators first equals: component.
-	self assert: (eventSubscriber originatorsLinks at: #default) equals: component.
+	self assert: (eventSubscriber originatorsLinks at: MolUtils defaultComponentName) equals: component.
 	
 	eventSubscriber subscribe: component.
 	self assert: (component isSubscribed: MolUsedEvents) equals: true.
 	self assert: (eventSubscriber observersConnection includesKey: component).
 	self assert: (eventSubscriber observersConnection at: component) size equals: 1.
-	self assert: ((eventSubscriber observersConnection at: component) includes: #default).
+	self assert: ((eventSubscriber observersConnection at: component) includes: MolUtils defaultComponentName).
 	self assert: eventSubscriber originators size equals: 1.
 	self assert: eventSubscriber originators first equals: component.
-	self assert: (eventSubscriber originatorsLinks at: #default) equals: component.
+	self assert: (eventSubscriber originatorsLinks at: MolUtils defaultComponentName) equals: component.
 	
 ]
 
@@ -264,14 +264,14 @@ MolEventSubscriberTest >> testUnsubscribe [
 	self assert: eventSubscriber observersConnection isEmpty.
 	self assert: eventSubscriber originators size equals: 1.
 	self assert: eventSubscriber originators first equals: component.
-	self assert: (eventSubscriber originatorsLinks at: #default) equals: component.
+	self assert: (eventSubscriber originatorsLinks at: MolUtils defaultComponentName) equals: component.
 	
 	eventSubscriber unsubscribe: component.
 	self assert: (component isSubscribed: MolUsedEvents) equals: false.
 	self assert: eventSubscriber observersConnection isEmpty.
 	self assert: eventSubscriber originators size equals: 1.
 	self assert: eventSubscriber originators first equals: component.
-	self assert: (eventSubscriber originatorsLinks at: #default) equals: component.
+	self assert: (eventSubscriber originatorsLinks at: MolUtils defaultComponentName) equals: component.
 ]
 
 { #category : #test }

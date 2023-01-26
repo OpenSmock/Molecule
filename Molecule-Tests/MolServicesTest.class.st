@@ -140,9 +140,7 @@ MolServicesTest >> testTableProvideServicesToSeveralUsers [
 	user1 := manager homeServices instanciateComponent: MolMyUserComponentImpl named: #user1.
 	user2 := manager homeServices instanciateComponent: MolMyUserComponentImpl named: #user2.
 	
-	"Subscriptions"
-	user1 forServices: MolMyTableServices useProvider: #default.
-	user2 forServices: MolMyTableServices useProvider: #default.
+	"Auto subscriptions, because of using default component name"
 	
 	"Activation"
 	manager homeServices activateComponent: MolMyTableComponentImpl.

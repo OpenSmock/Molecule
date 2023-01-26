@@ -46,7 +46,8 @@ MolLocatorServices >> resolveWaitingSubscriptions: aComponent [
 
 { #category : #searching }
 MolLocatorServices >> searchComponentTypeImplementorFor: aComponentType [
-	^self searchComponentTypeImplementorFor: aComponentType named: #default
+
+	^ self searchComponentTypeImplementorFor: aComponentType named: MolUtils defaultComponentName
 ]
 
 { #category : #searching }
@@ -63,7 +64,8 @@ MolLocatorServices >> searchComponentTypeImplementorFor: aComponentType named: a
 
 { #category : #searching }
 MolLocatorServices >> searchEventsSubscriberFor: anEventsTrait [
-	^self searchEventsSubscriberFor: anEventsTrait named: #default
+
+	^ self searchEventsSubscriberFor: anEventsTrait named: MolUtils defaultComponentName
 ]
 
 { #category : #searching }
@@ -99,7 +101,8 @@ MolLocatorServices >> searchEventsSubscriberFor: anEventsTrait named: aSymbolOrA
 
 { #category : #searching }
 MolLocatorServices >> searchParametersProviderFor: aParametersTrait [
-	^self searchParametersProviderFor: aParametersTrait named: #default
+
+	^ self searchParametersProviderFor: aParametersTrait named: MolUtils defaultComponentName
 ]
 
 { #category : #searching }
@@ -118,7 +121,8 @@ MolLocatorServices >> searchParametersProviderFor: aParametersTrait named: aSymb
 
 { #category : #searching }
 MolLocatorServices >> searchServicesProviderFor: aServicesTrait [
-	^self searchServicesProviderFor: aServicesTrait named: #default
+
+	^ self searchServicesProviderFor: aServicesTrait named: MolUtils defaultComponentName
 ]
 
 { #category : #searching }

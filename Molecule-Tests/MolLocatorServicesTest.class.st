@@ -92,12 +92,12 @@ MolLocatorServicesTest >> testSearchComponentTypeImplementorFor [
 MolLocatorServicesTest >> testSearchComponentTypeImplementorForNamed [
 	| manager component myComponent |
 	manager := MolComponentManager default.
-	component := manager locatorServices searchComponentTypeImplementorFor: MolCompleteComponent named: #default.
+	component := manager locatorServices searchComponentTypeImplementorFor: MolCompleteComponent.
 	self assert: component isNil.
 	
 	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
 	myComponent := manager homeServices instanciateComponent: MolCompleteComponentImpl.
-	component := manager locatorServices searchComponentTypeImplementorFor: MolCompleteComponent named: #default.
+	component := manager locatorServices searchComponentTypeImplementorFor: MolCompleteComponent.
 	
 	self assert: component notNil.
 	self assert: component identicalTo: myComponent.
@@ -122,7 +122,7 @@ MolLocatorServicesTest >> testSearchEventsSubscriberForNamed [
 	| eventSubscriber component |
 
 	component := MolUtils startComponent: MolCompleteComponentImpl.	
-	eventSubscriber := MolComponentManager default locatorServices searchEventsSubscriberFor: MolUsedEvents named: #default.
+	eventSubscriber := MolComponentManager default locatorServices searchEventsSubscriberFor: MolUsedEvents.
 
 	self assert: eventSubscriber isNotFoundEventsSubscriber not.
 	self assert: (eventSubscriber isKindOf: MolEventSubscriber).
@@ -151,7 +151,7 @@ MolLocatorServicesTest >> testSearchParametersProviderForNamed [
 	manager := MolComponentManager default.
 	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
 	manager homeServices instanciateComponent: MolCompleteComponentImpl.
-	parametersProvider := manager locatorServices searchParametersProviderFor: MolUsedParameters named: #default.
+	parametersProvider := manager locatorServices searchParametersProviderFor: MolUsedParameters.
 	
 	self assert: parametersProvider isNotFoundParameters not.
 	self assert: (parametersProvider isKindOf: MolCompleteComponentImpl).
@@ -177,7 +177,7 @@ MolLocatorServicesTest >> testSearchServicesProviderForNamed [
 	manager := MolComponentManager default.
 	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
 	manager homeServices instanciateComponent: MolCompleteComponentImpl.
-	servicesProvider := manager locatorServices searchServicesProviderFor: MolUsedServices named: #default.
+	servicesProvider := manager locatorServices searchServicesProviderFor: MolUsedServices.
 	
 	self assert: servicesProvider isNotFoundServices not.
 	self assert: (servicesProvider isKindOf: MolCompleteComponentImpl).

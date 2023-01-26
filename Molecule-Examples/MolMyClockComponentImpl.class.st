@@ -28,9 +28,6 @@ MolMyClockComponentImpl >> componentInitialize [
 	useManualTime := false.
 	timeZone := TimeZone local.
 	delta := Time hour: 0 minute: 0 second: 0.
-	
-	self forServices: MolMyServerTimeServices useProvider: #default.
-	self forEvents: MolMyGlobalTimeEvents useProducer: #default.
 ]
 
 { #category : #'life cycle' }

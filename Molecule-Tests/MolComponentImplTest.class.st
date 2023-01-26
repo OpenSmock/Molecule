@@ -27,8 +27,8 @@ MolComponentImplTest >> testAugmentedClassToAComponentProperties [
 
 	"Component name"
 	self assert: component componentName equals: nil.
-	component componentName: #default.
-	self assert: component componentName equals: #default.
+	component componentName: MolUtils defaultComponentName.
+	self assert: component componentName equals: MolUtils defaultComponentName.
 	
 	"Component connector, just test if accessors exists because componentConnector is managed on component instanciation"
 	self assert: component componentConnector equals: nil.
@@ -153,17 +153,17 @@ MolComponentImplTest >> testEventsSubscribers [
 	
 	"Test initial events producer contents : default component name"
 	self assert: component eventsSubscribers size equals: 1.
-	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #default.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName.
 	
 	MolUtils activateComponent: MolCompleteComponentImpl named: #myComponentA.
 	
 	self assert: component eventsSubscribers size equals: 1.
-	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #default.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName.
 	
 	MolUtils passivateComponent: MolCompleteComponentImpl named: #myComponentA.
 	
 	self assert: component eventsSubscribers size equals: 1.
-	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #default.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName.
 	
 	MolUtils removeComponent: MolCompleteComponentImpl named: #myComponentA.
 
@@ -201,7 +201,7 @@ MolComponentImplTest >> testForEventsAddProducer [
 	self assert: component eventsSubscribers size equals: 1.
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#default #producerA #producerB).
 	
-	component forEvents: MolUsedEvents addProducer: #default.
+	component forEvents: MolUsedEvents addProducer: MolUtils defaultComponentName.
 	self assert: component eventsSubscribers size equals: 1.
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#default #producerA #producerB).
 ]
@@ -216,7 +216,7 @@ MolComponentImplTest >> testForEventsRemoveAllProducers [
 
 	component forEvents: MolUsedEvents removeAllProducers: #(#producerA #producerB #producerC #producerD #producerE #producerF).
 	self assert: component eventsSubscribers size equals: 1.
-	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #default.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName.
 	
 	component forEvents: MolUsedEvents addAllProducers: #(#producerA #producerB #producerC).
 	component forEvents: MolUsedEvents removeAllProducers: #(#producerA).
@@ -256,7 +256,7 @@ MolComponentImplTest >> testForEventsRemoveProducer2 [
 	| component |
 	component := MolCompleteComponentImpl start: #myComponentA.
 	
-	component forEvents: MolUsedEvents removeProducer: #default.
+	component forEvents: MolUsedEvents removeProducer: MolUtils defaultComponentName.
 	self assert: component eventsSubscribers size equals: 1.
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
 ]
@@ -307,9 +307,9 @@ MolComponentImplTest >> testForEventsUseProducer [
 	self assert: component eventsSubscribers size equals: 1.
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
 	
-	component forEvents: MolUsedEvents useProducer: #default. 
+	component forEvents: MolUsedEvents useProducer: MolUtils defaultComponentName. 
 	self assert: component eventsSubscribers size equals: 1.
-	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #default.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName.
 ]
 
 { #category : #'test - connecting - events producers' }
@@ -537,17 +537,17 @@ MolComponentImplTest >> testParametersProviders [
 	
 	"Test initial events producer contents : default component name"
 	self assert: component parametersProviders size equals: 1.
-	self assert: (component parametersProviders at: MolUsedParameters) equals: #default.
+	self assert: (component parametersProviders at: MolUsedParameters) equals: MolUtils defaultComponentName.
 	
 	MolUtils activateComponent: MolCompleteComponentImpl named: #myComponentA.
 	
 	self assert: component parametersProviders size equals: 1.
-	self assert: (component parametersProviders at: MolUsedParameters) equals: #default.
+	self assert: (component parametersProviders at: MolUsedParameters) equals: MolUtils defaultComponentName.
 	
 	MolUtils passivateComponent: MolCompleteComponentImpl named: #myComponentA.
 	
 	self assert: component parametersProviders size equals: 1.
-	self assert: (component parametersProviders at: MolUsedParameters) equals: #default.
+	self assert: (component parametersProviders at: MolUsedParameters) equals: MolUtils defaultComponentName.
 	
 	MolUtils removeComponent: MolCompleteComponentImpl named: #myComponentA.
 
@@ -567,17 +567,17 @@ MolComponentImplTest >> testServicesProviders [
 	
 	"Test initial events producer contents : default component name"
 	self assert: component servicesProviders size equals: 1.
-	self assert: (component servicesProviders at: MolUsedServices) equals: #default.
+	self assert: (component servicesProviders at: MolUsedServices) equals: MolUtils defaultComponentName.
 	
 	MolUtils activateComponent: MolCompleteComponentImpl named: #myComponentA.
 	
 	self assert: component servicesProviders size equals: 1.
-	self assert: (component servicesProviders at: MolUsedServices) equals: #default.
+	self assert: (component servicesProviders at: MolUsedServices) equals: MolUtils defaultComponentName.
 	
 	MolUtils passivateComponent: MolCompleteComponentImpl named: #myComponentA.
 	
 	self assert: component servicesProviders size equals: 1.
-	self assert: (component servicesProviders at: MolUsedServices) equals: #default.
+	self assert: (component servicesProviders at: MolUsedServices) equals: MolUtils defaultComponentName.
 	
 	MolUtils removeComponent: MolCompleteComponentImpl named: #myComponentA.
 
@@ -602,7 +602,7 @@ MolComponentImplTest >> testStart2 [
 	component := MolCompleteComponentImpl start.
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) notNil.
 	self assert: component isComponent.
-	self assert: component componentName equals: #default.
+	self assert: component componentName equals: MolUtils defaultComponentName.
 	
 	component := MolCompleteComponentImpl start: #compA.
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl named: #compA) notNil.

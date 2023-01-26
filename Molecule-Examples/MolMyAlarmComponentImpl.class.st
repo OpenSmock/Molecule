@@ -36,8 +36,6 @@ MolMyAlarmComponentImpl >> componentInitialize [
 	time := Time hour: 7 minute: 30 second: 0.
 	bell := 'Ring ring'.
 	activate := false.
-	
-	self forEvents: MolMyLocalTimeEvents useProducer: #default.
 ]
 
 { #category : #'life cycle' }

@@ -37,7 +37,7 @@ MolHomeServicesTest >> testActivateComponent [
 	component := manager homeServices instanciateComponent: MolCompleteComponentImpl.
 	manager homeServices activateComponent: MolCompleteComponentImpl.
 	
-	self assert: component componentName equals: #default.
+	self assert: component componentName equals: MolUtils defaultComponentName.
 	self assert: (component componentConnector isKindOf: MolComponentConnector).
 	self assert: component eventsNotifiers notEmpty.
 	self assert: component eventsSubscribers notEmpty.
@@ -54,16 +54,16 @@ MolHomeServicesTest >> testActivateComponentAugmentedClass [
 	component := manager homeServices instanciateComponent: MolAugmentedClassToAComponent.
 	manager homeServices activateComponent: MolAugmentedClassToAComponent.
 	
-	self assert: component componentName equals: #default.
+	self assert: component componentName equals: MolUtils defaultComponentName.
 	self assert: (component componentConnector isKindOf: MolComponentConnector).
 	self assert: component eventsNotifiers notEmpty.
 	self assert: component eventsSubscribers notEmpty.
 	self assert: component parametersProviders notEmpty.
 	self assert: component servicesProviders notEmpty.
 	
-	component forServices: MolServicesTest useProvider: #default. 
-	component forEvents: MolEventsTest useProducer: #default. 
-	component forParameters: MolParametersTest useProvider: #default.
+	component forServices: MolServicesTest useProvider: MolUtils defaultComponentName. 
+	component forEvents: MolEventsTest useProducer: MolUtils defaultComponentName. 
+	component forParameters: MolParametersTest useProvider: MolUtils defaultComponentName.
 ]
 
 { #category : #tests }
@@ -91,7 +91,7 @@ MolHomeServicesTest >> testInstanciateComponent [
 	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
 	component := manager homeServices instanciateComponent: MolCompleteComponentImpl.
 	
-	self assert: component componentName equals: #default.
+	self assert: component componentName equals: MolUtils defaultComponentName.
 	self assert: (component componentConnector isKindOf: MolComponentConnector).
 	self assert: component eventsNotifiers notEmpty.
 	self assert: component eventsSubscribers notEmpty.
@@ -212,7 +212,7 @@ MolHomeServicesTest >> testPassivateComponent [
 	manager homeServices activateComponent: MolCompleteComponentImpl.
 	manager homeServices passivateComponent: MolCompleteComponentImpl.
 	
-	self assert: component componentName equals: #default.
+	self assert: component componentName equals: MolUtils defaultComponentName.
 	self assert: (component componentConnector isKindOf: MolComponentConnector).
 	self assert: component eventsNotifiers notEmpty.
 	self assert: component eventsSubscribers notEmpty.

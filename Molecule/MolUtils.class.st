@@ -78,6 +78,13 @@ MolUtils class >> createAllComponents [
 	components keysDo: [ :aClass | homeServices activateComponent: aClass ]
 ]
 
+{ #category : #accessing }
+MolUtils class >> defaultComponentName [
+	"Used when a component instanciation is not nammed"
+
+	^ #default
+]
+
 { #category : #'quick lifecycle' }
 MolUtils class >> deployAndInitializeComponent: aComponentClass named: aName [
 	"auto deploy, and instanciate quickly a component and return the instance"
@@ -108,7 +115,8 @@ MolUtils class >> deployAndInitializeComponents: aComponentClassList [
 
 { #category : #accessing }
 MolUtils class >> instanceKindOf: aClass [
-	^self instanceKindOf: aClass named: #default
+
+	^ self instanceKindOf: aClass named: self defaultComponentName
 ]
 
 { #category : #accessing }
@@ -124,7 +132,8 @@ MolUtils class >> instanceKindOf: aClass named: aName [
 
 { #category : #accessing }
 MolUtils class >> instanceOf: aClass [
-	^ self instanceOf: aClass named: #default
+
+	^ self instanceOf: aClass named: self defaultComponentName
 ]
 
 { #category : #accessing }
@@ -142,7 +151,8 @@ MolUtils class >> isComponentOrComponentClass: anObject [
 
 { #category : #testing }
 MolUtils class >> isInstanciateComponentOf: aClass [
-	^ self isInstanciateComponentOf: aClass named: #default
+
+	^ self isInstanciateComponentOf: aClass named: self defaultComponentName
 ]
 
 { #category : #testing }
@@ -251,7 +261,7 @@ MolUtils class >> showInformation: aString [
 MolUtils class >> startComponent: aComponentClass [
 	"deploy, initialize and activate quickly a component and return the instance"
 	
-	^ self startComponent: aComponentClass named: #default
+	^ self startComponent: aComponentClass named: self defaultComponentName
 ]
 
 { #category : #'quick start and stop' }
@@ -280,7 +290,7 @@ MolUtils class >> startComponents: aComponentClassList [
 MolUtils class >> stopComponent: aComponentClass [
 	"passivate, remove and undeploy quickly a component"
 	
-	^ self stopComponent: aComponentClass named: #default
+	^ self stopComponent: aComponentClass named: self defaultComponentName
 ]
 
 { #category : #'quick start and stop' }
