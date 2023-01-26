@@ -10,9 +10,9 @@ Molecule support completely transparent class augmentation into component (not n
 
 ## Getting Started
 
-### Installing Molecule
+### Installing Molecule for the last Pharo
 
-Pharo 9, Pharo 10 and Pharo 11 (build 269+) : 
+Pharo 11 (build 459+) : 
 
 ```smalltalk
 Metacello new
@@ -21,9 +21,16 @@ Metacello new
    load.
 ```
 
-Pharo 8 : Last supported release for Pharo 8 is [1.2.6](https://github.com/OpenSmock/Molecule/tree/1.2.6), newer versions are not supported but may be works.
+### Looking for an older Pharo ?
 
-Pharo 6 and 7 : Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
+New releases of Molecule not support old Pharo versions (< 10), but may be works.
+Find below some Molecule branches for old Pharo versions. 
+
+[Pharo 9 and 10 - last release is 1.2.8](https://github.com/OpenSmock/Molecule/tree/Pharo9-10).
+
+[Pharo 8 - last release is 1.2.7](https://github.com/OpenSmock/Molecule/tree/Pharo8).
+
+[Pharo 6 and 7 - last release is 1.1.1](https://github.com/OpenSmock/Molecule/tree/Pharo6-7).
 
 ### Prerequisites
 
