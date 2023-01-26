@@ -28,7 +28,7 @@ MolSpBrowseComponentClasses >> initializePresenters [
 	table := self newTreeTable.
 	table addColumn: (SpCompositeTableColumn new
 			title: 'Double click on a class to browse it...';
-			addColumn: ((SpImageTableColumn evaluated: #systemIcon)
+			addColumn: ((SpImageTableColumn evaluated: [ :e | e iconNamed: e systemIconName])
 				width: 20;
 				yourself);
 			addColumn: (SpStringTableColumn evaluated: #name);
