@@ -225,7 +225,7 @@ MolComponentImplTest >> testForEventsRemoveAllProducers [
 	
 	component forEvents: MolUsedEvents removeAllProducers: #(#default #producerB #producerC).
 	self assert: component eventsSubscribers size equals: 1.
-	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName. "Cannot remove the component default name"
 	
 ]
 
@@ -252,13 +252,13 @@ MolComponentImplTest >> testForEventsRemoveProducer [
 
 { #category : #'test - connecting - events producers' }
 MolComponentImplTest >> testForEventsRemoveProducer2 [
-
+	"This test testing if case of remove a producer with the defaultComponentName, it is not done because of this is the basic configuration of a component event"
 	| component |
 	component := MolCompleteComponentImpl start: #myComponentA.
 	
 	component forEvents: MolUsedEvents removeProducer: MolUtils defaultComponentName.
 	self assert: component eventsSubscribers size equals: 1.
-	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName.
 ]
 
 { #category : #'test - connecting - events producers' }

@@ -310,6 +310,9 @@ MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 
 	| producers |
 	
+	"Cannot delete default component because this is the basic configuration of all events"
+	aComponentName = MolUtils defaultComponentName ifTrue:[ ^ self ].
+	
 	(anEventsTrait traits includes: MolComponentEvents) ifTrue: [
 		
 		producers := self eventsSubscribers at: anEventsTrait.
@@ -317,7 +320,7 @@ MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 		producers = aComponentName ifTrue:[ self eventsSubscribers at: anEventsTrait put: nil. ^ self ].
 		(producers isArray and:[producers includes: aComponentName]) ifTrue: [ | newProducers |
 			newProducers := producers asOrderedCollection copy.
-			newProducers remove: aComponentName. 
+			newProducers remove: aComponentName.
 			^ self forEvents: anEventsTrait useAllProducers: newProducers
 		].
 		

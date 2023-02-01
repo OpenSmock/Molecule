@@ -253,6 +253,32 @@ MolEventSubscriberTest >> testSubscribeANoStartedComponent [
 ]
 
 { #category : #test }
+MolEventSubscriberTest >> testSubscribeAddAndRemoveProducerAndUnsubscribe [
+	
+	| component |
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	component getMolUsedEventsSubscriber subscribe: self.
+	
+	component forEvents: MolUsedEvents addProducer: #default. "PLA : verifier que ça na pas dimpact"
+	component forEvents: MolUsedEvents removeProducer: #default. "PLA : verifier que le remove producer nest pas supprimé"
+	
+	component getMolUsedEventsSubscriber unsubscribe: self.
+]
+
+{ #category : #test }
+MolEventSubscriberTest >> testSubscribeAddAndRemoveProducerAndUnsubscribe2 [
+	
+	| component |
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	component getMolUsedEventsSubscriber subscribe: self.
+	
+	component forEvents: MolUsedEvents addProducer: #componentA.
+	component forEvents: MolUsedEvents removeProducer: #componentA.
+	
+	component getMolUsedEventsSubscriber unsubscribe: self.
+]
+
+{ #category : #test }
 MolEventSubscriberTest >> testUnsubscribe [
 	| eventSubscriber component |
 	component := MolUtils startComponent: MolCompleteComponentImpl.
