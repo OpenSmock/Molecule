@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - 'master'
+  pull_request:
+    branches:
+      - 'master'
 
 jobs:
   build:
@@ -13,13 +16,14 @@ jobs:
         smalltalk: [ Pharo64-11 ]
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.smalltalk }} on ${{ matrix.os }}
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - uses: hpi-swa/setup-smalltalkCI@v1
         with:
-          smalltalk-image: Pharo64-11
-      - run: smalltalkci -s ${{ matrix.smalltalk }}
+          smalltalk-image: ${{ matrix.smalltalk }}
+      - name: Load in New Image and Run Tests
+        run: smalltalkci -s ${{ matrix.smalltalk }} ${{ matrix.ston }}
         shell: bash
         timeout-minutes: 10
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
