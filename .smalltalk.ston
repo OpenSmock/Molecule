@@ -2,15 +2,7 @@ SmalltalkCISpec {
   #loading : [
     SCIMetacelloLoadSpec {
       #baseline : 'Molecule',
-      #directory : '',
       #platforms : [ #pharo ]
     }
   ]
-  // #testing : {
-    // Code coverage
-    // #coverage : {
-    //  #packages : [ 'Molecule', 'Molecule-IDE' ],
-    //  #format : #coveralls
-    // }
-  // }
 }
