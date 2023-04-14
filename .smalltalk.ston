@@ -5,12 +5,12 @@ SmalltalkCISpec {
       #directory : '',
       #platforms : [ #pharo ]
     }
-  ],
-  #testing : {
+  ]
+  // #testing : {
     // Code coverage
-    #coverage : {
-      #packages : [ 'Molecule', 'Molecule-IDE' ],
-      #format : #coveralls
-    }
-  }
+    // #coverage : {
+    //  #packages : [ 'Molecule', 'Molecule-IDE' ],
+    //  #format : #coveralls
+    // }
+  // }
 }
