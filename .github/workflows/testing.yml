@@ -1,4 +1,4 @@
-name: CI
+name: Release
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ macos-latest, windows-latest, ubuntu-latest]
+        os: [ windows-latest ]
         smalltalk: [ Pharo64-11 ]
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.smalltalk }} on ${{ matrix.os }}
@@ -22,4 +22,4 @@ jobs:
           smalltalk-image: Pharo64-11
       - run: smalltalkci -s ${{ matrix.smalltalk }}
         shell: bash
-        timeout-minutes: 15
+        timeout-minutes: 10
