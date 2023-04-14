@@ -1,0 +1,9 @@
+SmalltalkCISpec {
+  #loading : [
+    SCIMetacelloLoadSpec {
+      #baseline : 'Molecule',
+      #directory : ''
+      #platforms : [ #pharo ]
+    }
+  ]
+}
