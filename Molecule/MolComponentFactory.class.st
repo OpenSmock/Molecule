@@ -23,7 +23,7 @@ Class {
 { #category : #'component - contract management' }
 MolComponentFactory class >> addConsumedEvents: aComponentEvents in: aComponentType [
 	"Add a provided ComponentEvents in a ComponentType"
-	| declaredConsumedComponentEvents selector sourceCode |
+	| declaredConsumedComponentEvents |
 	
 	(aComponentEvents isNil or:[aComponentEvents isTrait not]) ifTrue:[^self].
 	aComponentEvents isComponentEvents ifFalse:[^self].
@@ -37,32 +37,13 @@ MolComponentFactory class >> addConsumedEvents: aComponentEvents in: aComponentT
 	declaredConsumedComponentEvents := aComponentType consumedComponentEvents asOrderedCollection.
 	declaredConsumedComponentEvents add: aComponentEvents.
 	
-	selector := 'consumedComponentEvents'.
-	sourceCode := WriteStream on: String new.
-	sourceCode nextPutAll: selector.
-	sourceCode crtab: 1.
-	sourceCode
-		nextPutAll: '<componentContract>';
-		crtab: 1;
-		"Empty : nextPutAll: '^ {}'."
-		nextPutAll: '^ {'.
-	1 to: (declaredConsumedComponentEvents size) do:[ :i |
-		sourceCode nextPutAll: ' ' , (declaredConsumedComponentEvents at: i) printString , ' '.
-		i < declaredConsumedComponentEvents size ifTrue:[sourceCode nextPutAll: '.'].
-	].
-	sourceCode nextPutAll: '}'.
-	
-	"Compile"
-	aComponentType class
-		compile: sourceCode contents 
-		classified: self protocolForComponentEvents.
-	
+	self compileContractSelector: 'consumedComponentEvents' protocol: self protocolForComponentEvents interfaces: declaredConsumedComponentEvents type: aComponentType
 ]
 
 { #category : #'component - contract management' }
 MolComponentFactory class >> addProducedEvents: aComponentEvents in: aComponentType [
 	"Add a provided ComponentEvents in a ComponentType"
-	| declaredProducedComponentEvents selector sourceCode |
+	| declaredProducedComponentEvents |
 
 	(aComponentEvents isNil or:[aComponentEvents isTrait not]) ifTrue:[^self].
 	aComponentEvents isComponentEvents ifFalse:[^self].
@@ -76,32 +57,13 @@ MolComponentFactory class >> addProducedEvents: aComponentEvents in: aComponentT
 	declaredProducedComponentEvents := aComponentType producedComponentEvents asOrderedCollection.
 	declaredProducedComponentEvents add: aComponentEvents.
 	
-	selector := 'producedComponentEvents'.
-	sourceCode := WriteStream on: String new.
-	sourceCode nextPutAll: selector.
-	sourceCode crtab: 1.
-	sourceCode
-		nextPutAll: '<componentContract>';
-		crtab: 1;
-		"Empty : nextPutAll: '^ {}'."
-		nextPutAll: '^ {'.
-	1 to: (declaredProducedComponentEvents size) do:[ :i |
-		sourceCode nextPutAll: ' ' , (declaredProducedComponentEvents at: i) printString , ' '.
-		i < declaredProducedComponentEvents size ifTrue:[sourceCode nextPutAll: '.'].
-	].
-	sourceCode nextPutAll: '}'.
-	
-	"Compile"
-	aComponentType class
-		compile: sourceCode contents 
-		classified: self protocolForComponentEvents.
-	
+	self compileContractSelector: 'producedComponentEvents' protocol: self protocolForComponentEvents interfaces: declaredProducedComponentEvents type: aComponentType
 ]
 
 { #category : #'component - contract management' }
 MolComponentFactory class >> addProvidedParameters: aComponentParameters in: aComponentType [
 	"Add a provided ComponentParameters in a ComponentType"
-	| declaredProvidedComponentParameters selector sourceCode |
+	| declaredProvidedComponentParameters |
 
 	(aComponentParameters isNil or:[aComponentParameters isTrait not]) ifTrue:[^self].
 	aComponentParameters isComponentParameters ifFalse:[^self].
@@ -115,32 +77,13 @@ MolComponentFactory class >> addProvidedParameters: aComponentParameters in: aCo
 	declaredProvidedComponentParameters := aComponentType providedComponentParameters asOrderedCollection.
 	declaredProvidedComponentParameters add: aComponentParameters.
 	
-	selector := 'providedComponentParameters'.
-	sourceCode := WriteStream on: String new.
-	sourceCode nextPutAll: selector.
-	sourceCode crtab: 1.
-	sourceCode
-		nextPutAll: '<componentContract>';
-		crtab: 1;
-		"Empty : nextPutAll: '^ {}'."
-		nextPutAll: '^ {'.
-	1 to: (declaredProvidedComponentParameters size) do:[ :i |
-		sourceCode nextPutAll: ' ' , (declaredProvidedComponentParameters at: i) printString , ' '.
-		i < declaredProvidedComponentParameters size ifTrue:[sourceCode nextPutAll: '.'].
-	].
-	sourceCode nextPutAll: '}'.
-	
-	"Compile"
-	aComponentType class
-		compile: sourceCode contents 
-		classified: self protocolForComponentParameters.
-	
+	self compileContractSelector: 'providedComponentParameters' protocol: self protocolForComponentParameters interfaces: declaredProvidedComponentParameters type: aComponentType
 ]
 
 { #category : #'component - contract management' }
 MolComponentFactory class >> addProvidedServices: aComponentServices in: aComponentType [
 	"Add a provided ComponentServices in a ComponentType"
-	| declaredProvidedComponentServices selector sourceCode |
+	| declaredProvidedComponentServices |
 	
 	(aComponentServices isNil or:[aComponentServices isTrait not]) ifTrue:[^self].
 	aComponentServices isComponentServices ifFalse:[^self].
@@ -154,32 +97,13 @@ MolComponentFactory class >> addProvidedServices: aComponentServices in: aCompon
 	declaredProvidedComponentServices := aComponentType providedComponentServices asOrderedCollection.
 	declaredProvidedComponentServices add: aComponentServices.
 	
-	selector := 'providedComponentServices'.
-	sourceCode := WriteStream on: String new.
-	sourceCode nextPutAll: selector.
-	sourceCode crtab: 1.
-	sourceCode
-		nextPutAll: '<componentContract>';
-		crtab: 1;
-		"Empty : nextPutAll: '^ {}'."
-		nextPutAll: '^ {'.
-	1 to: (declaredProvidedComponentServices size) do:[ :i |
-		sourceCode nextPutAll: ' ' , (declaredProvidedComponentServices at: i) printString , ' '.
-		i < declaredProvidedComponentServices size ifTrue:[sourceCode nextPutAll: '.'].
-	].
-	sourceCode nextPutAll: '}'.
-	
-	"Compile"
-	aComponentType class
-		compile: sourceCode contents 
-		classified: self protocolForComponentServices.
-	
+	self compileContractSelector: 'providedComponentServices' protocol: self protocolForComponentServices interfaces: declaredProvidedComponentServices type: aComponentType
 ]
 
 { #category : #'component - contract management' }
 MolComponentFactory class >> addUsedParameters: aComponentParameters in: aComponentType [
 	"Add a provided ComponentParameters in a ComponentType"
-	| declaredUsedComponentParameters selector sourceCode |
+	| declaredUsedComponentParameters |
 	
 	(aComponentParameters isNil or:[aComponentParameters isTrait not]) ifTrue:[^self].
 	aComponentParameters isComponentParameters ifFalse:[^self].
@@ -193,32 +117,13 @@ MolComponentFactory class >> addUsedParameters: aComponentParameters in: aCompon
 	declaredUsedComponentParameters := aComponentType usedComponentParameters asOrderedCollection.
 	declaredUsedComponentParameters add: aComponentParameters.
 	
-	selector := 'usedComponentParameters'.
-	sourceCode := WriteStream on: String new.
-	sourceCode nextPutAll: selector.
-	sourceCode crtab: 1.
-	sourceCode
-		nextPutAll: '<componentContract>';
-		crtab: 1;
-		"Empty : nextPutAll: '^ {}'."
-		nextPutAll: '^ {'.
-	1 to: (declaredUsedComponentParameters size) do:[ :i |
-		sourceCode nextPutAll: ' ' , (declaredUsedComponentParameters at: i) printString , ' '.
-		i < declaredUsedComponentParameters size ifTrue:[sourceCode nextPutAll: '.'].
-	].
-	sourceCode nextPutAll: '}'.
-	
-	"Compile"
-	aComponentType class
-		compile: sourceCode contents 
-		classified: self protocolForComponentParameters.
-	
+	self compileContractSelector: 'usedComponentParameters' protocol: self protocolForComponentServices interfaces: declaredUsedComponentParameters type: aComponentType
 ]
 
 { #category : #'component - contract management' }
 MolComponentFactory class >> addUsedServices: aComponentServices in: aComponentType [
 	"Add a provided ComponentServices in a ComponentType"
-	| declaredUsedComponentServices selector sourceCode |
+	| declaredUsedComponentServices |
 	
 	(aComponentServices isNil or:[aComponentServices isTrait not]) ifTrue:[^self].
 	aComponentServices isComponentServices ifFalse:[^self].
@@ -232,26 +137,7 @@ MolComponentFactory class >> addUsedServices: aComponentServices in: aComponentT
 	declaredUsedComponentServices := aComponentType usedComponentServices asOrderedCollection.
 	declaredUsedComponentServices add: aComponentServices.
 	
-	selector := 'usedComponentServices'.
-	sourceCode := WriteStream on: String new.
-	sourceCode nextPutAll: selector.
-	sourceCode crtab: 1.
-	sourceCode
-		nextPutAll: '<componentContract>';
-		crtab: 1;
-		"Empty : nextPutAll: '^ {}'."
-		nextPutAll: '^ {'.
-	1 to: (declaredUsedComponentServices size) do:[ :i |
-		sourceCode nextPutAll: ' ' , (declaredUsedComponentServices at: i) printString , ' '.
-		i < declaredUsedComponentServices size ifTrue:[sourceCode nextPutAll: '.'].
-	].
-	sourceCode nextPutAll: '}'.
-	
-	"Compile"
-	aComponentType class
-		compile: sourceCode contents 
-		classified: self protocolForComponentServices.
-	
+	self compileContractSelector: 'usedComponentServices' protocol: self protocolForComponentServices interfaces: declaredUsedComponentServices type: aComponentType
 ]
 
 { #category : #accessing }
@@ -261,6 +147,38 @@ MolComponentFactory class >> cleanUp [
 	Default ifNil: [ ^ self ].
 	Default release.
 	Default := nil
+]
+
+{ #category : #'component - contract management' }
+MolComponentFactory class >> compileContractSelector: aSelector protocol: aProtocol interfaces: interfaceList type: aComponentType [
+	| sourceCode |
+
+	sourceCode := WriteStream on: String new.
+	sourceCode nextPutAll: aSelector.
+	sourceCode crtab: 1.
+	sourceCode
+		nextPutAll: '<componentContract>';
+		crtab: 1;
+		nextPutAll: '^ {'.
+		
+	1 to: (interfaceList size) do:[ :i |
+		sourceCode nextPutAll: ' ' , (interfaceList at: i) printString , ' '.
+		i < interfaceList size ifTrue:[sourceCode nextPutAll: '.'].
+	].
+
+	sourceCode nextPutAll: '}'.
+	
+	"Compile"
+	aComponentType class
+		compile: sourceCode contents 
+		classified: aProtocol.
+	
+]
+
+{ #category : #pragma }
+MolComponentFactory class >> componentContractPragma [
+
+	^#componentContract
 ]
 
 { #category : #'component - creation' }
@@ -481,10 +399,15 @@ MolComponentFactory >> collectComponentConnectionTraits: aComponentOrAComponentC
 
 { #category : #announcements }
 MolComponentFactory >> componentAddedAnnouncement: anAnnouncement [
+	
+	anAnnouncement ifNil: [ 
+		^ self error: '[Molecule] Error on added Component notification.'.
+	].
 
-	| classOrTraitAdded |
-	classOrTraitAdded := anAnnouncement classAdded.
-	self componentChanged: classOrTraitAdded
+	anAnnouncement classAdded ifNotNil:[ :c | 
+		self componentChanged: c	
+	]
+	
 ]
 
 { #category : #announcements }
@@ -498,11 +421,11 @@ MolComponentFactory >> componentChanged: aChangedClass [
 		"We need to wait because of the changedClass should be removed and become obsolete"
 		self flag:'PLA : This is a patch because of Molecule need not yet existing pharo system flags, warning : if a new fork is started on the same object there is a concurrency access risk, if necessary write some code to control a fork stack for each objects'.
 		
-		[(Delay forMilliseconds: 25) wait. 
+		"[(Delay forMilliseconds: 25) wait. "
 		
 		aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]
 		
-		] forkAt: Processor highIOPriority named: 'Molecule component changed'.
+		"] forkAt: Processor highIOPriority named: 'Molecule component changed'."
 	
 	] ifFalse: [ dirtyComponents add: aChangedClass].
 ]
@@ -531,25 +454,25 @@ MolComponentFactory >> contractChanged: aComponentType [
 		"need to fork the definition because new traits are not already injected here to the component"
 		self flag:'PLA : This is a patch because of Molecule need not yet existing pharo system flags, warning : if a new fork is started on the same object there is a concurrency access risk, if necessary write some code to control a fork stack for each objects'.
 		
-		[(Delay forMilliseconds: 25) wait. 
+		"[(Delay forMilliseconds: 25) wait. "
 		
 		aComponentType isObsolete ifFalse:[self defineComponentTypeImplementors: aComponentType]
 		
-		] forkAt: Processor highIOPriority named: 'Molecule contract changed'.
+		"] forkAt: Processor highIOPriority named: 'Molecule contract changed'."
 	
 	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
 ]
 
 { #category : #announcements }
 MolComponentFactory >> contractChangedAnnouncement: aPragmaAnnouncement [
-	| aComponentType |
 	
 	(aPragmaAnnouncement isNil or:[aPragmaAnnouncement pragma isNil or:[aPragmaAnnouncement pragma method isNil or:[aPragmaAnnouncement pragma method methodClass isNil]]]) ifTrue:[
 		^ self error: '[Molecule] Error on changed contract announcement.' 		
 	].
 
-	aComponentType := aPragmaAnnouncement pragma method methodClass instanceSide.
-	self contractChanged: aComponentType.
+	aPragmaAnnouncement pragma method methodClass instanceSide ifNotNil:[ :type |
+		self contractChanged: type.
+	].
 ]
 
 { #category : #'dynamic contract update' }
@@ -833,8 +756,13 @@ MolComponentFactory >> initialize [
 { #category : #'initialize - release' }
 MolComponentFactory >> initializePragmaAnnouncements [
 	"Component Type Observer"
-	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = #componentContract ]) reset.
-	pragmaCollector announcer when: PragmaAnnouncement send: #contractChangedAnnouncement: to: self.
+	
+	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = self class componentContractPragma ]) reset.
+	
+	pragmaCollector announcer 
+		when: PragmaAnnouncement 
+		send: #contractChangedAnnouncement: 
+		to: self.
 ]
 
 { #category : #'initialize - release' }
