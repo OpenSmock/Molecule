@@ -480,10 +480,10 @@ MolComponentFactory >> collectComponentConnectionTraits: aComponentOrAComponentC
 ]
 
 { #category : #announcements }
-MolComponentFactory >> componentAddedAnnouncement: aClassAddedAnnouncement [
+MolComponentFactory >> componentAddedAnnouncement: anAnnouncement [
 
 	| classOrTraitAdded |
-	classOrTraitAdded := aClassAddedAnnouncement classAdded.
+	classOrTraitAdded := anAnnouncement classAdded.
 	self componentChanged: classOrTraitAdded
 ]
 
@@ -497,18 +497,24 @@ MolComponentFactory >> componentChanged: aChangedClass [
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"We need to wait because of the changedClass should be removed and become obsolete"
 		self flag:'PLA : This is a patch because of Molecule need not yet existing pharo system flags, warning : if a new fork is started on the same object there is a concurrency access risk, if necessary write some code to control a fork stack for each objects'.
-		[(Delay forMilliseconds: 25) wait. aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]] forkAt: Processor highIOPriority.
+		
+		[(Delay forMilliseconds: 25) wait. 
+		
+		aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]
+		
+		] forkAt: Processor highIOPriority named: 'Molecule component changed'.
+	
 	] ifFalse: [ dirtyComponents add: aChangedClass].
 ]
 
 { #category : #announcements }
-MolComponentFactory >> componentChangedAnnouncement: aClassModifiedClassDefinitionAnnouncement [
+MolComponentFactory >> componentChangedAnnouncement: anAnnouncement [
 
-	aClassModifiedClassDefinitionAnnouncement ifNil: [ 
+	anAnnouncement ifNil: [ 
 		^ self error: '[Molecule] Error on modified Component notification.'.
 	].
 	
-	aClassModifiedClassDefinitionAnnouncement newClassDefinition ifNotNil: [ :c |
+	anAnnouncement classAffected ifNotNil: [ :c |
 		c isObsolete ifFalse:[self componentChanged: c].
 	].
 ]
@@ -524,7 +530,13 @@ MolComponentFactory >> contractChanged: aComponentType [
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		"need to fork the definition because new traits are not already injected here to the component"
 		self flag:'PLA : This is a patch because of Molecule need not yet existing pharo system flags, warning : if a new fork is started on the same object there is a concurrency access risk, if necessary write some code to control a fork stack for each objects'.
-		[(Delay forMilliseconds: 25) wait. aComponentType isObsolete ifFalse:[self defineComponentTypeImplementors: aComponentType]] forkAt: Processor highIOPriority.
+		
+		[(Delay forMilliseconds: 25) wait. 
+		
+		aComponentType isObsolete ifFalse:[self defineComponentTypeImplementors: aComponentType]
+		
+		] forkAt: Processor highIOPriority named: 'Molecule contract changed'.
+	
 	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
 ]
 
@@ -837,7 +849,8 @@ MolComponentFactory >> initializeSystemAnnouncements [
 
 	"Component Implementation Observer"
 	announcer when: ClassAdded send: #componentAddedAnnouncement: to: self.
-	announcer when: ClassModifiedClassDefinition send: #componentChangedAnnouncement: to: self.
+	"announcer when: ClassModifiedClassDefinition send: #componentChangedAnnouncement: to: self."
+	announcer when: ClassModificationApplied send: #componentChangedAnnouncement: to: self.
 
 	"Monticello events"
 	announcer when: #MCVersionLoaderStarted send: #deactivateDynamicContractUpdate: to: self with: false.
