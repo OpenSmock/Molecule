@@ -3,6 +3,7 @@
 ![Molecule Logo](MoleculeBanner.jpg)
 
 [![Build](https://github.com/OpenSmock/Molecule/actions/workflows/build.yml/badge.svg)](https://github.com/OpenSmock/Molecule/actions/workflows/build.yml)
+[![Continuous Release](https://github.com/OpenSmock/Molecule/actions/workflows/continuous.yml/badge.svg)](https://github.com/OpenSmock/Molecule/actions/workflows/continuous.yml)
 
 Molecule is a component oriented framework for Pharo. 
 His Component architecture approach provide an adapted structuration to graphic user interface (GUI) or another software application wich need Component features.
