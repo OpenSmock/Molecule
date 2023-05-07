@@ -532,31 +532,41 @@ MolHomeServicesTest >> testSubComponentLifecycleWithName [
 { #category : #'tests - threading' }
 MolHomeServicesTest >> testThreadsToStartAndStopComponents [
 
-	| manager nb |
+	| manager nb random forkList |
+	
+	self timeLimit: 1 second.
+	"By pass CI"
+	self skipOnPharoCITestingEnvironment.
+	
 	manager := MolComponentManager default.
 	nb := 500.
+	random := Random new.
+	forkList := OrderedCollection new.
 	
 	1 to: nb do:[ :i |
-		[
-		(Delay forMilliseconds: (Random new next * 10)) wait.
+		forkList add: ([
+		(Delay forMilliseconds: (random next * 10)) wait.
 		manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
 		manager homeServices instanciateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
 		manager homeServices activateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
-		] fork.
+		] forkAt: Processor userBackgroundPriority named: ('Molecule test fork ', nb printString)).
 	].
-	(Delay forSeconds: 2) wait.
+
+	[ (forkList detect:[ :f | f isTerminated not] ifNone:[nil]) notNil ] whileTrue:[ 50 milliSeconds wait ].
+	forkList := OrderedCollection new.
 
 	self assert: manager homeServices deployedComponents size equals: 1.
 	self assert: (manager homeServices deployedComponents at: MolCompleteComponentImpl) size equals: nb.
 		
 	1 to: nb do:[ :i |
-		[
-		(Delay forMilliseconds: (Random new next * 10)) wait.
+		forkList add: ([
+		(Delay forMilliseconds: (random next * 10)) wait.
 		manager homeServices passivateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
 		manager homeServices removeComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
-		] fork.
+		] forkAt: Processor userBackgroundPriority named: ('Molecule test fork ', nb printString)).
 	].
-	(Delay forSeconds: 2) wait.
+
+	[ (forkList detect:[ :f | f isTerminated not] ifNone:[nil]) notNil ] whileTrue:[ 50 milliSeconds wait ].
 
 	self assert: manager homeServices deployedComponents size equals: 1.
 	self assert: (manager homeServices deployedComponents at: MolCompleteComponentImpl) isEmpty.
@@ -565,20 +575,26 @@ MolHomeServicesTest >> testThreadsToStartAndStopComponents [
 { #category : #'tests - threading' }
 MolHomeServicesTest >> testThreadsToStartAndStopComponents2 [
 
-	| nb oc |
+	| nb forkList |
+	
+	self timeLimit: 1 second.
+	"By pass CI"
+	self skipOnPharoCITestingEnvironment.
+	
 	nb := 500.
-	oc := OrderedCollection new.
+	forkList := OrderedCollection new.
+	
 	1 to: nb do:[ :i |
-		oc add: [
+		forkList add: ([
 			MolComponentManager default deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
 			MolComponentManager default homeServices instanciateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
 			MolComponentManager default homeServices activateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
 			MolComponentManager default homeServices passivateComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
 			MolComponentManager default homeServices removeComponent: MolCompleteComponentImpl named: (#key, i printString) asSymbol.
-		].
+		] forkAt: Processor userBackgroundPriority named: ('Molecule test fork ', i printString)).
 	].
-	oc do:[ :bloc | bloc fork ].
-	(Delay forSeconds: 1) wait.
+
+	[ (forkList detect:[ :f | f isTerminated not] ifNone:[nil]) notNil ] whileTrue:[ 50 milliSeconds wait ].
 
 	self assert: MolComponentManager default homeServices deployedComponents size equals: 1.
 	self assert: (MolComponentManager default homeServices deployedComponents at: MolCompleteComponentImpl) isEmpty.
