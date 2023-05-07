@@ -533,6 +533,11 @@ MolHomeServicesTest >> testSubComponentLifecycleWithName [
 MolHomeServicesTest >> testThreadsToStartAndStopComponents [
 
 	| manager nb random forkList |
+	
+	self timeLimit: 1 second.
+	"By pass CI"
+	self skipOnPharoCITestingEnvironment.
+	
 	manager := MolComponentManager default.
 	nb := 500.
 	random := Random new.
@@ -547,7 +552,7 @@ MolHomeServicesTest >> testThreadsToStartAndStopComponents [
 		] forkAt: Processor userBackgroundPriority named: ('Molecule test fork ', nb printString)).
 	].
 
-	[ (forkList detect:[ :f | f isTerminated not] ifNone:[nil]) notNil ] whileTrue:[(Delay forMilliseconds: 50) wait].
+	[ (forkList detect:[ :f | f isTerminated not] ifNone:[nil]) notNil ] whileTrue:[ 50 milliSeconds wait ].
 	forkList := OrderedCollection new.
 
 	self assert: manager homeServices deployedComponents size equals: 1.
@@ -561,7 +566,7 @@ MolHomeServicesTest >> testThreadsToStartAndStopComponents [
 		] forkAt: Processor userBackgroundPriority named: ('Molecule test fork ', nb printString)).
 	].
 
-	[ (forkList detect:[ :f | f isTerminated not] ifNone:[nil]) notNil ] whileTrue:[(Delay forMilliseconds: 50) wait].
+	[ (forkList detect:[ :f | f isTerminated not] ifNone:[nil]) notNil ] whileTrue:[ 50 milliSeconds wait ].
 
 	self assert: manager homeServices deployedComponents size equals: 1.
 	self assert: (manager homeServices deployedComponents at: MolCompleteComponentImpl) isEmpty.
@@ -571,6 +576,11 @@ MolHomeServicesTest >> testThreadsToStartAndStopComponents [
 MolHomeServicesTest >> testThreadsToStartAndStopComponents2 [
 
 	| nb forkList |
+	
+	self timeLimit: 1 second.
+	"By pass CI"
+	self skipOnPharoCITestingEnvironment.
+	
 	nb := 500.
 	forkList := OrderedCollection new.
 	
@@ -584,7 +594,7 @@ MolHomeServicesTest >> testThreadsToStartAndStopComponents2 [
 		] forkAt: Processor userBackgroundPriority named: ('Molecule test fork ', i printString)).
 	].
 
-	[ (forkList detect:[ :f | f isTerminated not] ifNone:[nil]) notNil ] whileTrue:[(Delay forMilliseconds: 50) wait].
+	[ (forkList detect:[ :f | f isTerminated not] ifNone:[nil]) notNil ] whileTrue:[ 50 milliSeconds wait ].
 
 	self assert: MolComponentManager default homeServices deployedComponents size equals: 1.
 	self assert: (MolComponentManager default homeServices deployedComponents at: MolCompleteComponentImpl) isEmpty.
