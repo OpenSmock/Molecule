@@ -1,4 +1,4 @@
-name: 'Continuous Release'
+name: Continuous Release
 
 on:
   push:
@@ -10,12 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_NAME: Molecule-${{ matrix.smalltalk }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
         smalltalk: [ Pharo64-11 ]
     name: ${{ matrix.smalltalk }}
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - uses: hpi-swa/setup-smalltalkCI@v1
