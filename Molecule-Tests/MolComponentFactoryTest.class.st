@@ -111,12 +111,6 @@ MolComponentFactoryTest >> generationTag [
 	^'Molecule-Tests-Resources - Generated'
 ]
 
-{ #category : #utils }
-MolComponentFactoryTest >> longWait [
-
-	(Delay forMilliseconds: 2000) wait.
-]
-
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUp [
 
@@ -170,12 +164,6 @@ MolComponentFactoryTest >> setUpComponentAndType [
 	edited ifTrue:[(Delay forMilliseconds: 100) wait].
 ]
 
-{ #category : #utils }
-MolComponentFactoryTest >> smallWait [
-
-	(Delay forMilliseconds: 10) wait.
-]
-
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> tearDown [
 
@@ -223,24 +211,20 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: self generationTag.
 	
 	"Waiting for event callback"
-	self smallWait.
 	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedComponentClass)).
 	MolComponentFactory default dirtyComponents removeAll.
 	
 	"add the type manually to the created component"
 	self generatedComponentClass setTraitComposition: MolCompleteComponent.
 	"Waiting for event callback"
-	self smallWait.
 	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedComponentClass)).
 	MolComponentFactory default dirtyComponents removeAll.
 	
 	"remove the testing class, and create a new component with Type, check if the component in on the dirty components list"
  	(self class environment at: self generatedComponentClassSymbolName) removeFromSystem.
-	self smallWait.
 	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationTag.
 	
 	"Waiting for event callback"
-	self smallWait.
 	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedComponentClass)).
 	MolComponentFactory default dirtyComponents removeAll.
 	
@@ -270,9 +254,6 @@ MolComponentFactoryTest >> testComponentContractChanged [
 		s nextPutAll: '^{ }'.
 	].
 	MolCompleteComponent class compile: source.
-	
-	"Waiting for event callback"
-	self smallWait.
 	
 	self assert: (MolComponentFactory default dirtyComponentTypes includes: MolCompleteComponent).
 		
@@ -906,7 +887,6 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
 	class addToComposition: self generatedComponentTypeTrait.
 	
-	self smallWait.
 	self assert: (class canPerform: #methodOfNoComponentTrait).
 ]
 
@@ -939,11 +919,9 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
-	self longWait.
 	
 	"Add a trait"
 	componentClass addToComposition: MolTestNoComponentTraitA.
-	self longWait.
 	
 	self assert: (componentClass canPerform: #methodOfNoComponentTrait).
 	self assert: (componentClass traitComposition members size) equals: 5.
@@ -987,11 +965,9 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlt
 	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
-	
-	self longWait.
  
 	self assert: (componentClass canPerform: #methodOfNoComponentTrait).
-	self assert: (componentClass traitComposition members size = 5).
+	self assert: (componentClass traitComposition members size) equals: 5.
 	self assert: (componentClass traitComposition includesTrait: MolTestNoComponentTraitA).
 	self assert: (componentClass traitComposition includesTrait: MolComponentType).
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentServicesTrait).
@@ -1030,8 +1006,6 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	
-	self longWait.
-	
 	"Check generated methods"
 	self assert: (componentClass canPerform: #getMolTestGeneratedComponentServicesProvider).
 	self assert: (componentClass canPerform: #getMolTestGeneratedComponentParametersProvider).
@@ -1044,8 +1018,6 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	self createInstanceMethod: 'testGeneratedParameterB' in: self generatedComponentParametersTrait protocol: 'parameters' withCode: nil.
 	self createInstanceMethod: 'testGeneratedEventA' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 	self createInstanceMethod: 'testGeneratedEventB' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
-
-	self longWait.
 	
 	"Check generated methods"
 	self assert: (componentClass canPerform: #testGeneratedServiceA).
@@ -1091,8 +1063,6 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 
 	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationTag.
 	componentClass := self class environment at: componentClassNameSymbol.
-
-	self longWait.
 	
 	"Check generated methods"
 	self assert: (componentClass canPerform: #getMolTestGeneratedComponentServicesProvider).
@@ -1136,8 +1106,6 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative3 [
 	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
-	
-	self longWait.
 	
 	"Check generated methods"
 	self assert: (componentClass canPerform: #getMolTestGeneratedComponentServicesProvider).
@@ -1183,14 +1151,10 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
-	
-	self longWait.
 
 	self assert: componentClass traitComposition members size equals: 4.
 	
 	componentClass removeFromComposition: self generatedComponentTypeTrait.
-
-	self longWait.
 
 	self assert: componentClass traitComposition isEmpty.
 		
