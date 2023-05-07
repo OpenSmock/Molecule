@@ -45,6 +45,7 @@ MolCompleteComponent classSide >> usedComponentParameters [
 
 { #category : #'accessing - services' }
 MolCompleteComponent classSide >> usedComponentServices [
+
 	<componentContract>
 	^ { MolUsedServices }
 ]
