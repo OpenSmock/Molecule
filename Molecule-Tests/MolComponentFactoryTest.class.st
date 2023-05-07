@@ -184,7 +184,7 @@ MolComponentFactoryTest >> tearDown [
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testCollectComponentConnectionTraits [
 	| traits |
 	traits := MolComponentFactory default collectComponentConnectionTraits: nil.
@@ -209,7 +209,7 @@ MolComponentFactoryTest >> testCollectComponentConnectionTraits [
 	self assert: (traits includes: MolUsedParameters).
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	"Create a class, edit this class from different ways and check if the factory define the component or not"
 	| isDynamicContractUpdateActivated |
@@ -250,7 +250,7 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testComponentContractChanged [
 	"Create a class, edit this class from different ways and check if the factory define the component or not"
 	| isDynamicContractUpdateActivated methodName source |
@@ -283,7 +283,7 @@ MolComponentFactoryTest >> testComponentContractChanged [
 	
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testComponentFactoryDefaultClass [
 	MolComponentFactory cleanUp.
 
@@ -711,12 +711,87 @@ MolComponentFactoryTest >> testCreateEmptyComponentServices [
 	
 ]
 
-{ #category : #test }
+{ #category : #tests }
+MolComponentFactoryTest >> testCreateSourceCodeContractSelector [
+
+	| interfaces sourceCode toBeGenerated |
+	
+	self testCreateComponentType.
+	
+	interfaces := self generatedComponentTypeTrait consumedComponentEvents asOrderedCollection.
+	interfaces add: #MolTestGeneratedComponentEvents.
+	
+	sourceCode := MolComponentFactory 
+		createSourceCodeContractSelector: 'consumedComponentEvents' 
+		protocol: MolComponentFactory protocolForComponentEvents
+		interfaces: interfaces
+		type: self generatedComponentTypeTrait.
+	
+	toBeGenerated := 'consumedComponentEvents
+
+	<componentContract>
+	^ { #MolTestGeneratedComponentEvents }'.
+	
+	self assert: sourceCode contents equals: toBeGenerated.
+]
+
+{ #category : #tests }
+MolComponentFactoryTest >> testCreateSourceCodeContractSelector2 [
+	"Test with multiple interfaces"
+
+	| interfaces sourceCode toBeGenerated |
+	
+	self testCreateComponentType.
+	
+	interfaces := self generatedComponentTypeTrait consumedComponentEvents asOrderedCollection.
+	interfaces add: #MolTestGeneratedComponentEvents.
+	interfaces add: #MolUsedEvents.
+	interfaces add: #MolUsedChildEvents.
+	
+	sourceCode := MolComponentFactory 
+		createSourceCodeContractSelector: 'consumedComponentEvents' 
+		protocol: MolComponentFactory protocolForComponentEvents
+		interfaces: interfaces
+		type: self generatedComponentTypeTrait.
+	
+	toBeGenerated := 'consumedComponentEvents
+
+	<componentContract>
+	^ { #MolTestGeneratedComponentEvents . #MolUsedEvents . #MolUsedChildEvents }'.
+	
+	self assert: sourceCode contents equals: toBeGenerated.
+]
+
+{ #category : #tests }
+MolComponentFactoryTest >> testCreateSourceCodeContractSelector3 [
+	"Test without interfaces"
+
+	| interfaces sourceCode toBeGenerated |
+	
+	self testCreateComponentType.
+	
+	interfaces := {}.
+	
+	sourceCode := MolComponentFactory 
+		createSourceCodeContractSelector: 'consumedComponentEvents' 
+		protocol: MolComponentFactory protocolForComponentEvents
+		interfaces: interfaces
+		type: self generatedComponentTypeTrait.
+	
+	toBeGenerated := 'consumedComponentEvents
+
+	<componentContract>
+	^ {}'.
+	
+	self assert: sourceCode contents equals: toBeGenerated.
+]
+
+{ #category : #tests }
 MolComponentFactoryTest >> testDefineAllComponents [
 	MolComponentFactory defineAllComponents.
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testDefineComponent [
 	"The Factory can define only Component Classes"
 	MolComponentFactory defineComponent: nil.
@@ -730,7 +805,7 @@ MolComponentFactoryTest >> testDefineComponent [
 	MolComponentFactory defineComponent: MolCompleteComponent.
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testDefineComponentTypeImplementors [
 	MolComponentFactory default defineComponentTypeImplementors: nil.
 	
@@ -743,7 +818,7 @@ MolComponentFactoryTest >> testDefineComponentTypeImplementors [
 	MolComponentFactory default defineComponentTypeImplementors: MolCompleteComponent.
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testDefineDirtyComponents [
 	self assert: MolComponentFactory default dirtyComponentTypes isEmpty.
 
@@ -758,7 +833,7 @@ MolComponentFactoryTest >> testDefineDirtyComponents [
 	self assert: MolComponentFactory default dirtyComponents isEmpty.
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testDynamicContractUpdateActivation [
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
 	
@@ -769,7 +844,7 @@ MolComponentFactoryTest >> testDynamicContractUpdateActivation [
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testDynamicContractUpdateActivation2 [
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
 	
@@ -782,28 +857,28 @@ MolComponentFactoryTest >> testDynamicContractUpdateActivation2 [
 	
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testGenerateConsumedEventComponentAccessorsFor [
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsSubscriber.
 	MolComponentFactory default generateOrRemoveConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsSubscriber).
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testGenerateProducedEventComponentAccessorsFor [
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsNotifier.
 	MolComponentFactory default generateOrRemoveProducedEventsComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsNotifier).
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testGenerateUsedParametersComponentAccessorsFor [
 	MolCompleteComponentImpl removeSelector: #getMolUsedParametersProvider.
 	MolComponentFactory default generateOrRemoveUsedParametersComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedParametersProvider).
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolComponentFactoryTest >> testGenerateUsedServicesComponentAccessorsFor [
 	MolCompleteComponentImpl removeSelector: #getMolUsedServicesProvider.
 	MolComponentFactory default generateOrRemoveUsedServicesComponentAccessorsFor: MolCompleteComponentImpl.

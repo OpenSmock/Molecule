@@ -151,32 +151,19 @@ MolComponentFactory class >> cleanUp [
 
 { #category : #'component - contract management' }
 MolComponentFactory class >> compileContractSelector: aSelector protocol: aProtocol interfaces: interfaceList type: aComponentType [
+	"Compile Component Type contract description method into a class selector, this method return an array of Molecule interfaces (Traits as Services or Events)"
 	| sourceCode |
 
-	sourceCode := WriteStream on: String new.
-	sourceCode nextPutAll: aSelector.
-	sourceCode crtab: 1.
-	sourceCode
-		nextPutAll: '<componentContract>';
-		crtab: 1;
-		nextPutAll: '^ {'.
-		
-	1 to: (interfaceList size) do:[ :i |
-		sourceCode nextPutAll: ' ' , (interfaceList at: i) printString , ' '.
-		i < interfaceList size ifTrue:[sourceCode nextPutAll: '.'].
-	].
-
-	sourceCode nextPutAll: '}'.
+	sourceCode := self createSourceCodeContractSelector: aSelector protocol: aProtocol interfaces: interfaceList type: aComponentType.
 	
 	"Compile"
 	aComponentType class
 		compile: sourceCode contents 
-		classified: aProtocol.
-	
+		classified: aProtocol
 ]
 
 { #category : #pragma }
-MolComponentFactory class >> componentContractPragma [
+MolComponentFactory class >> componentContractPragmaSymbol [
 
 	^#componentContract
 ]
@@ -284,6 +271,32 @@ MolComponentFactory class >> createComponentType: aSymbol in: aPackageName [
 	uses: MolComponentType
 	package: ''' , aPackageName , ''''.
 	
+]
+
+{ #category : #'component - contract management' }
+MolComponentFactory class >> createSourceCodeContractSelector: aSelector protocol: aProtocol interfaces: interfaceList type: aComponentType [
+	"Create source code for Component Type contract description method into a class selector, this method return an array of Molecule interfaces (Traits as Services or Events)"
+	| sourceCode |
+
+	sourceCode := WriteStream on: String new.
+	sourceCode nextPutAll: aSelector.
+	sourceCode cr.
+	sourceCode crtab: 1.
+	sourceCode
+		nextPutAll: '<componentContract>';
+		crtab: 1;
+		nextPutAll: '^ {'.
+		
+	1 to: (interfaceList size) do:[ :i |
+		sourceCode nextPutAll: ' '.
+		sourceCode nextPutAll: (interfaceList at: i) printString.
+		sourceCode nextPutAll: ' '.
+		i < interfaceList size ifTrue:[sourceCode nextPutAll: '.'].
+	].
+
+	sourceCode nextPutAll: '}'.
+	
+	^ sourceCode
 ]
 
 { #category : #accessing }
@@ -757,7 +770,7 @@ MolComponentFactory >> initialize [
 MolComponentFactory >> initializePragmaAnnouncements [
 	"Component Type Observer"
 	
-	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = self class componentContractPragma ]) reset.
+	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = self class componentContractPragmaSymbol ]) reset.
 	
 	pragmaCollector announcer 
 		when: PragmaAnnouncement 
