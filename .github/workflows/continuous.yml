@@ -39,6 +39,6 @@ jobs:
       - name: Update release
         uses: johnwbyrd/update-release@v1.0.0
         with:
-          release: 'Continuous Release'
+          release: 'continuous'
           token: ${{ secrets.GITHUB_TOKEN }}
           files: ${{ env.PROJECT_NAME }}.zip
