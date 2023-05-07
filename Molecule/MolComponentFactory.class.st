@@ -152,14 +152,25 @@ MolComponentFactory class >> cleanUp [
 { #category : #'component - contract management' }
 MolComponentFactory class >> compileContractSelector: aSelector protocol: aProtocol interfaces: interfaceList type: aComponentType [
 	"Compile Component Type contract description method into a class selector, this method return an array of Molecule interfaces (Traits as Services or Events)"
-	| sourceCode |
+	| sourceCode selector previousMethodOrNil newMethod |
 
+	"Get the previous method or nil"
+	previousMethodOrNil := aComponentType class compiledMethodAt:( aSelector asSymbol) ifAbsent: [ nil ].
+
+	"Get the new source code"
 	sourceCode := self createSourceCodeContractSelector: aSelector protocol: aProtocol interfaces: interfaceList type: aComponentType.
 	
-	"Compile"
-	aComponentType class
+	"Compile the new method"
+	selector := aComponentType class
 		compile: sourceCode contents 
-		classified: aProtocol
+		classified: aProtocol.
+	
+	"Notify pragma change after Trait compilation to be sure that the compiled method is applied to Trait users"
+	newMethod := aComponentType class compiledMethodAt: selector.
+	SystemAnnouncer uniqueInstance
+		methodChangedFrom: previousMethodOrNil
+		to: newMethod
+		oldProtocol: aProtocol
 ]
 
 { #category : #pragma }

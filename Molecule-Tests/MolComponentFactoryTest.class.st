@@ -305,7 +305,7 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	- Add a TraitB in the Component B, check if it only on B
 	- Add a TraitC in the Component C, check if it only on C
 	"
-	"self timeLimit: (Duration seconds: 15)."
+	| type |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 
 	MolTestComponentImplA setTraitComposition: #().
@@ -313,20 +313,20 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	MolTestComponentImplC setTraitComposition: #().
 	
 	self testCreateComponentType.
-	MolTestComponentImplA setTraitComposition: self generatedComponentTypeTrait.
+	
+	type := self generatedComponentTypeTrait.
+	MolTestComponentImplA setTraitComposition: type.
 
 	self testCreateComponentServices.
 	self testCreateComponentParameters.
 	self testCreateComponentEvents.
 	
-	MolComponentFactory addProvidedServices: self generatedComponentServicesTrait in: self generatedComponentTypeTrait.
-	MolComponentFactory addUsedServices: self generatedComponentServicesTrait in: self generatedComponentTypeTrait.
-	MolComponentFactory addProvidedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait. 
-	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: self generatedComponentTypeTrait.
-	MolComponentFactory addProducedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait. 
-	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
-	
-	self longWait.
+	MolComponentFactory addProvidedServices: self generatedComponentServicesTrait in: type.
+	MolComponentFactory addUsedServices: self generatedComponentServicesTrait in: type.
+	MolComponentFactory addProvidedParameters: self generatedComponentParametersTrait in: type. 
+	MolComponentFactory addUsedParameters: self generatedComponentParametersTrait in: type.
+	MolComponentFactory addProducedEvents: self generatedComponentEventsTrait in: type. 
+	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: type.
 	
 	"Check Trait composition of A, B and C"
 	self assert: MolTestComponentImplA traitComposition traits size equals: 4.
@@ -338,17 +338,13 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	MolTestComponentImplB setTraitComposition: MolTestNoComponentTraitB.
 	MolTestComponentImplC setTraitComposition: MolTestNoComponentTraitC.
 	
-	self longWait.
-	
 	"Check Trait composition of A, B and C"
 	self assert: MolTestComponentImplA traitComposition traits size equals: 5.
 	self assert: MolTestComponentImplB traitComposition traits size equals: 1.
 	self assert: MolTestComponentImplC traitComposition traits size equals: 1.
 	
 	"Remove the type and check if the each no components traits are already here"
-	MolTestComponentImplA removeFromComposition: self generatedComponentTypeTrait.
-	
-	self longWait.
+	MolTestComponentImplA removeFromComposition: type.
 	
 	"Check Trait composition of A, B and C"
 	self assert: MolTestComponentImplA traitComposition traits size equals: 1.
@@ -363,18 +359,19 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 { #category : #'test - component subclasses' }
 MolComponentFactoryTest >> testComponentSubclassesTraitsUses2 [
 
+	| type |
 	MolTestComponentImplA setTraitComposition: #().
 	
 	self testCreateComponentType.
-	MolTestComponentImplA setTraitComposition: self generatedComponentTypeTrait.
+	type := self generatedComponentTypeTrait.
+	MolTestComponentImplA setTraitComposition: type.
 
 	self testCreateComponentServices.
 	self testCreateComponentParameters.
 	self testCreateComponentEvents.
 	
-	MolComponentFactory addProvidedServices: self generatedComponentServicesTrait in: self generatedComponentTypeTrait.
+	MolComponentFactory addProvidedServices: self generatedComponentServicesTrait in: type.
 
-	(Delay forSeconds: 1) wait.	
 	self assert: MolTestComponentImplA traitComposition traits size equals: 2.
 	
 
