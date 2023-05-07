@@ -14,7 +14,7 @@ Molecule support completely transparent class augmentation into component (not n
 
 ### Installing Molecule for the last Pharo
 
-Pharo 11 (build 677+) : 
+Pharo 11 : 
 
 ```smalltalk
 Metacello new
@@ -148,10 +148,6 @@ First we program a component application that connects to a Global Positioning S
 The GPS data and view map are implemented as Molecule components.
 In a second way, we reuse an existing non-component class in our Molecule application (MolGPSHardware).
 To do so, we augment this class with component behavior.
-
-## Test coverage
-
-Molecule includes more than 250 unit tests, we have also written tests that simulate the work of a developer when creating and modifying components. Test coverage is detailed in the release notes.
 
 ## Credits
 
