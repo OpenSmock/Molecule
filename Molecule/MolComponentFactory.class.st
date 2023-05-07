@@ -442,16 +442,10 @@ MolComponentFactory >> componentChanged: aChangedClass [
 	aChangedClass isComponentClass ifFalse:[^self].
 	
 	self isDynamicContractUpdateActivated ifTrue: [ 
-		"We need to wait because of the changedClass should be removed and become obsolete"
-		self flag:'PLA : This is a patch because of Molecule need not yet existing pharo system flags, warning : if a new fork is started on the same object there is a concurrency access risk, if necessary write some code to control a fork stack for each objects'.
-		
-		"[(Delay forMilliseconds: 25) wait. "
-		
 		aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]
-		
-		"] forkAt: Processor highIOPriority named: 'Molecule component changed'."
-	
-	] ifFalse: [ dirtyComponents add: aChangedClass].
+	] ifFalse: [ 
+		dirtyComponents add: aChangedClass
+	].
 ]
 
 { #category : #announcements }
@@ -475,16 +469,10 @@ MolComponentFactory >> contractChanged: aComponentType [
 	aComponentType = MolComponentType ifTrue:[ "Exception for the ComponentType Trait (Abstract ComponentType)" ^ self ].
 
 	self isDynamicContractUpdateActivated ifTrue: [ 
-		"need to fork the definition because new traits are not already injected here to the component"
-		self flag:'PLA : This is a patch because of Molecule need not yet existing pharo system flags, warning : if a new fork is started on the same object there is a concurrency access risk, if necessary write some code to control a fork stack for each objects'.
-		
-		"[(Delay forMilliseconds: 25) wait. "
-		
 		aComponentType isObsolete ifFalse:[self defineComponentTypeImplementors: aComponentType]
-		
-		"] forkAt: Processor highIOPriority named: 'Molecule contract changed'."
-	
-	] ifFalse: [ dirtyComponentTypes add: aComponentType ]
+	] ifFalse: [ 
+		dirtyComponentTypes add: aComponentType 
+	]
 ]
 
 { #category : #announcements }
