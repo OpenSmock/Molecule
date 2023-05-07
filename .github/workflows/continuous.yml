@@ -1,0 +1,44 @@
+name: continuous
+
+on:
+  push:
+    branches:
+      - 'master'
+      
+jobs:
+  build:
+    env:
+      PROJECT_NAME: Molecule-${{ matrix.smalltalk }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        smalltalk: [ Pharo64-11 ]
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.smalltalk }} on ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hpi-swa/setup-smalltalkCI@v1
+        with:
+          smalltalk-version: ${{ matrix.smalltalk }}
+      - run: smalltalkci -s ${{ matrix.smalltalk }}
+        shell: bash
+        timeout-minutes: 15
+        
+      # Here we zip the result of the build to be able to keep the artefacts
+      - name: package
+        run: |
+          mv /home/runner/.smalltalkCI/_builds/* .
+          mv TravisCI.image $PROJECT_NAME.image
+          mv TravisCI.changes $PROJECT_NAME.changes
+          echo ${${{ matrix.smalltalk }}} | sed -e 's/.*\-//g ; s/\..*//g ; s/$/0/' > pharo.version
+          zip -r $PROJECT_NAME.zip $PROJECT_NAME.image $PROJECT_NAME.changes *.sources pharo.version
+          ls
+        
+      #Save the artefact of the build under "continuous" tag
+      - name: Update release
+        uses: johnwbyrd/update-release@v1.0.0
+        with:
+          release: 'Continuous Release'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: ${{ env.PROJECT_NAME }}.zip
