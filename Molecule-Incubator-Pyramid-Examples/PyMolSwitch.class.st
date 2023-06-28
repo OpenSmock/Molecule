@@ -1,7 +1,6 @@
 Class {
 	#name : #PyMolSwitch,
 	#superclass : #BlElement,
-	#traits : 'TPyramidSton',
 	#classTraits : 'TPyramidSton classTrait',
 	#instVars : [
 		'indicator',
@@ -326,6 +325,13 @@ PyMolSwitch class >> pystonSpec [
 		}
 	}
 ]'
+]
+
+{ #category : #'as yet unclassified' }
+PyMolSwitch >> buildElements [
+
+	self hasChildren ifTrue: [ self removeChildren ].
+	self addChildren: self class pystonSpec materializeAsBlElement
 ]
 
 { #category : #initialization }

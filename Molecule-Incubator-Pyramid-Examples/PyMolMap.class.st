@@ -1,8 +1,8 @@
 Class {
 	#name : #PyMolMap,
 	#superclass : #BlElement,
-	#traits : 'TPyramidSton + MolGPSMap + MolGPSDataEvents + MolComponentImpl',
-	#classTraits : 'TPyramidSton classTrait + MolGPSMap classTrait + MolGPSDataEvents classTrait + MolComponentImpl classTrait',
+	#traits : 'MolGPSMap + MolGPSDataEvents + MolComponentImpl',
+	#classTraits : 'MolGPSMap classTrait + MolGPSDataEvents classTrait + MolComponentImpl classTrait',
 	#instVars : [
 		'pointerV',
 		'pointerH',
@@ -362,6 +362,13 @@ PyMolMap class >> pystonSpec [
 		}
 	}
 ]'
+]
+
+{ #category : #'as yet unclassified' }
+PyMolMap >> buildElements [
+
+	self hasChildren ifTrue: [ self removeChildren ].
+	self addChildren: self class pystonSpec materializeAsBlElement
 ]
 
 { #category : #'life cycle' }

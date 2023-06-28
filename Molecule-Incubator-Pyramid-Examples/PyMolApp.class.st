@@ -58,15 +58,21 @@ PyMolApp >> initialize [
 PyMolApp >> open [
 
 	| space |
-	space := BlSpace new extent: 400 @ 470;
-	addChild: self; yourself.
-	space when: BlSpaceClosedEvent do: [ :evt | MolComponentManager cleanUp ].
-	space enqueueTask:
-   (BlTaskAction new
-      action: [ space center ];
-      yourself).
+	space := BlSpace new
+		         extent: 400 @ 470;
+		         addChild: self;
+		         yourself.
+	space
+		when: BlSpaceClosedEvent
+		do: [ :evt | MolComponentManager cleanUp ].
+	space when: BlKeyDownEvent do: [ :evt |
+		evt key = KeyboardKey F12 ifTrue: [
+			(self canPerform: #pyramidOpenInEditor) ifTrue: [
+				self pyramidOpenInEditor ] ] ].
+
+	space enqueueTask: (BlTaskAction new
+			 action: [ space center ];
+			 yourself).
 
 	space show
-		
-		
 ]
