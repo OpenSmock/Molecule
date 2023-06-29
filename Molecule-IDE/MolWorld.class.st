@@ -17,22 +17,19 @@ MolWorld class >> defineAComponent [
 ]
 
 { #category : #actions }
-MolWorld class >> doComponentManagerCleanUp [
+MolWorld class >> doComponentManagerCleanUpCatchingErrors [
 	"Clean the current ComponentManager, ignore errors when appears and show a report if necessary"
-	| result |
+	| error |
+		
+	[ MolComponentManager cleanUp ] on: Error do:[ :e | error := e ].
 	
-	MolComponentManager isRunningComponents ifTrue: [ 
-		"Confirmation window to execute the clean when system is running components"
-		result := UITheme current
-			          proceedIn: Morph new
-			          text: 'Some Components are running, clean anyway ?'
-			          title: 'Molecule - Clean Up confirmation' 
-	].
-
-	((result notNil and: [ result ]) or: [ result isNil ]) ifFalse: [ ^ self ].
+	error ifNil: [ 
+		MolUtils showInformation: 'Cleanup done'.
+	 ] ifNotNil: [ 
+		MolUtils showInformation: 'Errors during cleanup : Try to do an "Image Molecule cleanup".'.
+	 ].
 	
-	MolComponentManager cleanUp.
-	MolUtils showInformation: 'Clean Molecule'
+	^ error
 ]
 
 { #category : #menu }
@@ -108,8 +105,27 @@ MolWorld class >> menu30ComponentManagerCleanUpOn: aBuilder [
 		order: 2.0;
 		help: 'Clean the current ComponentManager and current running Components';
 		icon: (self iconNamed: #stop);
-		action: [ self doComponentManagerCleanUp ];
-		label: 'Do ComponentManager Cleanup'
+		action: [ | result error |
+			MolComponentManager isRunningComponents ifTrue: [ 
+			"Confirmation window to execute the clean when system is running components"
+			result := UITheme current
+			          proceedIn: Morph new
+			          text: 'Some Components are running, clean anyway ?'
+			          title: 'Molecule - Cleanup confirmation' 
+			].
+
+			((result notNil and: [ result ]) or: [ result isNil ]) ifFalse: [ ^ self ].
+			
+			error := self doComponentManagerCleanUpCatchingErrors.
+			error ifNotNil: [ 
+					UITheme current
+			          abortIn: Morph new
+			          text: 'Errors during cleanup : Try to do an "Image Molecule cleanup" to debug'
+			          title: 'Molecule - Cleanup error' 
+			]
+			
+		];
+		label: 'Do cleanup'
 ]
 
 { #category : #menu }

@@ -1,11 +1,32 @@
 Class {
-	#name : #MolWorldMenuTest,
+	#name : #MolWorldTest,
 	#superclass : #TestCase,
 	#category : #'Molecule-IDE-Tests-Cases'
 }
 
+{ #category : #'tests - actions' }
+MolWorldTest >> testDoComponentManagerCleanUp [
+
+	self assert: MolWorld doComponentManagerCleanUpCatchingErrors isNil
+]
+
+{ #category : #'tests - actions' }
+MolWorldTest >> testDoComponentManagerCleanUpWithError [
+
+	| result comp |
+	comp := MolSignalErrorComponentWhenPassivate start: #comp1.
+
+	result := MolWorld doComponentManagerCleanUpCatchingErrors.
+	self assert: (result isKindOf: Error).
+	self assert: MolComponentManager isRunningComponents. 
+	
+	"Simulate an error fix by the developper"
+	comp isRaisedErrorOnPassivate: false.
+	self assert: (MolWorld doComponentManagerCleanUpCatchingErrors isNil).
+]
+
 { #category : #tests }
-MolWorldMenuTest >> testWorldMenu [
+MolWorldTest >> testWorldMenu [
 	| menuElements moleculeMenuEntry libraryMenu |
 	
 	menuElements := self currentWorld worldState menuBuilder menuSpec items.
@@ -17,7 +38,7 @@ MolWorldMenuTest >> testWorldMenu [
 ]
 
 { #category : #tests }
-MolWorldMenuTest >> testWorldMenuBuilding [
+MolWorldTest >> testWorldMenuBuilding [
 	| menuBuilder |
 	menuBuilder := WorldState new menuBuilder.
 

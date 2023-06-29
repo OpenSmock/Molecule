@@ -3,6 +3,6 @@ Exception when a component class is not found.
 "
 Class {
 	#name : #ComponentNotFoundError,
-	#superclass : #Error,
+	#superclass : #MolError,
 	#category : #'Molecule-Exceptions-NotFound'
 }

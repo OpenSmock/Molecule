@@ -3,6 +3,6 @@ This error occurs when an expected component is not typed
 "
 Class {
 	#name : #NotATypedComponentClassError,
-	#superclass : #Error,
+	#superclass : #MolError,
 	#category : #'Molecule-Exceptions-NotFound'
 }

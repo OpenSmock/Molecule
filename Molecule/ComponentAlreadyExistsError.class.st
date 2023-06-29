@@ -3,6 +3,6 @@ Exception when a component try to start with the same name of an another compone
 "
 Class {
 	#name : #ComponentAlreadyExistsError,
-	#superclass : #Error,
+	#superclass : #MolError,
 	#category : #'Molecule-Exceptions-NotFound'
 }
