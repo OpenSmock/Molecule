@@ -1,11 +1,11 @@
 Class {
-	#name : #MolWorldMenuTest,
+	#name : #MolWorldTest,
 	#superclass : #TestCase,
 	#category : #'Molecule-IDE-Tests-Cases'
 }
 
 { #category : #tests }
-MolWorldMenuTest >> testWorldMenu [
+MolWorldTest >> testWorldMenu [
 	| menuElements moleculeMenuEntry libraryMenu |
 	
 	menuElements := self currentWorld worldState menuBuilder menuSpec items.
@@ -17,7 +17,7 @@ MolWorldMenuTest >> testWorldMenu [
 ]
 
 { #category : #tests }
-MolWorldMenuTest >> testWorldMenuBuilding [
+MolWorldTest >> testWorldMenuBuilding [
 	| menuBuilder |
 	menuBuilder := WorldState new menuBuilder.
 

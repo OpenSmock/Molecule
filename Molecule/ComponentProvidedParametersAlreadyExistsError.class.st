@@ -1,5 +1,5 @@
 Class {
 	#name : #ComponentProvidedParametersAlreadyExistsError,
-	#superclass : #Error,
+	#superclass : #MolError,
 	#category : #'Molecule-Exceptions-NotFound'
 }

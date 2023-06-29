@@ -3,6 +3,6 @@ This error occurs when an expected component type is not one
 "
 Class {
 	#name : #NotAComponentTypeError,
-	#superclass : #Error,
+	#superclass : #MolError,
 	#category : #'Molecule-Exceptions-NotFound'
 }

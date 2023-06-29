@@ -16,6 +16,29 @@ MolWorld class >> defineAComponent [
 	component ifNotNil: [ :e | MolComponentFactory defineComponent: e ]
 ]
 
+{ #category : #actions }
+MolWorld class >> doComponentManagerCleanUpCatchingErrors [
+	"Clean the current ComponentManager, ignore errors when appears and show a report if necessary"
+	| error |
+		
+	[ MolComponentManager cleanUp ] on: Error do:[ :e | | result |
+		error := e.
+		result := UIManager default 
+			confirm: 'Continue or debug error ?' 
+			label: 'Molecule - Cleanup freezed by an error' 
+			trueChoice: 'Continue' falseChoice: 'Debug' cancelChoice: 'Cancel' default: false.
+		
+		result = true ifTrue:[ error resume ]. 
+		result = false ifTrue:[ error debug ]. 
+	].
+	
+	error ifNil: [ 
+		MolUtils showInformation: 'Cleanup done'.
+	 ] ifNotNil: [ 
+		MolUtils showInformation: 'Error during cleanup, try to re-clean to be safe.'.
+	 ].
+]
+
 { #category : #menu }
 MolWorld class >> menu00MoleculeOn: aBuilder [
 
@@ -83,24 +106,26 @@ MolWorld class >> menu21BrowseClassesOn: aBuilder [
 { #category : #menu }
 MolWorld class >> menu30ComponentManagerCleanUpOn: aBuilder [
 	<worldMenu>
+
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #MoleculeTools;
 		order: 2.0;
 		help: 'Clean the current ComponentManager and current running Components';
 		icon: (self iconNamed: #stop);
 		action: [ | result |
-			MolComponentManager isRunningComponents ifTrue:[
-				"Confirmation window when system running components"
-				result := UITheme current proceedIn: Morph new 
-					text: 'Actually some Components are running, clean anyway ?' 
-					title: 'Molecule - Confirmation'.
+			MolComponentManager isRunningComponents ifTrue: [ 
+			"Confirmation window to execute the clean when system is running components"
+				result := UIManager default confirm: 'Some Components are running, clean anyway ?' label: 'Molecule - Cleanup confirmation'.
 			].
-			((result notNil and:[result]) or:[result isNil]) ifTrue:[
-				MolComponentManager cleanUp.
-				MolUtils showInformation: 'Clean Molecule'.
-			]. 
+
+			((result notNil and: [ result ]) or: [ result isNil ]) ifTrue:[
+			
+				self doComponentManagerCleanUpCatchingErrors.
+		
+			].
+			
 		];
-		label: 'Do ComponentManager Cleanup'
+		label: 'Cleanup'
 ]
 
 { #category : #menu }
@@ -163,14 +188,11 @@ MolWorld class >> toolsMenu100DefineAllComponentsOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDefineAllComponents)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 1.9;
 		action: [ | result |
 			"Confirmation window"
-			result := UITheme current proceedIn: Morph new 
-				text: 'Do you want to define all the Molecule Components of your Pharo image ? 
-This action may be necessary in the event of a Molecule update.' 
-				title: 'Molecule - Confirmation'.
+			result := UIManager default confirm: 'Do you want to define all the Molecule Components of your Pharo image ? 
+This action may be necessary in the event of a Molecule update.' label: 'Molecule - Define all confirmation'.
 			result ifTrue:[MolComponentFactory defineAllComponents]. 
 		];
 		icon: (self iconNamed: #warning);
@@ -183,7 +205,6 @@ MolWorld class >> toolsMenu10DefineComponentOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDefineComponent)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 1.0;
 		action: [ self defineAComponent ];
 		icon: (self iconNamed: #smallUpdate);
@@ -195,18 +216,16 @@ MolWorld class >> toolsMenu110DeepCleanUp: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 11.0;
-		icon: (self iconNamed: #remove);
+		icon: (self iconNamed: #stop);
 		action: [| result |
 			"Confirmation window"
-			result := UITheme current proceedIn: Morph new 
-				text: 'Do you want to scan and clean all the Molecule Components of your Pharo image ? 
+			result := UIManager default confirm: 'Do you want to scan and clean all the Molecule Components of your Pharo image ? 
 This action may be necessary if your system is broken.' 
-				title: 'Molecule - Confirmation'.
+				label: 'Molecule - Confirmation'.
 			result ifTrue:[ MolComponentManager deepCleanUp]. 
 		];
-		label: 'Do Image Molecule Cleanup';
+		label: 'Garbage, cleanup and release all components';
 		help: 'Cleanup all Molecule system instances and components of the image'
 ]
 
@@ -217,7 +236,6 @@ MolWorld class >> toolsMenu20ToggleLogsOn: aBuilder [
 		ifFalse: [ 
 			(aBuilder item: #TurnOffMolLogs)
 				parent: #MoleculeDebug;
-				target: World;
 				icon: (self iconNamed: #smallDebug);
 				order: 2.0;
 				action: [ MolUtils toggleLog. MenubarMorph reset. ];
@@ -226,7 +244,6 @@ MolWorld class >> toolsMenu20ToggleLogsOn: aBuilder [
 		ifTrue: [ 
 			(aBuilder item: #TurnOnMolLogs)
 				parent: #MoleculeDebug;
-				target: World;
 				icon: (self iconNamed: #smallDebug);
 				order: 2.0;
 				action: [ MolUtils toggleLog. MenubarMorph reset.  ];
@@ -241,7 +258,6 @@ MolWorld class >> toolsMenu30ToggleDynamicContractUpdate: aBuilder [
 		ifFalse: [ 
 			(aBuilder item: #TurnOffMolLogs)
 				parent: #MoleculeDebug;
-				target: World;
 				icon: (self iconNamed: #smallAuthoringTools);
 				order: 3.0;
 				action: [ MolComponentFactory default activateDynamicContractUpdate. MenubarMorph reset. ];
@@ -250,7 +266,6 @@ MolWorld class >> toolsMenu30ToggleDynamicContractUpdate: aBuilder [
 		ifTrue: [ 
 			(aBuilder item: #TurnOnMolLogs)
 				parent: #MoleculeDebug;
-				target: World;
 				icon: (self iconNamed: #smallAuthoringTools);
 				order: 3.0;
 				action: [ MolComponentFactory default deactivateDynamicContractUpdate.  MenubarMorph reset.  ];
@@ -265,7 +280,6 @@ MolWorld class >> toolsMenu40InspectAllComponentInstances: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectAllComponentInstances)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 4.0;
 		action: [ 
 			| components |
@@ -287,7 +301,6 @@ MolWorld class >> toolsMenu50InspectComponentManager: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectComponentManager)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 5.0;
 		action: [ MolComponentManager default inspect ];
 		icon: (self iconNamed: #glamorousInspect);
@@ -299,7 +312,6 @@ MolWorld class >> toolsMenu60InspectComponentFactory: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectComponentFactory)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 6.0;
 		action: [ MolComponentFactory default inspect ];
 		icon: (self iconNamed: #glamorousInspect);
@@ -311,7 +323,6 @@ MolWorld class >> toolsMenu70InspectDirtyComponents: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectDirtyComponents)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 7.0;
 		action: [ MolComponentFactory default dirtyComponents inspect ];
 		icon: (self iconNamed: #glamorousInspect);
@@ -323,7 +334,6 @@ MolWorld class >> toolsMenu80InspectDirtyComponentTypes: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectDirtyComponentTypes)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 8.0;
 		action: [ MolComponentFactory default dirtyComponentTypes inspect ];
 		icon: (self iconNamed: #glamorousInspect);
@@ -336,7 +346,6 @@ MolWorld class >> toolsMenu90DefineDirtyComponentsOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDefineDirtyComponents)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 10.0;
 		action: [ MolComponentFactory defineDirtyComponents ];
 		icon: (self iconNamed: #smallUpdate);

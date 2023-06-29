@@ -24,10 +24,7 @@ Class {
 MolGPSExampleLauncher class >> start [
 	<script: 'self start'>
 	
-	(UITheme current
-		proceedIn: Morph new 
-		text: 'This example displays results in a Transcript, clic OK to open a Transcript.'
-		title: 'Molecule - GPS Example') ifTrue:[Transcript open].
+	(UIManager default confirm: 'This example displays results in a Transcript, do you want to open a transcript window ?' label: 'Molecule - GPS Example') ifTrue:[Transcript open].
 	
 	"Start GPSDataImpl component (a Component with MolGPSData Type)"
 	MolGPSDataImpl start.
