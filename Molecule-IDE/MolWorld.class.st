@@ -16,6 +16,25 @@ MolWorld class >> defineAComponent [
 	component ifNotNil: [ :e | MolComponentFactory defineComponent: e ]
 ]
 
+{ #category : #actions }
+MolWorld class >> doComponentManagerCleanUp [
+	"Clean the current ComponentManager, ignore errors when appears and show a report if necessary"
+	| result |
+	
+	MolComponentManager isRunningComponents ifTrue: [ 
+		"Confirmation window to execute the clean when system is running components"
+		result := UITheme current
+			          proceedIn: Morph new
+			          text: 'Some Components are running, clean anyway ?'
+			          title: 'Molecule - Clean Up confirmation' 
+	].
+
+	((result notNil and: [ result ]) or: [ result isNil ]) ifFalse: [ ^ self ].
+	
+	MolComponentManager cleanUp.
+	MolUtils showInformation: 'Clean Molecule'
+]
+
 { #category : #menu }
 MolWorld class >> menu00MoleculeOn: aBuilder [
 
@@ -83,23 +102,13 @@ MolWorld class >> menu21BrowseClassesOn: aBuilder [
 { #category : #menu }
 MolWorld class >> menu30ComponentManagerCleanUpOn: aBuilder [
 	<worldMenu>
+
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #MoleculeTools;
 		order: 2.0;
 		help: 'Clean the current ComponentManager and current running Components';
 		icon: (self iconNamed: #stop);
-		action: [ | result |
-			MolComponentManager isRunningComponents ifTrue:[
-				"Confirmation window when system running components"
-				result := UITheme current proceedIn: Morph new 
-					text: 'Actually some Components are running, clean anyway ?' 
-					title: 'Molecule - Confirmation'.
-			].
-			((result notNil and:[result]) or:[result isNil]) ifTrue:[
-				MolComponentManager cleanUp.
-				MolUtils showInformation: 'Clean Molecule'.
-			]. 
-		];
+		action: [ self doComponentManagerCleanUp ];
 		label: 'Do ComponentManager Cleanup'
 ]
 
