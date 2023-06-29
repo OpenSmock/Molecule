@@ -27,8 +27,8 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 			spec postLoadDoIt: #'postload:package:'.
 			
 			"Load dependencies"
-			"Molecule IDE incubator use SVG capacities of Roassal not included in the Pharo image"
 			self loadRoassal: spec.
+			self loadBloc: spec.
 						
 			"Packages"
 			spec
@@ -40,6 +40,14 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 				package: 'Molecule-IDE-Incubators' with: [ spec requires: #('Molecule-IDE') ];
 				package: 'Molecule-IDE-Incubators-Tests' with: [ spec requires: #('Molecule-IDE-Incubators') ].
 		 ]
+]
+
+{ #category : #'load scripts' }
+BaselineOfMoleculeIncubator >> loadBloc: spec [
+
+	spec
+		baseline: #Bloc
+		with: [ spec repository: 'github://pharo-graphics/Bloc:dev-1.0/src' ]
 ]
 
 { #category : #'load scripts' }
