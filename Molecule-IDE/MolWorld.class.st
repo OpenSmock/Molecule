@@ -21,15 +21,22 @@ MolWorld class >> doComponentManagerCleanUpCatchingErrors [
 	"Clean the current ComponentManager, ignore errors when appears and show a report if necessary"
 	| error |
 		
-	[ MolComponentManager cleanUp ] on: Error do:[ :e | error := e ].
+	[ MolComponentManager cleanUp ] on: Error do:[ :e | | result |
+		error := e.
+		result := UIManager default 
+			confirm: 'Continue or debug error ?' 
+			label: 'Molecule - Cleanup freezed by an error' 
+			trueChoice: 'Continue' falseChoice: 'Debug' cancelChoice: 'Cancel' default: false.
+		
+		result = true ifTrue:[ error resume ]. 
+		result = false ifTrue:[ error debug ]. 
+	].
 	
 	error ifNil: [ 
 		MolUtils showInformation: 'Cleanup done'.
 	 ] ifNotNil: [ 
-		MolUtils showInformation: 'Errors during cleanup : Try to do an "Image Molecule cleanup".'.
+		MolUtils showInformation: 'Error during cleanup, try to re-clean to be safe.'.
 	 ].
-	
-	^ error
 ]
 
 { #category : #menu }
@@ -105,21 +112,20 @@ MolWorld class >> menu30ComponentManagerCleanUpOn: aBuilder [
 		order: 2.0;
 		help: 'Clean the current ComponentManager and current running Components';
 		icon: (self iconNamed: #stop);
-		action: [ | result error |
+		action: [ | result |
 			MolComponentManager isRunningComponents ifTrue: [ 
 			"Confirmation window to execute the clean when system is running components"
 				result := UIManager default confirm: 'Some Components are running, clean anyway ?' label: 'Molecule - Cleanup confirmation'.
 			].
 
-			((result notNil and: [ result ]) or: [ result isNil ]) ifFalse: [ ^ self ].
+			((result notNil and: [ result ]) or: [ result isNil ]) ifTrue:[
 			
-			error := self doComponentManagerCleanUpCatchingErrors.
-			error ifNotNil: [ 
-				UIManager default abort: 'Errors during cleanup : Try to do an "Image Molecule cleanup" to debug' title: 'Molecule - Cleanup error' 
-			]
+				self doComponentManagerCleanUpCatchingErrors.
+		
+			].
 			
 		];
-		label: 'Do cleanup'
+		label: 'Cleanup'
 ]
 
 { #category : #menu }
@@ -182,7 +188,6 @@ MolWorld class >> toolsMenu100DefineAllComponentsOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDefineAllComponents)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 1.9;
 		action: [ | result |
 			"Confirmation window"
@@ -200,7 +205,6 @@ MolWorld class >> toolsMenu10DefineComponentOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDefineComponent)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 1.0;
 		action: [ self defineAComponent ];
 		icon: (self iconNamed: #smallUpdate);
@@ -212,9 +216,8 @@ MolWorld class >> toolsMenu110DeepCleanUp: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 11.0;
-		icon: (self iconNamed: #remove);
+		icon: (self iconNamed: #stop);
 		action: [| result |
 			"Confirmation window"
 			result := UIManager default confirm: 'Do you want to scan and clean all the Molecule Components of your Pharo image ? 
@@ -222,7 +225,7 @@ This action may be necessary if your system is broken.'
 				label: 'Molecule - Confirmation'.
 			result ifTrue:[ MolComponentManager deepCleanUp]. 
 		];
-		label: 'Do Image Molecule Cleanup';
+		label: 'Garbage, cleanup and release all components';
 		help: 'Cleanup all Molecule system instances and components of the image'
 ]
 
@@ -233,7 +236,6 @@ MolWorld class >> toolsMenu20ToggleLogsOn: aBuilder [
 		ifFalse: [ 
 			(aBuilder item: #TurnOffMolLogs)
 				parent: #MoleculeDebug;
-				target: World;
 				icon: (self iconNamed: #smallDebug);
 				order: 2.0;
 				action: [ MolUtils toggleLog. MenubarMorph reset. ];
@@ -242,7 +244,6 @@ MolWorld class >> toolsMenu20ToggleLogsOn: aBuilder [
 		ifTrue: [ 
 			(aBuilder item: #TurnOnMolLogs)
 				parent: #MoleculeDebug;
-				target: World;
 				icon: (self iconNamed: #smallDebug);
 				order: 2.0;
 				action: [ MolUtils toggleLog. MenubarMorph reset.  ];
@@ -257,7 +258,6 @@ MolWorld class >> toolsMenu30ToggleDynamicContractUpdate: aBuilder [
 		ifFalse: [ 
 			(aBuilder item: #TurnOffMolLogs)
 				parent: #MoleculeDebug;
-				target: World;
 				icon: (self iconNamed: #smallAuthoringTools);
 				order: 3.0;
 				action: [ MolComponentFactory default activateDynamicContractUpdate. MenubarMorph reset. ];
@@ -266,7 +266,6 @@ MolWorld class >> toolsMenu30ToggleDynamicContractUpdate: aBuilder [
 		ifTrue: [ 
 			(aBuilder item: #TurnOnMolLogs)
 				parent: #MoleculeDebug;
-				target: World;
 				icon: (self iconNamed: #smallAuthoringTools);
 				order: 3.0;
 				action: [ MolComponentFactory default deactivateDynamicContractUpdate.  MenubarMorph reset.  ];
@@ -281,7 +280,6 @@ MolWorld class >> toolsMenu40InspectAllComponentInstances: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectAllComponentInstances)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 4.0;
 		action: [ 
 			| components |
@@ -303,7 +301,6 @@ MolWorld class >> toolsMenu50InspectComponentManager: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectComponentManager)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 5.0;
 		action: [ MolComponentManager default inspect ];
 		icon: (self iconNamed: #glamorousInspect);
@@ -315,7 +312,6 @@ MolWorld class >> toolsMenu60InspectComponentFactory: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectComponentFactory)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 6.0;
 		action: [ MolComponentFactory default inspect ];
 		icon: (self iconNamed: #glamorousInspect);
@@ -327,7 +323,6 @@ MolWorld class >> toolsMenu70InspectDirtyComponents: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectDirtyComponents)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 7.0;
 		action: [ MolComponentFactory default dirtyComponents inspect ];
 		icon: (self iconNamed: #glamorousInspect);
@@ -339,7 +334,6 @@ MolWorld class >> toolsMenu80InspectDirtyComponentTypes: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectDirtyComponentTypes)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 8.0;
 		action: [ MolComponentFactory default dirtyComponentTypes inspect ];
 		icon: (self iconNamed: #glamorousInspect);
@@ -352,7 +346,6 @@ MolWorld class >> toolsMenu90DefineDirtyComponentsOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDefineDirtyComponents)
 		parent: #MoleculeDebug;
-		target: World;
 		order: 10.0;
 		action: [ MolComponentFactory defineDirtyComponents ];
 		icon: (self iconNamed: #smallUpdate);

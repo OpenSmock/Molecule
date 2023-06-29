@@ -4,27 +4,6 @@ Class {
 	#category : #'Molecule-IDE-Tests-Cases'
 }
 
-{ #category : #'tests - actions' }
-MolWorldTest >> testDoComponentManagerCleanUp [
-
-	self assert: MolWorld doComponentManagerCleanUpCatchingErrors isNil
-]
-
-{ #category : #'tests - actions' }
-MolWorldTest >> testDoComponentManagerCleanUpWithError [
-
-	| result comp |
-	comp := MolSignalErrorComponentWhenPassivate start: #comp1.
-
-	result := MolWorld doComponentManagerCleanUpCatchingErrors.
-	self assert: (result isKindOf: Error).
-	self assert: MolComponentManager isRunningComponents. 
-	
-	"Simulate an error fix by the developper"
-	comp isRaisedErrorOnPassivate: false.
-	self assert: (MolWorld doComponentManagerCleanUpCatchingErrors isNil).
-]
-
 { #category : #tests }
 MolWorldTest >> testWorldMenu [
 	| menuElements moleculeMenuEntry libraryMenu |
