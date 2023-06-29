@@ -4,5 +4,10 @@ SmalltalkCISpec {
       #baseline : 'Molecule',
       #platforms : [ #pharo ]
     }
-  ]
+  ],
+  #testing : {
+    #include : {
+      #packages : [ 'Molecule*-Tests' ]
+    }
+  }
 }
