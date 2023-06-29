@@ -1,3 +1,4 @@
+[![License](https://img.shields.io/github/license/openSmock/Molecule.svg)](./LICENSE)
 [![Build](https://github.com/OpenSmock/Molecule/actions/workflows/build.yml/badge.svg)](https://github.com/OpenSmock/Molecule/actions/workflows/build.yml)
 
 # Molecule
