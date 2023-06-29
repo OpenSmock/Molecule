@@ -108,20 +108,14 @@ MolWorld class >> menu30ComponentManagerCleanUpOn: aBuilder [
 		action: [ | result error |
 			MolComponentManager isRunningComponents ifTrue: [ 
 			"Confirmation window to execute the clean when system is running components"
-			result := UITheme current
-			          proceedIn: Morph new
-			          text: 'Some Components are running, clean anyway ?'
-			          title: 'Molecule - Cleanup confirmation' 
+				result := UIManager default confirm: 'Some Components are running, clean anyway ?' label: 'Molecule - Cleanup confirmation'.
 			].
 
 			((result notNil and: [ result ]) or: [ result isNil ]) ifFalse: [ ^ self ].
 			
 			error := self doComponentManagerCleanUpCatchingErrors.
 			error ifNotNil: [ 
-					UITheme current
-			          abortIn: Morph new
-			          text: 'Errors during cleanup : Try to do an "Image Molecule cleanup" to debug'
-			          title: 'Molecule - Cleanup error' 
+				UIManager default abort: 'Errors during cleanup : Try to do an "Image Molecule cleanup" to debug' title: 'Molecule - Cleanup error' 
 			]
 			
 		];
@@ -192,10 +186,8 @@ MolWorld class >> toolsMenu100DefineAllComponentsOn: aBuilder [
 		order: 1.9;
 		action: [ | result |
 			"Confirmation window"
-			result := UITheme current proceedIn: Morph new 
-				text: 'Do you want to define all the Molecule Components of your Pharo image ? 
-This action may be necessary in the event of a Molecule update.' 
-				title: 'Molecule - Confirmation'.
+			result := UIManager default confirm: 'Do you want to define all the Molecule Components of your Pharo image ? 
+This action may be necessary in the event of a Molecule update.' label: 'Molecule - Define all confirmation'.
 			result ifTrue:[MolComponentFactory defineAllComponents]. 
 		];
 		icon: (self iconNamed: #warning);
@@ -225,10 +217,9 @@ MolWorld class >> toolsMenu110DeepCleanUp: aBuilder [
 		icon: (self iconNamed: #remove);
 		action: [| result |
 			"Confirmation window"
-			result := UITheme current proceedIn: Morph new 
-				text: 'Do you want to scan and clean all the Molecule Components of your Pharo image ? 
+			result := UIManager default confirm: 'Do you want to scan and clean all the Molecule Components of your Pharo image ? 
 This action may be necessary if your system is broken.' 
-				title: 'Molecule - Confirmation'.
+				label: 'Molecule - Confirmation'.
 			result ifTrue:[ MolComponentManager deepCleanUp]. 
 		];
 		label: 'Do Image Molecule Cleanup';

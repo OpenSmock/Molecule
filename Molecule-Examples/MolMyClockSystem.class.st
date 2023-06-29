@@ -52,10 +52,9 @@ MolMyClockSystem class >> startAlarmExample [
 	isLogActive ifFalse:[MolUtils toggleLog].
 	 
 	"Dialog to inform user to open a Transcript to see results"
-	(UITheme current
-		proceedIn: Morph new 
-		text: 'This example displays results in a Transcript and stop after 10 seconds, clic OK to open a Transcript.'
-		title: 'Molecule - Clock System Example') ifTrue:[Transcript open].
+	(UIManager default confirm: 'This example displays results in a transcript and stop after 10 seconds. 
+	Do you want to open a transcript window ?'
+		label: 'Molecule - Clock System Example') ifTrue:[Transcript open].
 	
 	"Clean up the Component Manager in case of previous example running"
 	MolComponentManager cleanUp.
