@@ -42,22 +42,11 @@ Molecule Core has no dependencies.
 
 Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark), this package contains benchmarks for working on performances.
 
-## UI Tools overview
+## Molecule Menu
 
-UI Tools are comming in next versions of Molecule. They are currently in development in Incubators packages but are ready to use.
+![image](https://github.com/OpenSmock/Molecule/assets/49183340/ef29b8f4-941a-45a6-b41e-bf6db9f78ec6)
 
-![image](https://user-images.githubusercontent.com/49183340/151664721-feefb39a-6a9f-44b8-a54d-ef4f2b01bc65.png)
-![moleculeUITools](https://user-images.githubusercontent.com/49183340/120898493-5eb8e100-c62b-11eb-86c6-021dc25e5dd0.PNG)
-![MoleculeIncubator_EditorTest](https://user-images.githubusercontent.com/49183340/152546159-17f15103-2ac7-4938-8d8f-9de8ff60f3a8.gif)
-
-Installing Incubators packages for Pharo 10 :
-
-```smalltalk
-Metacello new
-   baseline: 'MoleculeIncubator';
-   repository: 'github://OpenSmock/Molecule';
-   load.
-```
+Molecule system can be monitored and controlled from the dedicated `Molecule` library menu.
 
 ## Using Components
 
@@ -151,6 +140,24 @@ First we program a component application that connects to a Global Positioning S
 The GPS data and view map are implemented as Molecule components.
 In a second way, we reuse an existing non-component class in our Molecule application (MolGPSHardware).
 To do so, we augment this class with component behavior.
+
+
+## Incubator packages : our UI tools experimentation zone
+
+UI Tools are comming in next versions of Molecule. They are currently in development in incubators packages but are ready to use (may be instable).
+
+![image](https://user-images.githubusercontent.com/49183340/151664721-feefb39a-6a9f-44b8-a54d-ef4f2b01bc65.png)
+![moleculeUITools](https://user-images.githubusercontent.com/49183340/120898493-5eb8e100-c62b-11eb-86c6-021dc25e5dd0.PNG)
+![MoleculeIncubator_EditorTest](https://user-images.githubusercontent.com/49183340/152546159-17f15103-2ac7-4938-8d8f-9de8ff60f3a8.gif)
+
+### Installing incubators packages :
+
+```smalltalk
+Metacello new
+   baseline: 'MoleculeIncubator';
+   repository: 'github://OpenSmock/Molecule';
+   load.
+```
 
 ## To know more...
 
