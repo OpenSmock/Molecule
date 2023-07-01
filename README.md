@@ -14,9 +14,7 @@ Molecule support completely transparent class augmentation into component (not n
 
 ## Getting Started
 
-### Installing Molecule for the last Pharo
-
-Pharo 11 : 
+### Installing Molecule
 
 ```smalltalk
 Metacello new
@@ -24,6 +22,8 @@ Metacello new
    repository: 'github://OpenSmock/Molecule';
    load.
 ```
+
+Continuous integration (CI) status badges show status of compatibility all supported Pharo versions. You can use Molecule with your Pharo version when its badge is green ! 
 
 ### Looking for an older Pharo ?
 
@@ -39,6 +39,7 @@ Find below some Molecule branches for old Pharo versions.
 ### Prerequisites
 
 Molecule Core has no dependencies.
+
 Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark), this package contains benchmarks for working on performances.
 
 ## UI Tools overview
@@ -150,6 +151,16 @@ First we program a component application that connects to a Global Positioning S
 The GPS data and view map are implemented as Molecule components.
 In a second way, we reuse an existing non-component class in our Molecule application (MolGPSHardware).
 To do so, we augment this class with component behavior.
+
+## To know more...
+
+Publications related to Molecule.
+
+[Molecule: live prototyping with component-oriented programming](https://inria.hal.science/hal-02966704/)
+
+[15 Years of Reuse Experience in Evolutionary Prototyping for the Defense Industry](https://inria.hal.science/hal-02966691/preview/ICSR_15years.pdf)
+
+[Reuse in component-based prototyping: an industrial experience report from 15 years of reuse](https://link.springer.com/article/10.1007/s11334-022-00456-4)
 
 ## Credits
 
