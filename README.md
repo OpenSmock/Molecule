@@ -7,7 +7,7 @@
 ![Molecule Logo](MoleculeBanner.jpg)
 
 Molecule is a component oriented framework for Pharo. 
-His Component architecture approach provide an adapted structuration to graphic user interface (GUI) or another software application wich need Component features.
+His Component architecture approach provide an adapted structuration to User Interface (UI) or another software application wich need Component features.
 
 Molecule provide a way to describe a software application as a components group. Components communicate by use of services, parameters and events propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
 Molecule support completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
