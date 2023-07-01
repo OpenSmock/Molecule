@@ -1,4 +1,4 @@
-name: Build
+name: 'Pharo 11 CI'
 
 on:
   push:
