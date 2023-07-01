@@ -1,5 +1,6 @@
 [![License](https://img.shields.io/github/license/openSmock/Molecule.svg)](./LICENSE)
-[![Build](https://github.com/OpenSmock/Molecule/actions/workflows/build.yml/badge.svg)](https://github.com/OpenSmock/Molecule/actions/workflows/build.yml)
+[![Pharo 11 CI](https://github.com/OpenSmock/Molecule/actions/workflows/Pharo11CI.yml/badge.svg)](https://github.com/OpenSmock/Molecule/actions/workflows/Pharo11CI.yml)
+[![Pharo 12 CI](https://github.com/OpenSmock/Molecule/actions/workflows/Pharo12CI.yml/badge.svg)](https://github.com/OpenSmock/Molecule/actions/workflows/Pharo12CI.yml)
 
 # Molecule
 
