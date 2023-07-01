@@ -1,4 +1,4 @@
-name: Release
+name: 'Official release prod'
 
 on:
   release:
