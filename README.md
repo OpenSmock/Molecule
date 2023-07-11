@@ -14,7 +14,9 @@ Molecule support completely transparent class augmentation into component (not n
 
 ## Getting Started
 
-### Installing Molecule
+### Installation
+
+To install Molecule on your Pharo image you can just execute the following script:
 
 ```smalltalk
 Metacello new
