@@ -14,8 +14,7 @@ PyMolApp class >> open [
 	<script>
 	| element |
 	element := self new.
-	element open.
-	element inspect
+	element open
 ]
 
 { #category : #initialization }
