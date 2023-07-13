@@ -27,8 +27,9 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 			spec postLoadDoIt: #'postload:package:'.
 			
 			"Load dependencies"
-			"Molecule IDE incubator use SVG capacities of Roassal not included in the Pharo image"
 			self loadRoassal: spec.
+			self loadBloc: spec.
+			self loadPyramid: spec.
 						
 			"Packages"
 			spec
@@ -37,9 +38,29 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 				package: 'Molecule-Examples' with: [ spec requires: #('Molecule') ];
 				package: 'Molecule-Tests' with: [ spec requires: #('Molecule') ];
 				package: 'Molecule-IDE-Tests' with: [ spec requires: #('Molecule-IDE') ];
-				package: 'Molecule-IDE-Incubators' with: [ spec requires: #('Molecule-IDE') ];
-				package: 'Molecule-IDE-Incubators-Tests' with: [ spec requires: #('Molecule-IDE-Incubators') ].
+				package: 'Molecule-IDE-Incubator' with: [ spec requires: #('Molecule-IDE') ];
+				package: 'Molecule-IDE-Incubator-Tests' with: [ spec requires: #('Molecule-IDE-Incubator') ].
+				
+			"Pyramid examples"
+			spec
+				package: 'Molecule-Examples-Pyramid-Incubator' with: [ spec requires: #('Pyramid' 'Molecule-Examples') ].
 		 ]
+]
+
+{ #category : #'load scripts' }
+BaselineOfMoleculeIncubator >> loadBloc: spec [
+
+	spec
+		baseline: #Bloc
+		with: [ spec repository: 'github://pharo-graphics/Bloc:dev-1.0/src' ]
+]
+
+{ #category : #'load scripts' }
+BaselineOfMoleculeIncubator >> loadPyramid: spec [
+
+	spec
+		baseline: #Pyramid
+		with: [ spec repository: 'github://OpenSmock/Pyramid:main/src' ]
 ]
 
 { #category : #'load scripts' }
