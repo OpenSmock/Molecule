@@ -38,8 +38,12 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 				package: 'Molecule-Examples' with: [ spec requires: #('Molecule') ];
 				package: 'Molecule-Tests' with: [ spec requires: #('Molecule') ];
 				package: 'Molecule-IDE-Tests' with: [ spec requires: #('Molecule-IDE') ];
-				package: 'Molecule-IDE-Incubators' with: [ spec requires: #('Molecule-IDE') ];
-				package: 'Molecule-IDE-Incubators-Tests' with: [ spec requires: #('Molecule-IDE-Incubators') ].
+				package: 'Molecule-IDE-Incubator' with: [ spec requires: #('Molecule-IDE') ];
+				package: 'Molecule-IDE-Incubator-Tests' with: [ spec requires: #('Molecule-IDE-Incubator') ].
+				
+			"Pyramid examples"
+			spec
+				package: 'Molecule-Examples-Pyramid-Incubator' with: [ spec requires: #('Pyramid' 'Molecule-Examples') ].
 		 ]
 ]
 
