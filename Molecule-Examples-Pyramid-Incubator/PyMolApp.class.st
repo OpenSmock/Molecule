@@ -37,13 +37,13 @@ PyMolApp >> initialize [
 	PyMolMap start.
 	map := MolUtils instanceOf: PyMolMap.
 
-	rope1 := 'Comp 1' asRopedText.
-	rope1 attribute: (BlFontSizeAttribute size: 28).
+	rope1 := 'Accurate GPS' asRopedText.
+	rope1 attribute: (BlFontSizeAttribute size: 20).
 	label1 := rope1 asElement.
-	label1 position: 50 @ 425.
+	label1 position: 10 @ 425.
 
-	rope2 := 'Comp 2' asRopedText.
-	rope2 attribute: (BlFontSizeAttribute size: 28).
+	rope2 := 'Inaccurate GPS' asRopedText.
+	rope2 attribute: (BlFontSizeAttribute size: 20).
 	label2 := rope2 asElement.
 	label2 position: 260 @ 425.
 
