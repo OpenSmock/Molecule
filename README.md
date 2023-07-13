@@ -154,10 +154,13 @@ UI Tools are comming in next versions of Molecule. They are currently in develop
 
 ### Installing incubators packages :
 
+To install Molecule with incubator packages on your Pharo image you can just execute the following script:
+
 ```smalltalk
 Metacello new
    baseline: 'MoleculeIncubator';
    repository: 'github://OpenSmock/Molecule';
+   onConflictUseIncoming;
    load.
 ```
 
