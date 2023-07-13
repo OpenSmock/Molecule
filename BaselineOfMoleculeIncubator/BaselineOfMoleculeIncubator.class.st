@@ -29,6 +29,7 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 			"Load dependencies"
 			self loadRoassal: spec.
 			self loadBloc: spec.
+			self loadPyramid: spec.
 						
 			"Packages"
 			spec
@@ -48,6 +49,14 @@ BaselineOfMoleculeIncubator >> loadBloc: spec [
 	spec
 		baseline: #Bloc
 		with: [ spec repository: 'github://pharo-graphics/Bloc:dev-1.0/src' ]
+]
+
+{ #category : #'load scripts' }
+BaselineOfMoleculeIncubator >> loadPyramid: spec [
+
+	spec
+		baseline: #Pyramid
+		with: [ spec repository: 'github://OpenSmock/Pyramid:main/src' ]
 ]
 
 { #category : #'load scripts' }
