@@ -60,8 +60,10 @@ PyMolApp >> open [
 	| space |
 	space := BlSpace new
 		         extent: 400 @ 470;
-		         addChild: self;
 		         yourself.
+		
+	space root addChild: self.
+		
 	space
 		when: BlSpaceClosedEvent
 		do: [ :evt | MolComponentManager cleanUp ].
