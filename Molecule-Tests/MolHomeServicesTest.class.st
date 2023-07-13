@@ -533,10 +533,8 @@ MolHomeServicesTest >> testSubComponentLifecycleWithName [
 MolHomeServicesTest >> testThreadsToStartAndStopComponents [
 
 	| manager nb random forkList |
-	
-	self timeLimit: 1 second.
-	"By pass CI"
-	self skipOnPharoCITestingEnvironment.
+		
+	self timeLimit: 10 second.
 	
 	manager := MolComponentManager default.
 	nb := 500.
@@ -576,10 +574,8 @@ MolHomeServicesTest >> testThreadsToStartAndStopComponents [
 MolHomeServicesTest >> testThreadsToStartAndStopComponents2 [
 
 	| nb forkList |
-	
-	self timeLimit: 1 second.
-	"By pass CI"
-	self skipOnPharoCITestingEnvironment.
+
+	self timeLimit: 10 second.
 	
 	nb := 500.
 	forkList := OrderedCollection new.
