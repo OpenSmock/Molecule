@@ -152,12 +152,35 @@ MolUtils class >> isComponentOrComponentClass: anObject [
 { #category : #testing }
 MolUtils class >> isInstanciateComponentOf: aClass [
 
-	^ self isInstanciateComponentOf: aClass named: self defaultComponentName
+	self deprecated: 'Use isInstanciateComponentOf:'.
+	^ self
+		  isInstanciateComponentOf: aClass
+		  named: self defaultComponentName
 ]
 
 { #category : #testing }
 MolUtils class >> isInstanciateComponentOf: aClass named: aName [
-	^ (MolComponentManager default homeServices instanceOf: aClass named: aName) notNil
+
+	self deprecated: 'Use isInstanciateComponentOf: named: '.
+	^ (MolComponentManager default homeServices
+		   instanceOf: aClass
+		   named: aName) notNil
+]
+
+{ #category : #testing }
+MolUtils class >> isInstantiateComponentOf: aClass [
+
+	^ self
+		  isInstantiateComponentOf: aClass
+		  named: self defaultComponentName
+]
+
+{ #category : #testing }
+MolUtils class >> isInstantiateComponentOf: aClass named: aName [
+
+	^ (MolComponentManager default homeServices
+		   instanceOf: aClass
+		   named: aName) notNil
 ]
 
 { #category : #accessing }
