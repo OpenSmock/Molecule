@@ -7,16 +7,16 @@
 ![Molecule Logo](MoleculeBanner.jpg)
 
 Molecule is a component oriented framework for Pharo. 
-His Component architecture approach provide an adapted structuration to User Interface (UI) or another software application wich need Component features.
+His Component architecture approach provides an adapted structuration to User Interface (UI) or another software application which need Component features.
 
-Molecule provide a way to describe a software application as a components group. Components communicate by use of services, parameters and events propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
-Molecule support completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
+Molecule provides a way to describe a software application as a component group. Components communicate by use of services, parameters and event propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
+Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
 
 ## Getting Started
 
 ### Installation
 
-To install Molecule on your Pharo image you can just execute the following script:
+To install Molecule in your Pharo image you just need to execute the following script:
 
 ```smalltalk
 Metacello new
@@ -25,11 +25,11 @@ Metacello new
    load.
 ```
 
-Continuous integration (CI) status badges show status of compatibility all supported Pharo versions. You can use Molecule with your Pharo version when its badge is green ! 
+Continuous integration (CI) status badges show status of compatibility for all supported Pharo versions. You can use Molecule with your Pharo version when its badge is green ! 
 
 ### Looking for an older Pharo ?
 
-New releases of Molecule not support old Pharo versions (< 10), but may be works.
+New releases of Molecule don't support old Pharo versions (< 10), but could work.
 Find below some Molecule branches for old Pharo versions. 
 
 [Pharo 9 and 10 - last release is 1.2.8](https://github.com/OpenSmock/Molecule/tree/Pharo9-10).
@@ -56,35 +56,35 @@ Molecule system can be monitored and controlled from the dedicated `Molecule` li
 
 Components can be used with the start & stop method.
 
-To start a component :
+To start a component:
 
 ```smalltalk
 component := MyComponentClass start.
 ```
 
-To stop a component : 
+To stop a component: 
 
 ```smalltalk
 MyComponentClass stop.
 ```
 
-Component can be identified with a name. To start a component with a specific name :
+Component can be identified with a name. To start a component with a specific name:
 
 ```smalltalk
 componentA := MyComponentClass start: #componentA.
 ```
 
-To stop a component identified by a name.
+To stop a component identified by a name:
 
 ```smalltalk
 MyComponentClass stop: #componentA.
 ```
 
-### Component Life-cycle method
+### Component life-cycle method
 
 Components can be used with the life-cycle method, the two methods (start & stop, life-cycle) can be combined.
 
-Start a component is equivalent to :
+Starting a component is equivalent to:
 
 ```smalltalk
 MyComponentClass deploy.
@@ -92,7 +92,7 @@ component := MyComponentClass instanciate.
 MyComponentClass activate.
 ```
 
-With a name :
+With a name:
 
 ```smalltalk
 MyComponentClass deploy.
@@ -100,7 +100,7 @@ componentA := MyComponentClass instanciate: #compA.
 MyComponentClass activate: #compA.
 ```
 
-Stop a component is equivalent to :
+Stopping a component is equivalent to:
 
 ```smalltalk
 MyComponentClass passivate.
@@ -108,7 +108,7 @@ MyComponentClass remove.
 MyComponentClass undeploy.
 ```
 
-With a name :
+With a name:
 
 ```smalltalk
 MyComponentClass passivate: #compA.
@@ -119,7 +119,7 @@ MyComponentClass undeploy.
 ## Some examples
 
 Examples are available in the package 'Molecule-Examples'.
-Before running examples open the Transcript, some results are showed on the Transcript window.
+Open the Transcript before running examples, some results are showed in the Transcript window.
 
 #### Clock System example
 
@@ -127,7 +127,7 @@ Before running examples open the Transcript, some results are showed on the Tran
 MolMyClockSystem startAlarmExample.
 ```
 
-This system uses 4 components: a server time send global hour to a clock. The clock send local hour to alarms and to final user (which could be an UI). The final user can change the parameters of the system as alarm time or set manual time for the clock. The alarm is subscribed to clock time, and sounds when it is time.
+This system uses 4 components: a server time sends global hour to a clock. The clock sends local hour to alarms and to the final user (which could be an UI). The final user can change the parameters of the system as alarm time or set a manual time for the clock. The alarm is subscribed to the clock time, and sounds when it's time.
 
 This system provides a global example of the use of components. 
 
@@ -136,7 +136,7 @@ This system provides a global example of the use of components.
 ```smalltalk
 MolGPSExampleLauncher start.
 ```
-More details about examples in the comment of MolGPSExampleLauncher.
+Examples are further detailed in the comment of MolGPSExampleLauncher.
 
 First we program a component application that connects to a Global Positioning System (GPS) hardware and displays the GPS data on a view map (just fictitious).
 The GPS data and view map are implemented as Molecule components.
@@ -144,17 +144,17 @@ In a second way, we reuse an existing non-component class in our Molecule applic
 To do so, we augment this class with component behavior.
 
 
-## Incubator packages : our UI tools experimentation zone
+## Incubator packages: our UI tools experimentation zone
 
-UI Tools are comming in next versions of Molecule. They are currently in development in incubators packages but are ready to use (may be instable).
+UI Tools are coming in the next versions of Molecule. They are currently in development in incubators packages, are ready to use but may be instable.
 
 ![image](https://user-images.githubusercontent.com/49183340/151664721-feefb39a-6a9f-44b8-a54d-ef4f2b01bc65.png)
 ![moleculeUITools](https://user-images.githubusercontent.com/49183340/120898493-5eb8e100-c62b-11eb-86c6-021dc25e5dd0.PNG)
 ![MoleculeIncubator_EditorTest](https://user-images.githubusercontent.com/49183340/152546159-17f15103-2ac7-4938-8d8f-9de8ff60f3a8.gif)
 
-### Installing incubators packages :
+### Installing incubators packages:
 
-To install Molecule with incubator packages on your Pharo image you can just execute the following script:
+To install Molecule with incubator packages on your Pharo image you just need to execute the following script:
 
 ```smalltalk
 Metacello new
@@ -166,7 +166,7 @@ Metacello new
 
 ## To know more...
 
-Publications related to Molecule.
+Publications related to Molecule:
 
 [Molecule: live prototyping with component-oriented programming](https://inria.hal.science/hal-02966704/)
 
