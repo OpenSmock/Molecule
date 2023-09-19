@@ -73,8 +73,10 @@ MolHomeServices >> checkInstanciationOfComponent: aComponentClass named: aCompon
 	| deployed component overridedTypes |
 	self
 		deprecated: 'Use checkInstantiationOfComponent: named:'
-		transformWith: '`@receiver checkInstanciationOfComponent: @aComponentClass named: @aComponentName'
-			-> '`@receiver checkInstantiationOfComponent: @aComponentClass named: @aComponentName'.
+		transformWith:
+			'`@receiver checkInstanciationOfComponent: `@aComponentClass named: `@aComponentName'
+			->
+			'`@receiver checkInstantiationOfComponent: `@aComponentClass named: `@aComponentName'.
 	aComponentName ifNil: [
 		^ WrongComponentNameError new messageText:
 			  'Can not instanciate a component without name' ].
@@ -224,8 +226,8 @@ MolHomeServices >> instanciateComponent: aComponentClass [
 
 	self
 		deprecated: 'Use instantiateComponent:'
-		transformWith: '`@receiver instanciateComponent: @aComponentClass'
-			-> '`@receiver instantiateComponent: @aComponentClass'.
+		transformWith: '`@receiver instanciateComponent: `@aComponentClass'
+			-> '`@receiver instantiateComponent: `@aComponentClass'.
 	^ self
 		  instanciateComponent: aComponentClass
 		  named: MolUtils defaultComponentName
@@ -237,8 +239,10 @@ MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 	| error component connector deployed |
 	self
 		deprecated: 'Use instantiateComponent: named:'
-		transformWith: '`@receiver instanciateComponent: @aComponentClass named: @aName'
-			-> '`@receiver instantiateComponent: @aComponentClass named: @aName'.
+		transformWith:
+			'`@receiver instanciateComponent: `@aComponentClass named: `@aName'
+			->
+			'`@receiver instantiateComponent: `@aComponentClass named: `@aName'.
 	aComponentClass ifNil: [ ^ nil ].
 	error := self
 		         checkInstanciationOfComponent: aComponentClass

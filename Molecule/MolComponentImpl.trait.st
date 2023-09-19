@@ -85,8 +85,8 @@ MolComponentImpl classSide >> instanciate: aComponentName [
 
 	self
 		deprecated: 'Use instantiate:'
-		transformWith:
-		'`@receiver instanciate: @aComponentName' -> '`@receiver instantiate: @aComponentName'.
+		transformWith: '`@receiver instanciate: `@aComponentName'
+			-> '`@receiver instantiate: `@aComponentName'.
 	^ MolComponentManager default homeServices
 		  instanciateComponent: self
 		  named: aComponentName

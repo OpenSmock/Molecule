@@ -154,8 +154,8 @@ MolUtils class >> isInstanciateComponentOf: aClass [
 
 	self
 		deprecated: 'Use isInstantiateComponentOf:'
-		transformWith: '`@receiver isInstanciateComponentOf: @aClass'
-			-> '`@receiver isInstantiateComponentOf: @aClass'.
+		transformWith: '`@receiver isInstanciateComponentOf: `@aClass'
+			-> '`@receiver isInstantiateComponentOf: `@aClass'.
 	^ self
 		  isInstanciateComponentOf: aClass
 		  named: self defaultComponentName
@@ -167,8 +167,8 @@ MolUtils class >> isInstanciateComponentOf: aClass named: aName [
 	self
 		deprecated: 'Use isInstantiateComponentOf: named: '
 		transformWith:
-			'`@receiver isInstanciateComponentOf: @aClass named: @aName'
-			-> '`@receiver isInstantiateComponentOf: @aClass named: @aName'.
+			'`@receiver isInstanciateComponentOf: `@aClass named: `@aName'
+			-> '`@receiver isInstantiateComponentOf: `@aClass named: `@aName'.
 	^ (MolComponentManager default homeServices
 		   instanceOf: aClass
 		   named: aName) notNil
