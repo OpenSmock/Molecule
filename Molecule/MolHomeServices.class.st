@@ -71,7 +71,10 @@ MolHomeServices >> addDeployedComponent: aComponentClass [
 MolHomeServices >> checkInstanciationOfComponent: aComponentClass named: aComponentName [
 
 	| deployed component overridedTypes |
-	self deprecated: 'Use checkInstantiationOfComponent: named:'.
+	self
+		deprecated: 'Use checkInstantiationOfComponent: named:'
+		transformWith: '`@receiver checkInstanciationOfComponent: @aComponentClass named: @aComponentName'
+			-> '`@receiver checkInstantiationOfComponent: @aComponentClass named: @aComponentName'.
 	aComponentName ifNil: [
 		^ WrongComponentNameError new messageText:
 			  'Can not instanciate a component without name' ].
@@ -208,7 +211,10 @@ MolHomeServices >> instanceOf: aClass named: aName [
 { #category : #'life cycle' }
 MolHomeServices >> instanciateAllComponents [
 
-	self deprecated: 'Use instantiateAllComponents'.
+	self
+		deprecated: 'Use instantiateAllComponents'
+		transformWith: '`@receiver instanciateAllComponents'
+			-> '`@receiver instantiateAllComponents'.
 	self deployedComponents keysDo: [ :aClass |
 		self instanciateComponent: aClass ]
 ]
@@ -216,7 +222,10 @@ MolHomeServices >> instanciateAllComponents [
 { #category : #'life cycle' }
 MolHomeServices >> instanciateComponent: aComponentClass [
 
-	self deprecated: 'Use instantiateComponent:'.
+	self
+		deprecated: 'Use instantiateComponent:'
+		transformWith: '`@receiver instanciateComponent: @aComponentClass'
+			-> '`@receiver instantiateComponent: @aComponentClass'.
 	^ self
 		  instanciateComponent: aComponentClass
 		  named: MolUtils defaultComponentName
@@ -226,7 +235,10 @@ MolHomeServices >> instanciateComponent: aComponentClass [
 MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 
 	| error component connector deployed |
-	self deprecated: 'Use instantiateComponent: named:'.
+	self
+		deprecated: 'Use instantiateComponent: named:'
+		transformWith: '`@receiver instanciateComponent: @aComponentClass named: @aName'
+			-> '`@receiver instantiateComponent: @aComponentClass named: @aName'.
 	aComponentClass ifNil: [ ^ nil ].
 	error := self
 		         checkInstanciationOfComponent: aComponentClass
