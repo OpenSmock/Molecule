@@ -144,15 +144,15 @@ In a second way, we reuse an existing non-component class in our Molecule applic
 To do so, we augment this class with component behavior.
 
 
-## Incubator packages : our UI tools experimentation zone
+## Incubator packages: our UI tools experimentation zone
 
-UI Tools are coming in the next versions of Molecule. They are currently in development in incubators packages but are ready to use (but may be instable).
+UI Tools are coming in the next versions of Molecule. They are currently in development in incubators packages, are ready to use but may be instable.
 
 ![image](https://user-images.githubusercontent.com/49183340/151664721-feefb39a-6a9f-44b8-a54d-ef4f2b01bc65.png)
 ![moleculeUITools](https://user-images.githubusercontent.com/49183340/120898493-5eb8e100-c62b-11eb-86c6-021dc25e5dd0.PNG)
 ![MoleculeIncubator_EditorTest](https://user-images.githubusercontent.com/49183340/152546159-17f15103-2ac7-4938-8d8f-9de8ff60f3a8.gif)
 
-### Installing incubators packages :
+### Installing incubators packages:
 
 To install Molecule with incubator packages on your Pharo image you just need to execute the following script:
 
