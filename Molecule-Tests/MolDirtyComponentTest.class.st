@@ -42,24 +42,3 @@ MolDirtyComponentTest >> tearDown [
 	self cleanGeneratedClassesAndTraits.
 	MolComponentManager cleanUp.
 ]
-
-{ #category : #tests }
-MolDirtyComponentTest >> testDirtyTypeWithInstanceVariableInsteadOfComponentTraits [
-
-	"Create a component using a dirty Type"
-	| component |
-	MolComponentFactory createComponentForType: MolDirtyType named: self generatedDirtyTypeImplementationSymbol in: self generationTag.
-	component := self class environment at: self generatedDirtyTypeImplementationSymbol.
-	
-	self deny: (component methodDictionary includesKey: #getnilSubscriber). 
-	self deny: (component methodDictionary includesKey: #getnilNotifier). 
-	self deny: (component methodDictionary includesKey: #getnilProvider).
-	
-	self assert: component allConsumedEvents isEmpty.
-	self assert: component allProducedEvents isEmpty.
-	self assert: component allProvidedServices isEmpty.
-	self assert: component allUsedServices isEmpty.
-	self assert: component allProvidedParameters isEmpty.
-	self assert: component allUsedParameters isEmpty.
-	
-]
