@@ -166,6 +166,18 @@ MolEventsTest >> testSimpleListenerNotActivatedNamed [
 ]
 
 { #category : #tests }
+MolEventsTest >> testSimpleWarnerDuringActivation [
+	"A component send an event during activation phase"
+	| listener |
+	
+	listener := MolMyListenerComponentImpl start.
+	MolMyWarnerOnActivateComponentImpl start.
+
+	self assert: listener currentState equals: #operational.
+	
+]
+
+{ #category : #tests }
 MolEventsTest >> testSimpleWarnerNotActivated [
 	"A component not activated send events."
 	| warner listener |
