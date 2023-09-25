@@ -51,10 +51,27 @@ MolDirtyComponentTest >> testDirtyTypeWithInstanceVariableInsteadOfComponentTrai
 	MolComponentFactory createComponentForType: MolDirtyType named: self generatedDirtyTypeImplementationSymbol in: self generationTag.
 	component := self class environment at: self generatedDirtyTypeImplementationSymbol.
 	
+	"Check if the ComponentType is dirty"
+	self assert: MolDirtyType producedComponentEvents size equals: 1.
+	self assert: MolDirtyType producedComponentEvents first equals: nil.
+	self assert: MolDirtyType consumedComponentEvents size equals: 1.
+	self assert: MolDirtyType consumedComponentEvents first equals: nil.
+	self assert: MolDirtyType providedComponentParameters size equals: 1.
+	self assert: MolDirtyType providedComponentParameters first equals: nil.
+	self assert: MolDirtyType providedComponentServices size equals: 1.
+	self assert: MolDirtyType providedComponentServices first equals: nil.
+	self assert: MolDirtyType usedComponentParameters size equals: 1.
+	self assert: MolDirtyType usedComponentParameters first equals: nil.
+	self assert: MolDirtyType usedComponentServices size equals: 1.
+	self assert: MolDirtyType usedComponentServices first equals: nil.
+	self assert: (MolDirtyType class slotNames first) equals: #anInstanceVariable.
+	
+	"Check no generation of non necessary methods"
 	self deny: (component methodDictionary includesKey: #getnilSubscriber). 
 	self deny: (component methodDictionary includesKey: #getnilNotifier). 
 	self deny: (component methodDictionary includesKey: #getnilProvider).
 	
+	"Check that the contract is empty despite class side var in the all contract interfaces"
 	self assert: component allConsumedEvents isEmpty.
 	self assert: component allProducedEvents isEmpty.
 	self assert: component allProvidedServices isEmpty.
