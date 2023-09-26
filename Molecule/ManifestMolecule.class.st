@@ -26,7 +26,9 @@ Examples are in the package 'Molecule-Examples'.
 This project is licensed under the MIT License - see the LICENSE file for details.
 "
 Class {
-	#name : #ManifestMolecule,
-	#superclass : #PackageManifest,
-	#category : #'Molecule-Manifest'
+	#name : 'ManifestMolecule',
+	#superclass : 'PackageManifest',
+	#category : 'Molecule-Manifest',
+	#package : 'Molecule',
+	#tag : 'Manifest'
 }

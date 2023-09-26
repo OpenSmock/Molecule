@@ -4,8 +4,8 @@ I am an exemple of alarm clock. I have a time, a bell, a name, and I sound (MyAl
 Because I am a component implementation, you can force my automatic definition. To do it,  use class method 'self defineComponent'.
 "
 Class {
-	#name : #MolMyAlarmComponentImpl,
-	#superclass : #MolAbstractComponentImpl,
+	#name : 'MolMyAlarmComponentImpl',
+	#superclass : 'MolAbstractComponentImpl',
 	#traits : 'MolMyAlarmComponent + MolMyLocalTimeEvents + MolMyAlarmParameters + MolMyAlarmActivationServices',
 	#classTraits : 'MolMyAlarmComponent classTrait + MolMyLocalTimeEvents classTrait + MolMyAlarmParameters classTrait + MolMyAlarmActivationServices classTrait',
 	#instVars : [
@@ -14,22 +14,24 @@ Class {
 		'bell',
 		'activate'
 	],
-	#category : #'Molecule-Examples-Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example',
+	#package : 'Molecule-Examples',
+	#tag : 'Clock System Example'
 }
 
-{ #category : #services }
+{ #category : 'services' }
 MolMyAlarmComponentImpl >> activate [
 
 	activate := true.
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolMyAlarmComponentImpl >> componentActivate [
 
 	self getMolMyLocalTimeEventsSubscriber subscribe: self.
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolMyAlarmComponentImpl >> componentInitialize [
 	"Component is initialized with default values"
 	name := 'Alarm'.
@@ -38,30 +40,30 @@ MolMyAlarmComponentImpl >> componentInitialize [
 	activate := false.
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolMyAlarmComponentImpl >> componentPassivate [
 
 	self getMolMyLocalTimeEventsSubscriber unsubscribe: self.
 ]
 
-{ #category : #services }
+{ #category : 'services' }
 MolMyAlarmComponentImpl >> deactivate [
 
 	activate := false.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolMyAlarmComponentImpl >> getBell [
 
 	^ bell
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolMyAlarmComponentImpl >> getMolMyAlarmSoundsEventsNotifier [
 	^self eventsNotifiers at: MolMyAlarmSoundsEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolMyAlarmSoundsEvents name: nil].
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolMyAlarmComponentImpl >> getMolMyLocalTimeEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyLocalTimeEvents.
@@ -73,7 +75,7 @@ MolMyAlarmComponentImpl >> getMolMyLocalTimeEventsSubscriber [
 	^eventsSubscriber
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 MolMyAlarmComponentImpl >> notifyLocalTime: aTime [
 
 	activate ifTrue: 
@@ -81,19 +83,19 @@ MolMyAlarmComponentImpl >> notifyLocalTime: aTime [
 			[ self getMolMyAlarmSoundsEventsNotifier notifyAlarmRing: self ]]
 ]
 
-{ #category : #parameters }
+{ #category : 'parameters' }
 MolMyAlarmComponentImpl >> setBell: aBell [
 
 	bell := aBell
 ]
 
-{ #category : #parameters }
+{ #category : 'parameters' }
 MolMyAlarmComponentImpl >> setName: aName [
 
 	name := aName
 ]
 
-{ #category : #parameters }
+{ #category : 'parameters' }
 MolMyAlarmComponentImpl >> setTime: aTime [
 
 	time := aTime

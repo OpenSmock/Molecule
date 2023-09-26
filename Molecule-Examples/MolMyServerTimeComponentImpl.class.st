@@ -4,17 +4,19 @@ I am an exemple of server time. I send to my subscribers (clock) the UTC time ea
 Because I am a component implementation, you can force my automatic definition. To do it,  use class method 'self defineComponent'.
 "
 Class {
-	#name : #MolMyServerTimeComponentImpl,
-	#superclass : #MolAbstractComponentImpl,
+	#name : 'MolMyServerTimeComponentImpl',
+	#superclass : 'MolAbstractComponentImpl',
 	#traits : 'MolMyServerTimeComponent + MolMyServerTimeServices',
 	#classTraits : 'MolMyServerTimeComponent classTrait + MolMyServerTimeServices classTrait',
 	#instVars : [
 		'process'
 	],
-	#category : #'Molecule-Examples-Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example',
+	#package : 'Molecule-Examples',
+	#tag : 'Clock System Example'
 }
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolMyServerTimeComponentImpl >> componentInitialize [
 
 	process := 
@@ -24,19 +26,19 @@ MolMyServerTimeComponentImpl >> componentInitialize [
 		fork
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolMyServerTimeComponentImpl >> componentRemove [
 
 	process terminate.
 	process := nil.
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolMyServerTimeComponentImpl >> getMolMyGlobalTimeEventsNotifier [
 	^self eventsNotifiers at: MolMyGlobalTimeEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolMyGlobalTimeEvents name: nil].
 ]
 
-{ #category : #services }
+{ #category : 'services' }
 MolMyServerTimeComponentImpl >> getServerTime [
 
 	^ Time nowUTC

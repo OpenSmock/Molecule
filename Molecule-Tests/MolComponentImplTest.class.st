@@ -1,22 +1,24 @@
 Class {
-	#name : #MolComponentImplTest,
-	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases'
+	#name : 'MolComponentImplTest',
+	#superclass : 'TestCase',
+	#category : 'Molecule-Tests-Cases',
+	#package : 'Molecule-Tests',
+	#tag : 'Cases'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 MolComponentImplTest >> setUp [
 	MolComponentManager cleanUp.
 	super setUp 
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 MolComponentImplTest >> tearDown [
 	super tearDown.
 	MolComponentManager cleanUp
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testAugmentedClassToAComponentProperties [
 	| component |
 
@@ -36,7 +38,7 @@ MolComponentImplTest >> testAugmentedClassToAComponentProperties [
 	self assert: component componentConnector equals: nil.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testAugmentedClassToAComponentRemoveAndReuseAsNormalWay [
 	"Use an existing class to a component, remove the component and reuse the instance as a normal way"
 
@@ -56,7 +58,7 @@ MolComponentImplTest >> testAugmentedClassToAComponentRemoveAndReuseAsNormalWay 
 	myInstance getMolUsedEventsSubscriber unsubscribe: myInstance.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testAugmentedClassToAComponentUsesAsAClassicWay [
 	"Use existing API outside a Component system but with component capacities use inside (get services, parameters and notify events)"
 
@@ -67,7 +69,7 @@ MolComponentImplTest >> testAugmentedClassToAComponentUsesAsAClassicWay [
 	self assert: myInstance existingInterfaceC.
 ]
 
-{ #category : #'test - connecting - events producers' }
+{ #category : 'test - connecting - events producers' }
 MolComponentImplTest >> testChangeEventsProducersDuringSubscribe [
 
 	| component |
@@ -82,7 +84,7 @@ MolComponentImplTest >> testChangeEventsProducersDuringSubscribe [
 	
 ]
 
-{ #category : #'test - contract' }
+{ #category : 'test - contract' }
 MolComponentImplTest >> testComponentType [ 
 
 	self assert: MolBasicComponentImpl componentType equals: MolBasicComponent.
@@ -91,7 +93,7 @@ MolComponentImplTest >> testComponentType [
 	
 ]
 
-{ #category : #'test - contract' }
+{ #category : 'test - contract' }
 MolComponentImplTest >> testComponentType2 [
 
 	self assert: MolComponentImpl componentType equals: nil.
@@ -104,13 +106,13 @@ MolComponentImplTest >> testComponentType2 [
 	
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testDefineComponent [
 
 	self assert: MolComponentImpl defineComponent equals: MolComponentImpl.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testEventsNotifiers [
 
 	| component |
@@ -140,7 +142,7 @@ MolComponentImplTest >> testEventsNotifiers [
 	self assert: component eventsNotifiers isEmpty.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testEventsSubscribers [
 
 	| component |
@@ -170,7 +172,7 @@ MolComponentImplTest >> testEventsSubscribers [
 	self assert: component eventsSubscribers isEmpty.
 ]
 
-{ #category : #'test - connecting - events producers' }
+{ #category : 'test - connecting - events producers' }
 MolComponentImplTest >> testForEventsAddAllProducers [
 
 	| component |
@@ -187,7 +189,7 @@ MolComponentImplTest >> testForEventsAddAllProducers [
 	
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testForEventsAddProducer [
 
 	| component |
@@ -206,7 +208,7 @@ MolComponentImplTest >> testForEventsAddProducer [
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #(#default #producerA #producerB).
 ]
 
-{ #category : #'test - connecting - events producers' }
+{ #category : 'test - connecting - events producers' }
 MolComponentImplTest >> testForEventsRemoveAllProducers [
 
 	| component |
@@ -229,7 +231,7 @@ MolComponentImplTest >> testForEventsRemoveAllProducers [
 	
 ]
 
-{ #category : #'test - connecting - events producers' }
+{ #category : 'test - connecting - events producers' }
 MolComponentImplTest >> testForEventsRemoveProducer [
 
 	| component |
@@ -250,7 +252,7 @@ MolComponentImplTest >> testForEventsRemoveProducer [
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
 ]
 
-{ #category : #'test - connecting - events producers' }
+{ #category : 'test - connecting - events producers' }
 MolComponentImplTest >> testForEventsRemoveProducer2 [
 	"This test testing if case of remove a producer with the defaultComponentName, it is not done because of this is the basic configuration of a component event"
 	| component |
@@ -261,7 +263,7 @@ MolComponentImplTest >> testForEventsRemoveProducer2 [
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName.
 ]
 
-{ #category : #'test - connecting - events producers' }
+{ #category : 'test - connecting - events producers' }
 MolComponentImplTest >> testForEventsUseAllProducers [
 
 	| component |
@@ -288,7 +290,7 @@ MolComponentImplTest >> testForEventsUseAllProducers [
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: #producerA.
 ]
 
-{ #category : #'test - connecting - events producers' }
+{ #category : 'test - connecting - events producers' }
 MolComponentImplTest >> testForEventsUseProducer [
 
 	| component |
@@ -312,7 +314,7 @@ MolComponentImplTest >> testForEventsUseProducer [
 	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName.
 ]
 
-{ #category : #'test - connecting - events producers' }
+{ #category : 'test - connecting - events producers' }
 MolComponentImplTest >> testForEventsUseProducer2 [
 
 	| component |
@@ -326,7 +328,7 @@ MolComponentImplTest >> testForEventsUseProducer2 [
 	
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testFoundNotifier [
 
 	| component |
@@ -335,7 +337,7 @@ MolComponentImplTest >> testFoundNotifier [
 	self assert: component getMolUsedEventsNotifier isNotFoundEventsNotifier not.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testFoundParameters [
 
 	| component |
@@ -344,7 +346,7 @@ MolComponentImplTest >> testFoundParameters [
 	self assert: component getMolUsedParametersProvider isNotFoundParameters not.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testFoundServices [
 
 	| component |
@@ -353,7 +355,7 @@ MolComponentImplTest >> testFoundServices [
 	self assert: component getMolUsedServicesProvider isNotFoundServices not.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testFoundSubscriber [
 
 	| component |
@@ -362,7 +364,7 @@ MolComponentImplTest >> testFoundSubscriber [
 	self assert: component getMolUsedEventsSubscriber isNotFoundEventsSubscriber not.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testGetComponentUsedWithWrongName [
 	"Connect two components with different types of component name"
 	| providerComponent userComponent |
@@ -402,7 +404,7 @@ MolComponentImplTest >> testGetComponentUsedWithWrongName [
 
 ]
 
-{ #category : #'test - contract' }
+{ #category : 'test - contract' }
 MolComponentImplTest >> testHaveComponentType [ 
 
 	self assert: MolComponentImpl haveComponentType equals: false.
@@ -410,7 +412,7 @@ MolComponentImplTest >> testHaveComponentType [
 	self assert: MolBasicSubComponentImpl haveComponentType equals: true.
 ]
 
-{ #category : #'test - contract' }
+{ #category : 'test - contract' }
 MolComponentImplTest >> testHaveOwnComponentType [ 
 
 	self assert: MolComponentImpl haveOwnComponentType equals: false.
@@ -418,13 +420,13 @@ MolComponentImplTest >> testHaveOwnComponentType [
 	self assert: MolBasicSubComponentImpl haveOwnComponentType equals: false.
 ]
 
-{ #category : #'test - contract' }
+{ #category : 'test - contract' }
 MolComponentImplTest >> testIsComponent [
 
 	self assert: MolComponentImpl isComponentClass.
 ]
 
-{ #category : #'test - contract' }
+{ #category : 'test - contract' }
 MolComponentImplTest >> testIsOverrideComponentType [
 
 	self assert: MolCompleteComponentImpl isOverrideComponentType equals: false.
@@ -434,7 +436,7 @@ MolComponentImplTest >> testIsOverrideComponentType [
 	self assert: MolBasicSubComponentImpl isOverrideComponentType equals: false.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testIsSubscribed [
 
 	| component |
@@ -459,7 +461,7 @@ MolComponentImplTest >> testIsSubscribed [
 	self assert: (component isSubscribed: MolUsedChildEvents) equals: false. "never be true"
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testNotFoundNotifier [
 
 	| component result |
@@ -471,7 +473,7 @@ MolComponentImplTest >> testNotFoundNotifier [
 	self assert: result isNil.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testNotFoundParameters [
 
 	| component result |
@@ -483,7 +485,7 @@ MolComponentImplTest >> testNotFoundParameters [
 	self assert: result isNil.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testNotFoundServices [
 
 	| component result |
@@ -495,7 +497,7 @@ MolComponentImplTest >> testNotFoundServices [
 	self assert: result isNil.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testNotFoundSubscriber [
 
 	| component |
@@ -507,7 +509,7 @@ MolComponentImplTest >> testNotFoundSubscriber [
 	component getMolUsedEventsSubscriber unsubscribe: self.
 ]
 
-{ #category : #'test - contract' }
+{ #category : 'test - contract' }
 MolComponentImplTest >> testOverridedComponentTypes [
 
 	self assert: MolCompleteComponentImpl overridedComponentTypes isEmpty.
@@ -515,7 +517,7 @@ MolComponentImplTest >> testOverridedComponentTypes [
 	self assert: MolCompleteComponentChildImpl overridedComponentTypes first equals: MolCompleteComponent.
 ]
 
-{ #category : #'test - contract' }
+{ #category : 'test - contract' }
 MolComponentImplTest >> testOwnComponentType [ 
 
 	self assert: MolBasicComponentImpl ownComponentType equals: MolBasicComponent.
@@ -524,7 +526,7 @@ MolComponentImplTest >> testOwnComponentType [
 	
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testParametersProviders [
 
 	| component |
@@ -554,7 +556,7 @@ MolComponentImplTest >> testParametersProviders [
 	self assert: component parametersProviders isEmpty.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolComponentImplTest >> testServicesProviders [
 
 	| component |
@@ -584,7 +586,7 @@ MolComponentImplTest >> testServicesProviders [
 	self assert: component servicesProviders isEmpty.
 ]
 
-{ #category : #'test - component creation' }
+{ #category : 'test - component creation' }
 MolComponentImplTest >> testStart [
 	MolCompleteComponentImpl deploy.
 	MolCompleteComponentImpl instanciate.
@@ -596,7 +598,7 @@ MolComponentImplTest >> testStart [
 	MolCompleteComponentImpl undeploy.
 ]
 
-{ #category : #'test - component creation' }
+{ #category : 'test - component creation' }
 MolComponentImplTest >> testStart2 [
 	| component |
 	component := MolCompleteComponentImpl start.
@@ -610,7 +612,7 @@ MolComponentImplTest >> testStart2 [
 	self assert: component componentName equals: #compA.
 ]
 
-{ #category : #'test - component creation' }
+{ #category : 'test - component creation' }
 MolComponentImplTest >> testStartWithName [
 	MolCompleteComponentImpl deploy.
 	MolCompleteComponentImpl instanciate: #myComponent.
@@ -622,7 +624,7 @@ MolComponentImplTest >> testStartWithName [
 	MolCompleteComponentImpl undeploy.
 ]
 
-{ #category : #'test - component creation' }
+{ #category : 'test - component creation' }
 MolComponentImplTest >> testStartWithWrongNames [
 	"Start component with different types of component name"
 	| component error |
@@ -655,7 +657,7 @@ MolComponentImplTest >> testStartWithWrongNames [
 	self assert: component isNil.
 ]
 
-{ #category : #'test - component creation' }
+{ #category : 'test - component creation' }
 MolComponentImplTest >> testStop [
 	MolCompleteComponentImpl start.
 	MolCompleteComponentImpl stop.

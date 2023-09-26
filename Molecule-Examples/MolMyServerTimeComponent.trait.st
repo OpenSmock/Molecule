@@ -6,19 +6,21 @@ In my contract, I produce MyGlobalTimeEvents, and provide  MyServerTimeServices.
 With my contract, all my implementations will automatically use appropriate traits and receive generated methods.
 "
 Trait {
-	#name : #MolMyServerTimeComponent,
+	#name : 'MolMyServerTimeComponent',
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : #'Molecule-Examples-Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example',
+	#package : 'Molecule-Examples',
+	#tag : 'Clock System Example'
 }
 
-{ #category : #'accessing - events' }
+{ #category : 'accessing - events' }
 MolMyServerTimeComponent classSide >> producedComponentEvents [
 <componentContract>		
 	^{ MolMyGlobalTimeEvents }
 ]
 
-{ #category : #'accessing - services' }
+{ #category : 'accessing - services' }
 MolMyServerTimeComponent classSide >> providedComponentServices [
 <componentContract>	
 	^{ MolMyServerTimeServices } 

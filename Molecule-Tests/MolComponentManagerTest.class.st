@@ -2,24 +2,26 @@
 A MolComponentManagerTest is a test class for testing the behavior of MolComponentManager
 "
 Class {
-	#name : #MolComponentManagerTest,
-	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases'
+	#name : 'MolComponentManagerTest',
+	#superclass : 'TestCase',
+	#category : 'Molecule-Tests-Cases',
+	#package : 'Molecule-Tests',
+	#tag : 'Cases'
 }
 
-{ #category : #'setUp - tearDown' }
+{ #category : 'setUp - tearDown' }
 MolComponentManagerTest >> setUp [
 	super setUp.
 	MolComponentManager cleanUp
 ]
 
-{ #category : #'setUp - tearDown' }
+{ #category : 'setUp - tearDown' }
 MolComponentManagerTest >> tearDown [
 	MolComponentManager cleanUp.
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testCleanUp [
 	| manager1 manager2 |
 	manager1 := MolComponentManager default.
@@ -32,7 +34,7 @@ MolComponentManagerTest >> testCleanUp [
 	
 ]
 
-{ #category : #'tests - general' }
+{ #category : 'tests - general' }
 MolComponentManagerTest >> testCleanUpIgnoreErrors [
 	"Start a manuel tree of components and clean up, components are removed during the cleanUp but some componentRemove methods should remove again an already removed component : a error is reach but ignored during a cleanUp"
 	
@@ -40,7 +42,7 @@ MolComponentManagerTest >> testCleanUpIgnoreErrors [
 	MolUtils startComponent: MolTestComponentTreeLevel0Impl.	
 ]
 
-{ #category : #'tests - component start & stop' }
+{ #category : 'tests - component start & stop' }
 MolComponentManagerTest >> testComponentTree [
 	"Start a component Tree : a component which is starting sub components, etc."
 	| nb |
@@ -58,7 +60,7 @@ MolComponentManagerTest >> testComponentTree [
 	MolComponentManager default deploymentServices undeployComponentImplementation: MolTestComponentTreeLevel2Impl.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testDeepCleanUp [
 
 	| manager factory |
@@ -72,7 +74,7 @@ MolComponentManagerTest >> testDeepCleanUp [
 	self assert: factory == MolComponentFactory default equals: false.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testDeepCleanUpGarbageCollect [
 
 	1 to: 10 do: [ :i | 
@@ -87,20 +89,20 @@ MolComponentManagerTest >> testDeepCleanUpGarbageCollect [
 	self assert: MolCompleteComponentImpl allInstances size equals: 0.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testDefault [
 	self assert: (MolComponentManager default isKindOf: MolComponentManager).
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testDeploymentServices [
 	| manager |
 	manager := MolComponentManager default.
 	self assert: (manager deploymentServices isKindOf: MolDeploymentServices).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testFlushComponents [
 	| nb |
 	
@@ -118,7 +120,7 @@ MolComponentManagerTest >> testFlushComponents [
 	self assert: MolAugmentedClassToAComponent allInstances size equals: 0.
 ]
 
-{ #category : #'setUp - tearDown' }
+{ #category : 'setUp - tearDown' }
 MolComponentManagerTest >> testGarbageCollect [
 
 	"Create some classics components to clean"
@@ -138,14 +140,14 @@ MolComponentManagerTest >> testGarbageCollect [
 	self assert: MolCompleteComponentImpl allInstances size equals: 0
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testHomeServices [
 	| manager |
 	manager := MolComponentManager default.
 	self assert: (manager homeServices isKindOf: MolHomeServices).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testImageCleanUp [
 	"Test the Do Image Cleanup Pharo function"
 	
@@ -161,7 +163,7 @@ MolComponentManagerTest >> testImageCleanUp [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testInitialize [
 	| manager |
 	self assert: MolComponentManager isInitialized equals: false.
@@ -172,7 +174,7 @@ MolComponentManagerTest >> testInitialize [
 	self assert: manager homeServices notNil.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testIsInitialized [
 	self assert: MolComponentManager isInitialized equals: false.
 	MolComponentManager default.
@@ -181,7 +183,7 @@ MolComponentManagerTest >> testIsInitialized [
 	self assert: MolComponentManager isInitialized equals: false.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testIsRunningComponents [
 
 	self assert: MolComponentManager isRunningComponents equals: false.
@@ -193,7 +195,7 @@ MolComponentManagerTest >> testIsRunningComponents [
 	self assert: MolComponentManager isRunningComponents equals: false.
 ]
 
-{ #category : #'tests - general' }
+{ #category : 'tests - general' }
 MolComponentManagerTest >> testIsRunningComponentsAllSteps [
 
 	MolComponentManager default deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
@@ -212,14 +214,14 @@ MolComponentManagerTest >> testIsRunningComponentsAllSteps [
 	self assert: MolComponentManager isRunningComponents equals: false.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testLocatorServices [
 	| manager |
 	manager := MolComponentManager default.
 	self assert: (manager locatorServices isKindOf: MolLocatorServices).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolComponentManagerTest >> testRelease [
 	| manager |
 	manager := MolComponentManager default.

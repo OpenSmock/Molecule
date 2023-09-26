@@ -6,13 +6,15 @@ My consumers must use me as trait. If the component type is correctly defined, i
 See ComponentEvents for more informations about events.
 "
 Trait {
-	#name : #MolMyLocalTimeEvents,
+	#name : 'MolMyLocalTimeEvents',
 	#traits : 'MolComponentEvents',
 	#classTraits : 'MolComponentEvents classTrait',
-	#category : #'Molecule-Examples-Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example',
+	#package : 'Molecule-Examples',
+	#tag : 'Clock System Example'
 }
 
-{ #category : #events }
+{ #category : 'events' }
 MolMyLocalTimeEvents >> notifyLocalTime: aLocalTime [
 
 	self explicitRequirement

@@ -6,15 +6,17 @@ This system uses 4 components: a server time send global hour to a clock. The cl
 This system provides a global example of the use of components. Use Transcript to see the result, and activate Molecule log by using 'MolUtils isLogActive: true'.
 "
 Class {
-	#name : #MolMyClockSystem,
-	#superclass : #Object,
+	#name : 'MolMyClockSystem',
+	#superclass : 'Object',
 	#classVars : [
 		'ClockUser'
 	],
-	#category : #'Molecule-Examples-Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example',
+	#package : 'Molecule-Examples',
+	#tag : 'Clock System Example'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 MolMyClockSystem class >> deploy [
 	
 	MolComponentManager default deploymentServices deployComponentImplementation: MolMyServerTimeComponentImpl.
@@ -23,7 +25,7 @@ MolMyClockSystem class >> deploy [
 	MolComponentManager default deploymentServices deployComponentImplementation: MolMyUserFacadeComponentImpl.
 ]
 
-{ #category : #'start-stop' }
+{ #category : 'start-stop' }
 MolMyClockSystem class >> start [
 
 	| cm |
@@ -41,7 +43,7 @@ MolMyClockSystem class >> start [
 	cm homeServices activateComponent: MolMyAlarmComponentImpl.
 ]
 
-{ #category : #launcher }
+{ #category : 'launcher' }
 MolMyClockSystem class >> startAlarmExample [
 	"Start Clock System example : simulate a clock alarm for sleeping !"
 	<script: 'self startAlarmExample'>
@@ -85,7 +87,7 @@ MolMyClockSystem class >> startAlarmExample [
 	] fork.
 ]
 
-{ #category : #'start-stop' }
+{ #category : 'start-stop' }
 MolMyClockSystem class >> stop [
 	
 	MolComponentManager default homeServices removeAllComponents.
@@ -93,7 +95,7 @@ MolMyClockSystem class >> stop [
 	
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolMyClockSystem class >> undeploy [
 	
 	MolComponentManager default deploymentServices undeployComponentImplementation: MolMyServerTimeComponentImpl.

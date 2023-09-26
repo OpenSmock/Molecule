@@ -2,24 +2,26 @@
 A MolLocatorServicesTest is a test class for testing the behavior of MolLocatorServices
 "
 Class {
-	#name : #MolLocatorServicesTest,
-	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases'
+	#name : 'MolLocatorServicesTest',
+	#superclass : 'TestCase',
+	#category : 'Molecule-Tests-Cases',
+	#package : 'Molecule-Tests',
+	#tag : 'Cases'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> setUp [ 
 
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> tearDown [  
 
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> testManyComponentsSearchServiceProviderFor [
 	| servicesProvider comp1 comp2 comp3 |
 
@@ -37,7 +39,7 @@ MolLocatorServicesTest >> testManyComponentsSearchServiceProviderFor [
 	self assert: servicesProvider equals: comp3.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> testNotFoundParametersProvider [
 	| parametersProvider |
 	
@@ -49,7 +51,7 @@ MolLocatorServicesTest >> testNotFoundParametersProvider [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> testNotFoundServiceProvider [
 	| serviceProvider |
 
@@ -61,7 +63,7 @@ MolLocatorServicesTest >> testNotFoundServiceProvider [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> testNotReadySearchEventSubscriberFor [
 	| eventSubscriber |
 
@@ -73,7 +75,7 @@ MolLocatorServicesTest >> testNotReadySearchEventSubscriberFor [
 	self assert: (eventSubscriber observersConnection isEmpty).
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolLocatorServicesTest >> testSearchComponentTypeImplementorFor [
 	| manager component myComponent |
 	manager := MolComponentManager default.
@@ -88,7 +90,7 @@ MolLocatorServicesTest >> testSearchComponentTypeImplementorFor [
 	self assert: component identicalTo: myComponent.
 ]
 
-{ #category : #test }
+{ #category : 'test' }
 MolLocatorServicesTest >> testSearchComponentTypeImplementorForNamed [
 	| manager component myComponent |
 	manager := MolComponentManager default.
@@ -103,7 +105,7 @@ MolLocatorServicesTest >> testSearchComponentTypeImplementorForNamed [
 	self assert: component identicalTo: myComponent.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> testSearchEventsSubscriberFor [
 	| eventSubscriber component |
 
@@ -117,7 +119,7 @@ MolLocatorServicesTest >> testSearchEventsSubscriberFor [
 	self assert: (eventSubscriber observersConnection isEmpty).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> testSearchEventsSubscriberForNamed [
 	| eventSubscriber component |
 
@@ -131,7 +133,7 @@ MolLocatorServicesTest >> testSearchEventsSubscriberForNamed [
 	self assert: (eventSubscriber observersConnection isEmpty).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> testSearchParametersProviderFor [
 	| manager parametersProvider |
 	
@@ -144,7 +146,7 @@ MolLocatorServicesTest >> testSearchParametersProviderFor [
 	self assert: (parametersProvider isKindOf: MolCompleteComponentImpl).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> testSearchParametersProviderForNamed [
 	| manager parametersProvider |
 	
@@ -157,7 +159,7 @@ MolLocatorServicesTest >> testSearchParametersProviderForNamed [
 	self assert: (parametersProvider isKindOf: MolCompleteComponentImpl).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> testSearchServicesProviderFor [
 	| manager servicesProvider |
 
@@ -170,7 +172,7 @@ MolLocatorServicesTest >> testSearchServicesProviderFor [
 	self assert: (servicesProvider isKindOf: MolCompleteComponentImpl).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolLocatorServicesTest >> testSearchServicesProviderForNamed [
 	| manager servicesProvider |
 

@@ -11,24 +11,26 @@ I do not worry about interactions between components. See:
 - MyClockSystem for a global example.
 "
 Class {
-	#name : #MolHomeServicesTest,
-	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases'
+	#name : 'MolHomeServicesTest',
+	#superclass : 'TestCase',
+	#category : 'Molecule-Tests-Cases',
+	#package : 'Molecule-Tests',
+	#tag : 'Cases'
 }
 
-{ #category : #'setUp-tearDown' }
+{ #category : 'setUp-tearDown' }
 MolHomeServicesTest >> setUp [
 
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #'setUp-tearDown' }
+{ #category : 'setUp-tearDown' }
 MolHomeServicesTest >> tearDown [
 
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testActivateComponent [
 	"Test Component properties after activation"
 	| manager component |
@@ -45,7 +47,7 @@ MolHomeServicesTest >> testActivateComponent [
 	self assert: component servicesProviders notEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testActivateComponentAugmentedClass [
 	"Test Component properties after activation"
 	| manager component |
@@ -66,7 +68,7 @@ MolHomeServicesTest >> testActivateComponentAugmentedClass [
 	component forParameters: MolParametersTest useProvider: MolUtils defaultComponentName.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testActivateComponentNamed [
 	"Test Component properties after activation"
 	| manager component |
@@ -83,7 +85,7 @@ MolHomeServicesTest >> testActivateComponentNamed [
 	self assert: component servicesProviders notEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testInstanciateComponent [
 	"Test Component properties after instanciation"
 	| manager component |
@@ -99,7 +101,7 @@ MolHomeServicesTest >> testInstanciateComponent [
 	self assert: component servicesProviders notEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testInstanciateComponentNamed [
 	"Test Component properties after instanciation"
 	| manager component |
@@ -115,7 +117,7 @@ MolHomeServicesTest >> testInstanciateComponentNamed [
 	self assert: component servicesProviders notEmpty.
 ]
 
-{ #category : #'test - errors' }
+{ #category : 'test - errors' }
 MolHomeServicesTest >> testInstanciateComponentWithOverridedInstanciateTypeAndSameName [
 	"Test exception appear"
 	| manager error |
@@ -144,7 +146,7 @@ MolHomeServicesTest >> testInstanciateComponentWithOverridedInstanciateTypeAndSa
 	self assert: (error isKindOf: ComponentProvidedServicesAlreadyExistsError).
 ]
 
-{ #category : #'test - errors' }
+{ #category : 'test - errors' }
 MolHomeServicesTest >> testInstanciateComponentWithSameNameAndServices [
 	"Test exception appear"
 	| manager error |
@@ -173,7 +175,7 @@ MolHomeServicesTest >> testInstanciateComponentWithSameNameAndServices [
 	self assert: (error isKindOf: ComponentProvidedServicesAlreadyExistsError).
 ]
 
-{ #category : #'test - errors' }
+{ #category : 'test - errors' }
 MolHomeServicesTest >> testInstanciateComponentWithSameNameAndType [
 	"Test exception appear"
 	| manager error |
@@ -202,7 +204,7 @@ MolHomeServicesTest >> testInstanciateComponentWithSameNameAndType [
 	self assert: (error isKindOf: ComponentAlreadyExistsError).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testPassivateComponent [
 	"Test Component properties after passivation"
 	| manager component |
@@ -220,7 +222,7 @@ MolHomeServicesTest >> testPassivateComponent [
 	self assert: component servicesProviders notEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testPassivateComponentNamed [
 	"Test Component properties after passivation"
 	| manager component |
@@ -238,7 +240,7 @@ MolHomeServicesTest >> testPassivateComponentNamed [
 	self assert: component servicesProviders notEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testRemoveAllComponents [
 	"Test Component release on a remove"
 	| manager |
@@ -263,7 +265,7 @@ MolHomeServicesTest >> testRemoveAllComponents [
 	self assert: manager homeServices waitingForActivation isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testRemoveComponent [
 	"Test Component release on a remove"
 	| manager component |
@@ -283,7 +285,7 @@ MolHomeServicesTest >> testRemoveComponent [
 	self assert: component servicesProviders equals: MolComponentConnector defaultServicesProviders.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testRemoveComponentNamed [
 	"Test Component release on a remove"
 	| manager component |
@@ -303,7 +305,7 @@ MolHomeServicesTest >> testRemoveComponentNamed [
 	self assert: component servicesProviders equals: MolComponentConnector defaultServicesProviders.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testSeveralComponentsLifecycle [
 	"Test life cycle of several components"
 	| manager |
@@ -343,46 +345,78 @@ MolHomeServicesTest >> testSeveralComponentsLifecycle [
 	self assert: (manager homeServices isWaitingForActivation: MolCompleteComponentImpl) not.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testSeveralComponentsLifecycleWithName [
-"Test life cycle of several components with names"
-	| manager |
-	
-	manager := MolComponentManager default.
-	
-	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl2.
+	"Test life cycle of several components with names"
 
-	manager homeServices instanciateComponent: MolBasicComponentImpl named: #component1.
-	manager homeServices instanciateComponent: MolBasicComponentImpl.
-	manager homeServices instanciateComponent: MolBasicComponentImpl2 named: #component2.
+	| manager |
+	manager := MolComponentManager default.
+
+	"Deployment"
+	manager deploymentServices deployComponentImplementation:
+		MolBasicComponentImpl.
+	manager deploymentServices deployComponentImplementation:
+		MolBasicComponentImpl2.
+
+	manager homeServices
+		instantiateComponent: MolBasicComponentImpl
+		named: #component1.
+	manager homeServices instantiateComponent: MolBasicComponentImpl.
+	manager homeServices
+		instantiateComponent: MolBasicComponentImpl2
+		named: #component2.
 
 	"Test method activateAllComponents"
 	manager homeServices activateAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #component1).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl2 named: #component2).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl named: #component1) not.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl) not.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl2 named: #component2) not.
-	
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl
+			 named: #component1).
+	self assert:
+		(MolUtils isInstantiateComponentOf: MolBasicComponentImpl).
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl2
+			 named: #component2).
+	self assert: (manager homeServices
+			 isWaitingForActivation: MolBasicComponentImpl
+			 named: #component1) not.
+	self assert:
+		(manager homeServices isWaitingForActivation: MolBasicComponentImpl)
+			not.
+	self assert: (manager homeServices
+			 isWaitingForActivation: MolBasicComponentImpl2
+			 named: #component2) not.
+
 	"Test method passivateAllComponents"
 	manager homeServices passivateAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #component1).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl2 named: #component2).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl named: #component1).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl2 named: #component2).
-	
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl
+			 named: #component1).
+	self assert:
+		(MolUtils isInstantiateComponentOf: MolBasicComponentImpl).
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl2
+			 named: #component2).
+	self assert: (manager homeServices
+			 isWaitingForActivation: MolBasicComponentImpl
+			 named: #component1).
+	self assert:
+		(manager homeServices isWaitingForActivation: MolBasicComponentImpl).
+	self assert: (manager homeServices
+			 isWaitingForActivation: MolBasicComponentImpl2
+			 named: #component2).
+
 	manager homeServices removeAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #component1) not.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl) not.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl2 named: #component2) not.
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl
+			 named: #component1) not.
+	self assert:
+		(MolUtils isInstantiateComponentOf: MolBasicComponentImpl) not.
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl2
+			 named: #component2) not
 ]
 
-{ #category : #'test - errors' }
+{ #category : 'test - errors' }
 MolHomeServicesTest >> testStartAndStopComponentsAlreadyExists [
 	"Test exception appear"
 	| manager error |
@@ -417,7 +451,7 @@ MolHomeServicesTest >> testStartAndStopComponentsAlreadyExists [
 	self assert: (error isKindOf: ComponentNotFoundError).
 ]
 
-{ #category : #'test - errors' }
+{ #category : 'test - errors' }
 MolHomeServicesTest >> testStartAndStopComponentsNoExist [
 	"Test exception appear"
 	| manager error |
@@ -445,7 +479,7 @@ MolHomeServicesTest >> testStartAndStopComponentsNoExist [
 	self assert: (error isKindOf: ComponentNotFoundError).
 ]
 
-{ #category : #'test - errors' }
+{ #category : 'test - errors' }
 MolHomeServicesTest >> testStartNotDeployedComponent [
 	"Test exception appear"
 	| manager error |
@@ -461,7 +495,7 @@ MolHomeServicesTest >> testStartNotDeployedComponent [
 	self assert: (error isKindOf: ComponentNotDeployedError).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testSubComponentLifecycle [
 "test life cycle of a component using AbstractComponentImpl as super class"
 	| manager component |
@@ -495,7 +529,7 @@ MolHomeServicesTest >> testSubComponentLifecycle [
 	self assert: manager homeServices deployedComponents isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testSubComponentLifecycleWithName [
 "test life cycle of a component using AbstractComponentImpl as super class with a name"
 	| manager |
@@ -529,7 +563,7 @@ MolHomeServicesTest >> testSubComponentLifecycleWithName [
 	self assert: manager homeServices deployedComponents isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testTraitComponentLifecycle [
 "test life cycle of a component using ComponentImpl trait"
 	| manager |
@@ -563,7 +597,7 @@ MolHomeServicesTest >> testTraitComponentLifecycle [
 	self assert: manager homeServices deployedComponents isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolHomeServicesTest >> testTraitComponentLifecycleWithName [
 "test life cycle of a component using ComponentImpl trait with a name"
 	| manager |

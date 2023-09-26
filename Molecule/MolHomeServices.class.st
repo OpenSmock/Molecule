@@ -7,16 +7,18 @@ See examples of my use in Tests and Examples packages.
 
 "
 Class {
-	#name : #MolHomeServices,
-	#superclass : #Object,
+	#name : 'MolHomeServices',
+	#superclass : 'Object',
 	#instVars : [
 		'deployedComponents',
 		'waitingForActivation'
 	],
-	#category : #'Molecule-Core'
+	#category : 'Molecule-Core',
+	#package : 'Molecule',
+	#tag : 'Core'
 }
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> activateAllComponents [
 	| waitingComponents |
 	
@@ -26,13 +28,13 @@ MolHomeServices >> activateAllComponents [
 	]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> activateComponent: aComponentClass [
 
 	^ self activateComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> activateComponent: aComponentClass named: aName [
 	| component |
 	
@@ -62,78 +64,24 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 	^ component
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> addDeployedComponent: aComponentClass [
 	self deployedComponents at: aComponentClass ifAbsentPut: [Dictionary new]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> checkInstanciationOfComponent: aComponentClass named: aComponentName [
 
-	| deployed component overridedTypes |
 	self
 		deprecated: 'Use checkInstantiationOfComponent: named:'
 		transformWith:
 			'`@receiver checkInstanciationOfComponent: `@aComponentClass named: `@aComponentName'
 			->
 			'`@receiver checkInstantiationOfComponent: `@aComponentClass named: `@aComponentName'.
-	aComponentName ifNil: [
-		^ WrongComponentNameError new messageText:
-			  'Can not instanciate a component without name' ].
-
-	aComponentName isSymbol ifFalse: [
-		^ WrongComponentNameError new messageText:
-			  'Can not instanciate a component with a name wish is not a symbol' ].
-
-	deployed := self deployedComponents at: aComponentClass ifAbsent: [
-		            ^ ComponentNotDeployedError new messageText:
-			              'Can not instanciate a non deployed component' ].
-	deployed at: aComponentName ifPresent: [ :e |
-		e ifNotNil: [
-			^ ComponentAlreadyExistsError new messageText:
-				  'Can not instanciate a component with the same name of another component, please change the name of the component' ] ].
-
-	component := MolComponentManager default locatorServices
-		             searchComponentTypeImplementorFor:
-		             aComponentClass componentType
-		             named: aComponentName.
-	component ifNotNil: [
-		^ ComponentAlreadyExistsError new messageText:
-			  'Can not instanciate a component with the same type and name of another component, please change the name of the component' ].
-
-	aComponentClass componentType allProvidedServices do: [ :e |
-		(MolComponentManager default locatorServices
-			 searchServicesProviderFor: e
-			 named: aComponentName) isNotFoundServices ifFalse: [
-			^ ComponentProvidedServicesAlreadyExistsError new messageText:
-				  'Can not instanciate a component with the same services and name of another component, please change the name of the component' ] ].
-
-	aComponentClass componentType allProvidedParameters do: [ :e |
-		(MolComponentManager default locatorServices
-			 searchParametersProviderFor: e
-			 named: aComponentName) isNotFoundParameters ifFalse: [
-			^ ComponentProvidedParametersAlreadyExistsError new messageText:
-				  'Can not instanciate a component with the same parameters and name of another component, please change the name of the component' ] ].
-
-	aComponentClass isOverrideComponentType ifTrue: [
-		overridedTypes := aComponentClass overridedComponentTypes.
-		overridedTypes do: [ :type |
-			type allProvidedServices do: [ :e |
-				(MolComponentManager default locatorServices
-					 searchServicesProviderFor: e
-					 named: aComponentName) isNotFoundServices ifFalse: [
-					^ ComponentProvidedServicesAlreadyExistsError new messageText:
-						  '(Inheritance problem) Can not instanciate a component with the same services and name of another component, please change the name of the component' ] ].
-			type allProvidedParameters do: [ :e |
-				(MolComponentManager default locatorServices
-					 searchParametersProviderFor: e
-					 named: aComponentName) isNotFoundParameters ifFalse: [
-					^ ComponentProvidedServicesAlreadyExistsError new messageText:
-						  '(Inheritance problem) Can not instanciate a component with the same parameters and name of another component, please change the name of the component' ] ] ] ].
-	^ nil
+	^ self checkInstantiationOfComponent: aComponentClass named: aComponentName
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> checkInstantiationOfComponent: aComponentClass named: aComponentName [
 
 	| deployed component overridedTypes |
@@ -193,94 +141,63 @@ MolHomeServices >> checkInstantiationOfComponent: aComponentClass named: aCompon
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolHomeServices >> deployedComponents [
 	^ deployedComponents
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolHomeServices >> initialize [
 	super initialize.
 	deployedComponents := Dictionary new.
 	waitingForActivation := Set new.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolHomeServices >> instanceOf: aClass named: aName [
 	^(self deployedComponents at: aClass ifAbsent: [^nil]) at: aName ifAbsent: [^nil]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instanciateAllComponents [
 
 	self
 		deprecated: 'Use instantiateAllComponents'
 		transformWith: '`@receiver instanciateAllComponents'
 			-> '`@receiver instantiateAllComponents'.
-	self deployedComponents keysDo: [ :aClass |
-		self instanciateComponent: aClass ]
+	self instantiateAllComponents
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instanciateComponent: aComponentClass [
 
 	self
 		deprecated: 'Use instantiateComponent:'
 		transformWith: '`@receiver instanciateComponent: `@aComponentClass'
 			-> '`@receiver instantiateComponent: `@aComponentClass'.
-	^ self
-		  instanciateComponent: aComponentClass
-		  named: MolUtils defaultComponentName
+	^ self instantiateComponent: aComponentClass
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 
-	| error component connector deployed |
 	self
 		deprecated: 'Use instantiateComponent: named:'
 		transformWith:
 			'`@receiver instanciateComponent: `@aComponentClass named: `@aName'
 			->
 			'`@receiver instantiateComponent: `@aComponentClass named: `@aName'.
-	aComponentClass ifNil: [ ^ nil ].
-	error := self
-		         checkInstanciationOfComponent: aComponentClass
-		         named: aName.
-	error ifNotNil: [
-		error signal.
-		^ nil ].
-
-	component := aComponentClass new
-		             componentName: aName;
-		             yourself.
-	MolUtils log:
-		aComponentClass printString , ' named: ' , aName printString
-		, ' is instanciated.'.
-
-	deployed := self deployedComponents at: aComponentClass.
-	deployed at: component componentName put: component.
-
-	"connect the component to the component model and initialize it"
-	connector := MolComponentConnector new.
-	component componentConnector: connector.
-	component componentInitialize.
-	component triggerEvent: #instanciateComponent with: component.
-
-	"add the component to waiting activation list"
-	waitingForActivation add: component.
-
-	^ component
+	^ self instantiateComponent: aComponentClass named: aName
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instantiateAllComponents [
 
 	self deployedComponents keysDo: [ :aClass |
 		self instantiateComponent: aClass ]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instantiateComponent: aComponentClass [
 
 	^ self
@@ -288,7 +205,7 @@ MolHomeServices >> instantiateComponent: aComponentClass [
 		  named: MolUtils defaultComponentName
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instantiateComponent: aComponentClass named: aName [
 
 	| error component connector deployed |
@@ -322,19 +239,19 @@ MolHomeServices >> instantiateComponent: aComponentClass named: aName [
 	^ component
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> isDeployedComponent: aComponentClass [
 
 	^ self deployedComponents includesKey: aComponentClass
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolHomeServices >> isWaitingForActivation: aComponentClass [
 
 	^ self isWaitingForActivation: aComponentClass named: MolUtils defaultComponentName
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolHomeServices >> isWaitingForActivation: aComponentClass named: aComponentName [
 	| component |
 
@@ -344,7 +261,7 @@ MolHomeServices >> isWaitingForActivation: aComponentClass named: aComponentName
 		ifTrue: [^false]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> passivateAllComponents [
 	self deployedComponents do: [ :aDictionary | 
 		aDictionary keysAndValuesDo: [ :aName :aComponent | 
@@ -353,13 +270,13 @@ MolHomeServices >> passivateAllComponents [
 	]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> passivateComponent: aComponentClass [
 
 	^ self passivateComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> passivateComponent: aComponentClass named: aName [
 	| component |
 	
@@ -387,7 +304,7 @@ MolHomeServices >> passivateComponent: aComponentClass named: aName [
 	^ component
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolHomeServices >> release [
 	self removeAllComponents.
 	deployedComponents := nil.
@@ -395,7 +312,7 @@ MolHomeServices >> release [
 	super release.
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> removeAllComponents [
 	| components |
 	components := self deployedComponents.
@@ -404,13 +321,13 @@ MolHomeServices >> removeAllComponents [
 	]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> removeComponent: aComponentClass [
 
 	^ self removeComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> removeComponent: aComponentClass named: aName [
 	| removedComponent deployedComponentsOfThisClass |
 	(aComponentClass isNil or:[aName isNil]) ifTrue:[^nil].
@@ -457,7 +374,7 @@ MolHomeServices >> removeComponent: aComponentClass named: aName [
 	^removedComponent
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> removeDeployedComponent: aComponentClass [
 	"Remove a deployed component"
 	self deployedComponents at: aComponentClass ifPresent:[ :compDict | 
@@ -471,7 +388,7 @@ MolHomeServices >> removeDeployedComponent: aComponentClass [
 	] ifAbsent:[ ^self ].
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> resetComponentConnection: aComponent withRemovedComponent: aRemovedComponent [
 	"Unlink component connections with a removed component, this action reset component connexion in case of a new instance appears"
 	| eventAndComponentNameAssocList eventsSubscribers |
@@ -505,7 +422,7 @@ MolHomeServices >> resetComponentConnection: aComponent withRemovedComponent: aR
 	].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolHomeServices >> waitingForActivation [
 	^ waitingForActivation
 ]

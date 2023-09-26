@@ -3,24 +3,26 @@ I provide basic tests for services.
 Also, I can be used as example to use services. My classes are in package Molecule-Examples.
 "
 Class {
-	#name : #MolServicesTest,
-	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases'
+	#name : 'MolServicesTest',
+	#superclass : 'TestCase',
+	#category : 'Molecule-Tests-Cases',
+	#package : 'Molecule-Tests',
+	#tag : 'Cases'
 }
 
-{ #category : #'setUp-tearDown' }
+{ #category : 'setUp-tearDown' }
 MolServicesTest >> setUp [
 
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #'setUp-tearDown' }
+{ #category : 'setUp-tearDown' }
 MolServicesTest >> tearDown [
 
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolServicesTest >> testTableProvideServices [
 	| manager table user |
 	
@@ -43,7 +45,7 @@ MolServicesTest >> testTableProvideServices [
 	user getMolMyTableServicesProvider getContent.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolServicesTest >> testTableProvideServicesNamed [
 	| manager table user |
 	
@@ -68,7 +70,7 @@ MolServicesTest >> testTableProvideServicesNamed [
 	self assert: user getMolMyTableServicesProvider equals: table.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolServicesTest >> testTableProvideServicesNotActivated [
 	| manager table user |
 	
@@ -95,7 +97,7 @@ MolServicesTest >> testTableProvideServicesNotActivated [
 	user getMolMyTableServicesProvider getContent.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolServicesTest >> testTableProvideServicesNotActivatedNamed [
 	| manager table user |
 	
@@ -125,7 +127,7 @@ MolServicesTest >> testTableProvideServicesNotActivatedNamed [
 	user getMolMyTableServicesProvider getContent.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolServicesTest >> testTableProvideServicesToSeveralUsers [
 	| manager table user1 user2 |
 	

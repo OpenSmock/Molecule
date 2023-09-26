@@ -9,6 +9,8 @@ Naming conventions :
 <Name of my event>Events
 "
 Trait {
-	#name : #MolComponentEvents,
-	#category : #'Molecule-Component Contract'
+	#name : 'MolComponentEvents',
+	#category : 'Molecule-Component Contract',
+	#package : 'Molecule',
+	#tag : 'Component Contract'
 }

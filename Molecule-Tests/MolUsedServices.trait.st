@@ -2,13 +2,15 @@
 I am a services trait used for test LocatorServices class.
 "
 Trait {
-	#name : #MolUsedServices,
+	#name : 'MolUsedServices',
 	#traits : 'MolComponentServices',
 	#classTraits : 'MolComponentServices classTrait',
-	#category : #'Molecule-Tests-Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts',
+	#package : 'Molecule-Tests',
+	#tag : 'Resources - Contracts'
 }
 
-{ #category : #service }
+{ #category : 'service' }
 MolUsedServices >> service [
 	^ #service
 ]

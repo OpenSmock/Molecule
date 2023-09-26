@@ -6,19 +6,21 @@ My providers must use me as trait. If the component type is correctly defined, i
 See ComponentParameters for more informations about parameters.
 "
 Trait {
-	#name : #MolMyClockParameters,
+	#name : 'MolMyClockParameters',
 	#traits : 'MolComponentParameters',
 	#classTraits : 'MolComponentParameters classTrait',
-	#category : #'Molecule-Examples-Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example',
+	#package : 'Molecule-Examples',
+	#tag : 'Clock System Example'
 }
 
-{ #category : #parameters }
+{ #category : 'parameters' }
 MolMyClockParameters >> setManualTime: aTime [
 
 	self explicitRequirement
 ]
 
-{ #category : #parameters }
+{ #category : 'parameters' }
 MolMyClockParameters >> setTimeZone: aTimeZone [
 
 	self explicitRequirement

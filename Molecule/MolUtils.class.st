@@ -4,15 +4,17 @@ I am a toolbox which provide some additional services.
 I have in particular a log system that you can activate or disactivate, and use for your own components.
 "
 Class {
-	#name : #MolUtils,
-	#superclass : #Object,
+	#name : 'MolUtils',
+	#superclass : 'Object',
 	#classVars : [
 		'isLogActive'
 	],
-	#category : #'Molecule-Tools'
+	#category : 'Molecule-Tools',
+	#package : 'Molecule',
+	#tag : 'Tools'
 }
 
-{ #category : #'quick lifecycle' }
+{ #category : 'quick lifecycle' }
 MolUtils class >> activateComponent: aComponentClass named: aName [
 	"activate quickly a component"
 
@@ -20,7 +22,7 @@ MolUtils class >> activateComponent: aComponentClass named: aName [
 
 ]
 
-{ #category : #'quick lifecycle' }
+{ #category : 'quick lifecycle' }
 MolUtils class >> activateComponents: aComponentClassList [
 	"activate quickly a list of components"
 
@@ -30,7 +32,7 @@ MolUtils class >> activateComponents: aComponentClassList [
 	].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolUtils class >> allComponentInstancesOfType: aComponentType [
 
 	| oc homeServices |
@@ -47,7 +49,7 @@ MolUtils class >> allComponentInstancesOfType: aComponentType [
 	^oc
 ]
 
-{ #category : #'component contract' }
+{ #category : 'component contract' }
 MolUtils class >> componentType: aComponentOrComponentClass [
 	"Get component type of a component or a component class, return nil if no type was found"
 	
@@ -57,7 +59,7 @@ MolUtils class >> componentType: aComponentOrComponentClass [
 		ifFalse: [ aComponentOrComponentClass class componentType ]
 ]
 
-{ #category : #'component contract' }
+{ #category : 'component contract' }
 MolUtils class >> consumedComponentEvents: anObject [
 	"Get consumed events of an object, return nil if no events was found"
 	
@@ -67,7 +69,7 @@ MolUtils class >> consumedComponentEvents: anObject [
 	^ componentType ifNotNil: [ :e | ^ e consumedComponentEvents ] ifNil: [ ^ {} ]
 ]
 
-{ #category : #'quick creation' }
+{ #category : 'quick creation' }
 MolUtils class >> createAllComponents [
 	"instanciate and activate all deployed components"
 	| homeServices components |
@@ -78,14 +80,14 @@ MolUtils class >> createAllComponents [
 	components keysDo: [ :aClass | homeServices activateComponent: aClass ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolUtils class >> defaultComponentName [
 	"Used when a component instanciation is not nammed"
 
 	^ #default
 ]
 
-{ #category : #'quick lifecycle' }
+{ #category : 'quick lifecycle' }
 MolUtils class >> deployAndInitializeComponent: aComponentClass named: aName [
 	"auto deploy, and instanciate quickly a component and return the instance"
 
@@ -96,7 +98,7 @@ MolUtils class >> deployAndInitializeComponent: aComponentClass named: aName [
 	^ MolComponentManager default homeServices instanciateComponent: aComponentClass named: aName
 ]
 
-{ #category : #'quick lifecycle' }
+{ #category : 'quick lifecycle' }
 MolUtils class >> deployAndInitializeComponents: aComponentClassList [
 	"deploy and instanciate quickly a list of components and return all instances"
 	| components |
@@ -113,13 +115,13 @@ MolUtils class >> deployAndInitializeComponents: aComponentClassList [
 	^components
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolUtils class >> instanceKindOf: aClass [
 
 	^ self instanceKindOf: aClass named: self defaultComponentName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolUtils class >> instanceKindOf: aClass named: aName [
 	| instance |
 	
@@ -130,18 +132,18 @@ MolUtils class >> instanceKindOf: aClass named: aName [
 			instance ifNotNil: [^instance]]].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolUtils class >> instanceOf: aClass [
 
 	^ self instanceOf: aClass named: self defaultComponentName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolUtils class >> instanceOf: aClass named: aName [
 	^ MolComponentManager default homeServices instanceOf: aClass named: aName
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolUtils class >> isComponentOrComponentClass: anObject [
 
 	anObject ifNil: [  ^ false ].
@@ -149,7 +151,7 @@ MolUtils class >> isComponentOrComponentClass: anObject [
 	^anObject isComponent
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolUtils class >> isInstanciateComponentOf: aClass [
 
 	self
@@ -157,11 +159,10 @@ MolUtils class >> isInstanciateComponentOf: aClass [
 		transformWith: '`@receiver isInstanciateComponentOf: `@aClass'
 			-> '`@receiver isInstantiateComponentOf: `@aClass'.
 	^ self
-		  isInstanciateComponentOf: aClass
-		  named: self defaultComponentName
+		  isInstantiateComponentOf: aClass
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolUtils class >> isInstanciateComponentOf: aClass named: aName [
 
 	self
@@ -169,12 +170,10 @@ MolUtils class >> isInstanciateComponentOf: aClass named: aName [
 		transformWith:
 			'`@receiver isInstanciateComponentOf: `@aClass named: `@aName'
 			-> '`@receiver isInstantiateComponentOf: `@aClass named: `@aName'.
-	^ (MolComponentManager default homeServices
-		   instanceOf: aClass
-		   named: aName) notNil
+	^ self isInstantiateComponentOf: aClass named: aName
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolUtils class >> isInstantiateComponentOf: aClass [
 
 	^ self
@@ -182,7 +181,7 @@ MolUtils class >> isInstantiateComponentOf: aClass [
 		  named: self defaultComponentName
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolUtils class >> isInstantiateComponentOf: aClass named: aName [
 
 	^ (MolComponentManager default homeServices
@@ -190,20 +189,20 @@ MolUtils class >> isInstantiateComponentOf: aClass named: aName [
 		   named: aName) notNil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolUtils class >> isLogActive [
 
 	isLogActive ifNil: [ isLogActive := false ].
 	^ isLogActive
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolUtils class >> isLogActive: aBoolean [
 
 	isLogActive := aBoolean
 ]
 
-{ #category : #log }
+{ #category : 'log' }
 MolUtils class >> log: aString [
 	"Log a message"
 
@@ -213,14 +212,14 @@ MolUtils class >> log: aString [
 	self traceCr: '[Molecule] ' , string
 ]
 
-{ #category : #'quick lifecycle' }
+{ #category : 'quick lifecycle' }
 MolUtils class >> passivateComponent: aComponentClass named: aName [
 	"passivate quickly a component"
 
 	MolComponentManager default homeServices passivateComponent: aComponentClass named: aName.
 ]
 
-{ #category : #'quick lifecycle' }
+{ #category : 'quick lifecycle' }
 MolUtils class >> passivateComponents: aComponentClassList [
 	"pâssivate quickly a list of components"
 
@@ -230,7 +229,7 @@ MolUtils class >> passivateComponents: aComponentClassList [
 	].
 ]
 
-{ #category : #'component contract' }
+{ #category : 'component contract' }
 MolUtils class >> producedComponentEvents: anObject [
 	"Get produced events of an object, return nil if no events was found"
 	
@@ -240,7 +239,7 @@ MolUtils class >> producedComponentEvents: anObject [
 	^ componentType ifNotNil: [ :e | ^ e producedComponentEvents ] ifNil: [ ^ {} ]
 ]
 
-{ #category : #'component contract' }
+{ #category : 'component contract' }
 MolUtils class >> providedComponentParameters: anObject [
 	"Get provided parameters of an object, return nil if no parameters was found"
 	
@@ -250,7 +249,7 @@ MolUtils class >> providedComponentParameters: anObject [
 	^ componentType ifNotNil: [ :e | ^ e providedComponentParameters ] ifNil: [ ^ {} ]
 ]
 
-{ #category : #'component contract' }
+{ #category : 'component contract' }
 MolUtils class >> providedComponentServices: anObject [
 	"Get provided services of an object, return nil if no services was found"
 	
@@ -260,14 +259,14 @@ MolUtils class >> providedComponentServices: anObject [
 	^ componentType ifNotNil: [ :e | ^ e providedComponentServices ] ifNil: [ ^ {} ]
 ]
 
-{ #category : #'quick lifecycle' }
+{ #category : 'quick lifecycle' }
 MolUtils class >> removeComponent: aComponentClass named: aName [
 	"passivate quickly a component"
 
 	MolComponentManager default homeServices removeComponent: aComponentClass named: aName.
 ]
 
-{ #category : #'quick lifecycle' }
+{ #category : 'quick lifecycle' }
 MolUtils class >> removeComponents: aComponentClassList [
 	"pâssivate quickly a list of components"
 
@@ -277,7 +276,7 @@ MolUtils class >> removeComponents: aComponentClassList [
 	].
 ]
 
-{ #category : #log }
+{ #category : 'log' }
 MolUtils class >> showInformation: aString [
 	"Inform the user with a message into the Pharo UI"
 
@@ -287,14 +286,14 @@ MolUtils class >> showInformation: aString [
 	self inform: '[Molecule] ' , string
 ]
 
-{ #category : #'quick start and stop' }
+{ #category : 'quick start and stop' }
 MolUtils class >> startComponent: aComponentClass [
 	"deploy, initialize and activate quickly a component and return the instance"
 	
 	^ self startComponent: aComponentClass named: self defaultComponentName
 ]
 
-{ #category : #'quick start and stop' }
+{ #category : 'quick start and stop' }
 MolUtils class >> startComponent: aComponentClass named: aName [
 	"auto deploy, initialize and activate quickly a component and return the instance"
 	| component |
@@ -305,7 +304,7 @@ MolUtils class >> startComponent: aComponentClass named: aName [
 	^ component
 ]
 
-{ #category : #'quick start and stop' }
+{ #category : 'quick start and stop' }
 MolUtils class >> startComponents: aComponentClassList [
 	"deploy, initialize and activate quickly a list of components and return all instances"
 	| startedComponents |
@@ -316,28 +315,28 @@ MolUtils class >> startComponents: aComponentClassList [
 	^startedComponents
 ]
 
-{ #category : #'quick start and stop' }
+{ #category : 'quick start and stop' }
 MolUtils class >> stopComponent: aComponentClass [
 	"passivate, remove and undeploy quickly a component"
 	
 	^ self stopComponent: aComponentClass named: self defaultComponentName
 ]
 
-{ #category : #'quick start and stop' }
+{ #category : 'quick start and stop' }
 MolUtils class >> stopComponent: aComponentClass named: aName [
 	"passivate and remove quickly a component"
 
 	self removeComponent: aComponentClass named: aName.
 ]
 
-{ #category : #'quick start and stop' }
+{ #category : 'quick start and stop' }
 MolUtils class >> stopComponents: aComponentClassList [
 	"remove quickly a list of components"
 
 	self removeComponents: aComponentClassList
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolUtils class >> toggleLog [
 	"Active (or deactive) Molecule logs"
 
@@ -347,7 +346,7 @@ MolUtils class >> toggleLog [
 		ifFalse: [ MolUtils showInformation: 'Logs are not active' ]
 ]
 
-{ #category : #'component contract' }
+{ #category : 'component contract' }
 MolUtils class >> usedComponentParameters: anObject [
 	"Get used parameters of an object, return nil if no parameters was found"
 	
@@ -357,7 +356,7 @@ MolUtils class >> usedComponentParameters: anObject [
 	^ componentType ifNotNil: [ :e | ^ e usedComponentParameters ] ifNil: [ ^ {} ]
 ]
 
-{ #category : #'component contract' }
+{ #category : 'component contract' }
 MolUtils class >> usedComponentServices: anObject [
 	"Get used services of an object, return nil if no services was found"
 	

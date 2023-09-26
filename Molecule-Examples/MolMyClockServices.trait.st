@@ -6,13 +6,15 @@ My providers must use me as trait. If the component type is correctly defined, i
 See ComponentServices for more informations about services.
 "
 Trait {
-	#name : #MolMyClockServices,
+	#name : 'MolMyClockServices',
 	#traits : 'MolComponentServices',
 	#classTraits : 'MolComponentServices classTrait',
-	#category : #'Molecule-Examples-Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example',
+	#package : 'Molecule-Examples',
+	#tag : 'Clock System Example'
 }
 
-{ #category : #services }
+{ #category : 'services' }
 MolMyClockServices >> useManualTime: aBoolean [
 
 	self explicitRequirement

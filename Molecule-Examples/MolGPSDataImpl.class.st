@@ -1,28 +1,30 @@
 Class {
-	#name : #MolGPSDataImpl,
-	#superclass : #MolAbstractComponentImpl,
+	#name : 'MolGPSDataImpl',
+	#superclass : 'MolAbstractComponentImpl',
 	#traits : 'MolGPSData + MolGPSDataServices',
 	#classTraits : 'MolGPSData classTrait + MolGPSDataServices classTrait',
 	#instVars : [
 		'accuracy',
 		'sendCurrentPositionThread'
 	],
-	#category : #'Molecule-Examples-GPS Example'
+	#category : 'Molecule-Examples-GPS Example',
+	#package : 'Molecule-Examples',
+	#tag : 'GPS Example'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolGPSDataImpl >> accuracy [
 
 	^ accuracy
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolGPSDataImpl >> accuracy: anObject [
 
 	accuracy := anObject
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolGPSDataImpl >> componentActivate [ 
 			
 	"Start a thread to simulate sending of the geo position each seconds and accuracy precision"
@@ -37,7 +39,7 @@ MolGPSDataImpl >> componentActivate [
 	] forkAt: Processor userBackgroundPriority.
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolGPSDataImpl >> componentInitialize [
 
 	"Set starting accuracy"
@@ -45,26 +47,26 @@ MolGPSDataImpl >> componentInitialize [
 	self accuracy: 1000
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolGPSDataImpl >> componentPassivate [ 
 	
 	sendCurrentPositionThread ifNotNil:[ :e | e terminate ].
 	sendCurrentPositionThread := nil.
 ]
 
-{ #category : #services }
+{ #category : 'services' }
 MolGPSDataImpl >> getAccuracyRadiusInMeters [
 	"Get and return the accuracy of the GPS depending quality of signal and quantity of connected satellites"
 
 	^self accuracy 
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolGPSDataImpl >> getMolGPSDataEventsNotifier [
 	^self eventsNotifiers at: MolGPSDataEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolGPSDataEvents name: nil].
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolGPSDataImpl >> getRandomizedGPSPosition [
 
 	| random |
@@ -72,7 +74,7 @@ MolGPSDataImpl >> getRandomizedGPSPosition [
 	^ random next @ random next
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolGPSDataImpl >> increaseAccuracy [
 
 	| nextAccuracy |

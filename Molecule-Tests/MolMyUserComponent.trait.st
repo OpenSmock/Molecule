@@ -6,13 +6,15 @@ In my contract, I use MyTableServices.
 With my contract, all my implementations will automatically use appropriate traits and receive generated methods.
 "
 Trait {
-	#name : #MolMyUserComponent,
+	#name : 'MolMyUserComponent',
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : #'Molecule-Tests-Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts',
+	#package : 'Molecule-Tests',
+	#tag : 'Resources - Contracts'
 }
 
-{ #category : #'accessing - services' }
+{ #category : 'accessing - services' }
 MolMyUserComponent classSide >> usedComponentServices [
 <componentContract>	
 	^{ MolMyTableServices }

@@ -4,8 +4,8 @@ I am responsable for manage all the instances of the system. I have a deployment
 This component framework is based on Lightweight CCM (CORBA Component Model). It allows to have an architecture driven by components.
 "
 Class {
-	#name : #MolComponentManager,
-	#superclass : #Object,
+	#name : 'MolComponentManager',
+	#superclass : 'Object',
 	#instVars : [
 		'deploymentServices',
 		'locatorServices',
@@ -14,10 +14,12 @@ Class {
 	#classVars : [
 		'Default'
 	],
-	#category : #'Molecule-Core'
+	#category : 'Molecule-Core',
+	#package : 'Molecule',
+	#tag : 'Core'
 }
 
-{ #category : #cleanup }
+{ #category : 'cleanup' }
 MolComponentManager class >> cleanUp [
 
 	<script: 'self cleanUp'>
@@ -50,14 +52,14 @@ MolComponentManager class >> cleanUp [
 	MolUtils log: 'End of the cleanUp.'
 ]
 
-{ #category : #cleanup }
+{ #category : 'cleanup' }
 MolComponentManager class >> cleanUp: aBoolean [
 	"Pharo System CleanUp implementation"
 	
 	self deepCleanUp.
 ]
 
-{ #category : #cleanup }
+{ #category : 'cleanup' }
 MolComponentManager class >> deepCleanUp [
 	<script: 'self deepCleanUp'>
 	| i j |
@@ -91,7 +93,7 @@ MolComponentManager class >> deepCleanUp [
 	MolUtils log: 'End of the deep cleanUp.'.
 ]
 
-{ #category : #singleton }
+{ #category : 'singleton' }
 MolComponentManager class >> default [
 	<script: 'self default inspect'>
 	
@@ -102,7 +104,7 @@ MolComponentManager class >> default [
 	^Default
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager class >> flushComponents [
 	"Flush all components : detect all component class instances of the Pharo image and disconnect each componentconnector, return number of flushed components"
 	| i |
@@ -123,7 +125,7 @@ MolComponentManager class >> flushComponents [
 	^i
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager class >> isInitialized [
 	"Test if the Component Manager is initialized"
 
@@ -131,7 +133,7 @@ MolComponentManager class >> isInitialized [
 	^ Default notNil
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager class >> isRunningComponents [
 	<script:'self isRunningComponents inspect'>
 	"Test if somes components are started and running"
@@ -145,25 +147,25 @@ MolComponentManager class >> isRunningComponents [
 	^false
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager >> cleanUp [
 
 	self class cleanUp
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolComponentManager >> deploymentServices [
 
 	^ deploymentServices
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolComponentManager >> homeServices [
 
 	^ homeServices
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager >> initialize [
 	super initialize.
 	deploymentServices := MolDeploymentServices new.
@@ -171,13 +173,13 @@ MolComponentManager >> initialize [
 	homeServices := MolHomeServices new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolComponentManager >> locatorServices [
 
 	^ locatorServices
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager >> release [
 	deploymentServices release.
 	locatorServices release.

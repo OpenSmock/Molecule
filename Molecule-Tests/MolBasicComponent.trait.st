@@ -2,8 +2,10 @@
 I represent a trait defining a component without interaction : I have no events, services, or parameters.
 "
 Trait {
-	#name : #MolBasicComponent,
+	#name : 'MolBasicComponent',
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : #'Molecule-Tests-Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts',
+	#package : 'Molecule-Tests',
+	#tag : 'Resources - Contracts'
 }

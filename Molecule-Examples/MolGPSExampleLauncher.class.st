@@ -15,12 +15,14 @@ MolGPSExampleLauncher swapGPSHardwareByGPSDataImpl.
 MolGPSExampleLauncher stop.
 "
 Class {
-	#name : #MolGPSExampleLauncher,
-	#superclass : #Object,
-	#category : #'Molecule-Examples-GPS Example'
+	#name : 'MolGPSExampleLauncher',
+	#superclass : 'Object',
+	#category : 'Molecule-Examples-GPS Example',
+	#package : 'Molecule-Examples',
+	#tag : 'GPS Example'
 }
 
-{ #category : #scripts }
+{ #category : 'scripts' }
 MolGPSExampleLauncher class >> start [
 	<script: 'self start'>
 	
@@ -33,7 +35,7 @@ MolGPSExampleLauncher class >> start [
 	MolGPSMapImpl start.
 ]
 
-{ #category : #scripts }
+{ #category : 'scripts' }
 MolGPSExampleLauncher class >> stop [
 	<script: 'self stop'>
 	
@@ -41,7 +43,7 @@ MolGPSExampleLauncher class >> stop [
 	MolComponentManager cleanUp
 ]
 
-{ #category : #scripts }
+{ #category : 'scripts' }
 MolGPSExampleLauncher class >> swapGPSDataImplByGPSHardware [
 	<script: 'self swapGPSDataImplByGPSHardware'>
 	
@@ -51,7 +53,7 @@ MolGPSExampleLauncher class >> swapGPSDataImplByGPSHardware [
 
 ]
 
-{ #category : #scripts }
+{ #category : 'scripts' }
 MolGPSExampleLauncher class >> swapGPSHardwareByGPSDataImpl [
 	<script: 'self swapGPSHardwareByGPSDataImpl'>
 	
