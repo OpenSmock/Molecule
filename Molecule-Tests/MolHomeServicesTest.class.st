@@ -13,7 +13,7 @@ I do not worry about interactions between components. See:
 Class {
 	#name : #MolHomeServicesTest,
 	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases'
+	#category : 'Molecule-Tests-Cases'
 }
 
 { #category : #'setUp-tearDown' }
@@ -345,41 +345,73 @@ MolHomeServicesTest >> testSeveralComponentsLifecycle [
 
 { #category : #tests }
 MolHomeServicesTest >> testSeveralComponentsLifecycleWithName [
-"Test life cycle of several components with names"
-	| manager |
-	
-	manager := MolComponentManager default.
-	
-	"Deployment"
-	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl.
-	manager deploymentServices deployComponentImplementation: MolBasicComponentImpl2.
+	"Test life cycle of several components with names"
 
-	manager homeServices instanciateComponent: MolBasicComponentImpl named: #component1.
-	manager homeServices instanciateComponent: MolBasicComponentImpl.
-	manager homeServices instanciateComponent: MolBasicComponentImpl2 named: #component2.
+	| manager |
+	manager := MolComponentManager default.
+
+	"Deployment"
+	manager deploymentServices deployComponentImplementation:
+		MolBasicComponentImpl.
+	manager deploymentServices deployComponentImplementation:
+		MolBasicComponentImpl2.
+
+	manager homeServices
+		instantiateComponent: MolBasicComponentImpl
+		named: #component1.
+	manager homeServices instantiateComponent: MolBasicComponentImpl.
+	manager homeServices
+		instantiateComponent: MolBasicComponentImpl2
+		named: #component2.
 
 	"Test method activateAllComponents"
 	manager homeServices activateAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #component1).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl2 named: #component2).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl named: #component1) not.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl) not.
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl2 named: #component2) not.
-	
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl
+			 named: #component1).
+	self assert:
+		(MolUtils isInstantiateComponentOf: MolBasicComponentImpl).
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl2
+			 named: #component2).
+	self assert: (manager homeServices
+			 isWaitingForActivation: MolBasicComponentImpl
+			 named: #component1) not.
+	self assert:
+		(manager homeServices isWaitingForActivation: MolBasicComponentImpl)
+			not.
+	self assert: (manager homeServices
+			 isWaitingForActivation: MolBasicComponentImpl2
+			 named: #component2) not.
+
 	"Test method passivateAllComponents"
 	manager homeServices passivateAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #component1).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl).
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl2 named: #component2).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl named: #component1).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl).
-	self assert: (manager homeServices isWaitingForActivation: MolBasicComponentImpl2 named: #component2).
-	
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl
+			 named: #component1).
+	self assert:
+		(MolUtils isInstantiateComponentOf: MolBasicComponentImpl).
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl2
+			 named: #component2).
+	self assert: (manager homeServices
+			 isWaitingForActivation: MolBasicComponentImpl
+			 named: #component1).
+	self assert:
+		(manager homeServices isWaitingForActivation: MolBasicComponentImpl).
+	self assert: (manager homeServices
+			 isWaitingForActivation: MolBasicComponentImpl2
+			 named: #component2).
+
 	manager homeServices removeAllComponents.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl named: #component1) not.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl) not.
-	self assert: (MolUtils isInstanciateComponentOf: MolBasicComponentImpl2 named: #component2) not.
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl
+			 named: #component1) not.
+	self assert:
+		(MolUtils isInstantiateComponentOf: MolBasicComponentImpl) not.
+	self assert: (MolUtils
+			 isInstantiateComponentOf: MolBasicComponentImpl2
+			 named: #component2) not
 ]
 
 { #category : #'test - errors' }

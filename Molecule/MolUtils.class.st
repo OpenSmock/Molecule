@@ -9,7 +9,7 @@ Class {
 	#classVars : [
 		'isLogActive'
 	],
-	#category : #'Molecule-Tools'
+	#category : 'Molecule-Tools'
 }
 
 { #category : #'quick lifecycle' }
@@ -157,8 +157,7 @@ MolUtils class >> isInstanciateComponentOf: aClass [
 		transformWith: '`@receiver isInstanciateComponentOf: `@aClass'
 			-> '`@receiver isInstantiateComponentOf: `@aClass'.
 	^ self
-		  isInstanciateComponentOf: aClass
-		  named: self defaultComponentName
+		  isInstantiateComponentOf: aClass
 ]
 
 { #category : #testing }
@@ -169,9 +168,7 @@ MolUtils class >> isInstanciateComponentOf: aClass named: aName [
 		transformWith:
 			'`@receiver isInstanciateComponentOf: `@aClass named: `@aName'
 			-> '`@receiver isInstantiateComponentOf: `@aClass named: `@aName'.
-	^ (MolComponentManager default homeServices
-		   instanceOf: aClass
-		   named: aName) notNil
+	^ self isInstantiateComponentOf: aClass named: aName
 ]
 
 { #category : #testing }
