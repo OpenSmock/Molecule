@@ -46,59 +46,20 @@ MolGPSExampleLauncher class >> stop [
 	MolComponentManager cleanUp
 ]
 
-{ #category : 'private' }
-MolGPSExampleLauncher class >> stopCurrentLaunchedComponent [
-	"stops every possible component if it's launched"
-
-	| manager component |
-	manager := MolComponentManager default.
-
-	component := manager locatorServices
-		             searchComponentTypeImplementorFor: MolGPSData.
-	component class stop 
-]
-
-{ #category : 'scripts' }
-MolGPSExampleLauncher class >> swapGNSSGalileo [
-	"Swap current component by MolGNSSGalileo"
-
-	<script>
-	self stopCurrentLaunchedComponent.
-	MolGNSSGalileo start
-]
-
 { #category : 'scripts' }
 MolGPSExampleLauncher class >> swapGPSDataImpl [
-	"Swap current component by MolGPSDataImpl"
+	"Swap MolGPSHardware by MolGPSDataImpl"
 
 	<script>
-	self stopCurrentLaunchedComponent.
+	MolGPSHardware stop.
 	MolGPSDataImpl start
 ]
 
 { #category : 'scripts' }
 MolGPSExampleLauncher class >> swapGPSHardware [
-	"Swap current component by MolGPSHardware"
+	"Swap MolGPSDataImpl by MolGPSHardware"
 
 	<script>
-	self stopCurrentLaunchedComponent.
+	MolGPSDataImpl stop.
 	MolGPSHardware start
-]
-
-{ #category : 'scripts' }
-MolGPSExampleLauncher class >> swapGSM [
-	"Swap current component by MolGSM"
-
-	<script>
-	self stopCurrentLaunchedComponent.
-	MolGSM start
-]
-
-{ #category : 'scripts' }
-MolGPSExampleLauncher class >> swapWiFi [
-	"Swap current component by MolWiFi"
-
-	<script>
-	self stopCurrentLaunchedComponent.
-	MolWiFi start
 ]
