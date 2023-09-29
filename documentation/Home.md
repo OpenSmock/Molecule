@@ -46,7 +46,6 @@ The direct benefit of this approach is that it's possible for any existing class
 All components are managed by the ComponentManager object. It maintains the list of component instances currently alive in the system. It's currently handled as a singleton. The ComponentManager class implements an API to instantiate and to remove each component, to associate them, to connect events, etc. This API is used to manage each component's life-cycle programmatically.
 
 [Components' life-cycle and states](https://github.com/OpenSmock/Molecule/wiki#components-lifecycle-and-states)
-
 The activity of a component depends on contextual constraints such as the availability of a resource, the physical state of hardware elements, etc. To manage consumed resources accordingly, the life-cycle of a component has four possible states: Initialized, Activated, Passivated and Removed.
 ![Components lifecycle and states](https://user-images.githubusercontent.com/49183340/162570154-b39fc041-03f3-40d2-ad3f-30aac027a4b0.png)
 
@@ -65,8 +64,8 @@ The terminal state of a component is the Removed state. When a component switche
 
 Let us illustrate the use of these states with the example of a GUI window handled as a component. First, the window is instantiated by the component. Then the component state switches to Initialized. When the window is displayed on the desktop, the component’s state switches to Activated. When the window is reduced and its icon is stored into a task-bar, then the component switches to the Passivated state. As the window is only reduced, it can be re-opened very quickly. Finally, when the user closes the window, the component is first switched to Passivated, then to the Removed state.
 
-[Tutorials section](https://github.com/OpenSmock/Molecule/wiki#tutorials-section)
-[Create a new Molecule Component](https://github.com/OpenSmock/Molecule/wiki/Tutorial-:-Create-a-new-Molecule-Component)
+[Tutorials section](https://github.com/OpenSmock/Molecule/wiki#tutorials-section) \
+[Create a new Molecule Component](https://github.com/OpenSmock/Molecule/wiki/Tutorial-:-Create-a-new-Molecule-Component) \
 **Links to other tutorials to put here**
 
 [External links](https://github.com/OpenSmock/Molecule/wiki#external-links) \
