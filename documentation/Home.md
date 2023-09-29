@@ -1,5 +1,3 @@
-**Home page**
-
 Welcome to the Molecule wiki!
 
 [Introduction](https://github.com/OpenSmock/Molecule/wiki#introduction) \
