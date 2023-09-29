@@ -1,4 +1,4 @@
-**Creating Services**
+**Creating Services** \
 Now that we've created our first component, we will need to connect it to one or multiple Services which are used for transmitting data.
 Services host variables (they don't necessarily have the same name as the variables) and need their own Trait.
 A Service Trait is typically named after the Type it's used by, in the form of [Type]Services.
