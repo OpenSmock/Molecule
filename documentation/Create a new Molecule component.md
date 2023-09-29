@@ -1,5 +1,3 @@
-**Create a new Molecule Component**
-
 There are two ways to create a new Molecule Component :
 - Create a new Component from scratch : write a new Class inheriting from the Component hierarchy
 - Re-using an existing Class : augmenting that class with Component behavior
