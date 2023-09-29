@@ -72,12 +72,8 @@ MolHomeServices >> addDeployedComponent: aComponentClass [
 { #category : 'private' }
 MolHomeServices >> checkInstanciationOfComponent: aComponentClass named: aComponentName [
 
-	self
-		deprecated: 'Use checkInstantiationOfComponent: named:'
-		transformWith:
-			'`@receiver checkInstanciationOfComponent: `@aComponentClass named: `@aComponentName'
-			->
-			'`@receiver checkInstantiationOfComponent: `@aComponentClass named: `@aComponentName'.
+	self deprecated: 'Use checkInstantiationOfComponent: named:'
+		transformWith: '`@receiver checkInstanciationOfComponent: `@aComponentClass named: `@aComponentName' -> '`@receiver checkInstantiationOfComponent: `@aComponentClass named: `@aComponentName'.
 	^ self checkInstantiationOfComponent: aComponentClass named: aComponentName
 ]
 
@@ -161,32 +157,24 @@ MolHomeServices >> instanceOf: aClass named: aName [
 { #category : 'life cycle' }
 MolHomeServices >> instanciateAllComponents [
 
-	self
-		deprecated: 'Use instantiateAllComponents'
-		transformWith: '`@receiver instanciateAllComponents'
-			-> '`@receiver instantiateAllComponents'.
+	self deprecated: 'Use instantiateAllComponents'
+		transformWith: '`@receiver instanciateAllComponents' -> '`@receiver instantiateAllComponents'.
 	self instantiateAllComponents
 ]
 
 { #category : 'life cycle' }
 MolHomeServices >> instanciateComponent: aComponentClass [
 
-	self
-		deprecated: 'Use instantiateComponent:'
-		transformWith: '`@receiver instanciateComponent: `@aComponentClass'
-			-> '`@receiver instantiateComponent: `@aComponentClass'.
+	self deprecated: 'Use instantiateComponent:'
+		transformWith: '`@receiver instanciateComponent: `@aComponentClass' -> '`@receiver instantiateComponent: `@aComponentClass'.
 	^ self instantiateComponent: aComponentClass
 ]
 
 { #category : 'life cycle' }
 MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 
-	self
-		deprecated: 'Use instantiateComponent: named:'
-		transformWith:
-			'`@receiver instanciateComponent: `@aComponentClass named: `@aName'
-			->
-			'`@receiver instantiateComponent: `@aComponentClass named: `@aName'.
+	self deprecated: 'Use instantiateComponent: named:'
+		transformWith: '`@receiver instanciateComponent: `@aComponentClass named: `@aName' ->'`@receiver instantiateComponent: `@aComponentClass named: `@aName'.
 	^ self instantiateComponent: aComponentClass named: aName
 ]
 
@@ -200,9 +188,7 @@ MolHomeServices >> instantiateAllComponents [
 { #category : 'life cycle' }
 MolHomeServices >> instantiateComponent: aComponentClass [
 
-	^ self
-		  instantiateComponent: aComponentClass
-		  named: MolUtils defaultComponentName
+	^ self instantiateComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
 { #category : 'life cycle' }
