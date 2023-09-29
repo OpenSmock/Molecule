@@ -12,17 +12,16 @@ Class {
 }
 
 { #category : 'life cycle' }
-MolGPSHardware >> componentActivate [ 
-
+MolGPSHardware >> componentActivate [
 	"Start a thread to simulate sending of a fixed geo position each 2 seconds"
+
 	sendCurrentPositionThread := [
-		
-	 	[true] whileTrue:[
-			(Delay forSeconds: 1) wait.
-			self getMolGPSDataEventsNotifier currentPositionChanged: 1@1.
-		].
-	
-	] forkAt: Processor userBackgroundPriority.
+	                             [ true ] whileTrue: [
+		                             (Delay forSeconds: 1) wait.
+		                             self getMolGPSDataEventsNotifier
+			                             currentPositionChanged: 1 @ 1 ] ]
+		                             forkAt:
+		                             Processor userBackgroundPriority
 ]
 
 { #category : 'life cycle' }
