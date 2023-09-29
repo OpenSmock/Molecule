@@ -2,7 +2,7 @@
 
 Welcome to the Molecule wiki!
 
-[Introduction](https://github.com/OpenSmock/Molecule/wiki#introduction)
+[Introduction](https://github.com/OpenSmock/Molecule/wiki#introduction) \
 Molecule is a component oriented framework for Pharo. His Component architecture approach provides an adapted structuration to graphic user interface (GUI) or another software application which need Component features.
 
 Molecule provides a way to describe a software application as a component group.
@@ -11,7 +11,7 @@ Molecule is a Light-weight implementation of the Corba Component Model (LCCM). I
 
 Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
 
-[Installation](https://github.com/OpenSmock/Molecule/wiki#installation)
+[Installation](https://github.com/OpenSmock/Molecule/wiki#installation) \
 Pharo 8, 9, 10 and 11 :
 ```smalltalk
 Metacello new
@@ -21,7 +21,7 @@ Metacello new
 ```
 Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
 
-[Principles](https://github.com/OpenSmock/Molecule/wiki#principles)
+[Principles](https://github.com/OpenSmock/Molecule/wiki#principles) \
 This section briefly presents what is a Molecule component and how it's dynamically managed.
 
 [A Component and his Contract](https://github.com/OpenSmock/Molecule/wiki#a-component-and-his-contract)
@@ -46,7 +46,7 @@ The direct benefit of this approach is that it's possible for any existing class
 ![ComponentManager](https://user-images.githubusercontent.com/49183340/162572598-0219f49d-8975-4dbb-8764-e3f379c58d69.png)
 All components are managed by the ComponentManager object. It maintains the list of component instances currently alive in the system. It's currently handled as a singleton. The ComponentManager class implements an API to instantiate and to remove each component, to associate them, to connect events, etc. This API is used to manage each component's life-cycle programmatically.
 
-[Components' life-cycle and states](https://github.com/OpenSmock/Molecule/wiki#components-lifecycle-and-states)
+[Components' life-cycle and states](https://github.com/OpenSmock/Molecule/wiki#components-lifecycle-and-states) \
 
 The activity of a component depends on contextual constraints such as the availability of a resource, the physical state of hardware elements, etc. To manage consumed resources accordingly, the life-cycle of a component has four possible states: Initialized, Activated, Passivated and Removed.
 ![Components lifecycle and states](https://user-images.githubusercontent.com/49183340/162570154-b39fc041-03f3-40d2-ad3f-30aac027a4b0.png)
