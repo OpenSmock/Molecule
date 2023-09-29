@@ -51,15 +51,16 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 	waitingForActivation
 		remove: component
 		ifAbsent: [ ^ComponentAlreadyActivatedError signal: 'Component is already activated.' ].
-		
+
 	component componentConnector activateComponent.
+
+	"Manage connexion between components"
+	MolComponentManager default locatorServices resolveWaitingSubscriptions: component.
+
 	component componentActivate.
 	component triggerEvent: #activateComponent with: component.
 	
 	MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is activated.'.
-	
-	"manage connexion between components"
-	MolComponentManager default locatorServices resolveWaitingSubscriptions: component.
 	
 	^ component
 ]
