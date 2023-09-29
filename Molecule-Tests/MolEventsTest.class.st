@@ -167,7 +167,6 @@ MolEventsTest >> testSimpleListenerNotActivatedNamed [
 	self assert: listener currentState equals: #operational.
 ]
 
-{ #category : 'tests' }
 MolEventsTest >> testSimpleWarnerNotActivated [
 	"A component not activated send events."
 	| warner listener |
