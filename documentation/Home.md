@@ -26,7 +26,6 @@ This section briefly presents what is a Molecule component and how it's dynamica
 
 [A Component and his Contract](https://github.com/OpenSmock/Molecule/wiki#a-component-and-his-contract)
 ![Molecule component](https://user-images.githubusercontent.com/49183340/162572734-774a7065-9772-433e-8f0a-9dc538978c92.png)
-
 Similarly to the LCCM, a component’s business contract is exposed through its component Type. The Type specifies what a component has to offer to other components (namely, provided services and produced events) and what that component requires from other components (namely, used services and consumed events).
 ![Component application](https://user-images.githubusercontent.com/49183340/162572946-8cd11257-65bb-4ed3-a13a-0fe6dd6f83d1.png)
 
@@ -46,7 +45,7 @@ The direct benefit of this approach is that it's possible for any existing class
 ![ComponentManager](https://user-images.githubusercontent.com/49183340/162572598-0219f49d-8975-4dbb-8764-e3f379c58d69.png)
 All components are managed by the ComponentManager object. It maintains the list of component instances currently alive in the system. It's currently handled as a singleton. The ComponentManager class implements an API to instantiate and to remove each component, to associate them, to connect events, etc. This API is used to manage each component's life-cycle programmatically.
 
-[Components' life-cycle and states](https://github.com/OpenSmock/Molecule/wiki#components-lifecycle-and-states) \
+[Components' life-cycle and states](https://github.com/OpenSmock/Molecule/wiki#components-lifecycle-and-states)
 
 The activity of a component depends on contextual constraints such as the availability of a resource, the physical state of hardware elements, etc. To manage consumed resources accordingly, the life-cycle of a component has four possible states: Initialized, Activated, Passivated and Removed.
 ![Components lifecycle and states](https://user-images.githubusercontent.com/49183340/162570154-b39fc041-03f3-40d2-ad3f-30aac027a4b0.png)
@@ -70,7 +69,7 @@ Let us illustrate the use of these states with the example of a GUI window handl
 [Create a new Molecule Component](https://github.com/OpenSmock/Molecule/wiki/Tutorial-:-Create-a-new-Molecule-Component)
 **Links to other tutorials to put here**
 
-[External links](https://github.com/OpenSmock/Molecule/wiki#external-links)
+[External links](https://github.com/OpenSmock/Molecule/wiki#external-links) \
 **Publications**
 [Molecule: live prototyping with component-oriented programming](https://inria.hal.science/hal-02966704/)
 [15 years of reuse experience in evolutionary prototyping for the defense industry](https://inria.hal.science/hal-02966691/preview/ICSR_15years.pdf)
