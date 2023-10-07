@@ -12,20 +12,50 @@ His Component architecture approach provides an adapted structuration to User In
 Molecule provides a way to describe a software application as a component group. Components communicate by use of services, parameters and event propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
 Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
 
-## Getting Started
+## How to get Molecule
 
-### Installation
+You can load the latest development version of Molecule or load a specific stable release with a tag, for example 1.2.10.
 
-To install Molecule in your Pharo image you just need to execute the following script:
+Continuous integration (CI) status badges show status of compatibility for all supported Pharo versions. You can use Molecule with your Pharo version when its badge is green ! 
+
+### Latest version
+
+To install the **latest version of Molecule** in Pharo you just need to execute the following script:
 
 ```smalltalk
 Metacello new
    baseline: 'Molecule';
-   repository: 'github://OpenSmock/Molecule';
+   repository: 'github://OpenSmock/Molecule:main/src';
    load.
 ```
 
-Continuous integration (CI) status badges show status of compatibility for all supported Pharo versions. You can use Molecule with your Pharo version when its badge is green ! 
+### Specific release
+
+Don't forget to adapt the **x.x.x** tag to your wanted release in your script.
+
+#### More than 1.2.11
+
+To install a release **more than 1.2.11** in your Pharo image you just need to adapt and execute the following script:
+
+```smalltalk
+Metacello new
+   baseline: 'Molecule';
+   repository: 'github://OpenSmock/Molecule:1.2.11/src';
+   load.
+```
+
+Don't forget to adapt the **1.2.10** tag to your wanted release in your script.
+
+#### Equals or under number 1.2.10
+
+To install a release **equals or under number 1.2.10** in your Pharo image you just need to adapt and execute the following script:
+
+```smalltalk
+Metacello new
+   baseline: 'Molecule';
+   repository: 'github://OpenSmock/Molecule:1.2.10';
+   load.
+```
 
 ### Looking for an older Pharo ?
 
