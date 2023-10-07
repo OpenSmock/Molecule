@@ -31,29 +31,13 @@ Metacello new
 
 ### Specific release
 
-Don't forget to adapt the **x.x.x** tag to your wanted release in your script.
-
-#### More than 1.2.11
-
-To install a release **more than 1.2.11** in your Pharo image you just need to adapt and execute the following script:
+To install a release in your Pharo image you just need to adapt and execute the following script.
+Don't forget to adapt the **x.x.x** tag to your wanted release in your script, with for example **1.2.11**.
 
 ```smalltalk
 Metacello new
    baseline: 'Molecule';
-   repository: 'github://OpenSmock/Molecule:1.2.11/src';
-   load.
-```
-
-Don't forget to adapt the **1.2.10** tag to your wanted release in your script.
-
-#### Equals or under number 1.2.10
-
-To install a release **equals or under number 1.2.10** in your Pharo image you just need to adapt and execute the following script:
-
-```smalltalk
-Metacello new
-   baseline: 'Molecule';
-   repository: 'github://OpenSmock/Molecule:1.2.10';
+   repository: 'github://OpenSmock/Molecule:x.x.x';
    load.
 ```
 
@@ -189,7 +173,7 @@ To install Molecule with incubator packages on your Pharo image you just need to
 ```smalltalk
 Metacello new
    baseline: 'MoleculeIncubator';
-   repository: 'github://OpenSmock/Molecule';
+   repository: 'github://OpenSmock/Molecule:main/src';
    onConflictUseIncoming;
    load.
 ```
