@@ -4,7 +4,7 @@
 
 # Molecule
 
-![Molecule Logo](MoleculeBanner.jpg)
+![Molecule Logo](resources/MoleculeBanner.jpg)
 
 Molecule is a component oriented framework for Pharo. 
 His Component architecture approach provides an adapted structuration to User Interface (UI) or another software application which need Component features.
@@ -182,7 +182,7 @@ Publications related to Molecule:
 * **Alain Plantec** - *Initial work* - [plantec](https://github.com/plantec)
 * **Lisa Doyen** - *UI Components Tools* - [lisadoyen](https://github.com/lisadoyen)
 
-![Molecule Logo](MoleculeLogotype.svg)
+![Molecule Logo](resources/MoleculeLogotype.svg)
 
 ## License
 
