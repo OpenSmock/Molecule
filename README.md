@@ -29,6 +29,12 @@ Metacello new
    load.
 ```
 
+To add in your project **BaselineOf**:
+
+```smalltalk
+spec baseline: 'Molecule' with: [ spec repository: 'github://OpenSmock/Molecule:main/src' ].
+```
+
 ### Specific release
 
 To install a release in your Pharo image you just need to adapt and execute the following script.
@@ -39,6 +45,12 @@ Metacello new
    baseline: 'Molecule';
    repository: 'github://OpenSmock/Molecule:x.x.x';
    load.
+```
+
+To add in your project **BaselineOf**:
+
+```smalltalk
+spec baseline: 'Molecule' with: [ spec repository: 'github://OpenSmock/Molecule:x.x.x' ].
 ```
 
 ### Looking for an older Pharo ?
