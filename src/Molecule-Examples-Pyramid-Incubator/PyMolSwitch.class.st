@@ -1,7 +1,6 @@
 Class {
 	#name : #PyMolSwitch,
 	#superclass : #BlElement,
-	#classTraits : 'TPyramidSton classTrait',
 	#instVars : [
 		'indicator',
 		'state',
