@@ -4,19 +4,17 @@ I am an example of user of table component. I have a method which give me an acc
 Because I am a component implementation, you can force my automatic definition. To do it,  use class method 'self defineComponent'.
 "
 Class {
-	#name : 'MolMyUserComponentImpl',
-	#superclass : 'Object',
+	#name : #MolMyUserComponentImpl,
+	#superclass : #Object,
 	#traits : 'MolMyUserComponent + MolComponentImpl',
 	#classTraits : 'MolMyUserComponent classTrait + MolComponentImpl classTrait',
 	#instVars : [
 		'myTableServices'
 	],
-	#category : 'Molecule-Tests-Resources - Components',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components'
 }
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolMyUserComponentImpl >> getMolMyTableServicesProvider [
 	| servicesSymbol servicesProvider itf |
 

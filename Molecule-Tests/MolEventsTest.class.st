@@ -3,28 +3,26 @@ I provide basic tests for events.
 Also, I can be used as example to use events. My classes are in package Molecule-Examples.
 "
 Class {
-	#name : 'MolEventsTest',
-	#superclass : 'TestCase',
-	#category : 'Molecule-Tests-Cases',
-	#package : 'Molecule-Tests',
-	#tag : 'Cases'
+	#name : #MolEventsTest,
+	#superclass : #TestCase,
+	#category : #'Molecule-Tests-Cases'
 }
 
-{ #category : 'setUp - tearDown' }
+{ #category : #'setUp - tearDown' }
 MolEventsTest >> setUp [
 
 	super setUp.
 	MolComponentManager cleanUp.
 ]
 
-{ #category : 'setUp - tearDown' }
+{ #category : #'setUp - tearDown' }
 MolEventsTest >> tearDown [
 
 	MolComponentManager cleanUp.
 	super tearDown.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSeveralListeners [
 	| warner listener1 listener2 |
 	"Deployment"
@@ -60,7 +58,7 @@ MolEventsTest >> testSeveralListeners [
 	self assert: listener2 currentState equals: #failure.	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSeveralWarners [
 	| warner1 warner2 listener subscriptions subscribers |
 	"Deployment"
@@ -103,7 +101,7 @@ MolEventsTest >> testSeveralWarners [
 	self assert: listener currentState equals: #failure.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSimpleListenerNotActivated [
 	| warner listener |
 	"Deployment"
@@ -134,7 +132,7 @@ MolEventsTest >> testSimpleListenerNotActivated [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSimpleListenerNotActivatedNamed [
 	| warner listener |
 	"Deployment"
@@ -167,6 +165,19 @@ MolEventsTest >> testSimpleListenerNotActivatedNamed [
 	self assert: listener currentState equals: #operational.
 ]
 
+{ #category : #tests }
+MolEventsTest >> testSimpleWarnerDuringActivation [
+	"A component send an event during activation phase"
+	| listener |
+	
+	listener := MolMyListenerComponentImpl start.
+	MolMyWarnerOnActivateComponentImpl start.
+
+	self assert: listener currentState equals: #operational.
+	
+]
+
+{ #category : #tests }
 MolEventsTest >> testSimpleWarnerNotActivated [
 	"A component not activated send events."
 	| warner listener |
@@ -199,7 +210,7 @@ MolEventsTest >> testSimpleWarnerNotActivated [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSimpleWarnerNotActivatedNamed [
 	"A component not activated send events."
 	| warner listener |
@@ -235,7 +246,7 @@ MolEventsTest >> testSimpleWarnerNotActivatedNamed [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSimpleWarningSystem [
 	| warner listener |
 	"Deployment"
@@ -265,7 +276,7 @@ MolEventsTest >> testSimpleWarningSystem [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSimpleWarningSystemNamed [
 	| warner listener |
 	"Deployment"
@@ -295,7 +306,7 @@ MolEventsTest >> testSimpleWarningSystemNamed [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSimpleWarningSystemNamedDelayed [
 "Test subscription after activation"
 	| warner listener |
@@ -318,7 +329,7 @@ MolEventsTest >> testSimpleWarningSystemNamedDelayed [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSubscribeAndAddProviderAfter [
 	| warner listener |
 	"Deployment"
@@ -348,7 +359,7 @@ MolEventsTest >> testSubscribeAndAddProviderAfter [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSubscribeAndRemoveProviderAfter [
 	| warner listener |
 	"Deployment"
@@ -377,7 +388,7 @@ MolEventsTest >> testSubscribeAndRemoveProviderAfter [
 	self assert: listener currentState equals: #operational.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSubscribeAndUseProviderAfter [
 	| warner listener |
 	"Deployment"
@@ -407,7 +418,7 @@ MolEventsTest >> testSubscribeAndUseProviderAfter [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSubscribeAndUseProviderAfter2 [
 	| warner listener |
 	"Deployment"
@@ -438,7 +449,7 @@ MolEventsTest >> testSubscribeAndUseProviderAfter2 [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSubscribeNothing [
 	| warner listener |
 	"Deployment"
@@ -458,7 +469,7 @@ MolEventsTest >> testSubscribeNothing [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSubscribeStopAndRestartProvider [
 	| warner listener |
 	"Deployment"
@@ -485,7 +496,7 @@ MolEventsTest >> testSubscribeStopAndRestartProvider [
 	self assert: listener currentState equals: #operational.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolEventsTest >> testSubscriptionBeforeInstanciation [
 	"A component not activated send events."
 	| warner listener |

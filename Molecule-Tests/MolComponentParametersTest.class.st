@@ -2,14 +2,12 @@
 A MolComponentParametersTest is a test class for testing the behavior of MolComponentParameters
 "
 Class {
-	#name : 'MolComponentParametersTest',
-	#superclass : 'TestCase',
-	#category : 'Molecule-Tests-Cases - Component Contract',
-	#package : 'Molecule-Tests',
-	#tag : 'Cases - Component Contract'
+	#name : #MolComponentParametersTest,
+	#superclass : #TestCase,
+	#category : 'Molecule-Tests-Cases - Component Contract'
 }
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentParametersTest >> testIsComponentParameters [
 
 	self assert: MolComponentServices isComponentParameters equals: false.

@@ -6,33 +6,31 @@ My providers must use me as trait. If the component type is correctly defined, i
 See ComponentServices for more informations about services.
 "
 Trait {
-	#name : 'MolMyTableServices',
+	#name : #MolMyTableServices,
 	#traits : 'MolComponentServices',
 	#classTraits : 'MolComponentServices classTrait',
-	#category : 'Molecule-Tests-Resources - Contracts',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts'
 }
 
-{ #category : 'services' }
+{ #category : #services }
 MolMyTableServices >> getContent [
 
 	^ self explicitRequirement
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMyTableServices >> getContentAtRow: aRowNumber [
 
 	^ self explicitRequirement
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMyTableServices >> nbOfColumns [
 
 	^ 3
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMyTableServices >> nbOfRows [
 
 	^ self explicitRequirement

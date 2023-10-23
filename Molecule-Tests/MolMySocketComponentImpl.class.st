@@ -4,8 +4,8 @@ I am an example of socket component. I provided services to create an UDP or TCP
 Because I am a component implementation, you can force my automatic definition. To do it,  use class method 'self defineComponent'.
 "
 Class {
-	#name : 'MolMySocketComponentImpl',
-	#superclass : 'MolAbstractComponentImpl',
+	#name : #MolMySocketComponentImpl,
+	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolMySocketComponent + MolMySocketServices + MolMySocketParameters',
 	#classTraits : 'MolMySocketComponent classTrait + MolMySocketServices classTrait + MolMySocketParameters classTrait',
 	#instVars : [
@@ -13,48 +13,46 @@ Class {
 		'port',
 		'protocol'
 	],
-	#category : 'Molecule-Tests-Resources - Components',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components'
 }
 
-{ #category : 'services' }
+{ #category : #services }
 MolMySocketComponentImpl >> connect [
 
 	MolUtils log: self printString, ' connect to: ', ip printString, ':', port printString, ' with protocol: ', protocol printString.
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMySocketComponentImpl >> disconnect [
 
 	MolUtils log: self printString, ' disconnect.'
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMySocketComponentImpl >> receive: aMessage [
 
 	MolUtils log: self printString, ' receive: ', aMessage.
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMySocketComponentImpl >> send: aMessage [
 
 	MolUtils log: self printString, 'send a message: ', aMessage.
 ]
 
-{ #category : 'parameters' }
+{ #category : #parameters }
 MolMySocketComponentImpl >> setIp: anIpAddress [
 
 	ip := anIpAddress 
 ]
 
-{ #category : 'parameters' }
+{ #category : #parameters }
 MolMySocketComponentImpl >> setPort: aPort [
 
 	port := aPort
 ]
 
-{ #category : 'parameters' }
+{ #category : #parameters }
 MolMySocketComponentImpl >> setProtocol: aProtocol [
 
 	protocol := aProtocol = #tcp

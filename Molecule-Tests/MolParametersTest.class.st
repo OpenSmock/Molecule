@@ -3,26 +3,24 @@ I provide basic tests for parameters.
 Also, I can be used as example to use parameters. My classes are in package Molecule-Examples.
 "
 Class {
-	#name : 'MolParametersTest',
-	#superclass : 'TestCase',
-	#category : 'Molecule-Tests-Cases',
-	#package : 'Molecule-Tests',
-	#tag : 'Cases'
+	#name : #MolParametersTest,
+	#superclass : #TestCase,
+	#category : 'Molecule-Tests-Cases'
 }
 
-{ #category : 'setUp-tearDown' }
+{ #category : #'setUp-tearDown' }
 MolParametersTest >> setUp [
 
 	MolComponentManager cleanUp.
 ]
 
-{ #category : 'setUp-tearDown' }
+{ #category : #'setUp-tearDown' }
 MolParametersTest >> tearDown [
 
 	MolComponentManager cleanUp.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolParametersTest >> testClientSetParameters [
 	| manager socket client |
 	
@@ -50,7 +48,7 @@ MolParametersTest >> testClientSetParameters [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolParametersTest >> testClientSetParametersFromSeveralClient [
 	| manager socket client1 client2 |
 
@@ -88,7 +86,7 @@ MolParametersTest >> testClientSetParametersFromSeveralClient [
 	client2 connect.	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolParametersTest >> testClientSetParametersNamed [
 	| manager socket client |
 	

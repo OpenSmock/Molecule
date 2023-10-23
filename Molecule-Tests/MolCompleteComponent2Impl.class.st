@@ -1,19 +1,17 @@
 Class {
-	#name : 'MolCompleteComponent2Impl',
-	#superclass : 'MolAbstractComponentImpl',
+	#name : #MolCompleteComponent2Impl,
+	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolCompleteComponent2 + MolUsedEvents + MolUsedParameters + MolUsedServices',
 	#classTraits : 'MolCompleteComponent2 classTrait + MolUsedEvents classTrait + MolUsedParameters classTrait + MolUsedServices classTrait',
-	#category : 'Molecule-Tests-Resources - Components',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components'
 }
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolCompleteComponent2Impl >> getMolUsedEventsNotifier [
 	^self eventsNotifiers at: MolUsedEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolUsedEvents name: nil].
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolCompleteComponent2Impl >> getMolUsedEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolUsedEvents.
@@ -25,7 +23,7 @@ MolCompleteComponent2Impl >> getMolUsedEventsSubscriber [
 	^eventsSubscriber
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolCompleteComponent2Impl >> getMolUsedParametersProvider [
 	| parametersSymbol parametersProvider itf |
 
@@ -37,7 +35,7 @@ MolCompleteComponent2Impl >> getMolUsedParametersProvider [
 	^parametersProvider
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolCompleteComponent2Impl >> getMolUsedServicesProvider [
 	| servicesSymbol servicesProvider itf |
 

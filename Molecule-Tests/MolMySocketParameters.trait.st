@@ -6,27 +6,25 @@ My providers must use me as trait. If the component type is correctly defined, i
 See ComponentParameters for more informations about parameters.
 "
 Trait {
-	#name : 'MolMySocketParameters',
+	#name : #MolMySocketParameters,
 	#traits : 'MolComponentParameters',
 	#classTraits : 'MolComponentParameters classTrait',
-	#category : 'Molecule-Tests-Resources - Contracts',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts'
 }
 
-{ #category : 'parameters' }
+{ #category : #parameters }
 MolMySocketParameters >> setIp: anIpAddress [
 
 	self explicitRequirement
 ]
 
-{ #category : 'parameters' }
+{ #category : #parameters }
 MolMySocketParameters >> setPort: aPort [
 
 	self explicitRequirement
 ]
 
-{ #category : 'parameters' }
+{ #category : #parameters }
 MolMySocketParameters >> setProtocol: aProtocol [
 
 	self explicitRequirement

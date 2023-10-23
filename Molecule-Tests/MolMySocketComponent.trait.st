@@ -6,21 +6,19 @@ In my contract, I provide MySocketServices and MySocketParameters.
 With my contract, all my implementations will automatically use appropriate traits and receive generated methods.
 "
 Trait {
-	#name : 'MolMySocketComponent',
+	#name : #MolMySocketComponent,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : 'Molecule-Tests-Resources - Contracts',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts'
 }
 
-{ #category : 'accessing - parameters' }
+{ #category : #'accessing - parameters' }
 MolMySocketComponent classSide >> providedComponentParameters [
 <componentContract>		
 	^{ MolMySocketParameters }
 ]
 
-{ #category : 'accessing - services' }
+{ #category : #'accessing - services' }
 MolMySocketComponent classSide >> providedComponentServices [
 <componentContract>	
 	^{ MolMySocketServices } 

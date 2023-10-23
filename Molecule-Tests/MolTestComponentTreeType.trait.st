@@ -1,8 +1,6 @@
 Trait {
-	#name : 'MolTestComponentTreeType',
+	#name : #MolTestComponentTreeType,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : 'Molecule-Tests-Resources - Contracts',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts'
 }

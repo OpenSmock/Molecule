@@ -2,14 +2,12 @@
 A MolComponentFactoryTest is a test class for testing the behavior of MolComponentFactory
 "
 Class {
-	#name : 'MolComponentFactoryTest',
-	#superclass : 'TestCase',
-	#category : 'Molecule-Tests-Cases',
-	#package : 'Molecule-Tests',
-	#tag : 'Cases'
+	#name : #MolComponentFactoryTest,
+	#superclass : #TestCase,
+	#category : 'Molecule-Tests-Cases'
 }
 
-{ #category : 'setUp-tearDown' }
+{ #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 	"Smalltalk fixObsoleteReferences."
 	
@@ -33,7 +31,7 @@ MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 	edited ifTrue:[(Delay forMilliseconds: 100) wait].
 ]
 
-{ #category : 'utils' }
+{ #category : #utils }
 MolComponentFactoryTest >> createInstanceMethod: aSelector in: aClassOrTrait protocol: aProtocolString withCode: aSourceCodeString [
 	"Create an instance method in a Class or Trait with source code implementation"
 	| sourceCode |
@@ -48,72 +46,72 @@ MolComponentFactoryTest >> createInstanceMethod: aSelector in: aClassOrTrait pro
 	aClassOrTrait compile: sourceCode contents classified: aProtocolString.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentClass [
 	^self class environment at: self generatedComponentClassSymbolName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentClass2 [
 	^self class environment at: self generatedComponentClass2SymbolName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentClass2SymbolName [
 	^ #MolTestGeneratedComponentImpl
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentClassSymbolName [
 	^ #MolCompleteComponentTestImpl
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentEventsSymbolName [
 	^ #MolTestGeneratedComponentEvents
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentEventsTrait [
 	^self class environment at: self generatedComponentEventsSymbolName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentParametersSymbolName [
 	^ #MolTestGeneratedComponentParameters
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentParametersTrait [
 	^self class environment at: self generatedComponentParametersSymbolName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentServicesSymbolName [
 	^ #MolTestGeneratedComponentServices
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentServicesTrait [
 	^self class environment at: self generatedComponentServicesSymbolName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentTypeSymbolName [
 	^ #MolTestGeneratedComponentType
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generatedComponentTypeTrait [
 	^self class environment at: self generatedComponentTypeSymbolName
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactoryTest >> generationTag [
 	^'Molecule-Tests-Resources - Generated'
 ]
 
-{ #category : 'setUp-tearDown' }
+{ #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUp [
 
 	self timeLimit: 30 seconds.
@@ -121,7 +119,7 @@ MolComponentFactoryTest >> setUp [
 	self cleanGeneratedClassesAndTraits.
 ]
 
-{ #category : 'setUp-tearDown' }
+{ #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> setUpComponentAndType [
 	<script: 'self new setUpComponentAndType'>
 	| edited |
@@ -166,7 +164,7 @@ MolComponentFactoryTest >> setUpComponentAndType [
 	edited ifTrue:[(Delay forMilliseconds: 100) wait].
 ]
 
-{ #category : 'setUp-tearDown' }
+{ #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> tearDown [
 
 	(Delay forMilliseconds: 10) wait.
@@ -174,7 +172,7 @@ MolComponentFactoryTest >> tearDown [
 	MolComponentManager cleanUp.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testCollectComponentConnectionTraits [
 	| traits |
 	traits := MolComponentFactory default collectComponentConnectionTraits: nil.
@@ -199,7 +197,7 @@ MolComponentFactoryTest >> testCollectComponentConnectionTraits [
 	self assert: (traits includes: MolUsedParameters).
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	"Create a class, edit this class from different ways and check if the factory define the component or not"
 	| isDynamicContractUpdateActivated |
@@ -236,7 +234,7 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testComponentContractChanged [
 	"Create a class, edit this class from different ways and check if the factory define the component or not"
 	| isDynamicContractUpdateActivated methodName source |
@@ -266,7 +264,7 @@ MolComponentFactoryTest >> testComponentContractChanged [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testComponentFactoryDefaultClass [
 	MolComponentFactory cleanUp.
 
@@ -278,7 +276,7 @@ MolComponentFactoryTest >> testComponentFactoryDefaultClass [
 	MolComponentFactory cleanUp.
 ]
 
-{ #category : 'test - component subclasses' }
+{ #category : #'test - component subclasses' }
 MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	"Test if the traits declaration are correctly injected into a component class hierarchy
 	We have 3 components : A, B and C which inherits one another.
@@ -339,7 +337,7 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	MolTestComponentImplC setTraitComposition: #().
 ]
 
-{ #category : 'test - component subclasses' }
+{ #category : #'test - component subclasses' }
 MolComponentFactoryTest >> testComponentSubclassesTraitsUses2 [
 
 	| type |
@@ -360,7 +358,7 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses2 [
 
 ]
 
-{ #category : 'tests - component creation' }
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testCreateComponentClassWithType [
 	"Create a Component from scratch with a Type"
 	| class |
@@ -379,7 +377,7 @@ MolComponentFactoryTest >> testCreateComponentClassWithType [
 	class comment: 'I am added and removed by test: ', self printString.
 ]
 
-{ #category : 'tests - component creation' }
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testCreateComponentClassWithoutType [
 	"Create a Component from scratch without Type"
 	| class |
@@ -398,7 +396,7 @@ MolComponentFactoryTest >> testCreateComponentClassWithoutType [
 	class comment: 'I am added and removed by test: ', self printString.
 ]
 
-{ #category : 'tests - contract creation' }
+{ #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateComponentCompleteContract [
 	"Create a Component Type from scratch with services, events and parameters"
 	
@@ -475,7 +473,7 @@ MolComponentFactoryTest >> testCreateComponentCompleteContract [
 	self assert: (self generatedComponentTypeTrait isConsumeEvents: self generatedComponentEventsTrait).
 ]
 
-{ #category : 'tests - contract creation' }
+{ #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateComponentCompleteContractWithoutAPI [
 	"Create a Component Type from scratch with services, events and parameters but without API"
 	
@@ -552,7 +550,7 @@ MolComponentFactoryTest >> testCreateComponentCompleteContractWithoutAPI [
 	self assert: (self generatedComponentTypeTrait isConsumeEvents: self generatedComponentEventsTrait).
 ]
 
-{ #category : 'tests - contract creation' }
+{ #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateComponentEvents [
 	"Create a Component Events from scratch"
 	
@@ -562,7 +560,7 @@ MolComponentFactoryTest >> testCreateComponentEvents [
 	self createInstanceMethod: 'testGeneratedEventB' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 ]
 
-{ #category : 'tests - component creation' }
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testCreateComponentForTypeNamedIn [
 	"Test errors cases"
 	| error |
@@ -575,7 +573,7 @@ MolComponentFactoryTest >> testCreateComponentForTypeNamedIn [
 	self assert: error equals: true.
 ]
 
-{ #category : 'tests - contract creation' }
+{ #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateComponentParameters [
 	"Create a Component Parameters from scratch"
 	
@@ -585,7 +583,7 @@ MolComponentFactoryTest >> testCreateComponentParameters [
 	self createInstanceMethod: 'testGeneratedParameterB' in: self generatedComponentParametersTrait protocol: 'parameters' withCode: nil.
 ]
 
-{ #category : 'tests - contract creation' }
+{ #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateComponentServices [
 	"Create a Component Services from scratch"
 	
@@ -595,7 +593,7 @@ MolComponentFactoryTest >> testCreateComponentServices [
 	self createInstanceMethod: 'testGeneratedServiceB' in: self generatedComponentServicesTrait protocol: 'services' withCode: nil.
 ]
 
-{ #category : 'tests - contract creation' }
+{ #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateComponentType [
 	"Create a Component Type from scratch"
 	
@@ -619,7 +617,7 @@ MolComponentFactoryTest >> testCreateComponentType [
 	
 ]
 
-{ #category : 'tests - contract creation' }
+{ #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateEmptyComponentEvents [
 	"Create a Component Events from scratch"
 	
@@ -643,7 +641,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentEvents [
 	
 ]
 
-{ #category : 'tests - contract creation' }
+{ #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateEmptyComponentParameters [
 	"Create a Component Parameters from scratch"
 	
@@ -667,7 +665,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentParameters [
 	
 ]
 
-{ #category : 'tests - contract creation' }
+{ #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateEmptyComponentServices [
 	"Create a Component Services from scratch"
 	
@@ -691,7 +689,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentServices [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testCreateSourceCodeContractSelector [
 
 	| interfaces sourceCode toBeGenerated |
@@ -715,7 +713,7 @@ MolComponentFactoryTest >> testCreateSourceCodeContractSelector [
 	self assert: sourceCode contents equals: toBeGenerated.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testCreateSourceCodeContractSelector2 [
 	"Test with multiple interfaces"
 
@@ -742,7 +740,7 @@ MolComponentFactoryTest >> testCreateSourceCodeContractSelector2 [
 	self assert: sourceCode contents equals: toBeGenerated.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testCreateSourceCodeContractSelector3 [
 	"Test without interfaces"
 
@@ -766,12 +764,12 @@ MolComponentFactoryTest >> testCreateSourceCodeContractSelector3 [
 	self assert: sourceCode contents equals: toBeGenerated.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testDefineAllComponents [
 	MolComponentFactory defineAllComponents.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testDefineComponent [
 	"The Factory can define only Component Classes"
 	MolComponentFactory defineComponent: nil.
@@ -785,7 +783,7 @@ MolComponentFactoryTest >> testDefineComponent [
 	MolComponentFactory defineComponent: MolCompleteComponent.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testDefineComponentTypeImplementors [
 	MolComponentFactory default defineComponentTypeImplementors: nil.
 	
@@ -798,7 +796,7 @@ MolComponentFactoryTest >> testDefineComponentTypeImplementors [
 	MolComponentFactory default defineComponentTypeImplementors: MolCompleteComponent.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testDefineDirtyComponents [
 	self assert: MolComponentFactory default dirtyComponentTypes isEmpty.
 
@@ -813,7 +811,7 @@ MolComponentFactoryTest >> testDefineDirtyComponents [
 	self assert: MolComponentFactory default dirtyComponents isEmpty.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testDynamicContractUpdateActivation [
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
 	
@@ -824,7 +822,7 @@ MolComponentFactoryTest >> testDynamicContractUpdateActivation [
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testDynamicContractUpdateActivation2 [
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated equals: true.
 	
@@ -837,35 +835,35 @@ MolComponentFactoryTest >> testDynamicContractUpdateActivation2 [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testGenerateConsumedEventComponentAccessorsFor [
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsSubscriber.
 	MolComponentFactory default generateOrRemoveConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsSubscriber).
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testGenerateProducedEventComponentAccessorsFor [
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsNotifier.
 	MolComponentFactory default generateOrRemoveProducedEventsComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsNotifier).
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testGenerateUsedParametersComponentAccessorsFor [
 	MolCompleteComponentImpl removeSelector: #getMolUsedParametersProvider.
 	MolComponentFactory default generateOrRemoveUsedParametersComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedParametersProvider).
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentFactoryTest >> testGenerateUsedServicesComponentAccessorsFor [
 	MolCompleteComponentImpl removeSelector: #getMolUsedServicesProvider.
 	MolComponentFactory default generateOrRemoveUsedServicesComponentAccessorsFor: MolCompleteComponentImpl.
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedServicesProvider).
 ]
 
-{ #category : 'tests - component creation' }
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 	"Create a Component, adding a trait and adding a component type
 	- Create a component Class
@@ -892,7 +890,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 	self assert: (class canPerform: #methodOfNoComponentTrait).
 ]
 
-{ #category : 'tests - component creation' }
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	"Create a Component from scratch and adding a trait
 	- Create a component Class
@@ -934,7 +932,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentEventsTrait).
 ]
 
-{ #category : 'tests - component creation' }
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlternative2 [
 	"Create a Component from scratch and adding a trait
 	- Create a component Class
@@ -977,7 +975,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlt
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentEventsTrait).
 ]
 
-{ #category : 'tests - component creation' }
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	"Make a Component from scratch, try to reproduce the workflow of a component creator developper is this order : 
 	- Create Component Class
@@ -1030,7 +1028,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 	self assert: (componentClass canPerform: #testGeneratedEventB).
 ]
 
-{ #category : 'tests - component creation' }
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 	"Make a Component from scratch, try to reproduce the workflow of a component creator developper is this order : 
 	- Create Type
@@ -1080,7 +1078,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 	self assert: (componentClass canPerform: #testGeneratedEventB).
 ]
 
-{ #category : 'tests - component creation' }
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative3 [
 	"Make a Component from scratch, try to reproduce the workflow of a component creator developper is this order : 
 	- Create Type
@@ -1123,7 +1121,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative3 [
 	self assert: (componentClass canPerform: #testGeneratedEventB).
 ]
 
-{ #category : 'tests - component creation' }
+{ #category : #'tests - component creation' }
 MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	"Make a Component from scratch, try to reproduce the workflow of a component creator developper is this order : 
 	- Create Type
@@ -1173,25 +1171,25 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	self assert: (componentClass canPerform: #testGeneratedEventB) equals: false.
 ]
 
-{ #category : 'tests - protocol' }
+{ #category : #'tests - protocol' }
 MolComponentFactoryTest >> testProtocolForComponentAccess [
 
 	self assert: MolComponentFactory protocolForComponentAccess equals: 'component accessing'.
 ]
 
-{ #category : 'tests - protocol' }
+{ #category : #'tests - protocol' }
 MolComponentFactoryTest >> testProtocolForComponentEvents [
 
 	self assert: MolComponentFactory protocolForComponentEvents equals: 'accessing - events'.
 ]
 
-{ #category : 'tests - protocol' }
+{ #category : #'tests - protocol' }
 MolComponentFactoryTest >> testProtocolForComponentParameters [
 
 	self assert: MolComponentFactory protocolForComponentParameters equals: 'accessing - parameters'.
 ]
 
-{ #category : 'tests - protocol' }
+{ #category : #'tests - protocol' }
 MolComponentFactoryTest >> testProtocolForComponentServices [
 
 	self assert: MolComponentFactory protocolForComponentServices equals: 'accessing - services'.
