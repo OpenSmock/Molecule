@@ -2,28 +2,26 @@
 A MolEventSubscriberTest is a test class for testing the behavior of MolEventSubscriber
 "
 Class {
-	#name : 'MolEventSubscriberTest',
-	#superclass : 'TestCase',
-	#category : 'Molecule-Tests-Cases',
-	#package : 'Molecule-Tests',
-	#tag : 'Cases'
+	#name : #MolEventSubscriberTest,
+	#superclass : #TestCase,
+	#category : 'Molecule-Tests-Cases'
 }
 
-{ #category : 'running' }
+{ #category : #running }
 MolEventSubscriberTest >> setUp [
 
 	super setUp.
 	MolComponentManager cleanUp.
 ]
 
-{ #category : 'running' }
+{ #category : #running }
 MolEventSubscriberTest >> tearDown [
 
 	MolComponentManager cleanUp.
 	super tearDown.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testAddOriginator [
 	| subscribers componentEvents eventSubscriber component |
 	subscribers := OrderedCollection new.
@@ -43,7 +41,7 @@ MolEventSubscriberTest >> testAddOriginator [
 	self assert: (eventSubscriber originators includes: component).
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testAddOriginators [
 	| subscribers componentEvents eventSubscriber componentA componentB |
 	subscribers := OrderedCollection new.
@@ -62,7 +60,7 @@ MolEventSubscriberTest >> testAddOriginators [
 	self assert: (eventSubscriber originators includes: componentB).
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testEventsOriginators [
 	| subscribers componentEvents eventSubscriber componentA componentB |
 	subscribers := OrderedCollection new.
@@ -77,7 +75,7 @@ MolEventSubscriberTest >> testEventsOriginators [
 	self assert: (eventSubscriber originators includes: componentB).
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testGetObserversFrom [
 	| observer producer |
 
@@ -99,7 +97,7 @@ MolEventSubscriberTest >> testGetObserversFrom [
 	self assert: (observer getMolUsedEventsSubscriber getObserversFrom: producer) first identicalTo: observer.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testIncludesOriginator [
 	| subscribers componentEvents eventSubscriber component |
 	subscribers := OrderedCollection new.
@@ -113,7 +111,7 @@ MolEventSubscriberTest >> testIncludesOriginator [
 	self assert: (eventSubscriber includesOriginator: component).
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testInitialize [
 	| eventSubscriber |
 	eventSubscriber := MolEventSubscriber new.
@@ -124,7 +122,7 @@ MolEventSubscriberTest >> testInitialize [
 	self assert: eventSubscriber observersConnection isEmpty.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testIsAllOriginatorsLinked [
 	| subscribers componentEvents eventSubscriber |
 	subscribers := OrderedCollection new.
@@ -135,7 +133,7 @@ MolEventSubscriberTest >> testIsAllOriginatorsLinked [
 	self assert: eventSubscriber isAllOriginatorsLinked equals: true.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testIsNotFoundEventsSubscriber [
 	| subscribers componentEvents eventSubscriber |
 	subscribers := OrderedCollection new.
@@ -145,7 +143,7 @@ MolEventSubscriberTest >> testIsNotFoundEventsSubscriber [
 	self assert: eventSubscriber isNotFoundEventsSubscriber equals: false.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testIsSubscribed [
 	| component subscriber |
 	component := MolCompleteComponentImpl start: #myComponent.
@@ -161,7 +159,7 @@ MolEventSubscriberTest >> testIsSubscribed [
 	self assert: (component getMolUsedEventsSubscriber isSubscribed: component) equals: false.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testIsSubscribed2 [
 	| component subscriber |
 	component := MolCompleteComponentImpl start: #myComponent.
@@ -178,7 +176,7 @@ MolEventSubscriberTest >> testIsSubscribed2 [
 	self assert: (component getMolUsedEventsSubscriber isSubscribed: component) equals: false.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testRelease [
 	| subscribers componentEvents eventSubscriber |
 	subscribers := OrderedCollection new.
@@ -194,7 +192,7 @@ MolEventSubscriberTest >> testRelease [
 	self assert: eventSubscriber observersConnection isEmpty.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testSubscribe [
 	| eventSubscriber component |
 	component := MolUtils startComponent: MolCompleteComponentImpl.
@@ -225,7 +223,7 @@ MolEventSubscriberTest >> testSubscribe [
 	
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testSubscribeANoStartedComponent [
 	| eventSubscriber component |
 	eventSubscriber := MolEventSubscriber events: MolUsedEvents originators: #(#default).
@@ -254,7 +252,7 @@ MolEventSubscriberTest >> testSubscribeANoStartedComponent [
 	self assert: eventSubscriber originatorsLinks isEmpty.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testSubscribeAddAndRemoveProducerAndUnsubscribe [
 	
 	| component |
@@ -267,7 +265,7 @@ MolEventSubscriberTest >> testSubscribeAddAndRemoveProducerAndUnsubscribe [
 	component getMolUsedEventsSubscriber unsubscribe: self.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testSubscribeAddAndRemoveProducerAndUnsubscribe2 [
 	
 	| component |
@@ -280,7 +278,7 @@ MolEventSubscriberTest >> testSubscribeAddAndRemoveProducerAndUnsubscribe2 [
 	component getMolUsedEventsSubscriber unsubscribe: self.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testUnsubscribe [
 	| eventSubscriber component |
 	component := MolUtils startComponent: MolCompleteComponentImpl.
@@ -302,7 +300,7 @@ MolEventSubscriberTest >> testUnsubscribe [
 	self assert: (eventSubscriber originatorsLinks at: MolUtils defaultComponentName) equals: component.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventSubscriberTest >> testUnsubscribeANoStartedComponent [
 	| eventSubscriber component |
 	eventSubscriber := MolEventSubscriber events: MolUsedEvents originators: #(#default).

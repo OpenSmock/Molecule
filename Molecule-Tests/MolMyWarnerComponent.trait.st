@@ -6,15 +6,13 @@ In my contract, I produce MyStateChangeEvents.
 With my contract, all my implementations will automatically use appropriate traits and receive generated methods.
 "
 Trait {
-	#name : 'MolMyWarnerComponent',
+	#name : #MolMyWarnerComponent,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : 'Molecule-Tests-Resources - Contracts',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts'
 }
 
-{ #category : 'accessing - events' }
+{ #category : #'accessing - events' }
 MolMyWarnerComponent classSide >> producedComponentEvents [
 <componentContract>		
 	^{ MolMyStateChangeEvents }

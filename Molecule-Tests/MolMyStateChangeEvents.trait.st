@@ -6,27 +6,25 @@ My consumers must use me as trait. If the component type is correctly defined, i
 See ComponentEvents for more informations about events.
 "
 Trait {
-	#name : 'MolMyStateChangeEvents',
+	#name : #MolMyStateChangeEvents,
 	#traits : 'MolComponentEvents',
 	#classTraits : 'MolComponentEvents classTrait',
-	#category : 'Molecule-Tests-Resources - Contracts',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts'
 }
 
-{ #category : 'events' }
+{ #category : #events }
 MolMyStateChangeEvents >> failure: aLevel [
 
 	^ self explicitRequirement
 ]
 
-{ #category : 'events' }
+{ #category : #events }
 MolMyStateChangeEvents >> maintenance [
 
 	^ self explicitRequirement
 ]
 
-{ #category : 'events' }
+{ #category : #events }
 MolMyStateChangeEvents >> operational [
 
 	^ self explicitRequirement

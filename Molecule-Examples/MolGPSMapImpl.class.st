@@ -1,26 +1,24 @@
 Class {
-	#name : 'MolGPSMapImpl',
-	#superclass : 'MolAbstractComponentImpl',
+	#name : #MolGPSMapImpl,
+	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolGPSMap + MolGPSDataEvents',
 	#classTraits : 'MolGPSMap classTrait + MolGPSDataEvents classTrait',
-	#category : 'Molecule-Examples-GPS Example',
-	#package : 'Molecule-Examples',
-	#tag : 'GPS Example'
+	#category : 'Molecule-Examples-GPS Example'
 }
 
-{ #category : 'component life cycle' }
+{ #category : #'component life cycle' }
 MolGPSMapImpl >> componentActivate [
 	
 	self getMolGPSDataEventsSubscriber subscribe: self.
 ]
 
-{ #category : 'component life cycle' }
+{ #category : #'component life cycle' }
 MolGPSMapImpl >> componentPassivate [
 	
 	self getMolGPSDataEventsSubscriber unsubscribe: self.
 ]
 
-{ #category : 'events' }
+{ #category : #events }
 MolGPSMapImpl >> currentPositionChanged: aGeoPosition [
 
 	"Display a circle on the map view at the current position"
@@ -31,7 +29,7 @@ MolGPSMapImpl >> currentPositionChanged: aGeoPosition [
 	self updatePositionCircleOnMap: aGeoPosition radius: radius
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolGPSMapImpl >> getMolGPSDataEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolGPSDataEvents.
@@ -43,7 +41,7 @@ MolGPSMapImpl >> getMolGPSDataEventsSubscriber [
 	^eventsSubscriber
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolGPSMapImpl >> getMolGPSDataServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
@@ -55,7 +53,7 @@ MolGPSMapImpl >> getMolGPSDataServicesProvider [
 	^servicesProvider
 ]
 
-{ #category : 'map updating' }
+{ #category : #'map updating' }
 MolGPSMapImpl >> updatePositionCircleOnMap: aGeoPosition radius: radius [
 	"Update geographic position of the received GPS position circle with a precision radius"
 	

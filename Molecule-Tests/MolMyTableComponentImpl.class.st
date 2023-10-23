@@ -4,20 +4,18 @@ I am an example of table which provide services to all its users. My services ar
 Because I am a component implementation, you can force my automatic definition. To do it,  use class method 'self defineComponent'.
 "
 Class {
-	#name : 'MolMyTableComponentImpl',
-	#superclass : 'Object',
+	#name : #MolMyTableComponentImpl,
+	#superclass : #Object,
 	#traits : 'MolMyTableComponent + MolComponentImpl + MolMyTableServices',
 	#classTraits : 'MolMyTableComponent classTrait + MolComponentImpl classTrait + MolMyTableServices classTrait',
 	#instVars : [
 		'tableContent',
 		'columnNames'
 	],
-	#category : 'Molecule-Tests-Resources - Components',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolMyTableComponentImpl >> addRow: aName attribute1: aNumber1 attribute2: aNumber2 [
 
 	| collection |
@@ -29,7 +27,7 @@ MolMyTableComponentImpl >> addRow: aName attribute1: aNumber1 attribute2: aNumbe
 		
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolMyTableComponentImpl >> componentInitialize [
 	"here write the code corresponding to component initialisation phase"
 	
@@ -39,20 +37,20 @@ MolMyTableComponentImpl >> componentInitialize [
 	self addRow: 'Raw3' attribute1: 5 attribute2: 1.587.
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMyTableComponentImpl >> getContent [
 
 	^ tableContent
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMyTableComponentImpl >> getContentAtRow: aRowNumber [
 
 	aRowNumber isInteger ifFalse: [ self error: 'Argument must be an integer.' ].
 	^ tableContent at: aRowNumber
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMyTableComponentImpl >> nbOfRows [
 
 	^ tableContent size

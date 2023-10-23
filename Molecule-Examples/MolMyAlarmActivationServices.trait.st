@@ -6,21 +6,19 @@ My providers must use me as trait. If the component type is correctly defined, i
 See ComponentServices for more informations about services.
 "
 Trait {
-	#name : 'MolMyAlarmActivationServices',
+	#name : #MolMyAlarmActivationServices,
 	#traits : 'MolComponentServices',
 	#classTraits : 'MolComponentServices classTrait',
-	#category : 'Molecule-Examples-Clock System Example',
-	#package : 'Molecule-Examples',
-	#tag : 'Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example'
 }
 
-{ #category : 'services' }
+{ #category : #services }
 MolMyAlarmActivationServices >> activate [
 
 	self explicitRequirement
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMyAlarmActivationServices >> deactivate [
 
 	self explicitRequirement

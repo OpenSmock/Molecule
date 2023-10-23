@@ -4,8 +4,8 @@ I am an exemple of clock. I receive a UTC time from a server, and I convert it t
 Because I am a component implementation, you can force my automatic definition. To do it,  use class method 'self defineComponent'.
 "
 Class {
-	#name : 'MolMyClockComponentImpl',
-	#superclass : 'MolAbstractComponentImpl',
+	#name : #MolMyClockComponentImpl,
+	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolMyClockComponent + MolMyGlobalTimeEvents + MolMyClockServices + MolMyClockParameters',
 	#classTraits : 'MolMyClockComponent classTrait + MolMyGlobalTimeEvents classTrait + MolMyClockServices classTrait + MolMyClockParameters classTrait',
 	#instVars : [
@@ -13,18 +13,16 @@ Class {
 		'timeZone',
 		'useManualTime'
 	],
-	#category : 'Molecule-Examples-Clock System Example',
-	#package : 'Molecule-Examples',
-	#tag : 'Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example'
 }
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolMyClockComponentImpl >> componentActivate [
 
 	self getMolMyGlobalTimeEventsSubscriber subscribe: self.
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolMyClockComponentImpl >> componentInitialize [
 
 	useManualTime := false.
@@ -32,13 +30,13 @@ MolMyClockComponentImpl >> componentInitialize [
 	delta := Time hour: 0 minute: 0 second: 0.
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolMyClockComponentImpl >> componentPassivate [
 
 	self getMolMyGlobalTimeEventsSubscriber unsubscribe: self.
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolMyClockComponentImpl >> getMolMyGlobalTimeEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyGlobalTimeEvents.
@@ -50,12 +48,12 @@ MolMyClockComponentImpl >> getMolMyGlobalTimeEventsSubscriber [
 	^eventsSubscriber
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolMyClockComponentImpl >> getMolMyLocalTimeEventsNotifier [
 	^self eventsNotifiers at: MolMyLocalTimeEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolMyLocalTimeEvents name: nil].
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolMyClockComponentImpl >> getMolMyServerTimeServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
@@ -67,7 +65,7 @@ MolMyClockComponentImpl >> getMolMyServerTimeServicesProvider [
 	^servicesProvider
 ]
 
-{ #category : 'events' }
+{ #category : #events }
 MolMyClockComponentImpl >> notifyGlobalTime: aGlobalTime [
 	| localTime |
 	localTime := useManualTime
@@ -82,7 +80,7 @@ MolMyClockComponentImpl >> notifyGlobalTime: aGlobalTime [
 	self getMolMyLocalTimeEventsNotifier notifyLocalTime: localTime
 ]
 
-{ #category : 'parameters' }
+{ #category : #parameters }
 MolMyClockComponentImpl >> setManualTime: aTime [
 
 	| globalTime |
@@ -94,13 +92,13 @@ MolMyClockComponentImpl >> setManualTime: aTime [
 		seconds: (globalTime second - aTime second)
 ]
 
-{ #category : 'parameters' }
+{ #category : #parameters }
 MolMyClockComponentImpl >> setTimeZone: aTimeZone [
 
 	timeZone := aTimeZone
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMyClockComponentImpl >> useManualTime: aBoolean [
 
 	useManualTime := aBoolean

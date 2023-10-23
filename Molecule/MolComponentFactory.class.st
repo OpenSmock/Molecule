@@ -6,8 +6,8 @@ When a component implementation and its trait type are defined, use method 'defi
 Also, when the contract of ComponentType changes, 'defineComponent' is automatically send.
 "
 Class {
-	#name : 'MolComponentFactory',
-	#superclass : 'Object',
+	#name : #MolComponentFactory,
+	#superclass : #Object,
 	#instVars : [
 		'pragmaCollector',
 		'isDynamicContractUpdateActivated',
@@ -17,12 +17,10 @@ Class {
 	#classVars : [
 		'Default'
 	],
-	#category : 'Molecule-Tools',
-	#package : 'Molecule',
-	#tag : 'Tools'
+	#category : #'Molecule-Tools'
 }
 
-{ #category : 'component - contract management' }
+{ #category : #'component - contract management' }
 MolComponentFactory class >> addConsumedEvents: aComponentEvents in: aComponentType [
 	"Add a provided ComponentEvents in a ComponentType"
 	| declaredConsumedComponentEvents |
@@ -42,7 +40,7 @@ MolComponentFactory class >> addConsumedEvents: aComponentEvents in: aComponentT
 	self compileContractSelector: 'consumedComponentEvents' protocol: self protocolForComponentEvents interfaces: declaredConsumedComponentEvents type: aComponentType
 ]
 
-{ #category : 'component - contract management' }
+{ #category : #'component - contract management' }
 MolComponentFactory class >> addProducedEvents: aComponentEvents in: aComponentType [
 	"Add a provided ComponentEvents in a ComponentType"
 	| declaredProducedComponentEvents |
@@ -62,7 +60,7 @@ MolComponentFactory class >> addProducedEvents: aComponentEvents in: aComponentT
 	self compileContractSelector: 'producedComponentEvents' protocol: self protocolForComponentEvents interfaces: declaredProducedComponentEvents type: aComponentType
 ]
 
-{ #category : 'component - contract management' }
+{ #category : #'component - contract management' }
 MolComponentFactory class >> addProvidedParameters: aComponentParameters in: aComponentType [
 	"Add a provided ComponentParameters in a ComponentType"
 	| declaredProvidedComponentParameters |
@@ -82,7 +80,7 @@ MolComponentFactory class >> addProvidedParameters: aComponentParameters in: aCo
 	self compileContractSelector: 'providedComponentParameters' protocol: self protocolForComponentParameters interfaces: declaredProvidedComponentParameters type: aComponentType
 ]
 
-{ #category : 'component - contract management' }
+{ #category : #'component - contract management' }
 MolComponentFactory class >> addProvidedServices: aComponentServices in: aComponentType [
 	"Add a provided ComponentServices in a ComponentType"
 	| declaredProvidedComponentServices |
@@ -102,7 +100,7 @@ MolComponentFactory class >> addProvidedServices: aComponentServices in: aCompon
 	self compileContractSelector: 'providedComponentServices' protocol: self protocolForComponentServices interfaces: declaredProvidedComponentServices type: aComponentType
 ]
 
-{ #category : 'component - contract management' }
+{ #category : #'component - contract management' }
 MolComponentFactory class >> addUsedParameters: aComponentParameters in: aComponentType [
 	"Add a provided ComponentParameters in a ComponentType"
 	| declaredUsedComponentParameters |
@@ -122,7 +120,7 @@ MolComponentFactory class >> addUsedParameters: aComponentParameters in: aCompon
 	self compileContractSelector: 'usedComponentParameters' protocol: self protocolForComponentServices interfaces: declaredUsedComponentParameters type: aComponentType
 ]
 
-{ #category : 'component - contract management' }
+{ #category : #'component - contract management' }
 MolComponentFactory class >> addUsedServices: aComponentServices in: aComponentType [
 	"Add a provided ComponentServices in a ComponentType"
 	| declaredUsedComponentServices |
@@ -142,7 +140,7 @@ MolComponentFactory class >> addUsedServices: aComponentServices in: aComponentT
 	self compileContractSelector: 'usedComponentServices' protocol: self protocolForComponentServices interfaces: declaredUsedComponentServices type: aComponentType
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactory class >> cleanUp [
 
 	<script: 'self cleanUp'>
@@ -151,7 +149,7 @@ MolComponentFactory class >> cleanUp [
 	Default := nil
 ]
 
-{ #category : 'component - contract management' }
+{ #category : #'component - contract management' }
 MolComponentFactory class >> compileContractSelector: aSelector protocol: aProtocol interfaces: interfaceList type: aComponentType [
 	"Compile Component Type contract description method into a class selector, this method return an array of Molecule interfaces (Traits as Services or Events)"
 	| sourceCode selector previousMethodOrNil newMethod |
@@ -175,13 +173,13 @@ MolComponentFactory class >> compileContractSelector: aSelector protocol: aProto
 		oldProtocol: aProtocol
 ]
 
-{ #category : 'pragma' }
+{ #category : #pragma }
 MolComponentFactory class >> componentContractPragmaSymbol [
 
 	^#componentContract
 ]
 
-{ #category : 'component - creation' }
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentEvents: aSymbol in: aPackageName [
 	"Create a ComponentEvents interface named aSymbol in a package"
 	
@@ -199,7 +197,7 @@ MolComponentFactory class >> createComponentEvents: aSymbol in: aPackageName [
 	
 ]
 
-{ #category : 'component - creation' }
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentForType: aComponentType named: aSymbol in: aPackageName [
 
 	aComponentType ifNotNil: [ 
@@ -224,7 +222,7 @@ MolComponentFactory class >> createComponentForType: aComponentType named: aSymb
 	package: ''' , aPackageName , ''''.
 ]
 
-{ #category : 'component - creation' }
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentNamed: aSymbol in: aPackageName [
 
 	aSymbol ifNil:[^self].
@@ -232,7 +230,7 @@ MolComponentFactory class >> createComponentNamed: aSymbol in: aPackageName [
 	self createComponentForType: nil named: aSymbol in: aPackageName
 ]
 
-{ #category : 'component - creation' }
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentParameters: aSymbol in: aPackageName [
 	"Create a ComponentParameters interface named aSymbol in a package"
 	
@@ -250,7 +248,7 @@ MolComponentFactory class >> createComponentParameters: aSymbol in: aPackageName
 	
 ]
 
-{ #category : 'component - creation' }
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentServices: aSymbol in: aPackageName [
 	"Create a ComponentServices interface named aSymbol in a package"
 	
@@ -268,7 +266,7 @@ MolComponentFactory class >> createComponentServices: aSymbol in: aPackageName [
 	
 ]
 
-{ #category : 'component - creation' }
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentType: aSymbol in: aPackageName [
 	"Create a ComponentType named aSymbol in a package"
 	
@@ -286,7 +284,7 @@ MolComponentFactory class >> createComponentType: aSymbol in: aPackageName [
 	
 ]
 
-{ #category : 'component - contract management' }
+{ #category : #'component - contract management' }
 MolComponentFactory class >> createSourceCodeContractSelector: aSelector protocol: aProtocol interfaces: interfaceList type: aComponentType [
 	"Create source code for Component Type contract description method into a class selector, this method return an array of Molecule interfaces (Traits as Services or Events)"
 	| sourceCode |
@@ -312,7 +310,7 @@ MolComponentFactory class >> createSourceCodeContractSelector: aSelector protoco
 	^ sourceCode
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactory class >> default [
 
 	<script: 'self default'>
@@ -320,7 +318,7 @@ MolComponentFactory class >> default [
 	^ Default
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactory class >> defineAllComponents [
 	"<script> Don't be a script : too much risk to perform without doing it on purpose"
 	| componentClasses |
@@ -330,26 +328,26 @@ MolComponentFactory class >> defineAllComponents [
 	componentClasses do: [ :c | MolComponentFactory defineComponent: c ]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactory class >> defineComponent: aComponentClass [
 
 	self default defineComponent: aComponentClass
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactory class >> defineDirtyComponents [
 
 	<script>
 	self default defineDirtyComponents
 ]
 
-{ #category : 'class initialization' }
+{ #category : #'class initialization' }
 MolComponentFactory class >> initialize [
 
 	self default
 ]
 
-{ #category : 'class initialization' }
+{ #category : #'class initialization' }
 MolComponentFactory class >> isInitialized [
 	"Test if the Component Factory is initialized"
 
@@ -357,38 +355,38 @@ MolComponentFactory class >> isInitialized [
 	^ Default notNil
 ]
 
-{ #category : 'protocol' }
+{ #category : #protocol }
 MolComponentFactory class >> protocolForComponentAccess [
 
 	^ 'component accessing'
 ]
 
-{ #category : 'protocol' }
+{ #category : #protocol }
 MolComponentFactory class >> protocolForComponentEvents [
 
 	^ 'accessing - events'
 ]
 
-{ #category : 'protocol' }
+{ #category : #protocol }
 MolComponentFactory class >> protocolForComponentParameters [
 
 	^ 'accessing - parameters'
 ]
 
-{ #category : 'protocol' }
+{ #category : #protocol }
 MolComponentFactory class >> protocolForComponentServices [
 
 	^ 'accessing - services'
 ]
 
-{ #category : 'dynamic contract update' }
+{ #category : #'dynamic contract update' }
 MolComponentFactory >> activateDynamicContractUpdate [
 	"Activate Dynamic Contract Update, this method display an information message to the user"
 	
 	self activateDynamicContractUpdate: true
 ]
 
-{ #category : 'dynamic contract update' }
+{ #category : #'dynamic contract update' }
 MolComponentFactory >> activateDynamicContractUpdate: isInform [
 	"Activate Dynamic Contract Update, and choose to display an information message to the user"
 	
@@ -398,7 +396,7 @@ MolComponentFactory >> activateDynamicContractUpdate: isInform [
 	self isDynamicContractUpdateActivated: true
 ]
 
-{ #category : 'private - code checking' }
+{ #category : #'private - code checking' }
 MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass: aComponentClass [
 	"Check if a Component Class uses a list of Trait Class and do uses"
 	| traitList missingTraits |
@@ -410,7 +408,7 @@ MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass
 	missingTraits ifNotEmpty: [self rebuildComponent: aComponentClass traitsAdding: missingTraits].
 ]
 
-{ #category : 'dirty components' }
+{ #category : #'dirty components' }
 MolComponentFactory >> collectComponentConnectionTraits: aComponentOrAComponentClass [
 	"Collect a Component Traits : Services, Events and Parameters"
 	| componentClass |
@@ -423,7 +421,7 @@ MolComponentFactory >> collectComponentConnectionTraits: aComponentOrAComponentC
 	]
 ]
 
-{ #category : 'announcements' }
+{ #category : #announcements }
 MolComponentFactory >> componentAddedAnnouncement: anAnnouncement [
 	
 	anAnnouncement ifNil: [ 
@@ -436,7 +434,7 @@ MolComponentFactory >> componentAddedAnnouncement: anAnnouncement [
 	
 ]
 
-{ #category : 'announcements' }
+{ #category : #announcements }
 MolComponentFactory >> componentChanged: aChangedClass [
 	"Update a ComponentClass triggered by a class description change"
 	
@@ -450,7 +448,7 @@ MolComponentFactory >> componentChanged: aChangedClass [
 	].
 ]
 
-{ #category : 'announcements' }
+{ #category : #announcements }
 MolComponentFactory >> componentChangedAnnouncement: anAnnouncement [
 
 	anAnnouncement ifNil: [ 
@@ -462,7 +460,7 @@ MolComponentFactory >> componentChangedAnnouncement: anAnnouncement [
 	].
 ]
 
-{ #category : 'announcements' }
+{ #category : #announcements }
 MolComponentFactory >> contractChanged: aComponentType [
 	
 	aComponentType ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
@@ -477,7 +475,7 @@ MolComponentFactory >> contractChanged: aComponentType [
 	]
 ]
 
-{ #category : 'announcements' }
+{ #category : #announcements }
 MolComponentFactory >> contractChangedAnnouncement: aPragmaAnnouncement [
 	
 	(aPragmaAnnouncement isNil or:[aPragmaAnnouncement pragma isNil or:[aPragmaAnnouncement pragma method isNil or:[aPragmaAnnouncement pragma method methodClass isNil]]]) ifTrue:[
@@ -489,14 +487,14 @@ MolComponentFactory >> contractChangedAnnouncement: aPragmaAnnouncement [
 	].
 ]
 
-{ #category : 'dynamic contract update' }
+{ #category : #'dynamic contract update' }
 MolComponentFactory >> deactivateDynamicContractUpdate [
 	"Deactivate Dynamic Contract Update, this method display an information message to the user"
 
 	self deactivateDynamicContractUpdate: true.
 ]
 
-{ #category : 'dynamic contract update' }
+{ #category : #'dynamic contract update' }
 MolComponentFactory >> deactivateDynamicContractUpdate: isInform [ 
 	"Deactivate Dynamic Contract Update, and choose to display an information message to the user"
 	
@@ -506,7 +504,7 @@ MolComponentFactory >> deactivateDynamicContractUpdate: isInform [
 	self isDynamicContractUpdateActivated: false
 ]
 
-{ #category : 'component definition' }
+{ #category : #'component definition' }
 MolComponentFactory >> defineComponent: aComponentClass [
 	"A component is a Class, define it"
 	 | toUseTraitList |
@@ -535,7 +533,7 @@ MolComponentFactory >> defineComponent: aComponentClass [
 	].
 ]
 
-{ #category : 'component definition' }
+{ #category : #'component definition' }
 MolComponentFactory >> defineComponentTypeImplementors: aComponentType [
 	"Check if the object is a trait"
 
@@ -550,7 +548,7 @@ MolComponentFactory >> defineComponentTypeImplementors: aComponentType [
 	userList do: [ :user | self defineComponent: user ].
 ]
 
-{ #category : 'dirty components' }
+{ #category : #'dirty components' }
 MolComponentFactory >> defineDirtyComponents [
 	"Get all dirty Types and Components for defining them"
 	
@@ -561,53 +559,46 @@ MolComponentFactory >> defineDirtyComponents [
 	dirtyComponents := Set new.
 ]
 
-{ #category : 'dirty components' }
+{ #category : #'dirty components' }
 MolComponentFactory >> dirtyComponentTypes [
 
 	^dirtyComponentTypes 
 ]
 
-{ #category : 'dirty components' }
+{ #category : #'dirty components' }
 MolComponentFactory >> dirtyComponents [
 
 	^dirtyComponents
 ]
 
-{ #category : 'private - code generation' }
+{ #category : #'private - code generation' }
 MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollection in: aComponent suffix: suffix [
 	| selector sourceCode sourceMethod method |
 	
-	aCollection copy do: [ :e | | trait |
+	aCollection copy do: [ :trait |
 		
-		"e can be another thing that a Trait, need to check nature of e before generate"
-		( e notNil and:[ e isTrait and:[( e isComponentServices or:[ e isComponentParameters or:[ e isComponentEvents ]])]]) ifTrue:[
-			
-			trait := e.
-		
-			selector := ('get' , trait printString , suffix) asSymbol.
-			sourceCode := self getSourceCodeFor: aSymbol trait: trait selector: selector.
-			(aComponent allSelectors includes: selector) ifFalse: [ 
-				aComponent compile: sourceCode contents classified: self class protocolForComponentAccess
-			] ifTrue: [ 
-				"if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
-				"the selector must not be a parent"
-				(aComponent selectors includes: selector) ifTrue: [ 
-					method := aComponent >> selector.
-					sourceMethod := method sourceCode.
-					sourceMethod ifNotNil: [ 
-						sourceMethod ~= sourceCode contents ifTrue: [ 
-						"rewrite the method"
-							aComponent compile: sourceCode contents classified: self class protocolForComponentAccess 
-						]. 
+		selector := ('get' , trait printString , suffix) asSymbol.
+		sourceCode := self getSourceCodeFor: aSymbol trait: trait selector: selector.
+		(aComponent allSelectors includes: selector) ifFalse: [ 
+			aComponent compile: sourceCode contents classified: self class protocolForComponentAccess
+		] ifTrue: [ 
+			"if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
+			"the selector must not be a parent"
+			(aComponent selectors includes: selector) ifTrue: [ 
+				method := aComponent >> selector.
+				sourceMethod := method sourceCode.
+				sourceMethod ifNotNil: [ 
+					sourceMethod ~= sourceCode contents ifTrue: [ 
+					"rewrite the method"
+						aComponent compile: sourceCode contents classified: self class protocolForComponentAccess 
 					]. 
 				]. 
 			]. 
-		
-		].
+		]. 
 	]
 ]
 
-{ #category : 'code generation' }
+{ #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aComponent [
 
 	self removeOldConsumedEventsComponentAccessorsFor: aComponent.
@@ -618,7 +609,7 @@ MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aCom
 	].
 ]
 
-{ #category : 'code generation' }
+{ #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aComponent [
 
 	self removeOldProducedEventsComponentAccessorsFor: aComponent.
@@ -628,7 +619,7 @@ MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aCom
 	].
 ]
 
-{ #category : 'code generation' }
+{ #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aComponent [
 
 	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
@@ -638,7 +629,7 @@ MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aCom
 	].
 ]
 
-{ #category : 'code generation' }
+{ #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aComponent [
  
 	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
@@ -648,7 +639,7 @@ MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aCompo
 	].
 ]
 
-{ #category : 'private - code generation' }
+{ #category : #'private - code generation' }
 MolComponentFactory >> getConsumedEventSourceCodeFor: aTrait selector: selector [
 	| writeStream |
 	
@@ -679,7 +670,7 @@ MolComponentFactory >> getConsumedEventSourceCodeFor: aTrait selector: selector 
 	^ writeStream
 ]
 
-{ #category : 'private - code generation' }
+{ #category : #'private - code generation' }
 MolComponentFactory >> getProducedEventSourceCodeFor: aTrait selector: selector [
 	| writeStream |
 	
@@ -695,7 +686,7 @@ MolComponentFactory >> getProducedEventSourceCodeFor: aTrait selector: selector 
 	^ writeStream
 ]
 
-{ #category : 'code generation' }
+{ #category : #'code generation' }
 MolComponentFactory >> getSourceCodeFor: aSymbol trait: aTrait selector: aSelector [
 
 	aSymbol = #producedEvents ifTrue:[^self getProducedEventSourceCodeFor: aTrait selector: aSelector ].
@@ -705,7 +696,7 @@ MolComponentFactory >> getSourceCodeFor: aSymbol trait: aTrait selector: aSelect
 	^ self error: 'Component Type contract category not supported'.
 ]
 
-{ #category : 'private - code generation' }
+{ #category : #'private - code generation' }
 MolComponentFactory >> getUsedParametersSourceCodeFor: aTrait selector: selector [
 	| writeStream |
 	
@@ -734,7 +725,7 @@ MolComponentFactory >> getUsedParametersSourceCodeFor: aTrait selector: selector
 	^ writeStream
 ]
 
-{ #category : 'private - code generation' }
+{ #category : #'private - code generation' }
 MolComponentFactory >> getUsedServicesSourceCodeFor: aTrait selector: selector [
 	| writeStream |
 	
@@ -763,7 +754,7 @@ MolComponentFactory >> getUsedServicesSourceCodeFor: aTrait selector: selector [
 	^ writeStream
 ]
 
-{ #category : 'initialize - release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> initialize [
 
 	super initialize.
@@ -774,7 +765,7 @@ MolComponentFactory >> initialize [
 	self initializeSystemAnnouncements
 ]
 
-{ #category : 'initialize - release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> initializePragmaAnnouncements [
 	"Component Type Observer"
 	
@@ -786,7 +777,7 @@ MolComponentFactory >> initializePragmaAnnouncements [
 		to: self.
 ]
 
-{ #category : 'initialize - release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> initializeSystemAnnouncements [
 	"Activate (or desactivate) component contract update when iceberge is used (or not)"
 	| announcer |
@@ -806,20 +797,20 @@ MolComponentFactory >> initializeSystemAnnouncements [
 	announcer when: #MCVersionLoaderStopped send: #activateDynamicContractUpdate: to: self with: false.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactory >> isDynamicContractUpdateActivated [
 
 	isDynamicContractUpdateActivated ifNil: [ isDynamicContractUpdateActivated := true ].
 	^ isDynamicContractUpdateActivated
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentFactory >> isDynamicContractUpdateActivated: aBoolean [
 
 	isDynamicContractUpdateActivated := aBoolean
 ]
 
-{ #category : 'private - code generation' }
+{ #category : #'private - code generation' }
 MolComponentFactory >> rebuildComponent: aComponentClass traitsAdding: aTraitsList [
 	| classes |
 	"Get class hierarchy of the component class and clean classes not concerned by Component Contract Traits"
@@ -841,7 +832,7 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsAdding: aTraitsLi
 	].
 ]
 
-{ #category : 'initialize - release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> release [
 
 	self releaseSystemAnnouncements.
@@ -853,14 +844,14 @@ MolComponentFactory >> release [
 	super release
 ]
 
-{ #category : 'initialize - release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> releasePragmaAnnouncements [
 
 	pragmaCollector release.
 	pragmaCollector := nil
 ]
 
-{ #category : 'initialize - release' }
+{ #category : #'initialize - release' }
 MolComponentFactory >> releaseSystemAnnouncements [
 
 	| announcer |
@@ -869,7 +860,7 @@ MolComponentFactory >> releaseSystemAnnouncements [
 	announcer unsubscribe: self
 ]
 
-{ #category : 'code generation' }
+{ #category : #'code generation' }
 MolComponentFactory >> removeOldConsumedEventsComponentAccessorsFor: aComponent [
  	"remove old consumed events but not the existing"
 	| toBeRemoveConsumedSelectors |
@@ -885,7 +876,7 @@ MolComponentFactory >> removeOldConsumedEventsComponentAccessorsFor: aComponent 
 	toBeRemoveConsumedSelectors do:[ :s | aComponent removeSelector: s].
 ]
 
-{ #category : 'code generation' }
+{ #category : #'code generation' }
 MolComponentFactory >> removeOldProducedEventsComponentAccessorsFor: aComponent [
  	"remove old produced events but not the existing"
 	| toBeRemoveProducedSelectors |
@@ -901,7 +892,7 @@ MolComponentFactory >> removeOldProducedEventsComponentAccessorsFor: aComponent 
 	toBeRemoveProducedSelectors do:[ :s | aComponent removeSelector: s].
 ]
 
-{ #category : 'code generation' }
+{ #category : #'code generation' }
 MolComponentFactory >> removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent [
  	"remove old used parameters but not the existing or used services"
 	| toBeRemoveProviderSelectors |

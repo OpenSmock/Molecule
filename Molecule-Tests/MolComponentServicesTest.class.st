@@ -2,14 +2,12 @@
 A MolComponentServicesTest is a test class for testing the behavior of MolComponentServices
 "
 Class {
-	#name : 'MolComponentServicesTest',
-	#superclass : 'TestCase',
-	#category : 'Molecule-Tests-Cases - Component Contract',
-	#package : 'Molecule-Tests',
-	#tag : 'Cases - Component Contract'
+	#name : #MolComponentServicesTest,
+	#superclass : #TestCase,
+	#category : 'Molecule-Tests-Cases - Component Contract'
 }
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolComponentServicesTest >> testIsComponentServices [
 
 

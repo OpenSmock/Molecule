@@ -6,27 +6,25 @@ In my contract, I consume MyLocalTimeEvents and MyAlarmSoundsEvents, and I use M
 With my contract, all my implementations will automatically use appropriate traits and receive generated methods.
 "
 Trait {
-	#name : 'MolMyUserFacadeComponent',
+	#name : #MolMyUserFacadeComponent,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : 'Molecule-Examples-Clock System Example',
-	#package : 'Molecule-Examples',
-	#tag : 'Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example'
 }
 
-{ #category : 'accessing - events' }
+{ #category : #'accessing - events' }
 MolMyUserFacadeComponent classSide >> consumedComponentEvents [
 <componentContract>	
 	^{ MolMyLocalTimeEvents . MolMyAlarmSoundsEvents  } 
 ]
 
-{ #category : 'accessing - parameters' }
+{ #category : #'accessing - parameters' }
 MolMyUserFacadeComponent classSide >> usedComponentParameters [
 <componentContract>	
 	^{ MolMyClockParameters . MolMyAlarmParameters }
 ]
 
-{ #category : 'accessing - services' }
+{ #category : #'accessing - services' }
 MolMyUserFacadeComponent classSide >> usedComponentServices [
 <componentContract>	
 	^{ MolMyClockServices . MolMyAlarmActivationServices }

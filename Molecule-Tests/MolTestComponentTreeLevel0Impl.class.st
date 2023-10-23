@@ -2,16 +2,14 @@
 This test component start and manage a component tree (start and stop others components)
 "
 Class {
-	#name : 'MolTestComponentTreeLevel0Impl',
-	#superclass : 'MolAbstractComponentImpl',
+	#name : #MolTestComponentTreeLevel0Impl,
+	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolTestComponentTreeType',
 	#classTraits : 'MolTestComponentTreeType classTrait',
-	#category : 'Molecule-Tests-Resources - Components',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components'
 }
 
-{ #category : 'component life cycle' }
+{ #category : #'component life cycle' }
 MolTestComponentTreeLevel0Impl >> componentActivate [
 
 	MolComponentManager default homeServices activateComponent: MolTestComponentTreeLevel1Impl named: #level1element1.
@@ -19,7 +17,7 @@ MolTestComponentTreeLevel0Impl >> componentActivate [
 	MolComponentManager default homeServices activateComponent: MolTestComponentTreeLevel1Impl named: #level1element3.
 ]
 
-{ #category : 'component life cycle' }
+{ #category : #'component life cycle' }
 MolTestComponentTreeLevel0Impl >> componentInitialize [ 
 
 	MolComponentManager default deploymentServices deployComponentImplementation: MolTestComponentTreeLevel1Impl.
@@ -30,7 +28,7 @@ MolTestComponentTreeLevel0Impl >> componentInitialize [
 	MolComponentManager default homeServices instanciateComponent: MolTestComponentTreeLevel1Impl named: #level1element3.
 ]
 
-{ #category : 'component life cycle' }
+{ #category : #'component life cycle' }
 MolTestComponentTreeLevel0Impl >> componentPassivate [
 
 	MolComponentManager default homeServices passivateComponent: MolTestComponentTreeLevel1Impl named: #level1element1.
@@ -38,7 +36,7 @@ MolTestComponentTreeLevel0Impl >> componentPassivate [
 	MolComponentManager default homeServices passivateComponent: MolTestComponentTreeLevel1Impl named: #level1element3.
 ]
 
-{ #category : 'component life cycle' }
+{ #category : #'component life cycle' }
 MolTestComponentTreeLevel0Impl >> componentRemove [
 
 	MolComponentManager default homeServices removeComponent: MolTestComponentTreeLevel1Impl named: #level1element1.

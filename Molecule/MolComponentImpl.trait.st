@@ -11,29 +11,27 @@ If the component has only one implementation, it is not necessary to precise som
 
 "
 Trait {
-	#name : 'MolComponentImpl',
+	#name : #MolComponentImpl,
 	#instVars : [
 		'componentConnector',
 		'componentName'
 	],
-	#category : 'Molecule-Component',
-	#package : 'Molecule',
-	#tag : 'Component'
+	#category : 'Molecule-Component'
 }
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl classSide >> activate [
 
 	^ MolComponentManager default homeServices activateComponent: self
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl classSide >> activate: aComponentName [
 
 	^ MolComponentManager default homeServices activateComponent: self named: aComponentName
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 MolComponentImpl classSide >> componentType [
 
 	"get all hierarchy traits and try to detect a component type"
@@ -46,7 +44,7 @@ MolComponentImpl classSide >> componentType [
 	^ nil
 ]
 
-{ #category : 'definition' }
+{ #category : #definition }
 MolComponentImpl classSide >> defineComponent [
 
 	self removeProtocol: MolComponentFactory protocolForComponentAccess.
@@ -54,25 +52,25 @@ MolComponentImpl classSide >> defineComponent [
 
 ]
 
-{ #category : 'deployment' }
+{ #category : #deployment }
 MolComponentImpl classSide >> deploy [
 
 	^ MolComponentManager default deploymentServices deployComponentImplementation: self
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 MolComponentImpl classSide >> haveComponentType [
 
 	^ self componentType notNil
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 MolComponentImpl classSide >> haveOwnComponentType [
 
 	^ self ownComponentType notNil
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl classSide >> instanciate [
 
 	self
@@ -82,7 +80,7 @@ MolComponentImpl classSide >> instanciate [
 	^ MolComponentManager default homeServices instanciateComponent: self
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl classSide >> instanciate: aComponentName [
 
 	self
@@ -94,13 +92,13 @@ MolComponentImpl classSide >> instanciate: aComponentName [
 		  named: aComponentName
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl classSide >> instantiate [
 
 	^ MolComponentManager default homeServices instantiateComponent: self
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl classSide >> instantiate: aComponentName [
 
 	^ MolComponentManager default homeServices
@@ -108,19 +106,19 @@ MolComponentImpl classSide >> instantiate: aComponentName [
 		  named: aComponentName
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 MolComponentImpl classSide >> isComponentClass [
 
 	^ true
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 MolComponentImpl classSide >> isOverrideComponentType [
 
 	^ self overridedComponentTypes notEmpty
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 MolComponentImpl classSide >> overridedComponentTypes [
 	| traits componentType |
 
@@ -132,7 +130,7 @@ MolComponentImpl classSide >> overridedComponentTypes [
 	^(traits select:[ :t | t isComponentType and:[t ~= componentType] ]) asOrderedCollection 
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 MolComponentImpl classSide >> ownComponentType [
 
 	"get own traits and try to detect a component type"
@@ -143,71 +141,71 @@ MolComponentImpl classSide >> ownComponentType [
 	^ nil
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl classSide >> passivate [
 
 	^ MolComponentManager default homeServices passivateComponent: self
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl classSide >> passivate: aComponentName [
 
 	^ MolComponentManager default homeServices passivateComponent: self named: aComponentName
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl classSide >> remove [
 
 	^ MolComponentManager default homeServices removeComponent: self
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl classSide >> remove: aComponentName [
 
 	^ MolComponentManager default homeServices removeComponent: self named: aComponentName
 ]
 
-{ #category : 'start & stop' }
+{ #category : #'start & stop' }
 MolComponentImpl classSide >> start [
 
 	^ MolUtils startComponent: self
 ]
 
-{ #category : 'start & stop' }
+{ #category : #'start & stop' }
 MolComponentImpl classSide >> start: aComponentName [
 
 	^ MolUtils startComponent: self named: aComponentName
 ]
 
-{ #category : 'start & stop' }
+{ #category : #'start & stop' }
 MolComponentImpl classSide >> stop [
 
 	^ MolUtils stopComponent: self
 ]
 
-{ #category : 'start & stop' }
+{ #category : #'start & stop' }
 MolComponentImpl classSide >> stop: aComponentName [
 
 	^ MolUtils stopComponent: self named: aComponentName
 ]
 
-{ #category : 'deployment' }
+{ #category : #deployment }
 MolComponentImpl classSide >> undeploy [
 
 	^ MolComponentManager default deploymentServices undeployComponentImplementation: self
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl >> componentActivate [
 	"here write the code corresponding to component activation phase"
 ]
 
-{ #category : 'private accessing' }
+{ #category : #'private accessing' }
 MolComponentImpl >> componentConnector [
 	^ componentConnector
 ]
 
-{ #category : 'private accessing' }
+{ #category : #'private accessing' }
 MolComponentImpl >> componentConnector: aConnector [
 	"set a connector to a component, release previous if necessary"
 
@@ -221,34 +219,34 @@ MolComponentImpl >> componentConnector: aConnector [
 	aConnector ifNotNil: [ aConnector connectComponent: self ]
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl >> componentInitialize [
 	"here write the code corresponding to component initialisation phase"
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentImpl >> componentName [
 
 	^ componentName
 ]
 
-{ #category : 'private accessing' }
+{ #category : #'private accessing' }
 MolComponentImpl >> componentName: aSymbol [
 
 	componentName := aSymbol
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl >> componentPassivate [
 	"here write the code corresponding to component passivation phase"
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolComponentImpl >> componentRemove [
 	"here write the code corresponding to component remove phase"
 ]
 
-{ #category : 'private connecting' }
+{ #category : #'private connecting' }
 MolComponentImpl >> connectSubscriptionFor: anEventsTrait [ 
 	
 	| providerOrProviders eventsSubscriber |
@@ -261,7 +259,7 @@ MolComponentImpl >> connectSubscriptionFor: anEventsTrait [
 
 ]
 
-{ #category : 'private connecting' }
+{ #category : #'private connecting' }
 MolComponentImpl >> disconnectSubscriptionFor: anEventsTrait [ 
 	| providerOrProviders eventsSubscriber |
 
@@ -274,21 +272,21 @@ MolComponentImpl >> disconnectSubscriptionFor: anEventsTrait [
 	(eventsSubscriber isSubscribed: self) ifTrue:[eventsSubscriber disconnectAllOriginatorsFrom: self].
 ]
 
-{ #category : 'private accessing' }
+{ #category : #'private accessing' }
 MolComponentImpl >> eventsNotifiers [
 	^ self componentConnector
 		ifNotNil: [ :e | e eventsNotifiers ]
 		ifNil: [ MolComponentConnector defaultEventsNotifiers ]
 ]
 
-{ #category : 'private accessing' }
+{ #category : #'private accessing' }
 MolComponentImpl >> eventsSubscribers [
 	^ self componentConnector
 		ifNotNil: [ :e | e eventsSubscribers ]
 		ifNil: [ MolComponentConnector defaultEventsSubscribers ]
 ]
 
-{ #category : 'connecting - events producers' }
+{ #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait addAllProducers: aComponentNameList [
 
 	(aComponentNameList isNil or:[aComponentNameList isString or:[aComponentNameList isCollection not]]) ifTrue:[ ^ self ].	
@@ -298,7 +296,7 @@ MolComponentImpl >> forEvents: anEventsTrait addAllProducers: aComponentNameList
 	
 ]
 
-{ #category : 'connecting - events producers' }
+{ #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait addProducer: aComponentName [
 
 	| producers |
@@ -321,7 +319,7 @@ MolComponentImpl >> forEvents: anEventsTrait addProducer: aComponentName [
 	] ifFalse: [ MolUtils log: self printString , '>forEvent:removeProducer: try to link a non event trait for an event ' ].
 ]
 
-{ #category : 'connecting - events producers' }
+{ #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait removeAllProducers: aComponentNameList [
 
 	(aComponentNameList isNil or:[aComponentNameList isCollection not]) ifTrue:[ ^ self ].	
@@ -331,7 +329,7 @@ MolComponentImpl >> forEvents: anEventsTrait removeAllProducers: aComponentNameL
 	
 ]
 
-{ #category : 'connecting - events producers' }
+{ #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 
 	| producers |
@@ -353,7 +351,7 @@ MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 	] ifFalse: [ MolUtils log: self printString , '>forEvent:removeProducer: try to link a non event trait for an event ' ].
 ]
 
-{ #category : 'connecting - events producers' }
+{ #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait useAllProducers: aComponentNameList [
 	| anArrayOrComponentName previousProducers eventsSubscriber |
 	
@@ -385,7 +383,7 @@ MolComponentImpl >> forEvents: anEventsTrait useAllProducers: aComponentNameList
 	].
 ]
 
-{ #category : 'connecting - events producers' }
+{ #category : #'connecting - events producers' }
 MolComponentImpl >> forEvents: anEventsTrait useProducer: aComponentName [
 
 	(anEventsTrait traits includes: MolComponentEvents) ifFalse:[ 
@@ -397,7 +395,7 @@ MolComponentImpl >> forEvents: anEventsTrait useProducer: aComponentName [
 	].
 ]
 
-{ #category : 'connecting - parameters providers' }
+{ #category : #'connecting - parameters providers' }
 MolComponentImpl >> forParameters: aParametersTrait useProvider: aComponentName [
 
 	(aParametersTrait traits includes: MolComponentParameters)
@@ -405,7 +403,7 @@ MolComponentImpl >> forParameters: aParametersTrait useProvider: aComponentName 
 		ifFalse: [ MolUtils log: self printString, '>forParameters:useProvider: try to link a non parameters trait for parameters ' ]
 ]
 
-{ #category : 'connecting - services providers' }
+{ #category : #'connecting - services providers' }
 MolComponentImpl >> forServices: aServicesTrait useProvider: aComponentName [
 
 	(aServicesTrait traits includes: MolComponentServices)
@@ -413,35 +411,35 @@ MolComponentImpl >> forServices: aServicesTrait useProvider: aComponentName [
 		ifFalse: [ MolUtils log: self printString, '>forServices:useProvider: try to link a non services trait for services ' ]
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 MolComponentImpl >> isComponent [
 	^ true
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 MolComponentImpl >> isNotFoundParameters [
 	^false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 MolComponentImpl >> isNotFoundServices [
 	^false
 ]
 
-{ #category : 'testing' }
+{ #category : #testing }
 MolComponentImpl >> isSubscribed: aMolEvents [
 
 	^ self componentConnector ifNil:[ false ] ifNotNil: [ :e | e eventsSubscriptions at: aMolEvents ifAbsent: [ false ] ]
 ]
 
-{ #category : 'private accessing' }
+{ #category : #'private accessing' }
 MolComponentImpl >> parametersProviders [
 	^ self componentConnector
 		ifNotNil: [ :e | e parametersProviders ]
 		ifNil: [ MolComponentConnector defaultParametersProviders ]
 ]
 
-{ #category : 'private accessing' }
+{ #category : #'private accessing' }
 MolComponentImpl >> servicesProviders [
 	^ self componentConnector
 		ifNotNil: [ :e | e servicesProviders ]

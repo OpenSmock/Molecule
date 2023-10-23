@@ -1,7 +1,5 @@
 Class {
-	#name : 'ComponentProvidedParametersAlreadyExistsError',
-	#superclass : 'MolError',
-	#category : 'Molecule-Exceptions-NotFound',
-	#package : 'Molecule',
-	#tag : 'Exceptions-NotFound'
+	#name : #ComponentProvidedParametersAlreadyExistsError,
+	#superclass : #MolError,
+	#category : 'Molecule-Exceptions-NotFound'
 }

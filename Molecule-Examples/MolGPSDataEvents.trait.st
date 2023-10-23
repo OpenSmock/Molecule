@@ -1,13 +1,11 @@
 Trait {
-	#name : 'MolGPSDataEvents',
+	#name : #MolGPSDataEvents,
 	#traits : 'MolComponentEvents',
 	#classTraits : 'MolComponentEvents classTrait',
-	#category : 'Molecule-Examples-GPS Example',
-	#package : 'Molecule-Examples',
-	#tag : 'GPS Example'
+	#category : 'Molecule-Examples-GPS Example'
 }
 
-{ #category : 'events' }
+{ #category : #events }
 MolGPSDataEvents >> currentPositionChanged: aGeoPosition [
 	"Notify the current geographic position of the GPSreceiver when changed"
 ]

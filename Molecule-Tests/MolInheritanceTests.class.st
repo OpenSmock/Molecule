@@ -1,16 +1,14 @@
 Class {
-	#name : 'MolInheritanceTests',
-	#superclass : 'TestCase',
+	#name : #MolInheritanceTests,
+	#superclass : #TestCase,
 	#instVars : [
 		'motherComponent',
 		'childComponent'
 	],
-	#category : 'Molecule-Tests-Cases',
-	#package : 'Molecule-Tests',
-	#tag : 'Cases'
+	#category : 'Molecule-Tests-Cases'
 }
 
-{ #category : 'running' }
+{ #category : #running }
 MolInheritanceTests >> setUp [ 
 	| manager |
 	MolComponentManager cleanUp.
@@ -32,13 +30,13 @@ MolInheritanceTests >> setUp [
 
 ]
 
-{ #category : 'running' }
+{ #category : #running }
 MolInheritanceTests >> tearDown [ 
 
 	MolComponentManager cleanUp.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolInheritanceTests >> testDefineComponent [
 	"Test the definition of the two components."
 	
@@ -46,7 +44,7 @@ MolInheritanceTests >> testDefineComponent [
 	MolComponentFactory defineComponent: MolCompleteComponentChildImpl.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolInheritanceTests >> testEvents [
 	"Test events behavior"
 	
@@ -57,7 +55,7 @@ MolInheritanceTests >> testEvents [
 	self assert: childComponent subEvent equals: #subEvent.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolInheritanceTests >> testEventsNotifier [
 	"Test call to event notifier"
 	
@@ -67,7 +65,7 @@ MolInheritanceTests >> testEventsNotifier [
 	childComponent getMolUsedChildEventsNotifier subEvent.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolInheritanceTests >> testEventsSubscriber [
 	"Test call to event notifier"
 	
@@ -81,7 +79,7 @@ MolInheritanceTests >> testEventsSubscriber [
 	
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolInheritanceTests >> testParameters [
 	"Test parameters behavior"
 	
@@ -92,7 +90,7 @@ MolInheritanceTests >> testParameters [
 	self assert: childComponent subParameter equals: #subParameter.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolInheritanceTests >> testServices [
 	"Test services behavior"
 	
@@ -109,7 +107,7 @@ MolInheritanceTests >> testServices [
 	self assert: childComponent getMolUsedChildServicesProvider isNotFoundServices.
 ]
 
-{ #category : 'tests' }
+{ #category : #tests }
 MolInheritanceTests >> testServicesWithoutChild [
 	"Test services behavior"
 	

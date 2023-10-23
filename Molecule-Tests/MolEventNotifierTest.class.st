@@ -2,26 +2,24 @@
 A MolEventNotifierTest is a test class for testing the behavior of MolEventNotifier
 "
 Class {
-	#name : 'MolEventNotifierTest',
-	#superclass : 'TestCase',
-	#category : 'Molecule-Tests-Cases',
-	#package : 'Molecule-Tests',
-	#tag : 'Cases'
+	#name : #MolEventNotifierTest,
+	#superclass : #TestCase,
+	#category : 'Molecule-Tests-Cases'
 }
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventNotifierTest >> setUp [ 
 	
 	MolComponentManager cleanUp.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventNotifierTest >> tearDown [  
 	
 	MolComponentManager cleanUp.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventNotifierTest >> testActivate [
 	| notifier |
 	notifier := MolEventNotifier new.
@@ -29,7 +27,7 @@ MolEventNotifierTest >> testActivate [
 	self assert: notifier isActive.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventNotifierTest >> testDeactivate [
 	| notifier |
 	notifier := MolEventNotifier new.
@@ -38,7 +36,7 @@ MolEventNotifierTest >> testDeactivate [
 	self assert: notifier isActive not.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventNotifierTest >> testDoesNotUnderstand [
 	| originator notifier error |
 	originator := MolCompleteComponentImpl new.
@@ -52,7 +50,7 @@ MolEventNotifierTest >> testDoesNotUnderstand [
 	self assert: (error isKindOf: MessageNotUnderstood).
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventNotifierTest >> testDoesNotUnderstandWithoutCorrectDefinition [
 	| notifier error |
 	notifier := MolEventNotifier new.
@@ -64,7 +62,7 @@ MolEventNotifierTest >> testDoesNotUnderstandWithoutCorrectDefinition [
 	notifier event. "Make a log but not raised an error"
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventNotifierTest >> testInitialize [
 	| notifier |
 	notifier := MolEventNotifier new.
@@ -73,7 +71,7 @@ MolEventNotifierTest >> testInitialize [
 	self assert: notifier isActive equals: false.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventNotifierTest >> testInterfaceOriginator [
 	| notifier originator |
 	originator := MolCompleteComponentImpl new.
@@ -83,14 +81,14 @@ MolEventNotifierTest >> testInterfaceOriginator [
 	self assert: notifier isActive equals: false.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventNotifierTest >> testIsNotFoundEventsNotifier [
 	| notifier |
 	notifier := MolEventNotifier new.
 	self assert: notifier isNotFoundEventsNotifier not.
 ]
 
-{ #category : 'test' }
+{ #category : #test }
 MolEventNotifierTest >> testRelease [
 	| notifier originator |
 	originator := MolCompleteComponentImpl new.

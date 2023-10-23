@@ -15,30 +15,25 @@ MolGPSExampleLauncher swapGPSHardwareByGPSDataImpl.
 MolGPSExampleLauncher stop.
 "
 Class {
-	#name : 'MolGPSExampleLauncher',
-	#superclass : 'Object',
-	#category : 'Molecule-Examples-GPS Example',
-	#package : 'Molecule-Examples',
-	#tag : 'GPS Example'
+	#name : #MolGPSExampleLauncher,
+	#superclass : #Object,
+	#category : #'Molecule-Examples-GPS Example'
 }
 
-{ #category : 'scripts' }
+{ #category : #scripts }
 MolGPSExampleLauncher class >> start [
-
 	<script: 'self start'>
-	(UIManager default
-		 confirm:
-		 'This example displays results in a Transcript, do you want to open a transcript window ?'
-		 label: 'Molecule - GPS Example') ifTrue: [ Transcript open ].
-
+	
+	(UIManager default confirm: 'This example displays results in a Transcript, do you want to open a transcript window ?' label: 'Molecule - GPS Example') ifTrue:[Transcript open].
+	
 	"Start GPSDataImpl component (a Component with MolGPSData Type)"
 	MolGPSDataImpl start.
-
+	
 	"Start GPSMapImpl component (a Component with MolGPSMap Type)"
-	MolGPSMapImpl start
+	MolGPSMapImpl start.
 ]
 
-{ #category : 'scripts' }
+{ #category : #scripts }
 MolGPSExampleLauncher class >> stop [
 	<script: 'self stop'>
 	
@@ -46,20 +41,22 @@ MolGPSExampleLauncher class >> stop [
 	MolComponentManager cleanUp
 ]
 
-{ #category : 'scripts' }
-MolGPSExampleLauncher class >> swapGPSDataImpl [
-	"Swap MolGPSHardware by MolGPSDataImpl"
+{ #category : #scripts }
+MolGPSExampleLauncher class >> swapGPSDataImplByGPSHardware [
+	<script: 'self swapGPSDataImplByGPSHardware'>
+	
+	"Swap MolGPSDataImpl by MolGPSHardware"
+	MolGPSDataImpl stop.
+	MolGPSHardware start.
 
-	<script>
-	MolGPSHardware stop.
-	MolGPSDataImpl start
 ]
 
-{ #category : 'scripts' }
-MolGPSExampleLauncher class >> swapGPSHardware [
+{ #category : #scripts }
+MolGPSExampleLauncher class >> swapGPSHardwareByGPSDataImpl [
+	<script: 'self swapGPSHardwareByGPSDataImpl'>
+	
 	"Swap MolGPSDataImpl by MolGPSHardware"
+	MolGPSHardware stop.
+	MolGPSDataImpl start.
 
-	<script>
-	MolGPSDataImpl stop.
-	MolGPSHardware start
 ]

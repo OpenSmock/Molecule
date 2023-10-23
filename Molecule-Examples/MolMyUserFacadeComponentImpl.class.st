@@ -4,30 +4,28 @@ I am an example of final user of this system. I receive time and alarm events, a
 Because I am a component implementation, you can force my automatic definition. To do it,  use class method 'self defineComponent'.
 "
 Class {
-	#name : 'MolMyUserFacadeComponentImpl',
-	#superclass : 'MolAbstractComponentImpl',
+	#name : #MolMyUserFacadeComponentImpl,
+	#superclass : #MolAbstractComponentImpl,
 	#traits : 'MolMyUserFacadeComponent + MolMyLocalTimeEvents + MolMyAlarmSoundsEvents',
 	#classTraits : 'MolMyUserFacadeComponent classTrait + MolMyLocalTimeEvents classTrait + MolMyAlarmSoundsEvents classTrait',
-	#category : 'Molecule-Examples-Clock System Example',
-	#package : 'Molecule-Examples',
-	#tag : 'Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example'
 }
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolMyUserFacadeComponentImpl >> componentActivate [
 
 	self getMolMyLocalTimeEventsSubscriber subscribe: self.
 	self getMolMyAlarmSoundsEventsSubscriber subscribe: self
 ]
 
-{ #category : 'life cycle' }
+{ #category : #'life cycle' }
 MolMyUserFacadeComponentImpl >> componentPassivate [
 
 	self getMolMyLocalTimeEventsSubscriber unsubscribe: self.
 	self getMolMyAlarmSoundsEventsSubscriber unsubscribe: self
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolMyUserFacadeComponentImpl >> getMolMyAlarmActivationServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
@@ -39,7 +37,7 @@ MolMyUserFacadeComponentImpl >> getMolMyAlarmActivationServicesProvider [
 	^servicesProvider
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolMyUserFacadeComponentImpl >> getMolMyAlarmParametersProvider [
 	| parametersSymbol parametersProvider itf |
 
@@ -51,7 +49,7 @@ MolMyUserFacadeComponentImpl >> getMolMyAlarmParametersProvider [
 	^parametersProvider
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolMyUserFacadeComponentImpl >> getMolMyAlarmSoundsEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyAlarmSoundsEvents.
@@ -63,7 +61,7 @@ MolMyUserFacadeComponentImpl >> getMolMyAlarmSoundsEventsSubscriber [
 	^eventsSubscriber
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolMyUserFacadeComponentImpl >> getMolMyClockParametersProvider [
 	| parametersSymbol parametersProvider itf |
 
@@ -75,7 +73,7 @@ MolMyUserFacadeComponentImpl >> getMolMyClockParametersProvider [
 	^parametersProvider
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolMyUserFacadeComponentImpl >> getMolMyClockServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
@@ -87,7 +85,7 @@ MolMyUserFacadeComponentImpl >> getMolMyClockServicesProvider [
 	^servicesProvider
 ]
 
-{ #category : 'component accessing' }
+{ #category : #'component accessing' }
 MolMyUserFacadeComponentImpl >> getMolMyLocalTimeEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyLocalTimeEvents.
@@ -99,12 +97,12 @@ MolMyUserFacadeComponentImpl >> getMolMyLocalTimeEventsSubscriber [
 	^eventsSubscriber
 ]
 
-{ #category : 'events' }
+{ #category : #events }
 MolMyUserFacadeComponentImpl >> notifyAlarmRing: anAlarm [
 	MolUtils log: anAlarm getBell.
 ]
 
-{ #category : 'events' }
+{ #category : #events }
 MolMyUserFacadeComponentImpl >> notifyLocalTime: aLocalTime [
 
 	MolUtils log: self printString, ' hour is ', aLocalTime printString.

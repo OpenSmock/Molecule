@@ -14,103 +14,83 @@ See traits ComponentEvents, ComponentServices and ComponentParameters for more i
 Then, create a component implementation by using AbstractComponentImpl or ComponentImpl. Traits and methods are automatically added by ComponentFactory>defineComponent.
 "
 Trait {
-	#name : 'MolComponentType',
-	#category : 'Molecule-Component Contract',
-	#package : 'Molecule',
-	#tag : 'Component Contract'
+	#name : #MolComponentType,
+	#category : #'Molecule-Component Contract'
 }
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> allConsumedEvents [
 	| collection |
-	
-	collection := (self consumedComponentEvents select:[ :e | e notNil and:[ e isTrait and:[ e isComponentEvents ]]]) asSet.
-	
+	collection := Set withAll: self consumedComponentEvents.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s consumedComponentEvents 
 		] ].
-
 	^ collection asOrderedCollection
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> allProducedEvents [
 	| collection |
-	
-	collection := (self producedComponentEvents select:[ :e | e notNil and:[ e isTrait and:[ e isComponentEvents ]]]) asSet.
-	
+	collection := Set withAll: self producedComponentEvents.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s producedComponentEvents 
 		] ].
-	
 	^ collection asOrderedCollection
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> allProvidedParameters [
 	| collection |
-	
-	collection := (self providedComponentParameters select:[ :e | e notNil and:[ e isTrait and:[ e isComponentParameters ]]]) asSet.
-	
+	collection := Set withAll: self providedComponentParameters.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s providedComponentParameters 
 		] ].
-	
 	^ collection asOrderedCollection 
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> allProvidedServices [
 	| collection |
-	
-	collection := (self providedComponentServices select:[ :e | e notNil and:[ e isTrait and:[ e isComponentServices ]]]) asSet.
-	
+	collection := Set withAll: self providedComponentServices.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s providedComponentServices 
 		] ].
-	
 	^ collection asOrderedCollection 
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> allUsedParameters [
 	| collection |
-	
-	collection := (self usedComponentParameters select:[ :e | e notNil and:[ e isTrait and:[ e isComponentParameters ]]]) asSet.
-	
+	collection := Set withAll: self usedComponentParameters.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s usedComponentParameters 
 		] ].
-	
 	^ collection asOrderedCollection 
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> allUsedServices [
 	| collection |
-	
-	collection := (self usedComponentServices select:[ :e | e notNil and:[ e isTrait and:[ e isComponentServices ]]]) asSet.
-	
+	collection := Set withAll: self usedComponentServices.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s usedComponentServices 
 		] ].
-	
 	^ collection asOrderedCollection 
 ]
 
-{ #category : 'accessing - events' }
+{ #category : #'accessing - events' }
 MolComponentType classSide >> consumedComponentEvents [
 	<componentContract>
 	^ {}
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> isConsumeEvents: anEventsTrait [
 	anEventsTrait ifNil:[ ^ false ].
 	anEventsTrait isComponentEvents
@@ -118,7 +98,7 @@ MolComponentType classSide >> isConsumeEvents: anEventsTrait [
 		ifTrue: [ ^ self allConsumedEvents includes: anEventsTrait ]
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> isProduceEvents: anEventsTrait [
 	anEventsTrait ifNil: [ ^ false ].
 	anEventsTrait isComponentEvents
@@ -126,7 +106,7 @@ MolComponentType classSide >> isProduceEvents: anEventsTrait [
 		ifTrue: [ ^ self allProducedEvents includes: anEventsTrait ]
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> isProvideParameters: aParametersTrait [
 	aParametersTrait ifNil: [ ^false ].
 	aParametersTrait isComponentParameters
@@ -134,7 +114,7 @@ MolComponentType classSide >> isProvideParameters: aParametersTrait [
 		ifTrue: [ ^ self allProvidedParameters includes: aParametersTrait ]
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> isProvideServices: aServicesTrait [
 	aServicesTrait ifNil: [ ^ false ].
 	aServicesTrait isComponentServices
@@ -142,7 +122,7 @@ MolComponentType classSide >> isProvideServices: aServicesTrait [
 		ifTrue: [ ^ self allProvidedServices includes: aServicesTrait ]
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> isUseParameters: aParametersTrait [
 	aParametersTrait ifNil: [ ^ false ].
 	aParametersTrait isComponentParameters
@@ -150,7 +130,7 @@ MolComponentType classSide >> isUseParameters: aParametersTrait [
 		ifTrue: [ ^ self allUsedParameters includes: aParametersTrait ]
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolComponentType classSide >> isUseServices: aServicesTrait [
 	aServicesTrait ifNil: [ ^ false ].
 	aServicesTrait isComponentServices
@@ -158,31 +138,31 @@ MolComponentType classSide >> isUseServices: aServicesTrait [
 		ifTrue: [ ^ self allUsedServices includes: aServicesTrait ]
 ]
 
-{ #category : 'accessing - events' }
+{ #category : #'accessing - events' }
 MolComponentType classSide >> producedComponentEvents [
 	<componentContract>
 	^ {} 
 ]
 
-{ #category : 'accessing - parameters' }
+{ #category : #'accessing - parameters' }
 MolComponentType classSide >> providedComponentParameters [
 	<componentContract>
 	^ {} 
 ]
 
-{ #category : 'accessing - services' }
+{ #category : #'accessing - services' }
 MolComponentType classSide >> providedComponentServices [
 	<componentContract>
 	^ {} 
 ]
 
-{ #category : 'accessing - parameters' }
+{ #category : #'accessing - parameters' }
 MolComponentType classSide >> usedComponentParameters [
 	<componentContract>
 	^ {} 
 ]
 
-{ #category : 'accessing - services' }
+{ #category : #'accessing - services' }
 MolComponentType classSide >> usedComponentServices [
 	<componentContract>
 	^ {}

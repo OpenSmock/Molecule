@@ -1,6 +1,6 @@
-Extension { #name : 'ClassDescription' }
+Extension { #name : #ClassDescription }
 
-{ #category : '*Molecule' }
+{ #category : #'*Molecule' }
 ClassDescription >> isComponentClass [
 	^ false
 ]

@@ -4,28 +4,26 @@ I am responsible for find components in the system.
 See examples of my use in Tests and Examples packages.
 "
 Class {
-	#name : 'MolLocatorServices',
-	#superclass : 'Object',
+	#name : #MolLocatorServices,
+	#superclass : #Object,
 	#instVars : [
 		'eventsSubscribers'
 	],
-	#category : 'Molecule-Core',
-	#package : 'Molecule',
-	#tag : 'Core'
+	#category : 'Molecule-Core'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolLocatorServices >> eventsSubscribers [
 	eventsSubscribers isNil ifTrue: [eventsSubscribers := Dictionary new].
 	^ eventsSubscribers
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolLocatorServices >> eventsSubscribers: aDictionaryOrNil [
 	eventsSubscribers := aDictionaryOrNil
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolLocatorServices >> resolveWaitingSubscriptions: aComponent [
 	| eventsAndProviders |
 
@@ -46,13 +44,13 @@ MolLocatorServices >> resolveWaitingSubscriptions: aComponent [
 	]
 ]
 
-{ #category : 'searching' }
+{ #category : #searching }
 MolLocatorServices >> searchComponentTypeImplementorFor: aComponentType [
 
 	^ self searchComponentTypeImplementorFor: aComponentType named: MolUtils defaultComponentName
 ]
 
-{ #category : 'searching' }
+{ #category : #searching }
 MolLocatorServices >> searchComponentTypeImplementorFor: aComponentType named: aSymbol [
 	| comps |
 	
@@ -64,13 +62,13 @@ MolLocatorServices >> searchComponentTypeImplementorFor: aComponentType named: a
 	^nil
 ]
 
-{ #category : 'searching' }
+{ #category : #searching }
 MolLocatorServices >> searchEventsSubscriberFor: anEventsTrait [
 
 	^ self searchEventsSubscriberFor: anEventsTrait named: MolUtils defaultComponentName
 ]
 
-{ #category : 'searching' }
+{ #category : #searching }
 MolLocatorServices >> searchEventsSubscriberFor: anEventsTrait named: aSymbolOrArrayOfSymbols [
 	| comps itf symbols subscribers events remainingNames |
 	
@@ -101,13 +99,13 @@ MolLocatorServices >> searchEventsSubscriberFor: anEventsTrait named: aSymbolOrA
 	^ events
 ]
 
-{ #category : 'searching' }
+{ #category : #searching }
 MolLocatorServices >> searchParametersProviderFor: aParametersTrait [
 
 	^ self searchParametersProviderFor: aParametersTrait named: MolUtils defaultComponentName
 ]
 
-{ #category : 'searching' }
+{ #category : #searching }
 MolLocatorServices >> searchParametersProviderFor: aParametersTrait named: aSymbol [
 	| comps itf |
 	
@@ -121,13 +119,13 @@ MolLocatorServices >> searchParametersProviderFor: aParametersTrait named: aSymb
 	^MolNotFoundParametersProvider new interface: aParametersTrait name: aSymbol
 ]
 
-{ #category : 'searching' }
+{ #category : #searching }
 MolLocatorServices >> searchServicesProviderFor: aServicesTrait [
 
 	^ self searchServicesProviderFor: aServicesTrait named: MolUtils defaultComponentName
 ]
 
-{ #category : 'searching' }
+{ #category : #searching }
 MolLocatorServices >> searchServicesProviderFor: aServicesTrait named: aSymbol [
 	| comps itf |
 	

@@ -11,11 +11,9 @@ If the component has only one implementation, it is not necessary to precise som
 
 "
 Class {
-	#name : 'MolAbstractComponentImpl',
-	#superclass : 'Object',
+	#name : #MolAbstractComponentImpl,
+	#superclass : #Object,
 	#traits : 'MolComponentImpl',
 	#classTraits : 'MolComponentImpl classTrait',
-	#category : 'Molecule-Component',
-	#package : 'Molecule',
-	#tag : 'Component'
+	#category : 'Molecule-Component'
 }

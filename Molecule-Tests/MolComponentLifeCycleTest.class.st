@@ -1,24 +1,22 @@
 Class {
-	#name : 'MolComponentLifeCycleTest',
-	#superclass : 'TestCase',
-	#category : 'Molecule-Tests-Cases',
-	#package : 'Molecule-Tests',
-	#tag : 'Cases'
+	#name : #MolComponentLifeCycleTest,
+	#superclass : #TestCase,
+	#category : 'Molecule-Tests-Cases'
 }
 
-{ #category : 'running' }
+{ #category : #running }
 MolComponentLifeCycleTest >> setUp [ 
 	
 	MolComponentManager cleanUp.
 ]
 
-{ #category : 'running' }
+{ #category : #running }
 MolComponentLifeCycleTest >> tearDown [ 
 	
 	MolComponentManager cleanUp.
 ]
 
-{ #category : 'tests - component switching' }
+{ #category : #'tests - component switching' }
 MolComponentLifeCycleTest >> testSwitchComponentsSearchServicesProviderFor [
 	"start first implemention of a component contract"
 	MolUtils startComponent: MolCompleteComponentImpl.
@@ -34,7 +32,7 @@ MolComponentLifeCycleTest >> testSwitchComponentsSearchServicesProviderFor [
 	self assert: ((MolComponentManager default locatorServices searchServicesProviderFor: MolUsedServices) isKindOf: MolAugmentedClassToAComponent).
 ]
 
-{ #category : 'tests - component switching' }
+{ #category : #'tests - component switching' }
 MolComponentLifeCycleTest >> testSwitchComponentsWithKeys [
 	| compA1 compB |
 	"start first implemention of a component contract"
@@ -55,7 +53,7 @@ MolComponentLifeCycleTest >> testSwitchComponentsWithKeys [
 	self assert: compB getMolUsedServicesProvider service equals: #service2.
 ]
 
-{ #category : 'tests - component switching' }
+{ #category : #'tests - component switching' }
 MolComponentLifeCycleTest >> testSwitchComponentsWithKeysSearchServicesProviderFor [
 	"start first implemention of a component contract"
 	MolUtils startComponent: MolCompleteComponentImpl named: #comp1.

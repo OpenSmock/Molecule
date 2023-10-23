@@ -1,6 +1,6 @@
-Extension { #name : 'Object' }
+Extension { #name : #Object }
 
-{ #category : '*Molecule' }
+{ #category : #'*Molecule' }
 Object >> isComponent [
 	^ false
 ]

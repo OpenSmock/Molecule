@@ -2,10 +2,8 @@
 I am a services trait unused, to test NotFoundServicesProvider
 "
 Trait {
-	#name : 'MolUnusedServices',
+	#name : #MolUnusedServices,
 	#traits : 'MolComponentServices',
 	#classTraits : 'MolComponentServices classTrait',
-	#category : 'Molecule-Tests-Resources - Contracts',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts'
 }

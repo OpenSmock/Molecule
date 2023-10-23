@@ -23,9 +23,7 @@ In a second way, we reuse an existing non-component class in our Molecule applic
 To do so, we augment this class with component behavior.
 "
 Class {
-	#name : 'ManifestMoleculeExamples',
-	#superclass : 'PackageManifest',
-	#category : 'Molecule-Examples-Manifest',
-	#package : 'Molecule-Examples',
-	#tag : 'Manifest'
+	#name : #ManifestMoleculeExamples,
+	#superclass : #PackageManifest,
+	#category : 'Molecule-Examples-Manifest'
 }

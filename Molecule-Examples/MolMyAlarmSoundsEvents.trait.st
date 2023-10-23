@@ -6,15 +6,13 @@ My consumers must use me as trait. If the component type is correctly defined, i
 See ComponentEvents for more informations about events.
 "
 Trait {
-	#name : 'MolMyAlarmSoundsEvents',
+	#name : #MolMyAlarmSoundsEvents,
 	#traits : 'MolComponentEvents',
 	#classTraits : 'MolComponentEvents classTrait',
-	#category : 'Molecule-Examples-Clock System Example',
-	#package : 'Molecule-Examples',
-	#tag : 'Clock System Example'
+	#category : 'Molecule-Examples-Clock System Example'
 }
 
-{ #category : 'events' }
+{ #category : #events }
 MolMyAlarmSoundsEvents >> notifyAlarmRing: anAlarm [
 
 	self explicitRequirement

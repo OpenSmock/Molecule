@@ -2,15 +2,13 @@
 I am a events trait used for test LocatorServices class.
 "
 Trait {
-	#name : 'MolUsedEvents',
+	#name : #MolUsedEvents,
 	#traits : 'MolComponentEvents',
 	#classTraits : 'MolComponentEvents classTrait',
-	#category : 'Molecule-Tests-Resources - Contracts',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts'
 }
 
-{ #category : 'events' }
+{ #category : #events }
 MolUsedEvents >> event [
 	^ #event
 ]

@@ -4,8 +4,8 @@ I am relative to only one component implementation, and I manage all its connect
 I am automatically managed by component life cycle.
 "
 Class {
-	#name : 'MolComponentConnector',
-	#superclass : 'Object',
+	#name : #MolComponentConnector,
+	#superclass : #Object,
 	#instVars : [
 		'servicesProviders',
 		'parametersProviders',
@@ -13,42 +13,40 @@ Class {
 		'eventsNotifiers',
 		'eventsSubscriptions'
 	],
-	#category : 'Molecule-Core',
-	#package : 'Molecule',
-	#tag : 'Core'
+	#category : 'Molecule-Core'
 }
 
-{ #category : 'connectors' }
+{ #category : #connectors }
 MolComponentConnector class >> defaultEventsNotifiers [
 	^ Dictionary new
 ]
 
-{ #category : 'connectors' }
+{ #category : #connectors }
 MolComponentConnector class >> defaultEventsSubscribers [
 	^ Dictionary new
 ]
 
-{ #category : 'connectors' }
+{ #category : #connectors }
 MolComponentConnector class >> defaultEventsSubscriptions [
 	^ Dictionary new
 ]
 
-{ #category : 'connectors' }
+{ #category : #connectors }
 MolComponentConnector class >> defaultParametersProviders [
 	^ Dictionary new
 ]
 
-{ #category : 'connectors' }
+{ #category : #connectors }
 MolComponentConnector class >> defaultServicesProviders [
 	^ Dictionary new
 ]
 
-{ #category : 'service' }
+{ #category : #service }
 MolComponentConnector >> activateComponent [
 	eventsNotifiers do: [ :e | e activate ] 
 ]
 
-{ #category : 'service' }
+{ #category : #service }
 MolComponentConnector >> connectComponent: aComponent [
 	
 	eventsNotifiers := self class defaultEventsNotifiers.
@@ -64,7 +62,7 @@ MolComponentConnector >> connectComponent: aComponent [
 
 ]
 
-{ #category : 'service' }
+{ #category : #service }
 MolComponentConnector >> disconnectComponent: aComponent [
 	"Remove link between component and connector"
 	aComponent componentConnector == self ifFalse:[^self].
@@ -75,33 +73,33 @@ MolComponentConnector >> disconnectComponent: aComponent [
 	parametersProviders := nil.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentConnector >> eventsNotifiers [
 	^ eventsNotifiers 
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentConnector >> eventsSubscribers [
 	^ eventsSubscribers 
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentConnector >> eventsSubscriptions [
 
 	^ eventsSubscriptions
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentConnector >> parametersProviders [
 	^ parametersProviders 
 ]
 
-{ #category : 'service' }
+{ #category : #service }
 MolComponentConnector >> passivateComponent [
 	eventsNotifiers do: [ :e | e deactivate ] 
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 MolComponentConnector >> release [
 	eventsNotifiers := nil.
 	eventsSubscribers := nil.
@@ -111,7 +109,7 @@ MolComponentConnector >> release [
 	super release.	
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolComponentConnector >> servicesProviders [
 	^ servicesProviders
 ]

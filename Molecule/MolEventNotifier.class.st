@@ -2,34 +2,32 @@
 I am responsable for trigger events.
 "
 Class {
-	#name : 'MolEventNotifier',
-	#superclass : 'Object',
+	#name : #MolEventNotifier,
+	#superclass : #Object,
 	#instVars : [
 		'interface',
 		'originator',
 		'isActive'
 	],
-	#category : 'Molecule-Core',
-	#package : 'Molecule',
-	#tag : 'Core'
+	#category : 'Molecule-Core'
 }
 
-{ #category : 'constructor' }
+{ #category : #constructor }
 MolEventNotifier class >> interface: aMolUsedEvents originator: aComponent [
 	^ self new interface: aMolUsedEvents; originator: aComponent
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolEventNotifier >> activate [
 	isActive := true
 ]
 
-{ #category : 'actions' }
+{ #category : #actions }
 MolEventNotifier >> deactivate [
 	isActive := false
 ]
 
-{ #category : 'reflective operations' }
+{ #category : #'reflective operations' }
 MolEventNotifier >> doesNotUnderstand: aMessage [
 	"Event message is called by a Notifier, the message not exists in MolEventNotifier so the system called doesNotUnderstand: message. Check if the event message is known by the event interface and trigger the event."
 	| isEventExist |
@@ -59,43 +57,43 @@ MolEventNotifier >> doesNotUnderstand: aMessage [
 	
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 MolEventNotifier >> initialize [
 	super initialize.
 	self deactivate.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolEventNotifier >> interface [
 	^ interface
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolEventNotifier >> interface: anInterface [
 	interface := anInterface
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolEventNotifier >> isActive [
 	^ isActive
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 MolEventNotifier >> isNotFoundEventsNotifier [ 
 	^false
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolEventNotifier >> originator [
 	^ originator
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 MolEventNotifier >> originator: aComponent [
 	originator := aComponent
 ]
 
-{ #category : 'initialize-release' }
+{ #category : #'initialize-release' }
 MolEventNotifier >> release [
 	self deactivate.
 	interface := nil.

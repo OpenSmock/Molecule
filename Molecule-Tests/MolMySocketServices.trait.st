@@ -6,33 +6,31 @@ My providers must use me as trait. If the component type is correctly defined, i
 See ComponentServices for more informations about services.
 "
 Trait {
-	#name : 'MolMySocketServices',
+	#name : #MolMySocketServices,
 	#traits : 'MolComponentServices',
 	#classTraits : 'MolComponentServices classTrait',
-	#category : 'Molecule-Tests-Resources - Contracts',
-	#package : 'Molecule-Tests',
-	#tag : 'Resources - Contracts'
+	#category : 'Molecule-Tests-Resources - Contracts'
 }
 
-{ #category : 'services' }
+{ #category : #services }
 MolMySocketServices >> connect [
 
 	self explicitRequirement
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMySocketServices >> disconnect [
 
 	self explicitRequirement
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMySocketServices >> receive: aMessage [
 
 	self explicitRequirement
 ]
 
-{ #category : 'services' }
+{ #category : #services }
 MolMySocketServices >> send: aMessage [
 
 	self explicitRequirement
