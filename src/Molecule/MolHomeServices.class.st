@@ -60,9 +60,6 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 	
 	MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is activated.'.
 	
-	"manage connexion between components"
-	MolComponentManager default locatorServices resolveWaitingSubscriptions: component.
-	
 	^ component
 ]
 
