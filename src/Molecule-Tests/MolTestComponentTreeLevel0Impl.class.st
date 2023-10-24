@@ -18,14 +18,21 @@ MolTestComponentTreeLevel0Impl >> componentActivate [
 ]
 
 { #category : #'component life cycle' }
-MolTestComponentTreeLevel0Impl >> componentInitialize [ 
+MolTestComponentTreeLevel0Impl >> componentInitialize [
 
-	MolComponentManager default deploymentServices deployComponentImplementation: MolTestComponentTreeLevel1Impl.
+	MolComponentManager default deploymentServices
+		deployComponentImplementation: MolTestComponentTreeLevel1Impl.
 
 	"start three others components to make a tree"
-	MolComponentManager default homeServices instanciateComponent: MolTestComponentTreeLevel1Impl named: #level1element1.
-	MolComponentManager default homeServices instanciateComponent: MolTestComponentTreeLevel1Impl named: #level1element2.
-	MolComponentManager default homeServices instanciateComponent: MolTestComponentTreeLevel1Impl named: #level1element3.
+	MolComponentManager default homeServices
+		instantiateComponent: MolTestComponentTreeLevel1Impl
+		named: #level1element1.
+	MolComponentManager default homeServices
+		instantiateComponent: MolTestComponentTreeLevel1Impl
+		named: #level1element2.
+	MolComponentManager default homeServices
+		instantiateComponent: MolTestComponentTreeLevel1Impl
+		named: #level1element3
 ]
 
 { #category : #'component life cycle' }

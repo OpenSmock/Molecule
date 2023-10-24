@@ -43,19 +43,27 @@ MolComponentManagerTest >> testCleanUpIgnoreErrors [
 { #category : #'tests - component start & stop' }
 MolComponentManagerTest >> testComponentTree [
 	"Start a component Tree : a component which is starting sub components, etc."
+
 	| nb |
-	MolComponentManager default deploymentServices deployComponentImplementation: MolTestComponentTreeLevel0Impl.
-	MolComponentManager default homeServices instanciateComponent: MolTestComponentTreeLevel0Impl.
-	MolComponentManager default homeServices activateComponent: MolTestComponentTreeLevel0Impl.
-	
+	MolComponentManager default deploymentServices
+		deployComponentImplementation: MolTestComponentTreeLevel0Impl.
+	MolComponentManager default homeServices instantiateComponent:
+		MolTestComponentTreeLevel0Impl.
+	MolComponentManager default homeServices activateComponent:
+		MolTestComponentTreeLevel0Impl.
+
 	"Check started components"
 	nb := 0.
-	MolComponentManager default homeServices deployedComponents valuesDo:[ :compList | nb := nb + (compList size) ].
+	MolComponentManager default homeServices deployedComponents
+		valuesDo: [ :compList | nb := nb + compList size ].
 	self assert: nb equals: 13.
-	
-	MolComponentManager default homeServices passivateComponent: MolTestComponentTreeLevel0Impl.
-	MolComponentManager default homeServices removeComponent: MolTestComponentTreeLevel0Impl.
-	MolComponentManager default deploymentServices undeployComponentImplementation: MolTestComponentTreeLevel2Impl.
+
+	MolComponentManager default homeServices passivateComponent:
+		MolTestComponentTreeLevel0Impl.
+	MolComponentManager default homeServices removeComponent:
+		MolTestComponentTreeLevel0Impl.
+	MolComponentManager default deploymentServices
+		undeployComponentImplementation: MolTestComponentTreeLevel2Impl
 ]
 
 { #category : #tests }
@@ -196,20 +204,25 @@ MolComponentManagerTest >> testIsRunningComponents [
 { #category : #'tests - general' }
 MolComponentManagerTest >> testIsRunningComponentsAllSteps [
 
-	MolComponentManager default deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
+	MolComponentManager default deploymentServices
+		deployComponentImplementation: MolCompleteComponentImpl.
 	self assert: MolComponentManager isRunningComponents equals: false.
-	
-	MolComponentManager default homeServices instanciateComponent: MolCompleteComponentImpl.
-	self assert: MolComponentManager isRunningComponents equals: true.
-	
-	MolComponentManager default homeServices activateComponent: MolCompleteComponentImpl.
-	self assert: MolComponentManager isRunningComponents equals: true.
-	
-	MolComponentManager default homeServices passivateComponent: MolCompleteComponentImpl.
+
+	MolComponentManager default homeServices instantiateComponent:
+		MolCompleteComponentImpl.
 	self assert: MolComponentManager isRunningComponents equals: true.
 
-	MolComponentManager default homeServices removeComponent: MolCompleteComponentImpl.
-	self assert: MolComponentManager isRunningComponents equals: false.
+	MolComponentManager default homeServices activateComponent:
+		MolCompleteComponentImpl.
+	self assert: MolComponentManager isRunningComponents equals: true.
+
+	MolComponentManager default homeServices passivateComponent:
+		MolCompleteComponentImpl.
+	self assert: MolComponentManager isRunningComponents equals: true.
+
+	MolComponentManager default homeServices removeComponent:
+		MolCompleteComponentImpl.
+	self assert: MolComponentManager isRunningComponents equals: false
 ]
 
 { #category : #tests }
