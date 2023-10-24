@@ -326,7 +326,7 @@ PyMolSwitch class >> pystonSpec [
 ]'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 PyMolSwitch >> buildElements [
 
 	self hasChildren ifTrue: [ self removeChildren ].

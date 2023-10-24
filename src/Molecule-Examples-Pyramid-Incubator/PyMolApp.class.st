@@ -53,7 +53,7 @@ PyMolApp >> initialize [
 	self addChild: label2
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 PyMolApp >> open [
 
 	| space |

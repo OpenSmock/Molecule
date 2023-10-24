@@ -364,7 +364,7 @@ PyMolMap class >> pystonSpec [
 ]'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 PyMolMap >> buildElements [
 
 	self hasChildren ifTrue: [ self removeChildren ].
@@ -374,14 +374,14 @@ PyMolMap >> buildElements [
 { #category : #'life cycle' }
 PyMolMap >> componentActivate [
 
-	self getMolGPSDataEventsSubscriber subscribe: self
+	self getMolGeoPosEquipmentEventsSubscriber subscribe: self
 ]
 
 { #category : #'life cycle' }
 PyMolMap >> componentPassivate [
 
 	self space ifNotNil: [ :s | s close ].
-	self getMolGPSDataEventsSubscriber unsubscribe: self
+	self getMolGeoPosEquipmentEventsSubscriber unsubscribe: self
 ]
 
 { #category : #events }
@@ -389,25 +389,13 @@ PyMolMap >> currentPositionChanged: aGeoPosition [
 
 	| adjustedPosition radius |
 	adjustedPosition := aGeoPosition * 50 asPoint + 150 asPoint.
-	radius := self getMolGPSDataServicesProvider getAccuracyRadiusInMeters asPoint.
+	radius := self getMolGeoPosEquipmentServicesProvider getAccuracyRadiusInMeters asPoint.
 
 	pointerV position: adjustedPosition x @ 0.
 	pointerH position: 0 @ adjustedPosition y.
 	pointer position: adjustedPosition - (radius / 2) asPoint.
 	pointer size: radius
 		
-]
-
-{ #category : #'component accessing' }
-PyMolMap >> getMolGPSDataEventsSubscriber [
-	| eventsSymbol eventsSubscriber itf |
-	itf := MolGPSDataEvents.
-	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
-	eventsSymbol isCollection
-	 	ifTrue: 
-			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolGPSDataEvents named: eventsSymbol ]. 
-	^eventsSubscriber
 ]
 
 { #category : #'component accessing' }
