@@ -77,7 +77,7 @@ MolComponentImpl classSide >> instanciate [
 		deprecated: 'Use instantiate'
 		transformWith:
 		'`@receiver instanciate' -> '`@receiver instantiate'.
-	^ MolComponentManager default homeServices instanciateComponent: self
+	^ self instantiate
 ]
 
 { #category : #'life cycle' }
@@ -87,9 +87,7 @@ MolComponentImpl classSide >> instanciate: aComponentName [
 		deprecated: 'Use instantiate:'
 		transformWith: '`@receiver instanciate: `@aComponentName'
 			-> '`@receiver instantiate: `@aComponentName'.
-	^ MolComponentManager default homeServices
-		  instanciateComponent: self
-		  named: aComponentName
+	^ self instantiate: aComponentName
 ]
 
 { #category : #'life cycle' }
