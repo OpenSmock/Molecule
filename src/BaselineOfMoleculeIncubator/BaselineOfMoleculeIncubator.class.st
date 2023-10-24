@@ -43,7 +43,7 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 				
 			"Pyramid examples"
 			spec
-				package: 'Molecule-Examples-Pyramid-Incubator' with: [ spec requires: #('Pyramid' 'Molecule-Examples') ].
+				package: 'Molecule-Examples-GeoPosMap-Incubator' with: [ spec requires: #('Pyramid' 'Molecule-Examples') ].
 		 ]
 ]
 
