@@ -71,11 +71,11 @@ Let us illustrate the use of these states with the example of a GUI window handl
 [Creating Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md) \
 [Facilitating tests](https://github.com/OpenSmock/Molecule/blob/main/documentation/Facilitating%20tests.md)
 
-[External links](https://github.com/OpenSmock/Molecule/wiki#external-links) \
-**Publications** \
+# External links
+## Publications
 [Molecule: live prototyping with component-oriented programming](https://inria.hal.science/hal-02966704/) \
 [15 years of reuse experience in evolutionary prototyping for the defense industry](https://inria.hal.science/hal-02966691/preview/ICSR_15years.pdf) \
-**Videos** \
+## Videos
 [Molecule: live prototyping with component-oriented programming](https://www.youtube.com/watch?v=Zfo3VkH2bVw) \
 [15 years of reuse experience in evolutionary prototyping for the defense industry](https://www.youtube.com/watch?v=Zfo3VkH2bVw) \
 
