@@ -69,7 +69,7 @@ MolHomeServices >> addDeployedComponent: aComponentClass [
 ]
 
 { #category : #private }
-MolHomeServices >> checkInstanciationOfComponent: aComponentClass named: aComponentName [ [
+MolHomeServices >> checkInstanciationOfComponent: aComponentClass named: aComponentName [
 
 	| deployed component overridedTypes |
 	aComponentName ifNil: [ 
@@ -125,7 +125,6 @@ MolHomeServices >> checkInstanciationOfComponent: aComponentClass named: aCompon
 					^ ComponentProvidedServicesAlreadyExistsError new messageText:
 						  '(Inheritance problem) Can not instanciate a component with the same parameters and name of another component, please change the name of the component' ] ] ] ].
 	^ nil
-]
 ]
 
 { #category : #private }
