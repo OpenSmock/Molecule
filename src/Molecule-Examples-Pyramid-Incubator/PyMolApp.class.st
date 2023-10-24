@@ -27,13 +27,13 @@ PyMolApp >> initialize [
 	switch := PyMolSwitch new.
 	switch position: 152.5 @ 420.
 	switch whenOffDo: [
-		MolGPSDataImpl stop.
-		MolGPSHardware start ].
+		MolGNSSGPS stop.
+		MolGNSSGPSInaccurate start ].
 	switch whenOnDo: [
-		MolGPSHardware stop.
-		MolGPSDataImpl start ].
+		MolGNSSGPSInaccurate stop.
+		MolGNSSGPS start ].
 
-	MolGPSHardware start.
+	MolGNSSGPSInaccurate start.
 	PyMolMap start.
 	map := MolUtils instanceOf: PyMolMap.
 

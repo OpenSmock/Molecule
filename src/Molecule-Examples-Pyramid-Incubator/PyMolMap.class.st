@@ -1,8 +1,8 @@
 Class {
 	#name : #PyMolMap,
 	#superclass : #BlElement,
-	#traits : 'MolGPSMap + MolGPSDataEvents + MolComponentImpl',
-	#classTraits : 'MolGPSMap classTrait + MolGPSDataEvents classTrait + MolComponentImpl classTrait',
+	#traits : 'MolGeoPosMap + MolGeoPosEquipmentEvents + MolComponentImpl',
+	#classTraits : 'MolGeoPosMap classTrait + MolGeoPosEquipmentEvents classTrait + MolComponentImpl classTrait',
 	#instVars : [
 		'pointerV',
 		'pointerH',
@@ -411,14 +411,26 @@ PyMolMap >> getMolGPSDataEventsSubscriber [
 ]
 
 { #category : #'component accessing' }
-PyMolMap >> getMolGPSDataServicesProvider [
+PyMolMap >> getMolGeoPosEquipmentEventsSubscriber [
+	| eventsSymbol eventsSubscriber itf |
+	itf := MolGeoPosEquipmentEvents.
+	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
+	eventsSymbol isCollection
+	 	ifTrue: 
+			[eventsSubscriber := MolComponentManager default locatorServices 
+						searchEventsSubscriberFor: MolGeoPosEquipmentEvents named: eventsSymbol ]. 
+	^eventsSubscriber
+]
+
+{ #category : #'component accessing' }
+PyMolMap >> getMolGeoPosEquipmentServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
-	itf := MolGPSDataServices.
+	itf := MolGeoPosEquipmentServices.
 	servicesSymbol := self servicesProviders at: itf ifAbsent: [nil].
 	(servicesSymbol isNil or:[servicesSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundServicesProvider new interface: itf name: nil ].
 
-	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolGPSDataServices named: servicesSymbol.
+	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolGeoPosEquipmentServices named: servicesSymbol.
 	^servicesProvider
 ]
 

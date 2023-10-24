@@ -2,20 +2,20 @@
 The TypeGPSMap requires to consume services of the GPSDataServicesinterface and to use events of the GPSDataEventsinterface.
 "
 Trait {
-	#name : #MolGPSMap,
+	#name : #MolGeoPosMap,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : #'Molecule-Examples-GPS Example'
+	#category : #'Molecule-Examples-Geographical Position Example'
 }
 
 { #category : #'accessing - events' }
-MolGPSMap classSide >> consumedComponentEvents [
+MolGeoPosMap classSide >> consumedComponentEvents [
 <componentContract>	
-	^{ MolGPSDataEvents  } 
+	^{ MolGeoPosEquipmentEvents  } 
 ]
 
 { #category : #'accessing - services' }
-MolGPSMap classSide >> usedComponentServices [
+MolGeoPosMap classSide >> usedComponentServices [
 <componentContract>	
-	^{ MolGPSDataServices }
+	^{ MolGeoPosEquipmentServices }
 ]

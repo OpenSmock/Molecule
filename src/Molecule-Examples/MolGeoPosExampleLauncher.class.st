@@ -15,13 +15,13 @@ MolGPSExampleLauncher swapGPSHardwareByGPSDataImpl.
 MolGPSExampleLauncher stop.
 "
 Class {
-	#name : #MolGPSExampleLauncher,
+	#name : #MolGeoPosExampleLauncher,
 	#superclass : #Object,
-	#category : #'Molecule-Examples-GPS Example'
+	#category : #'Molecule-Examples-Geographical Position Example'
 }
 
-{ #category : #scripts }
-MolGPSExampleLauncher class >> start [
+{ #category : #'start-stop' }
+MolGeoPosExampleLauncher class >> start [
 
 	<script: 'self start'>
 	(UIManager default
@@ -30,14 +30,14 @@ MolGPSExampleLauncher class >> start [
 		 label: 'Molecule - GPS Example') ifTrue: [ Transcript open ].
 
 	"Start GPSDataImpl component (a Component with MolGPSData Type)"
-	MolGPSDataImpl start.
+	MolGNSSGPS start.
 
 	"Start GPSMapImpl component (a Component with MolGPSMap Type)"
-	MolGPSMapImpl start
+	MolGeoPosMapImpl start
 ]
 
-{ #category : #scripts }
-MolGPSExampleLauncher class >> stop [
+{ #category : #'start-stop' }
+MolGeoPosExampleLauncher class >> stop [
 	<script: 'self stop'>
 	
 	"General stop : Cleanup the Component Manager"
@@ -45,19 +45,19 @@ MolGPSExampleLauncher class >> stop [
 ]
 
 { #category : #private }
-MolGPSExampleLauncher class >> stopCurrentLaunchedComponent [
+MolGeoPosExampleLauncher class >> stopCurrentLaunchedComponent [
 	"stops every possible component if it's launched"
 
 	| manager component |
 	manager := MolComponentManager default.
 
 	component := manager locatorServices
-		             searchComponentTypeImplementorFor: MolGPSData.
+		             searchComponentTypeImplementorFor: MolGeoPosEquipmentType.
 	component class stop 
 ]
 
-{ #category : #scripts }
-MolGPSExampleLauncher class >> swapGNSSGalileo [
+{ #category : #swap }
+MolGeoPosExampleLauncher class >> swapGNSSGalileo [
 	"Swap current component by MolGNSSGalileo"
 
 	<script>
@@ -65,46 +65,26 @@ MolGPSExampleLauncher class >> swapGNSSGalileo [
 	MolGNSSGalileo start
 ]
 
-{ #category : #scripts }
-MolGPSExampleLauncher class >> swapGPSDataImpl [
+{ #category : #swap }
+MolGeoPosExampleLauncher class >> swapGPSDataImpl [
 	"Swap current component by MolGPSDataImpl"
 
 	<script>
 	self stopCurrentLaunchedComponent.
-	MolGPSDataImpl start
+	MolGNSSGPS start
 ]
 
-{ #category : #scripts }
-MolGPSExampleLauncher class >> swapGPSDataImplByGPSHardware [
-	<script: 'self swapGPSDataImplByGPSHardware'>
-	
-	"Swap MolGPSDataImpl by MolGPSHardware"
-	MolGPSDataImpl stop.
-	MolGPSHardware start.
-
-]
-
-{ #category : #scripts }
-MolGPSExampleLauncher class >> swapGPSHardware [
+{ #category : #swap }
+MolGeoPosExampleLauncher class >> swapGPSHardware [
 	"Swap current component by MolGPSHardware"
 
 	<script>
 	self stopCurrentLaunchedComponent.
-	MolGPSHardware start
+	MolGNSSGPSInaccurate start
 ]
 
-{ #category : #scripts }
-MolGPSExampleLauncher class >> swapGPSHardwareByGPSDataImpl [
-	<script: 'self swapGPSHardwareByGPSDataImpl'>
-	
-	"Swap MolGPSDataImpl by MolGPSHardware"
-	MolGPSHardware stop.
-	MolGPSDataImpl start.
-
-]
-
-{ #category : #scripts }
-MolGPSExampleLauncher class >> swapGSM [
+{ #category : #swap }
+MolGeoPosExampleLauncher class >> swapGSM [
 	"Swap current component by MolGSM"
 
 	<script>
@@ -112,8 +92,8 @@ MolGPSExampleLauncher class >> swapGSM [
 	MolGSM start
 ]
 
-{ #category : #scripts }
-MolGPSExampleLauncher class >> swapWiFi [
+{ #category : #swap }
+MolGeoPosExampleLauncher class >> swapWiFi [
 	"Swap current component by MolWiFi"
 
 	<script>

@@ -1,60 +1,60 @@
 Class {
-	#name : #MolGPSMapImpl,
+	#name : #MolGeoPosMapImpl,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolGPSMap + MolGPSDataEvents',
-	#classTraits : 'MolGPSMap classTrait + MolGPSDataEvents classTrait',
-	#category : #'Molecule-Examples-GPS Example'
+	#traits : 'MolGeoPosMap + MolGeoPosEquipmentEvents',
+	#classTraits : 'MolGeoPosMap classTrait + MolGeoPosEquipmentEvents classTrait',
+	#category : #'Molecule-Examples-Geographical Position Example'
 }
 
 { #category : #'component life cycle' }
-MolGPSMapImpl >> componentActivate [
+MolGeoPosMapImpl >> componentActivate [
 	
-	self getMolGPSDataEventsSubscriber subscribe: self.
+	self getMolGeoPosEquipmentEventsSubscriber subscribe: self.
 ]
 
 { #category : #'component life cycle' }
-MolGPSMapImpl >> componentPassivate [
+MolGeoPosMapImpl >> componentPassivate [
 	
-	self getMolGPSDataEventsSubscriber unsubscribe: self.
+	self getMolGeoPosEquipmentEventsSubscriber unsubscribe: self.
 ]
 
 { #category : #events }
-MolGPSMapImpl >> currentPositionChanged: aGeoPosition [
+MolGeoPosMapImpl >> currentPositionChanged: aGeoPosition [
 
 	"Display a circle on the map view at the current position"
 
 	| radius |
-	radius := self getMolGPSDataServicesProvider getAccuracyRadiusInMeters.
+	radius := self getMolGeoPosEquipmentServicesProvider getAccuracyRadiusInMeters.
 
 	self updatePositionCircleOnMap: aGeoPosition radius: radius
 ]
 
 { #category : #'component accessing' }
-MolGPSMapImpl >> getMolGPSDataEventsSubscriber [
+MolGeoPosMapImpl >> getMolGeoPosEquipmentEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
-	itf := MolGPSDataEvents.
+	itf := MolGeoPosEquipmentEvents.
 	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolGPSDataEvents named: eventsSymbol ]. 
+						searchEventsSubscriberFor: MolGeoPosEquipmentEvents named: eventsSymbol ]. 
 	^eventsSubscriber
 ]
 
 { #category : #'component accessing' }
-MolGPSMapImpl >> getMolGPSDataServicesProvider [
+MolGeoPosMapImpl >> getMolGeoPosEquipmentServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
-	itf := MolGPSDataServices.
+	itf := MolGeoPosEquipmentServices.
 	servicesSymbol := self servicesProviders at: itf ifAbsent: [nil].
 	(servicesSymbol isNil or:[servicesSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundServicesProvider new interface: itf name: nil ].
 
-	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolGPSDataServices named: servicesSymbol.
+	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolGeoPosEquipmentServices named: servicesSymbol.
 	^servicesProvider
 ]
 
 { #category : #'map updating' }
-MolGPSMapImpl >> updatePositionCircleOnMap: aGeoPosition radius: radius [
+MolGeoPosMapImpl >> updatePositionCircleOnMap: aGeoPosition radius: radius [
 	"Update geographic position of the received GPS position circle with a precision radius"
 	
 	| point text |
@@ -62,5 +62,5 @@ MolGPSMapImpl >> updatePositionCircleOnMap: aGeoPosition radius: radius [
 	point := point truncateTo: 0.01.
 	text := (point x printShowingDecimalPlaces: 2), '@', (point y printShowingDecimalPlaces: 2).
 	
-	Transcript show: ('[Map] Receive new GPS position: ', text, ' radius: ', radius rounded printString, ' m'); cr.
+	Transcript show: ('[Map] Receive geographical position: ', text, ' radius: ', radius rounded printString, ' m'); cr.
 ]

@@ -1,13 +1,13 @@
 Class {
 	#name : #MolGSM,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolGPSData + MolGPSDataServices',
-	#classTraits : 'MolGPSData classTrait + MolGPSDataServices classTrait',
+	#traits : 'MolGeoPosEquipmentType + MolGeoPosEquipmentServices',
+	#classTraits : 'MolGeoPosEquipmentType classTrait + MolGeoPosEquipmentServices classTrait',
 	#instVars : [
 		'accuracy',
 		'sendCurrentPositionThread'
 	],
-	#category : #'Molecule-Examples-GPS Example'
+	#category : #'Molecule-Examples-Geographical Position Example'
 }
 
 { #category : #accessing }
@@ -29,7 +29,7 @@ MolGSM >> componentActivate [
 	sendCurrentPositionThread := [
 	                             [ true ] whileTrue: [
 		                             (Delay forMilliseconds: 50) wait.
-		                             self getMolGPSDataEventsNotifier
+		                             self getMolGeoPosEquipmentEventsNotifier
 			                             currentPositionChanged:
 			                             self getRandomizedGSMPosition.
 		                             self increaseAccuracy ] ] forkAt:
@@ -58,8 +58,8 @@ MolGSM >> getAccuracyRadiusInMeters [
 ]
 
 { #category : #'component accessing' }
-MolGSM >> getMolGPSDataEventsNotifier [
-	^self eventsNotifiers at: MolGPSDataEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolGPSDataEvents name: nil].
+MolGSM >> getMolGeoPosEquipmentEventsNotifier [
+	^self eventsNotifiers at: MolGeoPosEquipmentEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolGeoPosEquipmentEvents name: nil].
 ]
 
 { #category : #accessing }

@@ -1,35 +1,35 @@
 Class {
-	#name : #MolGPSDataImpl,
+	#name : #MolGNSSGPS,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolGPSData + MolGPSDataServices',
-	#classTraits : 'MolGPSData classTrait + MolGPSDataServices classTrait',
+	#traits : 'MolGeoPosEquipmentType + MolGeoPosEquipmentServices',
+	#classTraits : 'MolGeoPosEquipmentType classTrait + MolGeoPosEquipmentServices classTrait',
 	#instVars : [
 		'accuracy',
 		'sendCurrentPositionThread'
 	],
-	#category : #'Molecule-Examples-GPS Example'
+	#category : #'Molecule-Examples-Geographical Position Example'
 }
 
 { #category : #accessing }
-MolGPSDataImpl >> accuracy [
+MolGNSSGPS >> accuracy [
 
 	^ accuracy
 ]
 
 { #category : #accessing }
-MolGPSDataImpl >> accuracy: anObject [
+MolGNSSGPS >> accuracy: anObject [
 
 	accuracy := anObject
 ]
 
 { #category : #'life cycle' }
-MolGPSDataImpl >> componentActivate [
+MolGNSSGPS >> componentActivate [
 	"Start a thread to simulate sending of the geo position and accuracy precision each second"
 
 	sendCurrentPositionThread := [
 	                             [ true ] whileTrue: [
 		                             (Delay forMilliseconds: 50) wait.
-		                             self getMolGPSDataEventsNotifier
+		                             self getMolGeoPosEquipmentEventsNotifier
 			                             currentPositionChanged:
 			                             self getRandomizedGPSPosition.
 		                             self increaseAccuracy ] ] forkAt:
@@ -37,7 +37,7 @@ MolGPSDataImpl >> componentActivate [
 ]
 
 { #category : #'life cycle' }
-MolGPSDataImpl >> componentInitialize [
+MolGNSSGPS >> componentInitialize [
 
 	"Set starting accuracy"
 
@@ -45,26 +45,26 @@ MolGPSDataImpl >> componentInitialize [
 ]
 
 { #category : #'life cycle' }
-MolGPSDataImpl >> componentPassivate [ 
+MolGNSSGPS >> componentPassivate [ 
 	
 	sendCurrentPositionThread ifNotNil:[ :e | e terminate ].
 	sendCurrentPositionThread := nil.
 ]
 
 { #category : #services }
-MolGPSDataImpl >> getAccuracyRadiusInMeters [
+MolGNSSGPS >> getAccuracyRadiusInMeters [
 	"Get and return the accuracy of the GPS depending quality of signal and quantity of connected satellites"
 
 	^self accuracy 
 ]
 
 { #category : #'component accessing' }
-MolGPSDataImpl >> getMolGPSDataEventsNotifier [
-	^self eventsNotifiers at: MolGPSDataEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolGPSDataEvents name: nil].
+MolGNSSGPS >> getMolGeoPosEquipmentEventsNotifier [
+	^self eventsNotifiers at: MolGeoPosEquipmentEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolGeoPosEquipmentEvents name: nil].
 ]
 
 { #category : #private }
-MolGPSDataImpl >> getRandomizedGPSPosition [
+MolGNSSGPS >> getRandomizedGPSPosition [
 
 	| random |
 	random := Random new.
@@ -72,7 +72,7 @@ MolGPSDataImpl >> getRandomizedGPSPosition [
 ]
 
 { #category : #private }
-MolGPSDataImpl >> increaseAccuracy [
+MolGNSSGPS >> increaseAccuracy [
 
 	| nextAccuracy |
 	self accuracy > 1 ifTrue: [
