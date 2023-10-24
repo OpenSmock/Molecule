@@ -572,16 +572,16 @@ MolComponentFactory >> dirtyComponents [
 ]
 
 { #category : #'private - code generation' }
-MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollection in: aComponent suffix: suffix [
+MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollection in: aComponent suffix: suffix [ [
 	| selector sourceCode sourceMethod method |
-	
+
 	aCollection copy do: [ :e | | trait |
-		
+
 		"e can be another thing that a Trait, need to check nature of e before generate"
 		( e notNil and:[ e isTrait and:[( e isComponentServices or:[ e isComponentParameters or:[ e isComponentEvents ]])]]) ifTrue:[
-			
+
 			trait := e.
-		
+
 			selector := ('get' , trait printString , suffix) asSymbol.
 			sourceCode := self getSourceCodeFor: aSymbol trait: trait selector: selector.
 			(aComponent allSelectors includes: selector) ifFalse: [ 
@@ -600,9 +600,10 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 					]. 
 				]. 
 			]. 
-		
+
 		].
 	]
+]
 ]
 
 { #category : #'code generation' }
