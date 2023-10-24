@@ -1,4 +1,4 @@
-Now that we've created our first component, we will need to create another one by following the same instructions (see [Create a new Molecule Component](https://github.com/OpenSmock/Molecule/wiki/Tutorial-:-Create-a-new-Molecule-Component)).
+Now that we've created our first component, we will need to create another one by following the same instructions (see [Create a new Molecule Component](https://github.com/OpenSmock/Molecule/blob/main/documentation/Create%20a%20new%20Molecule%20component.md)).
 In reality, having only one component isn't useful at all since components are meant to be connected between each other and communicate through data.
 The idea of having two components is that one will send data (through events and services), and the other will listen to the first component in order to receive and treat this data.
 To do that, we need to specify each component's contract in order to achieve exactly that.
@@ -13,7 +13,7 @@ For Events, it's done in `consumedComponentEvents`
 For Services, it's done in `usedComponentServices`
 For Parameters, it's done in `usedComponentParameters`
 
-For listening to a component for events, see the last part of [Creating Events]() tutorial.
+For listening to a component for events, see the last part of [Creating Events](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Events.md) tutorial.
 
 A component can receive events/services and emit other events/services by specifying them for a component without any conflict, since they're different parts of its contract.
 

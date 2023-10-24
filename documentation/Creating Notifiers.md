@@ -4,7 +4,7 @@ If you're not getting this method, you can first click on the Library tab of Pha
 
 To trigger an event, the syntax follows this template:
 `self get[componentName]EventsNotifier [eventName]`
-If a component is currently listening to the one emitting this event (see the last part of [Creating Events]()) and if the eventual Producers are set up correctly (see [Creating Producers]()), then the component listening will receive the event and execute its method that has the same name. 
+If a component is currently listening to the one emitting this event (see the last part of [Creating Events](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Events.md)) and if the eventual Producers are set up correctly (see [Creating Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md)), then the component listening will receive the event and execute its method that has the same name. 
 All steps are needed in order for this communication to happen.
 
 **add img**

@@ -23,6 +23,6 @@ This is done in the `componentActivate` method of a Molecule component (which yo
 Conversely, you then need to create a `componentPassivate` method which follows the same template, but for unsubscribing:
 `self get[componentName]EventsSubscriber unsubscribe: self`
 
-Notifiers will be needed to trigger an event and are explained in this [Creating Notifiers]() tutorial.
+Notifiers will be needed to trigger an event and are explained in this [Creating Notifiers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Notifiers.md) tutorial.
 
 **add img**
