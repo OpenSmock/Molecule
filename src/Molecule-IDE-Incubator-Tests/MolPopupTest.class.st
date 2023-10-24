@@ -17,10 +17,10 @@ MolPopupTest >> setUp [
 { #category : #tests }
 MolPopupTest >> testPopupTitle [
 	
-	self assert: (popup popup: RSPopup new title: MolGPSDataImpl) equals: popup
+	self assert: (popup popup: RSPopup new title: MolGNSSGPS) equals: popup
 ]
 
 { #category : #tests }
 MolPopupTest >> testPopupTitleItems [
-	self assert: (popup popup: RSPopup new title: MolGPSDataImpl items: {RSLabel new. RSEllipse new}) equals: popup
+	self assert: (popup popup: RSPopup new title: MolGNSSGPS items: {RSLabel new. RSEllipse new}) equals: popup
 ]

@@ -3,20 +3,20 @@ The GPSData component type uses the Molecule base Type MolComponentType.
 This base Type provides the skeleton methods providedComponentServices and producedComponentEvents.
 "
 Trait {
-	#name : #MolGPSData,
+	#name : #MolGeoPosEquipmentType,
 	#traits : 'MolComponentType',
 	#classTraits : 'MolComponentType classTrait',
-	#category : #'Molecule-Examples-GPS Example'
+	#category : #'Molecule-Examples-Geographical Position Example'
 }
 
 { #category : #'accessing - events' }
-MolGPSData classSide >> producedComponentEvents [
+MolGeoPosEquipmentType classSide >> producedComponentEvents [
 <componentContract>		
-	^{MolGPSDataEvents} 
+	^{ MolGeoPosEquipmentEvents } 
 ]
 
 { #category : #'accessing - services' }
-MolGPSData classSide >> providedComponentServices [
+MolGeoPosEquipmentType classSide >> providedComponentServices [
 <componentContract>	
-	^{ MolGPSDataServices  } 
+	^{ MolGeoPosEquipmentServices  } 
 ]

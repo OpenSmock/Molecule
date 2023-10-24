@@ -20,8 +20,8 @@ MolMenuSBTest >> testExecute [
 	| toolcontext dataSource item selectedItem |
 	toolcontext := ClyFullBrowserClassContext new.
 	dataSource := ClyDataSourceItem new.
-	item := ClyBrowserItem named: MolGPSDataImpl name with: MolGPSDataImpl.
-	item addProperty: (ClyClassDefinitionProperty of: MolGPSDataImpl).
+	item := ClyBrowserItem named: MolGNSSGPS name with: MolGNSSGPS.
+	item addProperty: (ClyClassDefinitionProperty of: MolGNSSGPS).
 	
 	dataSource browserItem: item.
 	

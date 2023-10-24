@@ -157,18 +157,33 @@ This system uses 4 components: a server time sends global hour to a clock. The c
 
 This system provides a global example of the use of components. 
 
-#### GPS example
+#### Geographical Position example
+
+Examples are further detailed in the comment of MolGeoPosExampleLauncher.
+
+1 - Start the demo: start a GPS equipment and a Map receiver (displaying result on Transcript)
 
 ```smalltalk
-MolGPSExampleLauncher start.
+MolGeoPosExampleLauncher start.
 ```
-Examples are further detailed in the comment of MolGPSExampleLauncher.
 
-First we program a component application that connects to a Global Positioning System (GPS) hardware and displays the GPS data on a view map (just fictitious).
-The GPS data and view map are implemented as Molecule components.
-In a second way, we reuse an existing non-component class in our Molecule application (MolGPSHardware).
-To do so, we augment this class with component behavior.
+2 - Choose between available geographical position equipments:
 
+Change the started component of MolGeoPosEquipmentType Type on the fly.
+
+```smalltalk
+MolGeoPosExampleLauncher swapGPSInaccurate.
+MolGeoPosExampleLauncher swapGSM.
+MolGeoPosExampleLauncher swapGalileo.
+MolGeoPosExampleLauncher swapWiFi.
+MolGeoPosExampleLauncher swapGPS.
+```
+
+3 - To stop the demo:
+
+```smalltalk
+MolGeoPosExampleLauncher stop.
+```
 
 ## Incubator packages: our UI tools experimentation zone
 

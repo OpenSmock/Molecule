@@ -28,7 +28,6 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 			
 			"Load dependencies"
 			self loadRoassal: spec.
-			self loadBloc: spec.
 			self loadPyramid: spec.
 						
 			"Packages"
@@ -40,19 +39,7 @@ BaselineOfMoleculeIncubator >> baseline: spec [
 				package: 'Molecule-IDE-Tests' with: [ spec requires: #('Molecule-IDE') ];
 				package: 'Molecule-IDE-Incubator' with: [ spec requires: #('Molecule-IDE') ];
 				package: 'Molecule-IDE-Incubator-Tests' with: [ spec requires: #('Molecule-IDE-Incubator') ].
-				
-			"Pyramid examples"
-			spec
-				package: 'Molecule-Examples-Pyramid-Incubator' with: [ spec requires: #('Pyramid' 'Molecule-Examples') ].
 		 ]
-]
-
-{ #category : #'load scripts' }
-BaselineOfMoleculeIncubator >> loadBloc: spec [
-
-	spec
-		baseline: #Bloc
-		with: [ spec repository: 'github://pharo-graphics/Bloc:dev-1.0/src' ]
 ]
 
 { #category : #'load scripts' }
@@ -66,9 +53,7 @@ BaselineOfMoleculeIncubator >> loadPyramid: spec [
 { #category : #'load scripts' }
 BaselineOfMoleculeIncubator >> loadRoassal: spec [
 
-	spec
-		baseline: 'Roassal3' 
-		with: [ spec repository: 'github://ObjectProfile/Roassal3' ]
+	spec baseline: 'Roassal' with: [ spec repository: 'github://pharo-graphics/Roassal/src' ].
 ]
 
 { #category : #'load scripts' }
