@@ -21,84 +21,66 @@ Trait {
 { #category : #actions }
 MolComponentType classSide >> allConsumedEvents [
 	| collection |
-	
-	collection := (self consumedComponentEvents select:[ :e | e notNil and:[ e isTrait and:[ e isComponentEvents ]]]) asSet.
-	
+	collection := Set withAll: self consumedComponentEvents.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s consumedComponentEvents 
 		] ].
-
 	^ collection asOrderedCollection
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allProducedEvents [
 	| collection |
-	
-	collection := (self producedComponentEvents select:[ :e | e notNil and:[ e isTrait and:[ e isComponentEvents ]]]) asSet.
-	
+	collection := Set withAll: self producedComponentEvents.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s producedComponentEvents 
 		] ].
-	
 	^ collection asOrderedCollection
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allProvidedParameters [
 	| collection |
-	
-	collection := (self providedComponentParameters select:[ :e | e notNil and:[ e isTrait and:[ e isComponentParameters ]]]) asSet.
-	
+	collection := Set withAll: self providedComponentParameters.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s providedComponentParameters 
 		] ].
-	
 	^ collection asOrderedCollection 
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allProvidedServices [
 	| collection |
-	
-	collection := (self providedComponentServices select:[ :e | e notNil and:[ e isTrait and:[ e isComponentServices ]]]) asSet.
-	
+	collection := Set withAll: self providedComponentServices.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s providedComponentServices 
 		] ].
-	
 	^ collection asOrderedCollection 
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allUsedParameters [
 	| collection |
-	
-	collection := (self usedComponentParameters select:[ :e | e notNil and:[ e isTrait and:[ e isComponentParameters ]]]) asSet.
-	
+	collection := Set withAll: self usedComponentParameters.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s usedComponentParameters 
 		] ].
-	
 	^ collection asOrderedCollection 
 ]
 
 { #category : #actions }
 MolComponentType classSide >> allUsedServices [
 	| collection |
-	
-	collection := (self usedComponentServices select:[ :e | e notNil and:[ e isTrait and:[ e isComponentServices ]]]) asSet.
-	
+	collection := Set withAll: self usedComponentServices.
 	self allSuperclassesDo: [ :s | 
 		(s allTraits includes: MolComponentType) ifTrue: [ 
 				collection addAll: s usedComponentServices 
 		] ].
-	
 	^ collection asOrderedCollection 
 ]
 

@@ -73,13 +73,37 @@ MolComponentImpl classSide >> haveOwnComponentType [
 { #category : #'life cycle' }
 MolComponentImpl classSide >> instanciate [
 
+	self
+		deprecated: 'Use instantiate'
+		transformWith:
+		'`@receiver instanciate' -> '`@receiver instantiate'.
 	^ MolComponentManager default homeServices instanciateComponent: self
 ]
 
 { #category : #'life cycle' }
 MolComponentImpl classSide >> instanciate: aComponentName [
 
-	^ MolComponentManager default homeServices instanciateComponent: self named: aComponentName
+	self
+		deprecated: 'Use instantiate:'
+		transformWith: '`@receiver instanciate: `@aComponentName'
+			-> '`@receiver instantiate: `@aComponentName'.
+	^ MolComponentManager default homeServices
+		  instanciateComponent: self
+		  named: aComponentName
+]
+
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> instantiate [
+
+	^ MolComponentManager default homeServices instantiateComponent: self
+]
+
+{ #category : #'life cycle' }
+MolComponentImpl classSide >> instantiate: aComponentName [
+
+	^ MolComponentManager default homeServices
+		  instantiateComponent: self
+		  named: aComponentName
 ]
 
 { #category : #testing }
