@@ -1,6 +1,6 @@
 Welcome to the Molecule wiki!
 
-[Introduction](https://github.com/OpenSmock/Molecule/wiki#introduction) \
+# Introduction
 Molecule is a component oriented framework for Pharo. His Component architecture approach provides an adapted structuration to graphic user interface (GUI) or another software application which need Component features.
 
 Molecule provides a way to describe a software application as a component group.
@@ -9,7 +9,7 @@ Molecule is a Light-weight implementation of the Corba Component Model (LCCM). I
 
 Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
 
-[Installation](https://github.com/OpenSmock/Molecule/wiki#installation) \
+# Installation
 Pharo 8, 9, 10 and 11 :
 ```smalltalk
 Metacello new
@@ -19,10 +19,10 @@ Metacello new
 ```
 Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
 
-[Principles](https://github.com/OpenSmock/Molecule/wiki#principles) \
+# Principles
 This section briefly presents what is a Molecule component and how it's dynamically managed.
 
-[A Component and his Contract](https://github.com/OpenSmock/Molecule/wiki#a-component-and-his-contract)
+# A Component and his Contract
 ![Molecule component](https://user-images.githubusercontent.com/49183340/162572734-774a7065-9772-433e-8f0a-9dc538978c92.png)
 Similarly to the LCCM, a component’s business contract is exposed through its component Type. The Type specifies what a component has to offer to other components (namely, provided services and produced events) and what that component requires from other components (namely, used services and consumed events).
 ![Component application](https://user-images.githubusercontent.com/49183340/162572946-8cd11257-65bb-4ed3-a13a-0fe6dd6f83d1.png)
@@ -32,18 +32,18 @@ Thus, the main role of the Type is to implement the services that the component 
 
 A Molecule component definition is based on Traits. The Type, as well as the services, the events and the parameters are all defined as Traits. A Molecule component is an instance of a standard class which uses Molecule traits.
 
-[Two ways to implement a Component](https://github.com/OpenSmock/Molecule/wiki#two-ways-to-implement-a-component)
+# Two ways to implement a Component
 ![Two ways to implement a component](https://user-images.githubusercontent.com/49183340/162573288-4d7fc513-5d98-420e-a309-e98f1e42fc6d.png)
 In Molecule, we define the elements of a component's contract (services, events, parameters) as a set of Traits. A component Type aggregates theses traits and is itself defined as a Trait. Molecule provides a dedicated Trait `MolComponentImpl`, which implements cross-cutting behavior shared by all components (e.g., components' life-cycle management). Implementing a component consists in defining a class that uses the `MolComponentImpl` Trait to obtain component shared behavior and uses a Type Trait (`MolComponentType`) implementing the component's business behavior.
 ![Component application and other](https://user-images.githubusercontent.com/49183340/162573410-9543b74f-af2f-4ad9-a156-aa4759916773.png)
 
 The direct benefit of this approach is that it's possible for any existing class to become a component. This existing class is then turned as (or augmented as) a component, and becomes usable in a Molecule component application while remaining fully compatible with non-component applications.
 
-[Run-time management of Components](https://github.com/OpenSmock/Molecule/wiki#run-time-management-of-components)
+# Run-time management of Components
 ![ComponentManager](https://user-images.githubusercontent.com/49183340/162572598-0219f49d-8975-4dbb-8764-e3f379c58d69.png)
 All components are managed by the ComponentManager object. It maintains the list of component instances currently alive in the system. It's currently handled as a singleton. The ComponentManager class implements an API to instantiate and to remove each component, to associate them, to connect events, etc. This API is used to manage each component's life-cycle programmatically.
 
-[Components' life-cycle and states](https://github.com/OpenSmock/Molecule/wiki#components-lifecycle-and-states)
+# Components' life-cycle and states
 The activity of a component depends on contextual constraints such as the availability of a resource, the physical state of hardware elements, etc. To manage consumed resources accordingly, the life-cycle of a component has four possible states: Initialized, Activated, Passivated and Removed.
 ![Components lifecycle and states](https://user-images.githubusercontent.com/49183340/162570154-b39fc041-03f3-40d2-ad3f-30aac027a4b0.png)
 
@@ -62,9 +62,14 @@ The terminal state of a component is the Removed state. When a component switche
 
 Let us illustrate the use of these states with the example of a GUI window handled as a component. First, the window is instantiated by the component. Then the component state switches to Initialized. When the window is displayed on the desktop, the component’s state switches to Activated. When the window is reduced and its icon is stored into a task-bar, then the component switches to the Passivated state. As the window is only reduced, it can be re-opened very quickly. Finally, when the user closes the window, the component is first switched to Passivated, then to the Removed state.
 
-[Tutorials section](https://github.com/OpenSmock/Molecule/wiki#tutorials-section) \
-[Create a new Molecule Component](https://github.com/OpenSmock/Molecule/wiki/Tutorial-:-Create-a-new-Molecule-Component) \
-**Links to other tutorials to put here**
+# [Tutorials section
+[Connecting two components](https://github.com/OpenSmock/Molecule/blob/main/documentation/Connecting%20two%20components.md) \
+[Create a new Molecule Component](https://github.com/OpenSmock/Molecule/blob/main/documentation/Create%20a%20new%20Molecule%20component.md) \
+[Creating Events](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Events.md) \
+[Creating Notifiers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Notifiers.md) \
+[Creating Parameters](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Parameters.md) \
+[Creating Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md) \
+[Facilitating tests](https://github.com/OpenSmock/Molecule/blob/main/documentation/Facilitating%20tests.md) \
 
 [External links](https://github.com/OpenSmock/Molecule/wiki#external-links) \
 **Publications** \
@@ -74,4 +79,4 @@ Let us illustrate the use of these states with the example of a GUI window handl
 [Molecule: live prototyping with component-oriented programming](https://www.youtube.com/watch?v=Zfo3VkH2bVw) \
 [15 years of reuse experience in evolutionary prototyping for the defense industry](https://www.youtube.com/watch?v=Zfo3VkH2bVw) \
 
-[Learn more about CCM specifications.](https://www.omg.org/spec/CCM/About-CCM/)
+[Learn more about CCM specifications](https://www.omg.org/spec/CCM/About-CCM/)
