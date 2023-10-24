@@ -69,12 +69,12 @@ MolUtils class >> consumedComponentEvents: anObject [
 
 { #category : #'quick creation' }
 MolUtils class >> createAllComponents [
-	"instanciate and activate all deployed components"
+	"instantiate and activate all deployed components"
+
 	| homeServices components |
-	
 	homeServices := MolComponentManager default homeServices.
 	components := homeServices deployedComponents.
-	components keysDo: [ :aClass | homeServices instanciateComponent: aClass ].
+	components keysDo: [ :aClass | homeServices instantiateComponent: aClass ].
 	components keysDo: [ :aClass | homeServices activateComponent: aClass ]
 ]
 
@@ -87,30 +87,30 @@ MolUtils class >> defaultComponentName [
 
 { #category : #'quick lifecycle' }
 MolUtils class >> deployAndInitializeComponent: aComponentClass named: aName [
-	"auto deploy, and instanciate quickly a component and return the instance"
+	"auto deploy, and instantiate quickly a component and return the instance"
 
-	(MolComponentManager default deploymentServices isDeployedComponentImplementation: aComponentClass) ifFalse:[
-		MolComponentManager default deploymentServices deployComponentImplementation: aComponentClass.
+	(MolComponentManager default deploymentServices isDeployedComponentImplementation: aComponentClass) ifFalse: [
+		MolComponentManager default deploymentServices deployComponentImplementation: aComponentClass 
 	].
 
-	^ MolComponentManager default homeServices instanciateComponent: aComponentClass named: aName
+	^ MolComponentManager default homeServices instantiateComponent: aComponentClass named: aName
 ]
 
 { #category : #'quick lifecycle' }
 MolUtils class >> deployAndInitializeComponents: aComponentClassList [
-	"deploy and instanciate quickly a list of components and return all instances"
+	"deploy and instantiate quickly a list of components and return all instances"
+
 	| components |
-
-	components := OrderedCollection new.	
-	aComponentClassList ifNil:[^components].
-	aComponentClassList do:[ :componentClass | 		
-		MolComponentManager default deploymentServices deployComponentImplementation: componentClass.
+	components := OrderedCollection new.
+	aComponentClassList ifNil: [ ^ components ].
+	aComponentClassList do: [ :componentClass |
+		MolComponentManager default deploymentServices deployComponentImplementation: componentClass 
 	].
-	aComponentClassList do:[ :componentClass | 
-		(MolComponentManager default homeServices instanciateComponent: componentClass) ifNotNil:[ :c | components add: c].
+	aComponentClassList do: [ :componentClass |
+		(MolComponentManager default homeServices instantiateComponent: componentClass) ifNotNil: [ :c | components add: c ] 
 	].
 
-	^components
+	^ components
 ]
 
 { #category : #accessing }
@@ -152,11 +152,28 @@ MolUtils class >> isComponentOrComponentClass: anObject [
 { #category : #testing }
 MolUtils class >> isInstanciateComponentOf: aClass [
 
-	^ self isInstanciateComponentOf: aClass named: self defaultComponentName
+	self deprecated: 'Use isInstantiateComponentOf:'
+		transformWith: '`@receiver isInstanciateComponentOf: `@aClass' -> '`@receiver isInstantiateComponentOf: `@aClass'.
+	^ self isInstantiateComponentOf: aClass
 ]
 
 { #category : #testing }
 MolUtils class >> isInstanciateComponentOf: aClass named: aName [
+
+	self deprecated: 'Use isInstantiateComponentOf: named: '
+		transformWith: '`@receiver isInstanciateComponentOf: `@aClass named: `@aName' -> '`@receiver isInstantiateComponentOf: `@aClass named: `@aName'.
+	^ self isInstantiateComponentOf: aClass named: aName
+]
+
+{ #category : #testing }
+MolUtils class >> isInstantiateComponentOf: aClass [
+
+	^ self isInstantiateComponentOf: aClass named: self defaultComponentName
+]
+
+{ #category : #testing }
+MolUtils class >> isInstantiateComponentOf: aClass named: aName [
+
 	^ (MolComponentManager default homeServices instanceOf: aClass named: aName) notNil
 ]
 

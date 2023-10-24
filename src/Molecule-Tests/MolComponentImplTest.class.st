@@ -586,14 +586,15 @@ MolComponentImplTest >> testServicesProviders [
 
 { #category : #'test - component creation' }
 MolComponentImplTest >> testStart [
+
 	MolCompleteComponentImpl deploy.
-	MolCompleteComponentImpl instanciate.
+	MolCompleteComponentImpl instantiate.
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) notNil.
 	MolCompleteComponentImpl activate.
 	MolCompleteComponentImpl passivate.
 	MolCompleteComponentImpl remove.
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) isNil.
-	MolCompleteComponentImpl undeploy.
+	MolCompleteComponentImpl undeploy
 ]
 
 { #category : #'test - component creation' }
@@ -612,14 +613,15 @@ MolComponentImplTest >> testStart2 [
 
 { #category : #'test - component creation' }
 MolComponentImplTest >> testStartWithName [
+
 	MolCompleteComponentImpl deploy.
-	MolCompleteComponentImpl instanciate: #myComponent.
+	MolCompleteComponentImpl instantiate: #myComponent.
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl named: #myComponent) notNil.
 	MolCompleteComponentImpl activate: #myComponent.
 	MolCompleteComponentImpl passivate: #myComponent.
 	MolCompleteComponentImpl remove: #myComponent.
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl named: #myComponent) isNil.
-	MolCompleteComponentImpl undeploy.
+	MolCompleteComponentImpl undeploy
 ]
 
 { #category : #'test - component creation' }
