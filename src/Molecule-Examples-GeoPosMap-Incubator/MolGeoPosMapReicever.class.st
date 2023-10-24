@@ -1,18 +1,18 @@
 Class {
-	#name : #PyMolMap,
+	#name : #MolGeoPosMapReicever,
 	#superclass : #BlElement,
-	#traits : 'MolGPSMap + MolGPSDataEvents + MolComponentImpl',
-	#classTraits : 'MolGPSMap classTrait + MolGPSDataEvents classTrait + MolComponentImpl classTrait',
+	#traits : 'MolGeoPosReceiverType + MolGeoPosEquipmentEvents + MolComponentImpl',
+	#classTraits : 'MolGeoPosReceiverType classTrait + MolGeoPosEquipmentEvents classTrait + MolComponentImpl classTrait',
 	#instVars : [
 		'pointerV',
 		'pointerH',
 		'pointer'
 	],
-	#category : #'Molecule-Examples-Pyramid-Incubator'
+	#category : #'Molecule-Examples-GeoPosMap-Incubator'
 }
 
 { #category : #'pyramid-serialized-bloc' }
-PyMolMap class >> pystonSpec [
+MolGeoPosMapReicever class >> pystonSpec [
 	"This class has been generated using Pyramid.
 
 	By: YannLEGOFF
@@ -364,32 +364,32 @@ PyMolMap class >> pystonSpec [
 ]'
 ]
 
-{ #category : #'as yet unclassified' }
-PyMolMap >> buildElements [
+{ #category : #initialization }
+MolGeoPosMapReicever >> buildElements [
 
 	self hasChildren ifTrue: [ self removeChildren ].
 	self addChildren: self class pystonSpec materializeAsBlElement
 ]
 
 { #category : #'life cycle' }
-PyMolMap >> componentActivate [
+MolGeoPosMapReicever >> componentActivate [
 
-	self getMolGPSDataEventsSubscriber subscribe: self
+	self getMolGeoPosEquipmentEventsSubscriber subscribe: self
 ]
 
 { #category : #'life cycle' }
-PyMolMap >> componentPassivate [
+MolGeoPosMapReicever >> componentPassivate [
 
 	self space ifNotNil: [ :s | s close ].
-	self getMolGPSDataEventsSubscriber unsubscribe: self
+	self getMolGeoPosEquipmentEventsSubscriber unsubscribe: self
 ]
 
 { #category : #events }
-PyMolMap >> currentPositionChanged: aGeoPosition [
+MolGeoPosMapReicever >> currentPositionChanged: aGeoPosition [
 
 	| adjustedPosition radius |
 	adjustedPosition := aGeoPosition * 50 asPoint + 150 asPoint.
-	radius := self getMolGPSDataServicesProvider getAccuracyRadiusInMeters asPoint.
+	radius := self getMolGeoPosEquipmentServicesProvider getAccuracyRadiusInMeters asPoint.
 
 	pointerV position: adjustedPosition x @ 0.
 	pointerH position: 0 @ adjustedPosition y.
@@ -399,31 +399,31 @@ PyMolMap >> currentPositionChanged: aGeoPosition [
 ]
 
 { #category : #'component accessing' }
-PyMolMap >> getMolGPSDataEventsSubscriber [
+MolGeoPosMapReicever >> getMolGeoPosEquipmentEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
-	itf := MolGPSDataEvents.
+	itf := MolGeoPosEquipmentEvents.
 	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
 	eventsSymbol isCollection
 	 	ifTrue: 
 			[eventsSubscriber := MolComponentManager default locatorServices 
-						searchEventsSubscriberFor: MolGPSDataEvents named: eventsSymbol ]. 
+						searchEventsSubscriberFor: MolGeoPosEquipmentEvents named: eventsSymbol ]. 
 	^eventsSubscriber
 ]
 
 { #category : #'component accessing' }
-PyMolMap >> getMolGPSDataServicesProvider [
+MolGeoPosMapReicever >> getMolGeoPosEquipmentServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
-	itf := MolGPSDataServices.
+	itf := MolGeoPosEquipmentServices.
 	servicesSymbol := self servicesProviders at: itf ifAbsent: [nil].
 	(servicesSymbol isNil or:[servicesSymbol isSymbol not]) ifTrue: [ ^ MolNotFoundServicesProvider new interface: itf name: nil ].
 
-	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolGPSDataServices named: servicesSymbol.
+	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolGeoPosEquipmentServices named: servicesSymbol.
 	^servicesProvider
 ]
 
 { #category : #'life cycle' }
-PyMolMap >> initialize [
+MolGeoPosMapReicever >> initialize [
 
 	super initialize.
 	self buildElements.

@@ -1,5 +1,5 @@
 Class {
-	#name : #PyMolSwitch,
+	#name : #MolSwitchButtonElement,
 	#superclass : #BlElement,
 	#instVars : [
 		'indicator',
@@ -7,11 +7,11 @@ Class {
 		'whenOffDo',
 		'whenOnDo'
 	],
-	#category : #'Molecule-Examples-Pyramid-Incubator'
+	#category : #'Molecule-Examples-GeoPosMap-Incubator'
 }
 
 { #category : #'pyramid-serialized-bloc' }
-PyMolSwitch class >> pystonSpec [
+MolSwitchButtonElement class >> pystonSpec [
 	"This class has been generated using Pyramid.
 
 	By: YannLEGOFF
@@ -326,15 +326,15 @@ PyMolSwitch class >> pystonSpec [
 ]'
 ]
 
-{ #category : #'as yet unclassified' }
-PyMolSwitch >> buildElements [
+{ #category : #initialization }
+MolSwitchButtonElement >> buildElements [
 
 	self hasChildren ifTrue: [ self removeChildren ].
 	self addChildren: self class pystonSpec materializeAsBlElement
 ]
 
 { #category : #initialization }
-PyMolSwitch >> initialize [
+MolSwitchButtonElement >> initialize [
 
 	super initialize.
 	self buildElements.
@@ -346,13 +346,13 @@ PyMolSwitch >> initialize [
 ]
 
 { #category : #accessing }
-PyMolSwitch >> state [
+MolSwitchButtonElement >> state [
 
 	^ state
 ]
 
 { #category : #accessing }
-PyMolSwitch >> state: aBoolean [
+MolSwitchButtonElement >> state: aBoolean [
 
 	state = aBoolean ifTrue: [ ^ self ].
 	state := aBoolean.
@@ -372,25 +372,25 @@ PyMolSwitch >> state: aBoolean [
 ]
 
 { #category : #accessing }
-PyMolSwitch >> whenOffDo [
+MolSwitchButtonElement >> whenOffDo [
 
 	^ whenOffDo
 ]
 
 { #category : #accessing }
-PyMolSwitch >> whenOffDo: aBlock [
+MolSwitchButtonElement >> whenOffDo: aBlock [
 
 	whenOffDo:= aBlock
 ]
 
 { #category : #accessing }
-PyMolSwitch >> whenOnDo [
+MolSwitchButtonElement >> whenOnDo [
 
 	^ whenOnDo
 ]
 
 { #category : #accessing }
-PyMolSwitch >> whenOnDo: aBlock [
+MolSwitchButtonElement >> whenOnDo: aBlock [
 
 	whenOnDo := aBlock
 ]
