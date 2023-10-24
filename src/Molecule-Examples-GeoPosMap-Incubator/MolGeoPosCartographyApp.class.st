@@ -1,15 +1,15 @@
 Class {
-	#name : #PyMolApp,
+	#name : #MolGeoPosCartographyApp,
 	#superclass : #BlElement,
 	#instVars : [
 		'map',
 		'switch'
 	],
-	#category : #'Molecule-Examples-Pyramid-Incubator'
+	#category : #'Molecule-Examples-GeoPosMap-Incubator'
 }
 
 { #category : #'instance creation' }
-PyMolApp class >> open [
+MolGeoPosCartographyApp class >> open [
 
 	<script>
 	| element |
@@ -18,24 +18,26 @@ PyMolApp class >> open [
 ]
 
 { #category : #initialization }
-PyMolApp >> initialize [
+MolGeoPosCartographyApp >> initialize [
 
 	| rope1 rope2 label1 label2 |
 	super initialize.
 	self size: 400 @ 470.
 
-	switch := PyMolSwitch new.
+	switch := MolSwitchButtonElement new.
 	switch position: 152.5 @ 420.
+	
 	switch whenOffDo: [
 		MolGNSSGPS stop.
 		MolGNSSGPSInaccurate start ].
+	
 	switch whenOnDo: [
 		MolGNSSGPSInaccurate stop.
 		MolGNSSGPS start ].
 
 	MolGNSSGPSInaccurate start.
-	PyMolMap start.
-	map := MolUtils instanceOf: PyMolMap.
+	MolGeoPosMapReicever start.
+	map := MolUtils instanceOf: MolGeoPosMapReicever.
 
 	rope1 := 'Accurate GPS' asRopedText.
 	rope1 attribute: (BlFontSizeAttribute size: 20).
@@ -54,7 +56,7 @@ PyMolApp >> initialize [
 ]
 
 { #category : #initialization }
-PyMolApp >> open [
+MolGeoPosCartographyApp >> open [
 
 	| space |
 	space := BlSpace new
@@ -68,8 +70,8 @@ PyMolApp >> open [
 		do: [ :evt | MolComponentManager cleanUp ].
 	space when: BlKeyDownEvent do: [ :evt |
 		evt key = KeyboardKey F12 ifTrue: [
-			(self canPerform: #pyramidOpenInEditor) ifTrue: [
-				self pyramidOpenInEditor ] ] ].
+			(self canPerform: #editWithPyramid) ifTrue: [
+				self editWithPyramid ] ] ].
 
 	space enqueueTask: (BlTaskAction new
 			 action: [ space center ];

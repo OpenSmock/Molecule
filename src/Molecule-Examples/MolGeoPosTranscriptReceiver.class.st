@@ -1,25 +1,25 @@
 Class {
-	#name : #MolGeoPosMapImpl,
+	#name : #MolGeoPosTranscriptReceiver,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolGeoPosMap + MolGeoPosEquipmentEvents',
-	#classTraits : 'MolGeoPosMap classTrait + MolGeoPosEquipmentEvents classTrait',
+	#traits : 'MolGeoPosReceiverType + MolGeoPosEquipmentEvents',
+	#classTraits : 'MolGeoPosReceiverType classTrait + MolGeoPosEquipmentEvents classTrait',
 	#category : #'Molecule-Examples-Geographical Position Example'
 }
 
 { #category : #'component life cycle' }
-MolGeoPosMapImpl >> componentActivate [
+MolGeoPosTranscriptReceiver >> componentActivate [
 	
 	self getMolGeoPosEquipmentEventsSubscriber subscribe: self.
 ]
 
 { #category : #'component life cycle' }
-MolGeoPosMapImpl >> componentPassivate [
+MolGeoPosTranscriptReceiver >> componentPassivate [
 	
 	self getMolGeoPosEquipmentEventsSubscriber unsubscribe: self.
 ]
 
 { #category : #events }
-MolGeoPosMapImpl >> currentPositionChanged: aGeoPosition [
+MolGeoPosTranscriptReceiver >> currentPositionChanged: aGeoPosition [
 
 	"Display a circle on the map view at the current position"
 
@@ -30,7 +30,7 @@ MolGeoPosMapImpl >> currentPositionChanged: aGeoPosition [
 ]
 
 { #category : #'component accessing' }
-MolGeoPosMapImpl >> getMolGeoPosEquipmentEventsSubscriber [
+MolGeoPosTranscriptReceiver >> getMolGeoPosEquipmentEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolGeoPosEquipmentEvents.
 	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
@@ -42,7 +42,7 @@ MolGeoPosMapImpl >> getMolGeoPosEquipmentEventsSubscriber [
 ]
 
 { #category : #'component accessing' }
-MolGeoPosMapImpl >> getMolGeoPosEquipmentServicesProvider [
+MolGeoPosTranscriptReceiver >> getMolGeoPosEquipmentServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
 	itf := MolGeoPosEquipmentServices.
@@ -54,7 +54,7 @@ MolGeoPosMapImpl >> getMolGeoPosEquipmentServicesProvider [
 ]
 
 { #category : #'map updating' }
-MolGeoPosMapImpl >> updatePositionCircleOnMap: aGeoPosition radius: radius [
+MolGeoPosTranscriptReceiver >> updatePositionCircleOnMap: aGeoPosition radius: radius [
 	"Update geographic position of the received GPS position circle with a precision radius"
 	
 	| point text |

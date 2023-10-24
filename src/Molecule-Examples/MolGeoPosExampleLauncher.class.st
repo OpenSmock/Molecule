@@ -35,8 +35,8 @@ MolGeoPosExampleLauncher class >> start [
 	"Start with GPS equipment by default"
 	MolGNSSGPS start.
 
-	"Start the geographical position receiver component: a Map"
-	MolGeoPosMapImpl start
+	"Start the geographical position receiver component: a component which is display the received position in a Transcript"
+	MolGeoPosTranscriptReceiver start
 ]
 
 { #category : #'start-stop' }

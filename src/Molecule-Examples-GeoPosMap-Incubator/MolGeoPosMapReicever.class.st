@@ -1,18 +1,18 @@
 Class {
-	#name : #PyMolMap,
+	#name : #MolGeoPosMapReicever,
 	#superclass : #BlElement,
-	#traits : 'MolGeoPosMap + MolGeoPosEquipmentEvents + MolComponentImpl',
-	#classTraits : 'MolGeoPosMap classTrait + MolGeoPosEquipmentEvents classTrait + MolComponentImpl classTrait',
+	#traits : 'MolGeoPosReceiverType + MolGeoPosEquipmentEvents + MolComponentImpl',
+	#classTraits : 'MolGeoPosReceiverType classTrait + MolGeoPosEquipmentEvents classTrait + MolComponentImpl classTrait',
 	#instVars : [
 		'pointerV',
 		'pointerH',
 		'pointer'
 	],
-	#category : #'Molecule-Examples-Pyramid-Incubator'
+	#category : #'Molecule-Examples-GeoPosMap-Incubator'
 }
 
 { #category : #'pyramid-serialized-bloc' }
-PyMolMap class >> pystonSpec [
+MolGeoPosMapReicever class >> pystonSpec [
 	"This class has been generated using Pyramid.
 
 	By: YannLEGOFF
@@ -365,27 +365,27 @@ PyMolMap class >> pystonSpec [
 ]
 
 { #category : #initialization }
-PyMolMap >> buildElements [
+MolGeoPosMapReicever >> buildElements [
 
 	self hasChildren ifTrue: [ self removeChildren ].
 	self addChildren: self class pystonSpec materializeAsBlElement
 ]
 
 { #category : #'life cycle' }
-PyMolMap >> componentActivate [
+MolGeoPosMapReicever >> componentActivate [
 
 	self getMolGeoPosEquipmentEventsSubscriber subscribe: self
 ]
 
 { #category : #'life cycle' }
-PyMolMap >> componentPassivate [
+MolGeoPosMapReicever >> componentPassivate [
 
 	self space ifNotNil: [ :s | s close ].
 	self getMolGeoPosEquipmentEventsSubscriber unsubscribe: self
 ]
 
 { #category : #events }
-PyMolMap >> currentPositionChanged: aGeoPosition [
+MolGeoPosMapReicever >> currentPositionChanged: aGeoPosition [
 
 	| adjustedPosition radius |
 	adjustedPosition := aGeoPosition * 50 asPoint + 150 asPoint.
@@ -399,7 +399,7 @@ PyMolMap >> currentPositionChanged: aGeoPosition [
 ]
 
 { #category : #'component accessing' }
-PyMolMap >> getMolGeoPosEquipmentEventsSubscriber [
+MolGeoPosMapReicever >> getMolGeoPosEquipmentEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolGeoPosEquipmentEvents.
 	eventsSymbol := self eventsSubscribers at: itf ifAbsent: [^MolNotFoundEventsSubscriber new interface: itf name: nil].
@@ -411,7 +411,7 @@ PyMolMap >> getMolGeoPosEquipmentEventsSubscriber [
 ]
 
 { #category : #'component accessing' }
-PyMolMap >> getMolGeoPosEquipmentServicesProvider [
+MolGeoPosMapReicever >> getMolGeoPosEquipmentServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
 	itf := MolGeoPosEquipmentServices.
@@ -423,7 +423,7 @@ PyMolMap >> getMolGeoPosEquipmentServicesProvider [
 ]
 
 { #category : #'life cycle' }
-PyMolMap >> initialize [
+MolGeoPosMapReicever >> initialize [
 
 	super initialize.
 	self buildElements.
