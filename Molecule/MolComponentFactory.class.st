@@ -575,26 +575,33 @@ MolComponentFactory >> dirtyComponents [
 MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollection in: aComponent suffix: suffix [
 	| selector sourceCode sourceMethod method |
 	
-	aCollection copy do: [ :trait |
+	aCollection copy do: [ :e | | trait |
 		
-		selector := ('get' , trait printString , suffix) asSymbol.
-		sourceCode := self getSourceCodeFor: aSymbol trait: trait selector: selector.
-		(aComponent allSelectors includes: selector) ifFalse: [ 
-			aComponent compile: sourceCode contents classified: self class protocolForComponentAccess
-		] ifTrue: [ 
-			"if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
-			"the selector must not be a parent"
-			(aComponent selectors includes: selector) ifTrue: [ 
-				method := aComponent >> selector.
-				sourceMethod := method sourceCode.
-				sourceMethod ifNotNil: [ 
-					sourceMethod ~= sourceCode contents ifTrue: [ 
-					"rewrite the method"
-						aComponent compile: sourceCode contents classified: self class protocolForComponentAccess 
+		"e can be another thing that a Trait, need to check nature of e before generate"
+		( e notNil and:[ e isTrait and:[( e isComponentServices or:[ e isComponentParameters or:[ e isComponentEvents ]])]]) ifTrue:[
+			
+			trait := e.
+		
+			selector := ('get' , trait printString , suffix) asSymbol.
+			sourceCode := self getSourceCodeFor: aSymbol trait: trait selector: selector.
+			(aComponent allSelectors includes: selector) ifFalse: [ 
+				aComponent compile: sourceCode contents classified: self class protocolForComponentAccess
+			] ifTrue: [ 
+				"if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
+				"the selector must not be a parent"
+				(aComponent selectors includes: selector) ifTrue: [ 
+					method := aComponent >> selector.
+					sourceMethod := method sourceCode.
+					sourceMethod ifNotNil: [ 
+						sourceMethod ~= sourceCode contents ifTrue: [ 
+						"rewrite the method"
+							aComponent compile: sourceCode contents classified: self class protocolForComponentAccess 
+						]. 
 					]. 
 				]. 
 			]. 
-		]. 
+		
+		].
 	]
 ]
 
