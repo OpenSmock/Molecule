@@ -114,7 +114,7 @@ Starting a component is equivalent to:
 
 ```smalltalk
 MyComponentClass deploy.
-component := MyComponentClass instanciate.
+component := MyComponentClass instantiate.
 MyComponentClass activate.
 ```
 
@@ -122,7 +122,7 @@ With a name:
 
 ```smalltalk
 MyComponentClass deploy.
-componentA := MyComponentClass instanciate: #compA.
+componentA := MyComponentClass instantiate: #compA.
 MyComponentClass activate: #compA.
 ```
 
