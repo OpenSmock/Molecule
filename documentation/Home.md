@@ -78,5 +78,5 @@ Let us illustrate the use of these states with the example of a GUI window handl
 ## Videos
 [Molecule: live prototyping with component-oriented programming](https://www.youtube.com/watch?v=Zfo3VkH2bVw) \
 [15 years of reuse experience in evolutionary prototyping for the defense industry](https://www.youtube.com/watch?v=Zfo3VkH2bVw) \
-
+## Specifications
 [Learn more about CCM specifications](https://www.omg.org/spec/CCM/About-CCM/)
