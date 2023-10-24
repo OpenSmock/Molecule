@@ -51,6 +51,10 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 		ifAbsent: [ ^ComponentAlreadyActivatedError signal: 'Component is already activated.' ].
 		
 	component componentConnector activateComponent.
+	
+	"Manage connexion between components"
+	MolComponentManager default locatorServices resolveWaitingSubscriptions: component.
+	
 	component componentActivate.
 	component triggerEvent: #activateComponent with: component.
 	
@@ -68,11 +72,63 @@ MolHomeServices >> addDeployedComponent: aComponentClass [
 ]
 
 { #category : #private }
-MolHomeServices >> checkInstanciationOfComponent: aComponentClass named: aComponentName [
+MolHomeServices >> checkInstanciationOfComponent: aComponentClass named: aComponentName [ [
 
-	self deprecated: 'Use checkInstantiationOfComponent: named:'
-		transformWith: '`@receiver checkInstanciationOfComponent: `@aComponentClass named: `@aComponentName' -> '`@receiver checkInstantiationOfComponent: `@aComponentClass named: `@aComponentName'.
-	^ self checkInstantiationOfComponent: aComponentClass named: aComponentName
+	| deployed component overridedTypes |
+	aComponentName ifNil: [ 
+		^ WrongComponentNameError new messageText:
+			  'Can not instanciate a component without name' ].
+		
+	aComponentName isSymbol ifFalse: [
+		^ WrongComponentNameError new messageText:
+			  'Can not instanciate a component with a name wish is not a symbol' ].
+		
+	deployed := self deployedComponents at: aComponentClass ifAbsent: [ 
+		        ^ ComponentNotDeployedError new messageText:
+			          'Can not instanciate a non deployed component' ].
+	deployed at: aComponentName ifPresent: [ :e | 
+		e ifNotNil: [ 
+			^ ComponentAlreadyExistsError new messageText:
+				  'Can not instanciate a component with the same name of another component, please change the name of the component' ] ].
+		
+	component := MolComponentManager default locatorServices
+		        searchComponentTypeImplementorFor: aComponentClass componentType
+		        named: aComponentName.
+	component ifNotNil: [ 
+		^ ComponentAlreadyExistsError new messageText:
+			  'Can not instanciate a component with the same type and name of another component, please change the name of the component' ].
+		
+	aComponentClass componentType allProvidedServices do: [ :e | 
+		(MolComponentManager default locatorServices
+			 searchServicesProviderFor: e
+			 named: aComponentName) isNotFoundServices ifFalse: [ 
+			^ ComponentProvidedServicesAlreadyExistsError new messageText:
+				  'Can not instanciate a component with the same services and name of another component, please change the name of the component' ] ].
+		
+	aComponentClass componentType allProvidedParameters do: [ :e | 
+		(MolComponentManager default locatorServices
+			 searchParametersProviderFor: e
+			 named: aComponentName) isNotFoundParameters ifFalse: [ 
+			^ ComponentProvidedParametersAlreadyExistsError new messageText:
+				  'Can not instanciate a component with the same parameters and name of another component, please change the name of the component' ] ].
+		
+	aComponentClass isOverrideComponentType ifTrue: [ 
+		overridedTypes := aComponentClass overridedComponentTypes.
+		overridedTypes do: [ :type | 
+			type allProvidedServices do: [ :e | 
+				(MolComponentManager default locatorServices
+					 searchServicesProviderFor: e
+					 named: aComponentName) isNotFoundServices ifFalse: [ 
+					^ ComponentProvidedServicesAlreadyExistsError new messageText:
+						  '(Inheritance problem) Can not instanciate a component with the same services and name of another component, please change the name of the component' ] ].
+			type allProvidedParameters do: [ :e | 
+				(MolComponentManager default locatorServices
+					 searchParametersProviderFor: e
+					 named: aComponentName) isNotFoundParameters ifFalse: [ 
+					^ ComponentProvidedServicesAlreadyExistsError new messageText:
+						  '(Inheritance problem) Can not instanciate a component with the same parameters and name of another component, please change the name of the component' ] ] ] ].
+	^ nil
+]
 ]
 
 { #category : #private }
