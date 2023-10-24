@@ -42,7 +42,7 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 	"get to be activated component instance"
 	component := self instanceOf: aComponentClass named: aName.
 	component ifNil:[
-		^ComponentNotFoundError signal: 'Can not activate a non instanciated component'.
+		^ComponentNotFoundError signal: 'Can not activate a non instantiated component'.
 	].
 	
 	"remove from waiting activation list"
@@ -262,7 +262,7 @@ MolHomeServices >> passivateComponent: aComponentClass named: aName [
 	"get to be passivated component instance"
 	component := self instanceOf: aComponentClass named: aName.
 	component ifNil: [
-		^ComponentNotFoundError signal: 'Can not passivate a non instanciated component'.
+		^ComponentNotFoundError signal: 'Can not passivate a non instantiated component'.
 	].
 
 	(self isWaitingForActivation: aComponentClass named: aName) ifTrue:[
@@ -311,7 +311,7 @@ MolHomeServices >> removeComponent: aComponentClass named: aName [
 	
 	"Get to be removed component instance"
 	removedComponent := self instanceOf: aComponentClass named: aName.
-	removedComponent ifNil:[ ComponentNotFoundError signal: 'Can not remove a non instanciated component'. ^nil ].
+	removedComponent ifNil:[ ComponentNotFoundError signal: 'Can not remove a non instantiated component'. ^nil ].
 	
 	"Passivation of the component if activated"
 	(self isWaitingForActivation: aComponentClass named: aName) ifFalse: [ self passivateComponent: aComponentClass named: aName ].
