@@ -23,7 +23,7 @@ Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here
 This section briefly presents what is a Molecule component and how it's dynamically managed.
 
 # A Component and his Contract
-![Molecule component](https://user-images.githubusercontent.com/49183340/162572734-774a7065-9772-433e-8f0a-9dc538978c92.png)
+![Molecule component](https://user-images.githubusercontent.com/49183340/162572734-774a7065-9772-433e-8f0a-9dc538978c92.png) \
 Similarly to the LCCM, a component’s business contract is exposed through its component Type. The Type specifies what a component has to offer to other components (namely, provided services and produced events) and what that component requires from other components (namely, used services and consumed events).
 ![Component application](https://user-images.githubusercontent.com/49183340/162572946-8cd11257-65bb-4ed3-a13a-0fe6dd6f83d1.png)
 
@@ -33,7 +33,7 @@ Thus, the main role of the Type is to implement the services that the component 
 A Molecule component definition is based on Traits. The Type, as well as the services, the events and the parameters are all defined as Traits. A Molecule component is an instance of a standard class which uses Molecule traits.
 
 # Two ways to implement a Component
-![Two ways to implement a component](https://user-images.githubusercontent.com/49183340/162573288-4d7fc513-5d98-420e-a309-e98f1e42fc6d.png)
+![Two ways to implement a component](https://user-images.githubusercontent.com/49183340/162573288-4d7fc513-5d98-420e-a309-e98f1e42fc6d.png) \
 In Molecule, we define the elements of a component's contract (services, events, parameters) as a set of Traits. A component Type aggregates theses traits and is itself defined as a Trait. Molecule provides a dedicated Trait `MolComponentImpl`, which implements cross-cutting behavior shared by all components (e.g., components' life-cycle management). Implementing a component consists in defining a class that uses the `MolComponentImpl` Trait to obtain component shared behavior and uses a Type Trait (`MolComponentType`) implementing the component's business behavior.
 ![Component application and other](https://user-images.githubusercontent.com/49183340/162573410-9543b74f-af2f-4ad9-a156-aa4759916773.png)
 
@@ -44,7 +44,7 @@ The direct benefit of this approach is that it's possible for any existing class
 All components are managed by the ComponentManager object. It maintains the list of component instances currently alive in the system. It's currently handled as a singleton. The ComponentManager class implements an API to instantiate and to remove each component, to associate them, to connect events, etc. This API is used to manage each component's life-cycle programmatically.
 
 # Components' life-cycle and states
-The activity of a component depends on contextual constraints such as the availability of a resource, the physical state of hardware elements, etc. To manage consumed resources accordingly, the life-cycle of a component has four possible states: Initialized, Activated, Passivated and Removed.
+The activity of a component depends on contextual constraints such as the availability of a resource, the physical state of hardware elements, etc. To manage consumed resources accordingly, the life-cycle of a component has four possible states: Initialized, Activated, Passivated and Removed. \
 ![Components lifecycle and states](https://user-images.githubusercontent.com/49183340/162570154-b39fc041-03f3-40d2-ad3f-30aac027a4b0.png)
 
 After its initialization, a component can switch from an Activated state to a Passivated state and conversely. When the life-cycle of a component is over, then it switches to the Removed state.
