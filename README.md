@@ -12,6 +12,12 @@ His Component architecture approach provides an adapted structuration to User In
 Molecule provides a way to describe a software application as a component group. Components communicate by use of services, parameters and event propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
 Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
 
+## Documentation
+
+Molecule documentation is available here: [Molecule Documentation Home](https://github.com/OpenSmock/Molecule/blob/main/documentation/Home.md)
+
+The documentation includes some tutorials, pattern description and examples. 
+
 ## How to get Molecule
 
 You can load the latest development version of Molecule or load a specific stable release with a tag, for example 1.2.10.
