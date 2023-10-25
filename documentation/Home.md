@@ -62,7 +62,7 @@ The terminal state of a component is the Removed state. When a component switche
 
 Let us illustrate the use of these states with the example of a GUI window handled as a component. First, the window is instantiated by the component. Then the component state switches to Initialized. When the window is displayed on the desktop, the component’s state switches to Activated. When the window is reduced and its icon is stored into a task-bar, then the component switches to the Passivated state. As the window is only reduced, it can be re-opened very quickly. Finally, when the user closes the window, the component is first switched to Passivated, then to the Removed state.
 
-# [Tutorials section
+# Tutorial section
 [Connecting two components](https://github.com/OpenSmock/Molecule/blob/main/documentation/Connecting%20two%20components.md) \
 [Create a new Molecule Component](https://github.com/OpenSmock/Molecule/blob/main/documentation/Create%20a%20new%20Molecule%20component.md) \
 [Creating Events](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Events.md) \
@@ -73,10 +73,10 @@ Let us illustrate the use of these states with the example of a GUI window handl
 
 # External links
 ## Publications
-[Molecule: live prototyping with component-oriented programming](https://inria.hal.science/hal-02966704/) \
-[15 years of reuse experience in evolutionary prototyping for the defense industry](https://inria.hal.science/hal-02966691/preview/ICSR_15years.pdf) \
+[Molecule: live prototyping with component-oriented programming](https://inria.hal.science/hal-02966704/)
+[15 years of reuse experience in evolutionary prototyping for the defense industry](https://inria.hal.science/hal-02966691/preview/ICSR_15years.pdf)
 ## Videos
-[Molecule: live prototyping with component-oriented programming](https://www.youtube.com/watch?v=Zfo3VkH2bVw) \
-[15 years of reuse experience in evolutionary prototyping for the defense industry](https://www.youtube.com/watch?v=Zfo3VkH2bVw) \
+[Molecule: live prototyping with component-oriented programming](https://www.youtube.com/watch?v=Zfo3VkH2bVw)
+[15 years of reuse experience in evolutionary prototyping for the defense industry](https://www.youtube.com/watch?v=Zfo3VkH2bVw)
 ## Specifications
 [Learn more about CCM specifications](https://www.omg.org/spec/CCM/About-CCM/)
