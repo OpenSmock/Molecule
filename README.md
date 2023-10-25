@@ -12,6 +12,12 @@ His Component architecture approach provides an adapted structuration to User In
 Molecule provides a way to describe a software application as a component group. Components communicate by use of services, parameters and event propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
 Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
 
+## Documentation
+
+Molecule documentation is available here: [Molecule Documentation Home](https://github.com/OpenSmock/Molecule/blob/main/documentation/Home.md)
+
+The documentation includes some tutorials, pattern description and examples. 
+
 ## How to get Molecule
 
 You can load the latest development version of Molecule or load a specific stable release with a tag, for example 1.2.10.
@@ -114,7 +120,7 @@ Starting a component is equivalent to:
 
 ```smalltalk
 MyComponentClass deploy.
-component := MyComponentClass instanciate.
+component := MyComponentClass instantiate.
 MyComponentClass activate.
 ```
 
@@ -122,7 +128,7 @@ With a name:
 
 ```smalltalk
 MyComponentClass deploy.
-componentA := MyComponentClass instanciate: #compA.
+componentA := MyComponentClass instantiate: #compA.
 MyComponentClass activate: #compA.
 ```
 
@@ -157,18 +163,33 @@ This system uses 4 components: a server time sends global hour to a clock. The c
 
 This system provides a global example of the use of components. 
 
-#### GPS example
+#### Geographical Position example
+
+Examples are further detailed in the comment of MolGeoPosExampleLauncher.
+
+1 - Start the demo: start a GPS equipment and a Map receiver (displaying result on Transcript)
 
 ```smalltalk
-MolGPSExampleLauncher start.
+MolGeoPosExampleLauncher start.
 ```
-Examples are further detailed in the comment of MolGPSExampleLauncher.
 
-First we program a component application that connects to a Global Positioning System (GPS) hardware and displays the GPS data on a view map (just fictitious).
-The GPS data and view map are implemented as Molecule components.
-In a second way, we reuse an existing non-component class in our Molecule application (MolGPSHardware).
-To do so, we augment this class with component behavior.
+2 - Choose between available geographical position equipments:
 
+Change the started component of MolGeoPosEquipmentType Type on the fly.
+
+```smalltalk
+MolGeoPosExampleLauncher swapGPSInaccurate.
+MolGeoPosExampleLauncher swapGSM.
+MolGeoPosExampleLauncher swapGalileo.
+MolGeoPosExampleLauncher swapWiFi.
+MolGeoPosExampleLauncher swapGPS.
+```
+
+3 - To stop the demo:
+
+```smalltalk
+MolGeoPosExampleLauncher stop.
+```
 
 ## Incubator packages: our UI tools experimentation zone
 
