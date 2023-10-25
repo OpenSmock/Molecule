@@ -67,3 +67,9 @@ This will be useful for [Producers](https://github.com/OpenSmock/Molecule/blob/m
 **add img**
 
 # Start the two components
+
+```smalltalk
+MyComponent>>methodA: anObject
+
+  ^ self
+```
