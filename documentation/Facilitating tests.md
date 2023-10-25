@@ -1,4 +1,5 @@
 To create quick tests for your components, you can create a package named [yourPackageName]-Examples or [yourPackageName]-Tests, then create an Object subclass named [yourPackageName]Examples, then display the class side and creating methods to have different test cases.
+
 One practical thing that you can do is putting a `<script>` tag at the start of your methods. This will create a small icon next to your method in order to launch it without the use of a Do It in a Playground.
 **img icon**
 
