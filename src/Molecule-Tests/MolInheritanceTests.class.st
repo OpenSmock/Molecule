@@ -9,25 +9,25 @@ Class {
 }
 
 { #category : #running }
-MolInheritanceTests >> setUp [ 
+MolInheritanceTests >> setUp [
+
 	| manager |
 	MolComponentManager cleanUp.
 	manager := MolComponentManager default.
-	
+
 	"Deploy components"
 	manager deploymentServices deployComponentImplementation: MolCompleteComponentImpl.
 	manager deploymentServices deployComponentImplementation: MolCompleteComponentChildImpl.
-	
-	"Instanciate componenets"
-	motherComponent := manager homeServices instanciateComponent: MolCompleteComponentImpl.
-	childComponent := manager homeServices instanciateComponent: MolCompleteComponentChildImpl named: #compB.
-	
-	motherComponent forServices: MolUsedServices useProvider: #compB.
-	
-	"Activate components"
-	 manager homeServices activateComponent: MolCompleteComponentImpl.
-	 manager homeServices activateComponent: MolCompleteComponentChildImpl named: #compB.
 
+	"Instanciate componenets"
+	motherComponent := manager homeServices instantiateComponent: MolCompleteComponentImpl.
+	childComponent := manager homeServices instantiateComponent: MolCompleteComponentChildImpl named: #compB.
+
+	motherComponent forServices: MolUsedServices useProvider: #compB.
+
+	"Activate components"
+	manager homeServices activateComponent: MolCompleteComponentImpl.
+	manager homeServices activateComponent: MolCompleteComponentChildImpl named: #compB
 ]
 
 { #category : #running }

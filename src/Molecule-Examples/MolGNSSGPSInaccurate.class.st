@@ -1,36 +1,36 @@
 Class {
-	#name : #MolGPSHardware,
+	#name : #MolGNSSGPSInaccurate,
 	#superclass : #Object,
-	#traits : 'MolComponentImpl + MolGPSData + MolGPSDataServices',
-	#classTraits : 'MolComponentImpl classTrait + MolGPSData classTrait + MolGPSDataServices classTrait',
+	#traits : 'MolComponentImpl + MolGeoPosEquipmentType + MolGeoPosEquipmentServices',
+	#classTraits : 'MolComponentImpl classTrait + MolGeoPosEquipmentType classTrait + MolGeoPosEquipmentServices classTrait',
 	#instVars : [
 		'sendCurrentPositionThread'
 	],
-	#category : #'Molecule-Examples-GPS Example'
+	#category : #'Molecule-Examples-Geographical Position Example'
 }
 
 { #category : #'life cycle' }
-MolGPSHardware >> componentActivate [
+MolGNSSGPSInaccurate >> componentActivate [
 	"Start a thread to simulate sending of a fixed geo position each 2 seconds"
 
 	sendCurrentPositionThread := [
 	                             [ true ] whileTrue: [
 		                             (Delay forSeconds: 1) wait.
-		                             self getMolGPSDataEventsNotifier
+		                             self getMolGeoPosEquipmentEventsNotifier
 			                             currentPositionChanged: 1 @ 1 ] ]
 		                             forkAt:
 		                             Processor userBackgroundPriority
 ]
 
 { #category : #'life cycle' }
-MolGPSHardware >> componentPassivate [ 
+MolGNSSGPSInaccurate >> componentPassivate [ 
 	
 	sendCurrentPositionThread ifNotNil:[ :e | e terminate ].
 	sendCurrentPositionThread := nil.
 ]
 
 { #category : #services }
-MolGPSHardware >> getAccuracyRadiusInMeters [
+MolGNSSGPSInaccurate >> getAccuracyRadiusInMeters [
 	"Get and return the accuracy of the GPS depending quality of signal and quantity of connected satellites"
 	
 	"convert precision in feet to meters"
@@ -38,12 +38,12 @@ MolGPSHardware >> getAccuracyRadiusInMeters [
 ]
 
 { #category : #'component accessing' }
-MolGPSHardware >> getMolGPSDataEventsNotifier [
-	^self eventsNotifiers at: MolGPSDataEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolGPSDataEvents name: nil].
+MolGNSSGPSInaccurate >> getMolGeoPosEquipmentEventsNotifier [
+	^self eventsNotifiers at: MolGeoPosEquipmentEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolGeoPosEquipmentEvents name: nil].
 ]
 
 { #category : #'GPS hardware existing API' }
-MolGPSHardware >> precision [
+MolGNSSGPSInaccurate >> precision [
 
 	"Return GPS hardware precision (in feet)"
 
