@@ -15,6 +15,7 @@ In the case of multiple events, you just need to separate the different Event Tr
 This will in return add other methods in the implementations of a Type, namely every event in the added Event Trait(s).
 It's here that the event's implementation is made, what you want it to do whenever it's received.
 The Event Trait added in `consumedComponentEvents` will in return add a `get[componentName]EventsSubscriber` method which will be used to subscribe to the events emitted from the Trait.
+
 If you're not getting all the methods you should have, you can first click on the **Library** tab of Pharo, then select **Molecule** -> **Debug and Tools**, then click on **Define All Components**. If you're still not getting what you expected, you will need to verify what is put in your component's contract (no empty instance variable for example). Methods related to the Events as well as `get[componentName]EventsSubscriber` are automatically generated, there is no need to manually type them.
 
 For Events in particular, you will need to subscribe to the class specified in `consumedComponentEvents`. 
