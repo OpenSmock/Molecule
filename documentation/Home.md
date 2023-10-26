@@ -1,24 +1,5 @@
 Welcome to the Molecule wiki!
 
-# Introduction
-Molecule is a component oriented framework for Pharo. His Component architecture approach provides an adapted structuration to graphic user interface (GUI) or another software application which need Component features.
-
-Molecule provides a way to describe a software application as a component group.
-
-Molecule is a Light-weight implementation of the Corba Component Model (LCCM). It allows for the specification of components as in the Corba standard: provided and used services, produced and consumed events. However, Molecule components are only specified and instantiated locally. They are not exchanged nor shared through a standard object bus.
-
-Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
-
-# Installation
-Pharo 8, 9, 10 and 11 :
-```smalltalk
-Metacello new
-   baseline: 'Molecule';
-   repository: 'github://OpenSmock/Molecule';
-   load.
-```
-Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
-
 # Principles
 This section briefly presents what is a Molecule component and how it's dynamically managed.
 
