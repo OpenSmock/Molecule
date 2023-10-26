@@ -1,6 +1,5 @@
 Welcome to the Molecule wiki!
 
-# Principles
 [Principles](https://github.com/Eliott-Guevel/Molecule-various-fixes/blob/documentation/documentation/Principles.md)
 
 # Tutorials
