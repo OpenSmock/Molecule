@@ -1,12 +1,12 @@
 # Create a Component
 In this tutorial, we will create a first Component that produces an Event and provides a Service (a GPS emitting geographical data). \
-Then we will create a second Component that uses the provided Service and consumes the produced Event (a map acting as a displayer of the data).
+Then we will create a second Component that uses the provided Service and consumes the produced Event (a Map acting as a display for the data).
 The complete GPS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works.
 
 # STATIC PART: declaration
 
 ## Define services and events
-Code spaces beginning by **Trait** need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
+Code spaces beginning by `Trait` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
 
 First, we will create a Service Trait¹ 
 with a Service inside it.
@@ -21,7 +21,7 @@ Trait named: #MolGPSDataServices
 Classes using a Trait automatically benefit from these methods, and must define that Trait’s requirements. \
 A Trait can be composed of multiple other traits.*
 
-Then, we create an Event Trait with an Event inside it.
+Then, we create an Event interface with an Trait inside it.
 ```smalltalk
 Trait named: #MolGPSDataEvents
 	uses: MolComponentEvents
@@ -29,7 +29,7 @@ Trait named: #MolGPSDataEvents
 	package: 'MoleculeTutorial'
 ```
 
-Next, we need to add the Service and Event Traits as suppliers (of a Service and an Event respectively).
+Next, we need to add the Service and Event interfaces as suppliers (of a Service and an Event respectively).
 ```smalltalk
  MolGPSDataServices>>getAccuracyRadiusInMeters
 	"Gets and return the accuracy of the GPS depending on quality of signal and quantity of connected satellites"
@@ -76,7 +76,6 @@ Trait named: #MolGPSMap
 ```
 
 ## Create a Component implementation of a Type
-
 There are two ways to create a new Molecule Component :
 - Create a new Component from scratch : write a new Class inheriting from the Component hierarchy
 - Re-using an existing Class : augmenting that class with Component behavior
@@ -91,11 +90,67 @@ With Molecule, we reuse any existing Class by augmenting that Class with Compone
 
 We must use the Molecule Component interface `MolComponentImpl`, which is a Trait, to the existing Class. Any class that implements this interface is usable as a Molecule component. Then, we assign the type Component to the class as a standard Molecule Component.
 
-## Create the component implementation for contract 1
+## Define the contract for MolGPSData
+For this tutorial, the GPS needs to send its geographical data to the Map.
+In order to do that, its contract needs to be redefined to indicate which Services and Events are produced and provided by it.
+Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser**, accessible through the **Browser** tab of Pharo, click on the radio button located left to the Class side text, which is located in the middle of the **System Browser** window).
+The needed methods for the contract already exist (since the Components' Type use `MolComponentType`), they just need to be overridden.
+A Component Type can provide multiple Services and Events (separated by a comma), there's just one each for this tutorial (each one being put between the curly brackets of the methods).
 
+Since the `MolGPSData` Component Type needs to inform the Map when its position is changed, it produces the `MolGPSDataEvents>>currentPositionChanged: aGeoPosition` Event.
+```smalltalk
+MolGPSData>>producedComponentEvents
 
-## Create the component implementation for contract 2
+	<componentContract>
+	^ { MolGPSDataEvents }
+```
 
+Since the `MolGPSData` Component Type needs to returns its accuracy when its position is changed, it provides the `MolGPSDataServices>>getAccuracyRadiusInMeters` Service.
+```smalltalk
+MolGPSData>>providedComponentServices
+
+	<componentContract>
+	^ { MolGPSDataServices }
+```
+
+## Create the Component implementation for MolGPSData
+Code spaces beginning by `MolAbstractComponentImpl` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
+
+When this is all done, we can move on to create the GPS Component, being `MolGPSDataImpl`. This component uses the `MolGPSData` Trait, used to define the Component's Contract, as well as the `MolGPSDataServices` interface, which needs to be specified in order for the Component to provide its Service.
+```smalltalk
+MolAbstractComponentImpl subclass: #MolGPSDataImpl
+	uses: MolGPSData + MolGPSDataServices
+	instanceVariableNames: 'accuracy sendCurrentPositionThread'
+	classVariableNames: ''
+	package: 'Molecule-Tutorial'
+```
+
+## Define the contract for MolGPSMap
+Conversely, the Map needs to be informed and receive the data through the same Event and Service as `MolGPSData`.
+Instead of producing and providing interfaces, it will instead consume and use them respectively.
+```smalltalk
+MolGPSMap>>consumedComponentEvents
+
+	<componentContract>
+	^ { MolGPSDataEvents }
+```
+
+```smalltalk
+MolGPSMap>>usedComponentServices
+
+	<componentContract>
+	^ { MolGPSDataServices }
+```
+
+## Create the Component implementation for MolGPSMap
+Same way as `MolGPSDataImpl`, we can move on to create the Map Component, being `MolGPSMapImpl`. This component uses the `MolGPSMap` Trait, used to define the Component's Contract, as well as the `MolGPSDataEvents` interface, which needs to be specified in order for the Component to consume its Service.
+```smalltalk
+MolAbstractComponentImpl subclass: #MolGPSMapImpl
+	uses: MolGPSMap + MolGPSDataEvents
+	instanceVariableNames: ''
+	classVariableNames: ''
+	package: 'Molecule-Examples-GPS Example'
+```
 
 # DYNAMIC PART: Execution
 
@@ -110,8 +165,8 @@ This is also why it's not possible to start two components of the same Type at a
 In a **Playground** (located in the **Browse** tab of Pharo):
 
 ```smalltalk
-	 start.
-	 start
+	 MolGPSDataImpl start.
+	 MolGPSMapImpl start
 ```
 
 ### Starting a component with a name
@@ -129,6 +184,6 @@ Components with a name are stopped using the same syntax as `start`, which is
 In a **Playground** (located in the **Browse** tab of Pharo):
 
 ```smalltalk
-	 stop.
-	 stop
+	 MolGPSDataImpl stop.
+	 MolGPSMapImpl stop
 ```
