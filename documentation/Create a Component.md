@@ -44,7 +44,7 @@ Next, we need to add the Service and Event interfaces as suppliers (of a Service
 
 Note: Parameters are similar to Services, their Trait Type just need to be changed to `MolComponentParameters`
 ```smalltalk
-Trait named: # MolGPSDataParameters
+Trait named: #MolGPSDataParameters
 	uses: MolComponentParameters
 	instanceVariableNames: ''
 	package: 'MoleculeTutorial'
