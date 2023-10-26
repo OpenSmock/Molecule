@@ -3,7 +3,7 @@ Welcome to the Molecule wiki!
 [Principles](https://github.com/Eliott-Guevel/Molecule-various-fixes/blob/documentation/documentation/Principles.md)
 
 # Tutorials
-Step-by-step example describing an example between 2 Components interacting.
+Step-by-step example describing an example between 2 Components interacting. \
 [Creating and connecting Components](https://github.com/Eliott-Guevel/Molecule-various-fixes/blob/documentation/documentation/Create%20a%20Component.md)
 
 [Connecting two Components](https://github.com/OpenSmock/Molecule/blob/main/documentation/Connecting%20two%20Components.md) \
