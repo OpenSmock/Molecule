@@ -1,4 +1,4 @@
-Now that we've created our first component, we will need to create another one by following the same instructions (see [Create a new Molecule Component](https://github.com/OpenSmock/Molecule/blob/main/documentation/Create%20a%20new%20Molecule%20component.md)).
+Now that we've created our first component, we will need to create another one by following the same instructions (see [Create a Component](https://github.com/Eliott-Guevel/Molecule-various-fixes/blob/documentation/documentation/Create%20a%20Component.md)).
 In reality, having only one component isn't useful at all since components are meant to be connected between each other and communicate through data.
 The idea of having two components is that one will send data (through events and services), and the other will listen to the first component in order to receive and treat this data.
 To do that, we need to specify each component's contract in order to achieve exactly that.
