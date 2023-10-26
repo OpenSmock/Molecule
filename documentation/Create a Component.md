@@ -8,22 +8,42 @@ Then we will create a second Component that uses the provided Service and consum
 First, we will create a Service Trait¹ 
 with a Service inside it.
 ```smalltalk
-
+Trait named: # Services
+	uses: MolComponentServices
+	instanceVariableNames: ''
+	package: 'MoleculeTutorial'
 ```
 
 ¹ Trait: *an independent set of methods with their implementation and requirements (methods and variables). \
 Classes using a Trait automatically benefit from these methods, and must define that Trait’s requirements. \
 A Trait can be composed of multiple other traits.*
 
-TODO : Créer une interface d'event avec un event dedans
-
+Then, we create an Event Trait with an Event inside it.
 ```smalltalk
-
+Trait named: # Events
+	uses: MolComponentEvents
+	instanceVariableNames: ''
+	package: 'MoleculeTutorial'
 ```
 
-TODO : ajouter services/events en fournisseur
+Next, we need to add the Service and Event Traits as suppliers.
+```smalltalk
+  Services>> :
+  "method is left empty, will be defined in the Components that provide it"
+```
 
-TODO : Petit note : les paramètres en disant que c'est comme les services en changeant le type de Trait à utiliser
+```smalltalk
+  Events>> :
+  "method is left empty, will be defined in the Components that consume it"
+```
+
+Note: Parameters are similar to Services, their Trait Type just needs to be changed to `MolComponentParameters`
+```smalltalk
+Trait named: # Parameters
+	uses: MolComponentParameters
+	instanceVariableNames: ''
+	package: 'MoleculeTutorial'
+```
 
 ## Define component types
 
