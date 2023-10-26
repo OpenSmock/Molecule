@@ -91,10 +91,10 @@ With Molecule, we reuse any existing Class by augmenting that Class with Compone
 We must use the Molecule Component interface `MolComponentImpl`, which is a Trait, in the existing Class. Any class that implements this interface is usable as a Molecule component. Then, we assign the type Component to the class as a standard Molecule Component.
 
 ## Define the contract for MolGPSData
-For this tutorial, the GPS needs to send its geographical data to the Map.
-In order to do that, its contract needs to be redefined to indicate which Services and Events are produced and provided by it.
-Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser**, accessible through the **Browser** tab of Pharo, click on the radio button located left to the Class side text, which is located in the middle of the **System Browser** window).
-The needed methods for the contract already exist (since the Components' Type use `MolComponentType`), they just need to be overridden.
+For this tutorial, the GPS needs to send its geographical data to the Map. \
+In order to do that, its contract needs to be redefined to indicate which Services and Events are produced and provided by it. \
+Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser**, accessible through the **Browser** tab of Pharo, click on the radio button located left to the Class side text, which is located in the middle of the **System Browser** window). \
+The needed methods for the contract already exist (since the Components' Type use `MolComponentType`), they just need to be overridden. \
 A Component Type can provide multiple Services and Events (separated by a comma), there's just one each for this tutorial (each one being put between the curly brackets of the methods).
 
 Since the `MolGPSData` Component Type needs to inform the Map when its position is changed, it produces the `MolGPSDataEvents>>currentPositionChanged: aGeoPosition` Event.
