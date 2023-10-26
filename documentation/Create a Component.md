@@ -63,15 +63,14 @@ Similarly, they're stopped by `[componentName] stop`.
 Components are created with the `default` name when the `start` instruction is used.
 This is also why it's not possible to start two components of the same Type at any moment, since they both use the same name (`default`) and same Type Trait (leading to a `ComponentAlreadyExistsError`).
 
-It's also possible to create a component with a name by using the following syntax: `[componentName] start: #[name]`.
-This will be useful for [Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md), which determine which component of a given Type A receives events from which component of a given Type B, if multiple components of the same Type exist.
-
 **add img**
 
 # Start the two components
 
-```smalltalk
-MyComponent>>methodA: anObject
 
-  ^ self
-```
+# Starting a component with a name
+It's also possible to create a component with a name by using the following syntax: 
+`[componentName] start: #[name]`.
+This will be useful for [Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md), which determine which component of a given Type A receives events from which component of a given Type B, if multiple components of the same Type exist.
+
+# Stop the two components
