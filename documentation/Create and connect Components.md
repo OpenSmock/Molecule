@@ -170,7 +170,7 @@ MolGPSDataImpl>>getRandomizedGPSPosition
 After that, the Component needs to call these methods and send them to the `MolGPSMapImpl` (component created in the next part). \
 This is done by overriding 
 `MolComponentImpl class>>componentActivate`, invoked when a Component is started, \
-`MolComponentImpl class>>componentInitialize` when a Component is initialized (comes after starting and only triggers one time) \
+`MolComponentImpl class>>componentInitialize` when a Component is initialized (comes after starting) \
 `MolComponentImpl class>>componentPassivate`, invoked when a Component is stopped.
 
 ```smalltalk
