@@ -125,23 +125,6 @@ MolAbstractComponentImpl subclass: #MolGPSDataImpl
 	package: 'Molecule-Tutorial'
 ```
 
-## Define the contract for MolGPSMap
-Conversely, the Map needs to be informed and receive the data through the same Event and Service as `MolGPSData`.
-Instead of producing and providing interfaces, it will instead consume and use them respectively.
-```smalltalk
-MolGPSMap>>consumedComponentEvents
-
-	<componentContract>
-	^ { MolGPSDataEvents }
-```
-
-```smalltalk
-MolGPSMap>>usedComponentServices
-
-	<componentContract>
-	^ { MolGPSDataServices }
-```
-
 ## Define what does the GPS Component do
 Next, we will need to specify what exactly the GPS sends. This is where the previously declared instance variables `accuracy` comes into play. 
 First, put a getter and setter for it.
@@ -225,6 +208,23 @@ MolAbstractComponentImpl subclass: #MolGPSMapImpl
 	instanceVariableNames: ''
 	classVariableNames: ''
 	package: 'Molecule-Examples-GPS Example'
+```
+
+## Define the contract for MolGPSMap
+Conversely, the Map needs to be informed and receive the data through the same Event and Service as `MolGPSData`.
+Instead of producing and providing interfaces, it will instead consume and use them respectively.
+```smalltalk
+MolGPSMap>>consumedComponentEvents
+
+	<componentContract>
+	^ { MolGPSDataEvents }
+```
+
+```smalltalk
+MolGPSMap>>usedComponentServices
+
+	<componentContract>
+	^ { MolGPSDataServices }
 ```
 
 ## Define what does the Map Component do
