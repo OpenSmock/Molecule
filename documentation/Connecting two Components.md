@@ -13,7 +13,7 @@ For Events, it's done in `consumedComponentEvents` \
 For Services, it's done in `usedComponentServices` \
 For Parameters, it's done in `usedComponentParameters`
 
-For listening to a component for events, see the second to last paragraph of [Creating Events](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Events.md) tutorial.
+For listening to a component for events, see the second to last paragraph of the [Events](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Events.md) tutorial.
 
 A component can receive events/services and emit other events/services by specifying them for a component without any conflict, since they're different parts of its contract.
 
