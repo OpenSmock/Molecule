@@ -1,4 +1,4 @@
-# Create a Component
+# Create and connect Components
 In this tutorial, we will create a first Component that produces an Event and provides a Service (a GPS emitting geographical data). \
 Then we will create a second Component that uses the provided Service and consumes the produced Event (a Map acting as a display for the data). \
 The complete GPS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works.
