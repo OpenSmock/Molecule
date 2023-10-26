@@ -287,8 +287,8 @@ This is also why it's not possible to start two components of the same Type at a
 In a **Playground** (located in the **Browse** tab of Pharo):
 
 ```smalltalk
-	 MolGPSDataImpl start.
-	 MolGPSMapImpl start
+MolGPSDataImpl start.
+MolGPSMapImpl start
 ```
 The Pharo **Transcript** (also located in the **Browse** tab of Pharo), will start showing messages in the form of '[Map] Receive new GPS position: x@x radius: x m';
 
@@ -307,6 +307,6 @@ Components with a name are stopped using the same syntax as `start`, which is
 In a **Playground** (located in the **Browse** tab of Pharo):
 
 ```smalltalk
-	 MolGPSDataImpl stop.
-	 MolGPSMapImpl stop
+MolGPSDataImpl stop.
+MolGPSMapImpl stop
 ```
