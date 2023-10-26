@@ -28,15 +28,15 @@ Trait named: # Events
 	package: 'MoleculeTutorial'
 ```
 
-Next, we need to add the Service and Event Traits as suppliers.
+Next, we need to add the Service and Event Traits as suppliers (of a Service and an Event respectively).
 ```smalltalk
-  Services>> :
-  "method is left empty, will be defined in the Components that provide it"
+Services>> :
+	"method is left empty, will be defined in the Components that provide it"
 ```
 
 ```smalltalk
-  Events>> :
-  "method is left empty, will be defined in the Components that consume it"
+Events>> :
+	"method is left empty, will be defined in the Components that consume it"
 ```
 
 Note: Parameters are similar to Services, their Trait Type just needs to be changed to `MolComponentParameters`
@@ -92,18 +92,34 @@ TODO
 
 ## Starting a Component
 Components are started using the `MolComponentImpl class>>start` instruction, with the complete syntax being `[componentName] start`.
-Similarly, they're stopped by `[componentName] stop`.
 Components are created with the `default` name when the `start` instruction is used.
 This is also why it's not possible to start two components of the same Type at any moment, since they both use the same name (`default`) and same Type Trait (leading to a `ComponentAlreadyExistsError`).
 
 **add img**
 
 ### Start the two components
+In a **Playground** (located in the **Browse** tab of Pharo):
 
+```smalltalk
+	 start.
+	 start
+```
 
 ### Starting a component with a name
 It's also possible to create a component with a name by using the following syntax: 
 `[componentName] start: #[name]`.
 This will be useful for [Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md), which determine which component of a given Type A receives events from which component of a given Type B, if multiple components of the same Type exist.
 
+## Stopping a component
+Components are stopped using the `MolComponentImpl class>> stop` instruction, the syntax being similar to the `start` instruction since
+Components are stopped by `[componentName] stop`.
+Components with a name are stopped using the same syntax as `start`, which is 
+`[componentName] stop: #[name]`.
+
 ## Stop the two components
+In a **Playground** (located in the **Browse** tab of Pharo):
+
+```smalltalk
+	 stop.
+	 stop
+```
