@@ -5,7 +5,7 @@ Then we will create a second Component that uses the provided Service and consum
 # STATIC PART: declaration
 
 ## Define services and events
-Code spaces beginning by **Trait** need to be put in the code space under *New class* in the **System Browser$$, located in the **Browse** tab of Pharo.
+Code spaces beginning by **Trait** need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
 
 First, we will create a Service Trait¹ 
 with a Service inside it.
