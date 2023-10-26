@@ -2,7 +2,7 @@ Welcome to the Molecule wiki!
 
 # Tutorial section
 [Connecting two components](https://github.com/OpenSmock/Molecule/blob/main/documentation/Connecting%20two%20components.md) \
-[Create a Component](https://github.com/OpenSmock/Molecule/blob/main/documentation/Create%20a%20new%20Molecule%20component.md) \
+[Create a Component](https://github.com/Eliott-Guevel/Molecule-various-fixes/blob/documentation/documentation/Create%20a%20Component.md) \
 [Creating Events](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Events.md) \
 [Creating Notifiers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Notifiers.md) \
 [Creating Parameters](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Parameters.md) \
