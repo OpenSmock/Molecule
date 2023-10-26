@@ -1,5 +1,8 @@
 Welcome to the Molecule wiki!
 
+# Principles
+[Principles](https://github.com/Eliott-Guevel/Molecule-various-fixes/blob/documentation/documentation/Principles.md)
+
 # Tutorials
 [Create a Component](https://github.com/Eliott-Guevel/Molecule-various-fixes/blob/documentation/documentation/Create%20a%20Component.md) \
 [Connecting two Components](https://github.com/OpenSmock/Molecule/blob/main/documentation/Connecting%20two%20Components.md) \
