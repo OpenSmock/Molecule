@@ -125,7 +125,7 @@ MolAbstractComponentImpl subclass: #MolGPSDataImpl
 	package: 'Molecule-Tutorial'
 ```
 
-## Define what does the GPS Component do
+## Define what the GPS Component does
 Next, we will need to specify what exactly the GPS sends. This is where the previously declared instance variable `accuracy` comes into play. 
 First, create a getter and setter for it.
 ```smalltalk
@@ -230,7 +230,7 @@ MolGPSMap>>usedComponentServices
 	^ { MolGPSDataServices }
 ```
 
-## Define what does the Map Component do
+## Define what the Map Component does
 First off, this method is used to show in the Transcript (available from the **Browse** tab of Pharo) every position received from `MolGPSDataImpl`.
 ```smalltalk
 MolGPSMapImpl>>updatePositionCircleOnMap: aGeoPosition radius: radius
