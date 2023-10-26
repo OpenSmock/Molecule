@@ -5,10 +5,21 @@ Then we will create a second Component that uses the provided Service and consum
 # STATIC PART: declaration
 
 ## Define services and events
+First, we will create a Service Trait* 
+with a Service inside it.
+```smalltalk
 
-TODO : Créer une interface de services avec un service dedans
+```
+
+Trait: *(an independent set of methods with their implementation and requirements (methods and variables)). \
+Classes using a Trait automatically benefit from these methods, and must define that Trait’s requirements. \
+A Trait can be composed of multiple other traits.*
 
 TODO : Créer une interface d'event avec un event dedans
+
+```smalltalk
+
+```
 
 TODO : ajouter services/events en fournisseur
 
