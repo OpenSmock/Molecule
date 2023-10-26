@@ -11,7 +11,7 @@ with a Service inside it.
 
 ```
 
-Trait: *(an independent set of methods with their implementation and requirements (methods and variables)). \
+Trait: *an independent set of methods with their implementation and requirements (methods and variables). \
 Classes using a Trait automatically benefit from these methods, and must define that Trait’s requirements. \
 A Trait can be composed of multiple other traits.*
 
