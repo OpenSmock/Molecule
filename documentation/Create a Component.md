@@ -1,6 +1,7 @@
 # Create a Component
-In this tutorial, we will create a first Component that produces an Event and provides a Service. \
-Then we will create a second Component that uses the provided Service and consumes the produced Event.
+In this tutorial, we will create a first Component that produces an Event and provides a Service (a GPS emitting geographical data). \
+Then we will create a second Component that uses the provided Service and consumes the produced Event (a map acting as a displayer of the data).
+The complete GPS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works.
 
 # STATIC PART: declaration
 
@@ -10,7 +11,7 @@ Code spaces beginning by **Trait** need to be put in the code space under *New c
 First, we will create a Service Trait¹ 
 with a Service inside it.
 ```smalltalk
-Trait named: # Services
+Trait named: #MolGPSDataServices
 	uses: MolComponentServices
 	instanceVariableNames: ''
 	package: 'MoleculeTutorial'
@@ -22,7 +23,7 @@ A Trait can be composed of multiple other traits.*
 
 Then, we create an Event Trait with an Event inside it.
 ```smalltalk
-Trait named: # Events
+Trait named: #MolGPSDataEvents
 	uses: MolComponentEvents
 	instanceVariableNames: ''
 	package: 'MoleculeTutorial'
@@ -30,41 +31,51 @@ Trait named: # Events
 
 Next, we need to add the Service and Event Traits as suppliers (of a Service and an Event respectively).
 ```smalltalk
-Services>> :
-	"method is left empty, will be defined in the Components that provide it"
+ MolGPSDataServices>>getAccuracyRadiusInMeters
+	"Gets and return the accuracy of the GPS depending on quality of signal and quantity of connected satellites"
+	"method is left empty, will be defined in the Component that provides it"
 ```
 
 ```smalltalk
-Events>> :
-	"method is left empty, will be defined in the Components that consume it"
+ MolGPSDataEvents>>currentPositionChanged: aGeoPosition
+	"Notify the current geographic position of the GPSreceiver when changed"
+	"method is left empty, will be defined in the Component that consumes it"
 ```
 
-Note: Parameters are similar to Services, their Trait Type just needs to be changed to `MolComponentParameters`
+Note: Parameters are similar to Services, their Trait Type just need to be changed to `MolComponentParameters`
 ```smalltalk
-Trait named: # Parameters
+Trait named: # MolGPSDataParameters
 	uses: MolComponentParameters
 	instanceVariableNames: ''
 	package: 'MoleculeTutorial'
 ```
 
-## Define component types
+## Define Component types
 
 ## Adding Component contract with a Component Type
-Whatever the method to create a component (from scratch or with an existing Class), the construction and assignment of the contract is the same.
+Whatever the method to create a Component (from scratch or with an existing Class) is, its contract first needs to be defined (for the two methods, the construction and assignment of the contract is the same).
 
-The component type implements the component contract (used/provided services, consumed/produced events, used/provided parameters). The type is implemented through a Trait.
+The Component Type implements the Component contract (used/provided Services, consumed/produced Events, used/provided Parameters). \
+The Type is implemented through a Trait.
+Types don't have any methods on the Instance side of Pharo, their contract is to be defined by overriding some methods on the **Class side** of Pharo.
 
-## Define the first component type
+## Define the first Component Type
+```smalltalk
+Trait named: #MolGPSData
+	uses: MolComponentType
+	instanceVariableNames: ''
+	package: 'Molecule-Tutorial'
+```
 
-TODO : Quelque soit la manière de créer un composant (from scratch ou en réutilisant une class) il faut d'abord définir son contrat.
+## Define the second Component Type
+```smalltalk
+Trait named: #MolGPSMap
+	uses: MolComponentType
+	instanceVariableNames: ''
+	package: 'Molecule-Tutorial'
+```
 
-TODO : Créer un ComponentType pour le premier composant
-
-## Define the second component type
-
-TODO : pareil avec l'inverse
-
-## Create a component implmentation of a type
+## Create a Component implementation of a Type
 
 There are two ways to create a new Molecule Component :
 - Create a new Component from scratch : write a new Class inheriting from the Component hierarchy
@@ -82,11 +93,9 @@ We must use the Molecule Component interface `MolComponentImpl`, which is a Trai
 
 ## Create the component implementation for contract 1
 
-TODO
 
 ## Create the component implementation for contract 2
 
-TODO
 
 # DYNAMIC PART: Execution
 
