@@ -56,7 +56,7 @@ Trait named: # MolGPSDataParameters
 Whatever the method to create a Component (from scratch or with an existing Class) is, its contract first needs to be defined (for the two methods, the construction and assignment of the contract is the same).
 
 The Component Type implements the Component contract (used/provided Services, consumed/produced Events, used/provided Parameters). \
-The Type is implemented through a Trait.
+The Type is implemented through a Trait. \
 Types don't have any methods on the Instance side of Pharo, their contract is to be defined by overriding some methods on the **Class side** of Pharo.
 
 ## Define the first Component Type
