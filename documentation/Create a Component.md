@@ -116,7 +116,7 @@ MolGPSData>>providedComponentServices
 ## Create the Component implementation for MolGPSData
 Code spaces beginning by `MolAbstractComponentImpl` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
 
-When this is all done, we can move on to create the GPS Component, being `MolGPSDataImpl`. This component uses the `MolGPSData` Trait, used to define the Component's Contract, as well as the `MolGPSDataServices` interface, which needs to be specified in order for the Component to provide its Service.
+When this is all done, we can move on to create the GPS Component, being `MolGPSDataImpl`. This component uses the `MolGPSData` Trait, used to define the Component's contract, as well as the `MolGPSDataServices` interface, which needs to be specified in order for the Component to provide its Service.
 ```smalltalk
 MolAbstractComponentImpl subclass: #MolGPSDataImpl
 	uses: MolGPSData + MolGPSDataServices
