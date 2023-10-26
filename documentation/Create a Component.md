@@ -88,7 +88,7 @@ Imagine that we want to reuse an open-source library that implements the behavio
 
 With Molecule, we reuse any existing Class by augmenting that Class with Component behavior. This Class becomes seamlessly usable as a Component in a Molecule architecture.
 
-We must use the Molecule Component interface `MolComponentImpl`, which is a Trait, to the existing Class. Any class that implements this interface is usable as a Molecule component. Then, we assign the type Component to the class as a standard Molecule Component.
+We must use the Molecule Component interface `MolComponentImpl`, which is a Trait, in the existing Class. Any class that implements this interface is usable as a Molecule component. Then, we assign the type Component to the class as a standard Molecule Component.
 
 ## Define the contract for MolGPSData
 For this tutorial, the GPS needs to send its geographical data to the Map.
