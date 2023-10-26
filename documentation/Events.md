@@ -1,4 +1,4 @@
-# Creating Events
+# Events
 Events are connected to a component similarly to Services, **with an added step explained at the end of this very tutorial**. \
 They differ in terms of goals since Events are used for data treatment, which operations need to be done on received data. \
 An Event Trait is typically named after the Type it's used by, in the form of [Type]Events. \
