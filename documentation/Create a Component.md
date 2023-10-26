@@ -290,7 +290,8 @@ In a **Playground** (located in the **Browse** tab of Pharo):
 MolGPSDataImpl start.
 MolGPSMapImpl start
 ```
-The Pharo **Transcript** (also located in the **Browse** tab of Pharo), will start showing messages in the form of '[Map] Receive new GPS position: x@x radius: x m';
+The Pharo **Transcript** (also located in the **Browse** tab of Pharo), will start showing messages in the form of \
+'[Map] Receive new GPS position: x@x radius: x m';
 
 ### Starting a component with a name
 It's also possible to create a component with a name by using the following syntax: 
