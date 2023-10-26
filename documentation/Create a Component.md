@@ -5,13 +5,13 @@ Then we will create a second Component that uses the provided Service and consum
 # STATIC PART: declaration
 
 ## Define services and events
-First, we will create a Service Trait* 
+First, we will create a Service Trait¹ 
 with a Service inside it.
 ```smalltalk
 
 ```
 
-Trait: *an independent set of methods with their implementation and requirements (methods and variables). \
+¹ Trait: *an independent set of methods with their implementation and requirements (methods and variables). \
 Classes using a Trait automatically benefit from these methods, and must define that Trait’s requirements. \
 A Trait can be composed of multiple other traits.*
 
