@@ -1,6 +1,6 @@
 # Create a Component
-In this tutorial, we will create a first Component that produces an Event and provides a Services. \
-Then we will create a second Component that uses the provided Service and that consumes the Event.
+In this tutorial, we will create a first Component that produces an Event and provides a Service. \
+Then we will create a second Component that uses the provided Service and consumes the produced Event.
 
 # STATIC PART: declaration
 
