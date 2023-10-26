@@ -26,12 +26,13 @@ MolGNSSGPS >> accuracy: anObject [
 MolGNSSGPS >> componentActivate [
 	"Start a thread to simulate sending of the geo position and accuracy precision each second"
 
-	sendCurrentPositionThread := [
-	                             [ true ] whileTrue: [
-		                             (Delay forMilliseconds: 50) wait.
+	sendCurrentPositionThread := [ | percent |
+		percent := 1.
+	                             [ true ] whileTrue: [ 
+		                             (Delay forMilliseconds: 100) wait.
 		                             self getMolGeoPosEquipmentEventsNotifier
-			                             currentPositionChanged:
-			                             self getRandomizedGPSPosition.
+			                             currentPositionChanged: (self getGPSPosition: percent).
+												percent := (percent + 1) min: 100.
 		                             self increaseAccuracy ] ] forkAt:
 		                             Processor userBackgroundPriority
 ]
@@ -56,6 +57,14 @@ MolGNSSGPS >> getAccuracyRadiusInMeters [
 	"Get and return the accuracy of the GPS depending quality of signal and quantity of connected satellites"
 
 	^self accuracy 
+]
+
+{ #category : #private }
+MolGNSSGPS >> getGPSPosition: aPercent [
+
+	| random |
+	random := Random new.
+	^ (random next @ random next) / aPercent
 ]
 
 { #category : #'component accessing' }

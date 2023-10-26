@@ -1,60 +1,39 @@
 Class {
 	#name : #MolGNSSGalileo,
-	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolGeoPosEquipmentType + MolGeoPosEquipmentServices',
-	#classTraits : 'MolGeoPosEquipmentType classTrait + MolGeoPosEquipmentServices classTrait',
+	#superclass : #Object,
+	#traits : 'MolComponentImpl + MolGeoPosEquipmentType + MolGeoPosEquipmentServices',
+	#classTraits : 'MolComponentImpl classTrait + MolGeoPosEquipmentType classTrait + MolGeoPosEquipmentServices classTrait',
 	#instVars : [
-		'accuracy',
 		'sendCurrentPositionThread'
 	],
 	#category : #'Molecule-Examples-Geographical Position Example'
 }
 
-{ #category : #services }
-MolGNSSGalileo >> accuracy [
-
-	^ accuracy
-]
-
-{ #category : #services }
-MolGNSSGalileo >> accuracy: anObject [
-
-	accuracy := anObject
-]
-
-{ #category : #services }
+{ #category : #'life cycle' }
 MolGNSSGalileo >> componentActivate [
-	"Start a thread to simulate sending of the geo position and accuracy precision each second"
+	"Start a thread to simulate sending of a fixed geo position each 2 seconds"
 
 	sendCurrentPositionThread := [
 	                             [ true ] whileTrue: [
-		                             (Delay forMilliseconds: 50) wait.
+		                             
 		                             self getMolGeoPosEquipmentEventsNotifier
-			                             currentPositionChanged:
-			                             self getRandomizedGNSSGalileoPosition.
-		                             self increaseAccuracy ] ] forkAt:
+			                             currentPositionChanged: 1 @ 1. (Delay forSeconds: 1) wait. ] ]
+		                             forkAt:
 		                             Processor userBackgroundPriority
 ]
 
-{ #category : #services }
-MolGNSSGalileo >> componentInitialize [
-	"Set starting accuracy"
-
-	self accuracy: 1000
-]
-
-{ #category : #services }
-MolGNSSGalileo >> componentPassivate [
-
-	sendCurrentPositionThread ifNotNil: [ :e | e terminate ].
-	sendCurrentPositionThread := nil
+{ #category : #'life cycle' }
+MolGNSSGalileo >> componentPassivate [ 
+	
+	sendCurrentPositionThread ifNotNil:[ :e | e terminate ].
+	sendCurrentPositionThread := nil.
 ]
 
 { #category : #services }
 MolGNSSGalileo >> getAccuracyRadiusInMeters [
-	"Get and return the accuracy of the GPS depending quality of signal and quantity of connected satellites"
-
-	^ self accuracy
+	"Get and return the geolocation accuracy depending quantity of connected satellites"
+	
+	^self precision
 ]
 
 { #category : #'component accessing' }
@@ -62,20 +41,9 @@ MolGNSSGalileo >> getMolGeoPosEquipmentEventsNotifier [
 	^self eventsNotifiers at: MolGeoPosEquipmentEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolGeoPosEquipmentEvents name: nil].
 ]
 
-{ #category : #services }
-MolGNSSGalileo >> getRandomizedGNSSGalileoPosition [
+{ #category : #'GPS hardware existing API' }
+MolGNSSGalileo >> precision [
+	"Return geolocation precision (in meters)"
 
-	| random |
-	random := Random new.
-	^ (random next) * 2 @ (random next) * 2
-]
-
-{ #category : #services }
-MolGNSSGalileo >> increaseAccuracy [
-
-	| nextAccuracy |
-	self accuracy > 1 ifTrue: [
-		nextAccuracy := self accuracy - (0.1 * self accuracy). "10% better precision at each times"
-		nextAccuracy < 1 ifTrue: [ "stay to 1" nextAccuracy := 1 ].
-		self accuracy: nextAccuracy ]
+	^3
 ]
