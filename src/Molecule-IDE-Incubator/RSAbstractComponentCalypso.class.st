@@ -27,14 +27,16 @@ RSAbstractComponentCalypso >> applyTheme: builder [
 
 { #category : #building }
 RSAbstractComponentCalypso >> build [
+
 	| canvas |
 	canvas := self buildComponentCanvas.
 	morph := canvas createMorph.
-	morph onAnnouncement: MorphDeleted 
-		do: [ self containerTab owner ifNotNil: [ self containerTab delete]].
-	canvas when: RSMouseEnter do: [ morph takeKeyboardFocus].
+	morph
+		onAnnouncement: MorphDeleted
+		do: [
+		self containerTab owner ifNotNil: [ self containerTab delete ] ].
+	canvas when: RSMouseEnter do: [ morph takeKeyboardFocus ] for: self.
 	self addMorph: morph fullFrame: LayoutFrame identity
-	
 ]
 
 { #category : #building }

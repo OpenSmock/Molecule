@@ -53,7 +53,8 @@ BaselineOfMoleculeIncubator >> loadPyramid: spec [
 { #category : #'load scripts' }
 BaselineOfMoleculeIncubator >> loadRoassal: spec [
 
-	spec baseline: 'Roassal' with: [ spec repository: 'github://pharo-graphics/Roassal/src' ].
+	spec baseline: 'Roassal' with: [ spec repository: 'github://pharo-graphics/Roassal/src'; loads: #('Full') ];
+	project: 'Roassal' copyFrom: 'Roassal' with: [ spec loads: #('Roassal3-UML-Calypso') ].
 ]
 
 { #category : #'load scripts' }
