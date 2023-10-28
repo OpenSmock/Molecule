@@ -36,11 +36,6 @@ MolPackagesCmdCommand class >> isAbstract [
 ]
 
 { #category : #execution }
-MolPackagesCmdCommand >> execute [
-	^ self subclassResponsibility 
-]
-
-{ #category : #execution }
 MolPackagesCmdCommand >> selectedPackages [
 
 	^ selectedItems collect:[ :p | p browserItem actualObject ]

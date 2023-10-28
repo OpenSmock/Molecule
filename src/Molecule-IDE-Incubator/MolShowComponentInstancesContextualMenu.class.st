@@ -37,8 +37,6 @@ MolShowComponentInstancesContextualMenu >> execute [
 
 	| componentInstances |
 	"open instances component window"
-	super execute.
-
 	componentInstances := items browserItem actualObject allSubInstances.
 
 	componentInstances isEmpty

@@ -34,3 +34,9 @@ MolClassesCmdCommand >> selectedClasses [
 
 	^ selectedItems collect:[ :p | p browserItem actualObject ]
 ]
+
+{ #category : #execution }
+MolClassesCmdCommand >> selectedComponentClasses [
+
+	^ self selectedClasses select:[ :c | c isComponentClass ].
+]

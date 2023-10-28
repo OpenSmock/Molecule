@@ -37,7 +37,6 @@ MolShowComponentContextualMenu >> execute [
 
 	| item usedComponentServices usedComponentParameters consumedComponentEvents providedComponentServices providedComponentParameters producedComponentEvents showComponent |
 	"open show component window"
-	super execute.
 
 	item := items browserItem actualObject.
 

@@ -32,7 +32,7 @@ MolDefineComponentCmdCommand >> description [
 MolDefineComponentCmdCommand >> execute [
 	| componentsToDefine nbComponents |
 	
-	componentsToDefine := self selectedClasses select:[ :c | c isComponentClass ].
+	componentsToDefine := self selectedComponentClasses.
 	componentsToDefine do:[ :c | MolComponentFactory defineComponent: c ].
 	
 	nbComponents := componentsToDefine size.

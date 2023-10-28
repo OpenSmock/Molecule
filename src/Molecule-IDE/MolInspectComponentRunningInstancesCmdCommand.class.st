@@ -30,10 +30,15 @@ MolInspectComponentRunningInstancesCmdCommand >> description [
 
 { #category : #accessing }
 MolInspectComponentRunningInstancesCmdCommand >> execute [
-	| item |
+	| selectedComponents instanceList |
+
+	selectedComponents := self selectedComponentClasses. 
+	instanceList := Set new.
+
+	selectedComponents do:[ :c | | running |
+		running := (MolComponentManager default homeServices deployedComponents at: c ifAbsent:[ Dictionary new ]) copy.
+		running isEmpty ifFalse:[ instanceList add: running ].			
+	].
 	
-	super execute.
-	item := items browserItem actualObject.
-	
-	(MolComponentManager default homeServices deployedComponents at: item ifAbsent:[Dictionary new]) copy inspect
+	^ instanceList inspect
 ]
