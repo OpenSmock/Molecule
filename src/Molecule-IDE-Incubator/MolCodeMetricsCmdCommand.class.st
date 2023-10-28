@@ -76,8 +76,8 @@ MolCodeMetricsCmdCommand >> metricsForSelectedPackagesClasses: aStream [
 	nbParametersInterface := (self selectedPackagesClasses select:[ :c | c isTrait and:[ c isComponentParameters ] ]) size.
 
 	aStream nextPutAll: '### Global metrics'; cr.
-	aStream nextPutAll: (nbComponents * 100 / nbClasses) rounded asString, '% of classes are components'; cr.
-	nbTraits > 0 ifTrue:[aStream nextPutAll: ((nbTypes + nbServicesInterface + nbEventsInterface + nbParametersInterface) * 100 / nbTraits) rounded asString, '% of traits are component contract'; cr].
+	aStream nextPutAll: ((nbComponents * 100 / nbClasses) rounded) asString, '% of classes are components'; cr.
+	nbTraits > 0 ifTrue:[aStream nextPutAll: (((nbTypes + nbServicesInterface + nbEventsInterface + nbParametersInterface) * 100 / nbTraits) rounded) asString, '% of traits are component contract'; cr].
 	aStream nextPutAll: 'Nb of classes: ', nbClasses asString; cr.
 	aStream nextPutAll: 'Nb of traits: ', nbTraits asString; cr.
 	aStream nextPutAll: 'Total: ', (nbClasses + nbTraits) asString; cr.
