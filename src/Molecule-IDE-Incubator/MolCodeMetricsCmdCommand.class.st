@@ -29,6 +29,12 @@ MolCodeMetricsCmdCommand >> defaultMenuItemName [
 ]
 
 { #category : #accessing }
+MolCodeMetricsCmdCommand >> description [
+
+	^'Display metrics about Molecule entities from selected packages'
+]
+
+{ #category : #accessing }
 MolCodeMetricsCmdCommand >> execute [
 	| presenter stream |
 	presenter := SpTextPresenter new.

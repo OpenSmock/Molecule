@@ -30,7 +30,7 @@ MolClassesCmdCommand class >> isAbstract [
 ]
 
 { #category : #execution }
-MolClassesCmdCommand >> execute [
+MolClassesCmdCommand >> selectedClasses [
 
-	^ items := selectedItems at: 1
+	^ selectedItems collect:[ :p | p browserItem actualObject ]
 ]

@@ -27,6 +27,12 @@ MolShowComponentContextualMenu >> defaultMenuItemName [
 ]
 
 { #category : #execution }
+MolShowComponentContextualMenu >> description [
+
+	^'Incubator action'
+]
+
+{ #category : #execution }
 MolShowComponentContextualMenu >> execute [
 
 	| item usedComponentServices usedComponentParameters consumedComponentEvents providedComponentServices providedComponentParameters producedComponentEvents showComponent |

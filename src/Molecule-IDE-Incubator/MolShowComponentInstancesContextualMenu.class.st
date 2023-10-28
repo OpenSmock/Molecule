@@ -26,6 +26,12 @@ MolShowComponentInstancesContextualMenu >> defaultMenuItemName [
 	^ '[Incubator] Show running instances'
 ]
 
+{ #category : #accessing }
+MolShowComponentInstancesContextualMenu >> description [
+
+	^'Incubator action'
+]
+
 { #category : #execution }
 MolShowComponentInstancesContextualMenu >> execute [
 

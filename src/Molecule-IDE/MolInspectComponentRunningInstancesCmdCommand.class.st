@@ -23,6 +23,12 @@ MolInspectComponentRunningInstancesCmdCommand >> defaultMenuItemName [
 ]
 
 { #category : #accessing }
+MolInspectComponentRunningInstancesCmdCommand >> description [
+
+	^'Show a list of actually running component instances of this component'
+]
+
+{ #category : #accessing }
 MolInspectComponentRunningInstancesCmdCommand >> execute [
 	| item |
 	
