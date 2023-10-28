@@ -1,7 +1,7 @@
 Class {
 	#name : #MolPackagesCmdCommand,
 	#superclass : #MolCmdCommand,
-	#category : #'Molecule-IDE-Menus'
+	#category : #'Molecule-IDE-Incubator-Menus'
 }
 
 { #category : #activation }
