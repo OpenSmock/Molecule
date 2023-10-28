@@ -38,7 +38,7 @@ MolPackagesCmdCommand class >> isAbstract [
 { #category : #execution }
 MolPackagesCmdCommand >> selectedPackages [
 
-	^ selectedItems collect:[ :p | p browserItem actualObject ]
+	^ selectedItems collect: [ :p | p browserItem actualObject ]
 ]
 
 { #category : #execution }
@@ -46,6 +46,12 @@ MolPackagesCmdCommand >> selectedPackagesClasses [
 
 	| classes |
 	classes := Set new.
-	self selectedPackages do:[ :p | classes addAll: p classes ].
-	^classes
+	self selectedPackages do: [ :p | classes addAll: p classes ].
+	^ classes
+]
+
+{ #category : #execution }
+MolPackagesCmdCommand >> selectedPackagesComponentClasses [
+
+	^ self selectedPackagesClasses select:[ :c | c isComponentClass ]
 ]

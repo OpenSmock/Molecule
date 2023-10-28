@@ -56,12 +56,18 @@ MolCodeMetricsCmdCommand >> execute [
 MolCodeMetricsCmdCommand >> metricsForSelectedPackagesClasses: aStream [
 
 	"Number of classes and traits"
-	| nbClasses nbTraits nbComponents nbTypes nbServicesInterface nbEventsInterface nbParametersInterface |
+	| nbClasses nbTraits nbComponents nbTypes nbServicesInterface nbEventsInterface nbParametersInterface nbInstanceMethods nbClasseMethods |
 	nbClasses := (self selectedPackagesClasses select:[ :c | c isClass ]) size.
 	nbTraits := (self selectedPackagesClasses select:[ :c | c isTrait ]) size.
+	
+	"Number of methods"
+	nbInstanceMethods := 0.
+	(self selectedPackagesClasses collect:[ :c | c numberOfMethods ]) do:[ :e | nbInstanceMethods := nbInstanceMethods + e ].
+	nbClasseMethods := 0.
+	(self selectedPackagesClasses collect:[ :c | c class numberOfMethods ]) do:[ :e | nbClasseMethods := nbClasseMethods + e ].
 
 	"Number of components class"
-	nbComponents := (self selectedPackagesClasses select:[ :c | c isComponentClass ]) size.	
+	nbComponents := self selectedPackagesComponentClasses size.
 	
 	"Number of Component Types and contract interfaces"
 	nbTypes := (self selectedPackagesClasses select:[ :c | c isTrait and:[ c isComponentType ] ]) size.
@@ -69,9 +75,16 @@ MolCodeMetricsCmdCommand >> metricsForSelectedPackagesClasses: aStream [
 	nbEventsInterface := (self selectedPackagesClasses select:[ :c | c isTrait and:[ c isComponentEvents ] ]) size.
 	nbParametersInterface := (self selectedPackagesClasses select:[ :c | c isTrait and:[ c isComponentParameters ] ]) size.
 
-	aStream nextPutAll: '### General metrics'; cr.
+	aStream nextPutAll: '### Global metrics'; cr.
 	aStream nextPutAll: (nbComponents * 100 / nbClasses) rounded asString, '% of classes are components'; cr.
 	nbTraits > 0 ifTrue:[aStream nextPutAll: ((nbTypes + nbServicesInterface + nbEventsInterface + nbParametersInterface) * 100 / nbTraits) rounded asString, '% of traits are component contract'; cr].
+	aStream nextPutAll: 'Nb of classes: ', nbClasses asString; cr.
+	aStream nextPutAll: 'Nb of traits: ', nbTraits asString; cr.
+	aStream nextPutAll: 'Total: ', (nbClasses + nbTraits) asString; cr.
+	aStream cr.
+
+	aStream nextPutAll: 'Nb of methods: ', nbInstanceMethods asString; cr.
+	aStream nextPutAll: 'Nb of class methods: ', nbClasseMethods asString; cr.
 	aStream cr.
 
 	aStream nextPutAll: '### Molecule entities'; cr.
@@ -83,10 +96,10 @@ MolCodeMetricsCmdCommand >> metricsForSelectedPackagesClasses: aStream [
 	aStream nextPutAll: 'Total: ', (nbComponents + nbTypes + nbServicesInterface + nbEventsInterface + nbParametersInterface) asString; cr.
 	aStream cr.
 
-	aStream nextPutAll: '### Standard entities'; cr.
-	aStream nextPutAll: 'Nb of classes: ', nbClasses asString; cr.
-	aStream nextPutAll: 'Nb of traits: ', nbTraits asString; cr.
-	aStream nextPutAll: 'Total: ', (nbClasses + nbTraits) asString; cr.
+	aStream nextPutAll: '### No Molecule entities'; cr.
+	aStream nextPutAll: 'Nb of classes: ', (nbClasses - nbComponents) asString; cr.
+	aStream nextPutAll: 'Nb of traits: ', (nbTraits - nbTypes - nbServicesInterface - nbEventsInterface - nbParametersInterface) asString; cr.
+	aStream nextPutAll: 'Total: ', ((nbClasses - nbComponents) + (nbTraits - nbTypes - nbServicesInterface - nbEventsInterface - nbParametersInterface)) asString; cr.
 	
 	
 ]
@@ -96,5 +109,5 @@ MolCodeMetricsCmdCommand >> titleForSelectedItems [
 
 	| nbPackages |
 	nbPackages := selectedItems size.
-	^ 'Molecule metrics for ' , nbPackages asString , ' package' , (nbPackages > 0 ifTrue:[ 's' ] ifFalse: [ '' ]).
+	^ 'Molecule metrics for ' , nbPackages asString , ' package' , (nbPackages > 1 ifTrue:[ 's' ] ifFalse: [ '' ]).
 ]
