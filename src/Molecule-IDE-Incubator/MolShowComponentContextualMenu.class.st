@@ -3,7 +3,7 @@ Menu to access on the component graphic vue
 "
 Class {
 	#name : #MolShowComponentContextualMenu,
-	#superclass : #MolCmdCommand,
+	#superclass : #MolClassesCmdCommand,
 	#category : #'Molecule-IDE-Incubator-Menus'
 }
 

@@ -107,6 +107,7 @@ MolComponentImpl classSide >> instantiate: aComponentName [
 { #category : #testing }
 MolComponentImpl classSide >> isComponentClass [
 
+	(self == MolComponentImpl or:[self == MolAbstractComponentImpl]) ifTrue:[ ^ false ].
 	^ true
 ]
 

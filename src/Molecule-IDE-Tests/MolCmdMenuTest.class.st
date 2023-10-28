@@ -11,7 +11,7 @@ Class {
 MolCmdMenuTest >> setUp [
 
 	super setUp.
-	menu := MolCmdCommand new
+	menu := MolClassesCmdCommand new
 ]
 
 { #category : #tests }

@@ -3,7 +3,7 @@ Class for Show Component INstances in System Browser
 "
 Class {
 	#name : #MolShowComponentInstancesContextualMenu,
-	#superclass : #MolCmdCommand,
+	#superclass : #MolClassesCmdCommand,
 	#category : #'Molecule-IDE-Incubator-Menus'
 }
 

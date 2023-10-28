@@ -1,6 +1,6 @@
 Class {
 	#name : #MolInspectComponentRunningInstancesCmdCommand,
-	#superclass : #MolCmdCommand,
+	#superclass : #MolClassesCmdCommand,
 	#category : #'Molecule-IDE-Menus'
 }
 
