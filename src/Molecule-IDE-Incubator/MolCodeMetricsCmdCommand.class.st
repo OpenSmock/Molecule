@@ -65,7 +65,7 @@ MolCodeMetricsCmdCommand >> metricsForSelectedPackagesClasses: aStream [
 
 	aStream nextPutAll: '### General metrics'; cr.
 	aStream nextPutAll: (nbComponents * 100 / nbClasses) rounded asString, '% of classes are components'; cr.
-	aStream nextPutAll: ((nbTypes + nbServicesInterface + nbEventsInterface + nbParametersInterface) * 100 / nbTraits) rounded asString, '% of traits are component contract'; cr.
+	nbTraits > 0 ifTrue:[aStream nextPutAll: ((nbTypes + nbServicesInterface + nbEventsInterface + nbParametersInterface) * 100 / nbTraits) rounded asString, '% of traits are component contract'; cr].
 	aStream cr.
 
 	aStream nextPutAll: '### Molecule entities'; cr.
