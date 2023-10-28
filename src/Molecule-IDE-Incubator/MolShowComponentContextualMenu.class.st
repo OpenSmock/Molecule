@@ -3,14 +3,14 @@ Menu to access on the component graphic vue
 "
 Class {
 	#name : #MolShowComponentContextualMenu,
-	#superclass : #MolContextualMenu,
+	#superclass : #MolCmdCommand,
 	#category : #'Molecule-IDE-Incubator-Menus'
 }
 
 { #category : #activation }
 MolShowComponentContextualMenu class >> browserMenuActivation [
 	<classAnnotation>
-	^CmdContextMenuActivation byItemOf: CmdMoleculeMenuGroup for: ClyFullBrowserClassContext.
+	^CmdContextMenuActivation byItemOf: MolCmdMenuGroup for: ClyFullBrowserClassContext.
 	
 
 
@@ -23,7 +23,7 @@ MolShowComponentContextualMenu >> defaultMenuIconName [
 
 { #category : #accessing }
 MolShowComponentContextualMenu >> defaultMenuItemName [ 
-	^ 'Show Component map'
+	^ '[Incubator] Show Component map'
 ]
 
 { #category : #execution }
