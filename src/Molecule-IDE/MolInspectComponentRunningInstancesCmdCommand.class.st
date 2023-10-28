@@ -1,6 +1,6 @@
 Class {
 	#name : #MolInspectComponentRunningInstancesCmdCommand,
-	#superclass : #MolCmdCommand,
+	#superclass : #MolClassesCmdCommand,
 	#category : #'Molecule-IDE-Menus'
 }
 
@@ -23,11 +23,23 @@ MolInspectComponentRunningInstancesCmdCommand >> defaultMenuItemName [
 ]
 
 { #category : #accessing }
+MolInspectComponentRunningInstancesCmdCommand >> description [
+
+	^'Show a list of actually running component instances of this component'
+]
+
+{ #category : #accessing }
 MolInspectComponentRunningInstancesCmdCommand >> execute [
-	| item |
+	| selectedComponents instanceList |
+
+	selectedComponents := self selectedComponentClasses. 
+	instanceList := Set new.
+
+	selectedComponents do:[ :c | | running |
+		running := (MolComponentManager default homeServices deployedComponents at: c ifAbsent:[ Dictionary new ]) copy.
+		running isEmpty ifFalse:[ instanceList add: running ].			
+	].
 	
-	super execute.
-	item := items browserItem actualObject.
-	
-	(MolComponentManager default homeServices deployedComponents at: item ifAbsent:[Dictionary new]) copy inspect
+	self executionResult: instanceList.
+	^ self executionResult inspect
 ]

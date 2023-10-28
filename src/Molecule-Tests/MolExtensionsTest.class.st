@@ -19,7 +19,7 @@ MolExtensionsTest >> tearDown [
 { #category : #tests }
 MolExtensionsTest >> testHaveComponentType [
 
-	self assert: MolAbstractComponentImpl  haveComponentType equals: false.
+	self deny: MolAbstractComponentImpl haveComponentType.
 	self assert: MolMyClientComponentImpl haveComponentType.
 	
 ]
@@ -27,17 +27,19 @@ MolExtensionsTest >> testHaveComponentType [
 { #category : #tests }
 MolExtensionsTest >> testIsComponentClass [
 
-	self assert: Object isComponentClass equals: false.
-	self assert: 2 class isComponentClass equals: false.
-	self assert: MolAbstractComponentImpl isComponentClass.
+	self deny: Object isComponentClass.
+	self deny: 2 class isComponentClass.
+	self deny: MolAbstractComponentImpl isComponentClass. "This class is not a component class, but subclasses yes"
 	self assert: MolMyClientComponentImpl isComponentClass.
-	self assert: MolMyClientComponentImpl class isComponentClass equals: false.
+	self deny: MolMyClientComponentImpl class isComponentClass.
 ]
 
 { #category : #tests }
 MolExtensionsTest >> testIsComponentType [
 
-	self assert: MolComponentImpl isComponentType equals: false.
-	self assert: MolComponentType isComponentType equals: false.
+	self deny: MolComponentImpl isComponentType.
+	self deny: MolComponentType isComponentType.
+	self deny: TraitedClass isComponentType.
+	
 	self assert: MolMyClientComponent isComponentType.
 ]

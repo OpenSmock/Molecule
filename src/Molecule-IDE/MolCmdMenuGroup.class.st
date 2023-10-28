@@ -17,7 +17,7 @@ MolCmdMenuGroup >> buildContextMenu: aMenu [
 { #category : #accessing }
 MolCmdMenuGroup >> description [
 
-	^ 'Molecule component menu'
+	^ 'Molecule contextual menu'
 ]
 
 { #category : #accessing }

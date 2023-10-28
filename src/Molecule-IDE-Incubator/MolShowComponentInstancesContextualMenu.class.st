@@ -3,7 +3,7 @@ Class for Show Component INstances in System Browser
 "
 Class {
 	#name : #MolShowComponentInstancesContextualMenu,
-	#superclass : #MolCmdCommand,
+	#superclass : #MolClassesCmdCommand,
 	#category : #'Molecule-IDE-Incubator-Menus'
 }
 
@@ -26,13 +26,17 @@ MolShowComponentInstancesContextualMenu >> defaultMenuItemName [
 	^ '[Incubator] Show running instances'
 ]
 
+{ #category : #accessing }
+MolShowComponentInstancesContextualMenu >> description [
+
+	^'Incubator action'
+]
+
 { #category : #execution }
 MolShowComponentInstancesContextualMenu >> execute [
 
 	| componentInstances |
 	"open instances component window"
-	super execute.
-
 	componentInstances := items browserItem actualObject allSubInstances.
 
 	componentInstances isEmpty

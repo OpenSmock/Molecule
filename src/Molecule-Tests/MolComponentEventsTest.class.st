@@ -10,11 +10,12 @@ Class {
 { #category : #tests }
 MolComponentEventsTest >> testIsComponentEvents [
 
-	self assert: MolComponentServices isComponentEvents equals: false.
-	self assert: MolComponentParameters isComponentEvents equals: false.
-	self assert: MolComponentEvents isComponentEvents equals: false.
+	self deny: MolComponentServices isComponentEvents.
+	self deny: MolComponentParameters isComponentEvents.
+	self deny: MolComponentEvents isComponentEvents.
+	self deny: TraitedClass isComponentEvents.
 	
-	self assert: MolUsedServices isComponentEvents equals: false.
-	self assert: MolUsedParameters isComponentEvents equals: false.
-	self assert: MolUsedEvents isComponentEvents equals: true.
+	self deny: MolUsedServices isComponentEvents.
+	self deny: MolUsedParameters isComponentEvents.
+	self assert: MolUsedEvents isComponentEvents.
 ]

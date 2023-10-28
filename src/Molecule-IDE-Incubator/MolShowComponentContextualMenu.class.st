@@ -3,7 +3,7 @@ Menu to access on the component graphic vue
 "
 Class {
 	#name : #MolShowComponentContextualMenu,
-	#superclass : #MolCmdCommand,
+	#superclass : #MolClassesCmdCommand,
 	#category : #'Molecule-IDE-Incubator-Menus'
 }
 
@@ -27,11 +27,16 @@ MolShowComponentContextualMenu >> defaultMenuItemName [
 ]
 
 { #category : #execution }
+MolShowComponentContextualMenu >> description [
+
+	^'Incubator action'
+]
+
+{ #category : #execution }
 MolShowComponentContextualMenu >> execute [
 
 	| item usedComponentServices usedComponentParameters consumedComponentEvents providedComponentServices providedComponentParameters producedComponentEvents showComponent |
 	"open show component window"
-	super execute.
 
 	item := items browserItem actualObject.
 
