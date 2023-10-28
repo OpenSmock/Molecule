@@ -25,7 +25,7 @@ SpMolInspect >> initializePresenters [
 	table := self newTreeTable.
 	table addColumn: (SpCompositeTableColumn new
 			title: 'Component';
-			addColumn: ((SpImageTableColumn evaluated: #systemIcon)
+			addColumn: ((SpImageTableColumn evaluated: [ :e | e iconNamed: e systemIconName])
 				width: 20;
 				yourself);
 			addColumn: (SpStringTableColumn evaluated: #name);
