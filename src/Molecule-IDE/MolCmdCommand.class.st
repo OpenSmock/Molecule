@@ -6,7 +6,8 @@ Class {
 	#superclass : #CmdCommand,
 	#instVars : [
 		'selectedItems',
-		'items'
+		'items',
+		'executionResult'
 	],
 	#category : #'Molecule-IDE-Menus'
 }
@@ -21,6 +22,18 @@ MolCmdCommand class >> browserMenuActivation [
 MolCmdCommand class >> isAbstract [
 
 	^ self = MolCmdCommand
+]
+
+{ #category : #accessing }
+MolCmdCommand >> executionResult [
+
+	^ executionResult
+]
+
+{ #category : #accessing }
+MolCmdCommand >> executionResult: anObject [
+
+	executionResult := anObject
 ]
 
 { #category : #execution }

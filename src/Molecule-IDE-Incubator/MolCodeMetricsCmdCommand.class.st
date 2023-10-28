@@ -49,7 +49,7 @@ MolCodeMetricsCmdCommand >> execute [
 	presenter text: stream contents.
 	
 	presenter open.
-	presenter withWindowDo: [ :w | w title: self titleForSelectedItems; aboutText: self aboutText ]
+	presenter withWindowDo: [ :w | w title: self titleForSelectedItems; aboutText: self aboutText ].
 ]
 
 { #category : #private }

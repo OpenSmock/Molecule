@@ -40,5 +40,6 @@ MolInspectComponentRunningInstancesCmdCommand >> execute [
 		running isEmpty ifFalse:[ instanceList add: running ].			
 	].
 	
-	^ instanceList inspect
+	self executionResult: instanceList.
+	^ self executionResult inspect
 ]

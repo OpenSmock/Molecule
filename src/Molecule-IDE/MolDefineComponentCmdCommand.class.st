@@ -30,12 +30,13 @@ MolDefineComponentCmdCommand >> description [
 
 { #category : #accessing }
 MolDefineComponentCmdCommand >> execute [
-	| componentsToDefine nbComponents |
+	| componentsToDefine nbOfDefinedComponents |
 	
 	componentsToDefine := self selectedComponentClasses.
 	componentsToDefine do:[ :c | MolComponentFactory defineComponent: c ].
 	
-	nbComponents := componentsToDefine size.
+	nbOfDefinedComponents := componentsToDefine size.
+	self executionResult: nbOfDefinedComponents.
 	
-	self inform: nbComponents asString, ' component', (nbComponents > 1 ifTrue:['s'] ifFalse:['']) ,' defined'.
+	self inform: nbOfDefinedComponents asString, ' component', (nbOfDefinedComponents > 1 ifTrue:['s'] ifFalse:['']) ,' defined'.
 ]
