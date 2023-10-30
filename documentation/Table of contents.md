@@ -3,7 +3,7 @@ Welcome to the Molecule wiki!
 [Principles](https://github.com/OpenSmock/Molecule/blob/main/documentation/Principles.md)
 
 # Tutorials
-Step-by-step example describing an example between 2 Components interacting: \
+Step-by-step example describing an example between two Components interacting: \
 [Create and connect Components](https://github.com/OpenSmock/Molecule/blob/main/documentation/Create%20and%20connect%20Components.md)
 
 Other tutorials focused on one specific part of Molecule: \
