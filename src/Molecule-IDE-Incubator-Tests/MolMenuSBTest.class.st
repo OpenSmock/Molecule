@@ -10,7 +10,7 @@ Class {
 { #category : #running }
 MolMenuSBTest >> setUp [
 	super setUp.
-	menu := MolContextualMenu new.
+	menu := MolCmdCommand new.
 	"Put here a common initialization logic for tests"
 ]
 

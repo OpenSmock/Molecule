@@ -1,6 +1,6 @@
 Class {
 	#name : #MolDefineComponentCmdCommand,
-	#superclass : #MolCmdCommand,
+	#superclass : #MolClassesCmdCommand,
 	#category : #'Molecule-IDE-Menus'
 }
 
@@ -23,10 +23,20 @@ MolDefineComponentCmdCommand >> defaultMenuItemName [
 ]
 
 { #category : #accessing }
+MolDefineComponentCmdCommand >> description [
+
+	^'Define this component: force to generate methods from contract definition'
+]
+
+{ #category : #accessing }
 MolDefineComponentCmdCommand >> execute [
-	| item |
+	| componentsToDefine nbOfDefinedComponents |
 	
-	super execute.
-	item := items browserItem actualObject.
-	MolComponentFactory defineComponent: item
+	componentsToDefine := self selectedComponentClasses.
+	componentsToDefine do:[ :c | MolComponentFactory defineComponent: c ].
+	
+	nbOfDefinedComponents := componentsToDefine size.
+	self executionResult: nbOfDefinedComponents.
+	
+	self inform: nbOfDefinedComponents asString, ' component', (nbOfDefinedComponents > 1 ifTrue:['s'] ifFalse:['']) ,' defined'.
 ]

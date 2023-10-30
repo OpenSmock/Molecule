@@ -11,11 +11,12 @@ Class {
 MolComponentServicesTest >> testIsComponentServices [
 
 
-	self assert: MolComponentServices isComponentServices equals: false.
-	self assert: MolComponentParameters isComponentServices equals: false.
-	self assert: MolComponentEvents isComponentServices equals: false.
+	self deny: MolComponentServices isComponentServices.
+	self deny: MolComponentParameters isComponentServices.
+	self deny: MolComponentEvents isComponentServices.
+	self deny: TraitedClass isComponentServices.
 	
-	self assert: MolUsedServices isComponentServices equals: true.
-	self assert: MolUsedParameters isComponentServices equals: false.
-	self assert: MolUsedEvents isComponentServices equals: false.
+	self assert: MolUsedServices isComponentServices.
+	self deny: MolUsedParameters isComponentServices.
+	self deny: MolUsedEvents isComponentServices.
 ]

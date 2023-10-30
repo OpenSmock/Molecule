@@ -12,13 +12,13 @@ His Component architecture approach provides an adapted structuration to User In
 Molecule provides a way to describe a software application as a component group. Components communicate by use of services, parameters and event propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
 Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
 
-## Documentation
+## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Documentation
 
 Molecule documentation is available here: [Molecule Documentation Home](https://github.com/OpenSmock/Molecule/blob/main/documentation/Home.md)
 
 The documentation includes some tutorials, pattern description and examples. 
 
-## How to get Molecule
+## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> How to get Molecule
 
 You can load the latest development version of Molecule or load a specific stable release with a tag, for example 1.2.10.
 
@@ -76,13 +76,13 @@ Molecule Core has no dependencies.
 
 Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark), this package contains benchmarks for working on performances.
 
-## Molecule Menu
+## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Molecule Menu
 
 ![image](https://github.com/OpenSmock/Molecule/assets/49183340/ef29b8f4-941a-45a6-b41e-bf6db9f78ec6)
 
 Molecule system can be monitored and controlled from the dedicated `Molecule` library menu.
 
-## Using Components
+## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Using Components
 
 ### Start and stop method
 
@@ -148,7 +148,7 @@ MyComponentClass remove: #compA.
 MyComponentClass undeploy.
 ```
 
-## Some examples
+## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Some examples
 
 Examples are available in the package 'Molecule-Examples'.
 Open the Transcript before running examples, some results are showed in the Transcript window.
@@ -191,7 +191,7 @@ MolGeoPosExampleLauncher swapGPS.
 MolGeoPosExampleLauncher stop.
 ```
 
-## Incubator packages: our UI tools experimentation zone
+## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Incubator packages: our UI tools experimentation zone
 
 UI Tools are coming in the next versions of Molecule. They are currently in development in incubators packages, are ready to use but may be instable.
 
@@ -211,7 +211,7 @@ Metacello new
    load.
 ```
 
-## To know more...
+## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> To know more...
 
 Publications related to Molecule:
 
@@ -221,7 +221,7 @@ Publications related to Molecule:
 
 [Reuse in component-based prototyping: an industrial experience report from 15 years of reuse](https://link.springer.com/article/10.1007/s11334-022-00456-4)
 
-## Credits
+## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Credits
 
 * **Pierre Laborde** - *Initial work* - [labordep](https://github.com/labordep)
 * **Eric Le Pors** - *Initial work* - [ELePors](https://github.com/ELePors)
@@ -229,8 +229,6 @@ Publications related to Molecule:
 * **Alain Plantec** - *Initial work* - [plantec](https://github.com/plantec)
 * **Lisa Doyen** - *UI Components Tools* - [lisadoyen](https://github.com/lisadoyen)
 
-![Molecule Logo](resources/MoleculeLogotype.svg)
-
-## License
+## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

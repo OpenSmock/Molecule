@@ -15,9 +15,9 @@ MolGNSSGPSInaccurate >> componentActivate [
 
 	sendCurrentPositionThread := [
 	                             [ true ] whileTrue: [
-		                             (Delay forSeconds: 1) wait.
+		                         
 		                             self getMolGeoPosEquipmentEventsNotifier
-			                             currentPositionChanged: 1 @ 1 ] ]
+			                             currentPositionChanged: self getRandomizedGPSPosition.  (Delay forSeconds: 1) wait. ] ]
 		                             forkAt:
 		                             Processor userBackgroundPriority
 ]
@@ -42,10 +42,17 @@ MolGNSSGPSInaccurate >> getMolGeoPosEquipmentEventsNotifier [
 	^self eventsNotifiers at: MolGeoPosEquipmentEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolGeoPosEquipmentEvents name: nil].
 ]
 
+{ #category : #services }
+MolGNSSGPSInaccurate >> getRandomizedGPSPosition [
+
+	| random |
+	random := Random new.
+	^ random next @ random next
+]
+
 { #category : #'GPS hardware existing API' }
 MolGNSSGPSInaccurate >> precision [
-
 	"Return GPS hardware precision (in feet)"
 
-	^3
+	^300
 ]
