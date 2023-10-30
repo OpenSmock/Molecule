@@ -6,10 +6,10 @@
 
 ![Molecule Logo](resources/MoleculeBanner.jpg)
 
-Molecule is a component oriented framework for Pharo. 
+Molecule is a component oriented framework for Pharo. \
 His Component architecture approach provides an adapted structuration to User Interface (UI) or another software application which need Component features.
 
-Molecule provides a way to describe a software application as a component group. Components communicate by use of services, parameters and event propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM).
+Molecule provides a way to describe a software application as a component group. Components communicate by use of services, parameters and event propagation. It is a Pharo implementation of the Lightweight Corba Component Model (Lightweight CCM). \
 Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
 
 ## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Documentation
@@ -26,7 +26,7 @@ Continuous integration (CI) status badges show status of compatibility for all s
 
 ### Latest version
 
-To install the **latest version of Molecule** in Pharo you just need to execute the following script:
+To install the **latest version of Molecule** in Pharo, you just need to execute the following script:
 
 ```smalltalk
 Metacello new
@@ -43,8 +43,8 @@ spec baseline: 'Molecule' with: [ spec repository: 'github://OpenSmock/Molecule:
 
 ### Specific release
 
-To install a release in your Pharo image you just need to adapt and execute the following script.
-Don't forget to adapt the **x.x.x** tag to your wanted release in your script, with for example **1.2.11**.
+To install a release in your Pharo image you just need to adapt and execute the following script. \
+Don't forget to adapt the **x.x.x** tag to your wanted release in your script, for example **1.2.11**.
 
 ```smalltalk
 Metacello new
@@ -100,7 +100,7 @@ To stop a component:
 MyComponentClass stop.
 ```
 
-Component can be identified with a name. To start a component with a specific name:
+Components can be identified with a name. To start a component with a specific name:
 
 ```smalltalk
 componentA := MyComponentClass start: #componentA.
