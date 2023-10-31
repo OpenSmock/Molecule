@@ -1,24 +1,3 @@
-Welcome to the Molecule wiki!
-
-# Introduction
-Molecule is a component oriented framework for Pharo. His Component architecture approach provides an adapted structuration to graphic user interface (GUI) or another software application which need Component features.
-
-Molecule provides a way to describe a software application as a component group.
-
-Molecule is a Light-weight implementation of the Corba Component Model (LCCM). It allows for the specification of components as in the Corba standard: provided and used services, produced and consumed events. However, Molecule components are only specified and instantiated locally. They are not exchanged nor shared through a standard object bus.
-
-Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
-
-# Installation
-Pharo 8, 9, 10 and 11 :
-```smalltalk
-Metacello new
-   baseline: 'Molecule';
-   repository: 'github://OpenSmock/Molecule';
-   load.
-```
-Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
-
 # Principles
 This section briefly presents what is a Molecule component and how it's dynamically managed.
 
@@ -62,21 +41,6 @@ The terminal state of a component is the Removed state. When a component switche
 
 Let us illustrate the use of these states with the example of a GUI window handled as a component. First, the window is instantiated by the component. Then the component state switches to Initialized. When the window is displayed on the desktop, the component’s state switches to Activated. When the window is reduced and its icon is stored into a task-bar, then the component switches to the Passivated state. As the window is only reduced, it can be re-opened very quickly. Finally, when the user closes the window, the component is first switched to Passivated, then to the Removed state.
 
-# Tutorial section
-[Connecting two components](https://github.com/OpenSmock/Molecule/blob/main/documentation/Connecting%20two%20components.md) \
-[Create a new Molecule Component](https://github.com/OpenSmock/Molecule/blob/main/documentation/Create%20a%20new%20Molecule%20component.md) \
-[Creating Events](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Events.md) \
-[Creating Notifiers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Notifiers.md) \
-[Creating Parameters](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Parameters.md) \
-[Creating Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md) \
-[Facilitating tests](https://github.com/OpenSmock/Molecule/blob/main/documentation/Facilitating%20tests.md)
-
 # External links
-## Publications
-[Molecule: live prototyping with component-oriented programming](https://inria.hal.science/hal-02966704/)
-[15 years of reuse experience in evolutionary prototyping for the defense industry](https://inria.hal.science/hal-02966691/preview/ICSR_15years.pdf)
-## Videos
-[Molecule: live prototyping with component-oriented programming](https://www.youtube.com/watch?v=Zfo3VkH2bVw)
-[15 years of reuse experience in evolutionary prototyping for the defense industry](https://www.youtube.com/watch?v=Zfo3VkH2bVw)
 ## Specifications
 [Learn more about CCM specifications](https://www.omg.org/spec/CCM/About-CCM/)
