@@ -43,7 +43,7 @@ spec baseline: 'Molecule' with: [ spec repository: 'github://OpenSmock/Molecule:
 
 ### Specific release
 
-To install a release in your Pharo image you just need to adapt and execute the following script. \
+To install a release in your Pharo image you just need to adapt and execute the following script.
 Don't forget to adapt the **x.x.x** tag to your wanted release in your script, for example **1.2.11**.
 
 ```smalltalk
