@@ -1,7 +1,7 @@
 # Create and connect Components
-In this tutorial, we will create a first Component that produces an Event and provides a Service (a GPS emitting geographical data). \
+In this tutorial, we will create a first Component that produces an Event and provides a Service (a GNSS emitting geographical data). \
 Then we will create a second Component that uses the provided Service and consumes the produced Event (a Map acting as a display for the data). \
-The complete GPS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works.
+The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works.
 
 # STATIC PART: declaration
 
@@ -11,7 +11,7 @@ Code spaces beginning by `Trait` need to be put in the code space under *New cla
 First, we will create a Service Trait¹ 
 with a Service inside it.
 ```smalltalk
-Trait named: #MolGPSDataServices
+Trait named: #MolGNSSDataServices
 	uses: MolComponentServices
 	instanceVariableNames: ''
 	package: 'MoleculeTutorial'
@@ -23,7 +23,7 @@ A Trait can be composed of multiple other traits.*
 
 Then, we create an Event interface with an Trait inside it.
 ```smalltalk
-Trait named: #MolGPSDataEvents
+Trait named: #MolGNSSDataEvents
 	uses: MolComponentEvents
 	instanceVariableNames: ''
 	package: 'MoleculeTutorial'
@@ -31,20 +31,20 @@ Trait named: #MolGPSDataEvents
 
 Next, we need to add the Service and Event interfaces as suppliers (of a Service and an Event respectively).
 ```smalltalk
- MolGPSDataServices>>getAccuracyRadiusInMeters
-	"Gets and return the accuracy of the GPS depending on quality of signal and quantity of connected satellites"
+ MolGNSSDataServices>>getAccuracyRadiusInMeters
+	"Gets and return the accuracy of the GNSS depending on quality of signal and quantity of connected satellites"
 	"method is left empty, will be defined in the Component that provides it"
 ```
 
 ```smalltalk
- MolGPSDataEvents>>currentPositionChanged: aGeoPosition
-	"Notify the current geographic position of the GPSreceiver when changed"
+ MolGNSSDataEvents>>currentPositionChanged: aGeoPosition
+	"Notify the current geographic position of the GNSSreceiver when changed"
 	"method is left empty, will be defined in the Component that consumes it"
 ```
 
 Note: Parameters are similar to Services, their Trait Type just need to be changed to `MolComponentParameters`
 ```smalltalk
-Trait named: #MolGPSDataParameters
+Trait named: #MolGNSSDataParameters
 	uses: MolComponentParameters
 	instanceVariableNames: ''
 	package: 'MoleculeTutorial'
@@ -61,7 +61,7 @@ Types don't have any methods on the Instance side of Pharo, their contract is to
 
 ## Define the first Component Type
 ```smalltalk
-Trait named: #MolGPSData
+Trait named: #MolGNSSData
 	uses: MolComponentType
 	instanceVariableNames: ''
 	package: 'Molecule-Tutorial'
@@ -69,7 +69,7 @@ Trait named: #MolGPSData
 
 ## Define the second Component Type
 ```smalltalk
-Trait named: #MolGPSMap
+Trait named: #MolGNSSMap
 	uses: MolComponentType
 	instanceVariableNames: ''
 	package: 'Molecule-Tutorial'
@@ -90,59 +90,59 @@ With Molecule, we reuse any existing Class by augmenting that Class with Compone
 
 We must use the Molecule Component interface `MolComponentImpl`, which is a Trait, in the existing Class. Any class that implements this interface is usable as a Molecule component. Then, we assign the type Component to the class as a standard Molecule Component.
 
-## Define the contract for MolGPSData
-For this tutorial, the GPS needs to send its geographical data to the Map. \
+## Define the contract for MolGNSSData
+For this tutorial, the GNSS needs to send its geographical data to the Map. \
 In order to do that, its contract needs to be redefined to indicate which Services and Events are produced and provided by it. \
 Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser**, accessible through the **Browser** tab of Pharo, click on the radio button located left to the Class side text, which is located in the middle of the **System Browser** window). \
 The needed methods for the contract already exist (since the Components' Type use `MolComponentType`), they just need to be overridden. \
 A Component Type can provide multiple Services and Events (separated by a comma), there's just one each for this tutorial (each one being put between the curly brackets of the methods).
 
-Since the `MolGPSData` Component Type needs to inform the Map when its position is changed, it produces the `MolGPSDataEvents>>currentPositionChanged: aGeoPosition` Event.
+Since the `MolGNSSData` Component Type needs to inform the Map when its position is changed, it produces the `MolGNSSDataEvents>>currentPositionChanged: aGeoPosition` Event.
 ```smalltalk
-MolGPSData>>producedComponentEvents
+MolGNSSData>>producedComponentEvents
 
 	<componentContract>
-	^ { MolGPSDataEvents }
+	^ { MolGNSSDataEvents }
 ```
 
-Since the `MolGPSData` Component Type needs to returns its accuracy when its position is changed, it provides the `MolGPSDataServices>>getAccuracyRadiusInMeters` Service.
+Since the `MolGNSSData` Component Type needs to returns its accuracy when its position is changed, it provides the `MolGNSSDataServices>>getAccuracyRadiusInMeters` Service.
 ```smalltalk
-MolGPSData>>providedComponentServices
+MolGNSSData>>providedComponentServices
 
 	<componentContract>
-	^ { MolGPSDataServices }
+	^ { MolGNSSDataServices }
 ```
 
-## Create the Component implementation for MolGPSData
+## Create the Component implementation for MolGNSSData
 Code spaces beginning by `MolAbstractComponentImpl` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
 
-When this is all done, we can move on to create the GPS Component, being `MolGPSDataImpl`. This component uses the `MolGPSData` Trait, used to define the Component's contract, as well as the `MolGPSDataServices` interface, which needs to be specified in order for the Component to provide its Service.
+When this is all done, we can move on to create the GNSS Component, being `MolGNSSDataImpl`. This component uses the `MolGNSSData` Trait, used to define the Component's contract, as well as the `MolGNSSDataServices` interface, which needs to be specified in order for the Component to provide its Service.
 ```smalltalk
-MolAbstractComponentImpl subclass: #MolGPSDataImpl
-	uses: MolGPSData + MolGPSDataServices
+MolAbstractComponentImpl subclass: #MolGNSSDataImpl
+	uses: MolGNSSData + MolGNSSDataServices
 	instanceVariableNames: 'accuracy sendCurrentPositionThread'
 	classVariableNames: ''
 	package: 'Molecule-Tutorial'
 ```
 
-## Define what the GPS Component does
-Next, we will need to specify what exactly the GPS sends. This is where the previously declared instance variable `accuracy` comes into play. 
+## Define what the GNSS Component does
+Next, we will need to specify what exactly the GNSS sends. This is where the previously declared instance variable `accuracy` comes into play. 
 First, create a getter and setter for it.
 ```smalltalk
-MolGPSDataImpl>>accuracy
+MolGNSSDataImpl>>accuracy
 
 	^ accuracy
 ```
 
 ```smalltalk
-MolGPSDataImpl>>accuracy: anObject
+MolGNSSDataImpl>>accuracy: anObject
 
 	accuracy := anObject
 ```
 
 Next, create a method that changes the value of this instance variable.
 ```smalltalk
-MolGPSDataImpl>>increaseAccuracy
+MolGNSSDataImpl>>increaseAccuracy
 
 	| nextAccuracy |
 	self accuracy > 1 ifTrue: [
@@ -153,88 +153,88 @@ MolGPSDataImpl>>increaseAccuracy
 
 Then, override the `getAccuracyRadiusInMeters` Service (which will simply return `accuracy`)
 ```smalltalk
-MolGPSDataImpl>>getAccuracyRadiusInMeters
-	"Get and return the accuracy of the GPS depending quality of signal and quantity of connected satellites"
+MolGNSSDataImpl>>getAccuracyRadiusInMeters
+	"Get and return the accuracy of the GNSS depending quality of signal and quantity of connected satellites"
 
 	^ self accuracy
 ```
 
-`getRandomizedGPSPosition` is used to return a randomized couple of values.
+`getRandomizedGNSSPosition` is used to return a randomized couple of values.
 ```smalltalk
-MolGPSDataImpl>>getRandomizedGPSPosition
+MolGNSSDataImpl>>getRandomizedGNSSPosition
 	| random |
 	random := Random new.
 	^ random next @ random next
  ```
 
-After that, the Component needs to call these methods and send them to the `MolGPSMapImpl` (component created in the next part). \
+After that, the Component needs to call these methods and send them to the `MolGNSSMapImpl` (component created in the next part). \
 This is done by overriding 
 `MolComponentImpl class>>componentActivate`, invoked when a Component is started, \
 `MolComponentImpl class>>componentInitialize` when a Component is initialized (comes after starting) \
 `MolComponentImpl class>>componentPassivate`, invoked when a Component is stopped.
 
 ```smalltalk
-MolGPSDataImpl>>componentInitialize
+MolGNSSDataImpl>>componentInitialize
 	"Set starting accuracy"
 
 	self accuracy: 1000
   ```
 
 ```smalltalk
-MolGPSDataImpl>>componentActivate
+MolGNSSDataImpl>>componentActivate
 	"Start a thread to simulate sending of the geo position and accuracy precision each second"
 
 	sendCurrentPositionThread := [
 	                             [ true ] whileTrue: [
 		                             (Delay forMilliseconds: 50) wait.
-		                             self getMolGPSDataEventsNotifier
+		                             self getMolGNSSDataEventsNotifier
 			                             currentPositionChanged:
-			                             self getRandomizedGPSPosition.
+			                             self getRandomizedGNSSPosition.
 		                             self increaseAccuracy ] ] forkAt:
 		                             Processor userBackgroundPriority
 ```
-To quickly detail this method, we first need to examine the `getMolGPSDataEventsNotifier`. This method was generated by Pharo after `MolGPSDataEvents` was put in the `producedComponentEvents` part of the Component's contract.
+To quickly detail this method, we first need to examine the `getMolGNSSDataEventsNotifier`. This method was generated by Pharo after `MolGNSSDataEvents` was put in the `producedComponentEvents` part of the Component's contract.
 To return to `componentActivate`, after every 50 milliseconds, a random geographical position is generated which is sent through the `currentPositionChanged: aGeoPosition` Event.
 
 ```smalltalk
-MolGPSDataImpl>>componentPassivate
+MolGNSSDataImpl>>componentPassivate
 
 	sendCurrentPositionThread ifNotNil: [ :e | e terminate ].
 	sendCurrentPositionThread := nil
 ```
 
-## Create the Component implementation for MolGPSMap
-Same way as `MolGPSDataImpl`, we can move on to create the Map Component, being `MolGPSMapImpl`. This component uses the `MolGPSMap` Trait, used to define the Component's contract, as well as the `MolGPSDataEvents` interface, which needs to be specified in order for the Component to consume its Service.
+## Create the Component implementation for MolGNSSMap
+Same way as `MolGNSSDataImpl`, we can move on to create the Map Component, being `MolGNSSMapImpl`. This component uses the `MolGNSSMap` Trait, used to define the Component's contract, as well as the `MolGNSSDataEvents` interface, which needs to be specified in order for the Component to consume its Service.
 ```smalltalk
-MolAbstractComponentImpl subclass: #MolGPSMapImpl
-	uses: MolGPSMap + MolGPSDataEvents
+MolAbstractComponentImpl subclass: #MolGNSSMapImpl
+	uses: MolGNSSMap + MolGNSSDataEvents
 	instanceVariableNames: ''
 	classVariableNames: ''
-	package: 'Molecule-Examples-GPS Example'
+	package: 'Molecule-Examples-GNSS Example'
 ```
 
-## Define the contract for MolGPSMap
-Conversely, the Map needs to be informed and receive the data through the same Event and Service as `MolGPSData`.
+## Define the contract for MolGNSSMap
+Conversely, the Map needs to be informed and receive the data through the same Event and Service as `MolGNSSData`.
 Instead of producing and providing interfaces, it will instead consume and use them respectively.
 ```smalltalk
-MolGPSMap>>consumedComponentEvents
+MolGNSSMap>>consumedComponentEvents
 
 	<componentContract>
-	^ { MolGPSDataEvents }
+	^ { MolGNSSDataEvents }
 ```
 
 ```smalltalk
-MolGPSMap>>usedComponentServices
+MolGNSSMap>>usedComponentServices
 
 	<componentContract>
-	^ { MolGPSDataServices }
+	^ { MolGNSSDataServices }
 ```
 
 ## Define what the Map Component does
-First off, this method is used to show in the Transcript (available from the **Browse** tab of Pharo) every position received from `MolGPSDataImpl`.
+First off, this method is used to show in the Transcript (available from the **Browse** tab of Pharo) every position received from `MolGNSSDataImpl`.
 ```smalltalk
-MolGPSMapImpl>>updatePositionCircleOnMap: aGeoPosition radius: radius
-	"Update geographic position of the received GPS position circle with a precision radius"
+MolGNSSMapImpl>>updatePositionCircleOnMap: aGeoPosition radius: radius
+	"Update geographic position of the received GNSS position circle with a precision radius"
 
 	| point text |
 	point := aGeoPosition.
@@ -243,32 +243,32 @@ MolGPSMapImpl>>updatePositionCircleOnMap: aGeoPosition radius: radius
 	        , (point y printShowingDecimalPlaces: 2).
 
 	Transcript
-		show: '[Map] Receive new GPS position: ' , text , ' radius: '
+		show: '[Map] Receive new GNSS position: ' , text , ' radius: '
 			, radius rounded printString , ' m';
 		cr
 ```
 
-Then, we will need to subscribe to `MolGPSDataEvents` through the `getMolGPSDataEventsSubscriber` (automatically generated by Pharo when `MolGPSDataEvents` was put in the `consumedComponentEvents` part of the Component's contract). Subscribing means that `MolGPSMapImpl` will be informed whenever an Event is produced from `MolGPSDataEvents`, and since `MolGPSDataImpl` is the only Component that can produce such Events, `MolGPSMapImpl` is informed by it.
+Then, we will need to subscribe to `MolGNSSDataEvents` through the `getMolGNSSDataEventsSubscriber` (automatically generated by Pharo when `MolGNSSDataEvents` was put in the `consumedComponentEvents` part of the Component's contract). Subscribing means that `MolGNSSMapImpl` will be informed whenever an Event is produced from `MolGNSSDataEvents`, and since `MolGNSSDataImpl` is the only Component that can produce such Events, `MolGNSSMapImpl` is informed by it.
 ```smalltalk
-MolGPSMapImpl>>componentActivate
+MolGNSSMapImpl>>componentActivate
 
-	self getMolGPSDataEventsSubscriber subscribe: self
+	self getMolGNSSDataEventsSubscriber subscribe: self
 ```
 
-Stopping the component means that it will not listen anymore to the events produced by `MolGPSDataEvents`.
+Stopping the component means that it will not listen anymore to the events produced by `MolGNSSDataEvents`.
 ```smalltalk
-MolGPSMapImpl>>componentPassivate
+MolGNSSMapImpl>>componentPassivate
 
-	self getMolGPSDataEventsSubscriber unsubscribe: self
+	self getMolGNSSDataEventsSubscriber unsubscribe: self
 ```
 
-Next, we need to override the `currentPositionChanged: aGeoPosition` inherited from the `MolGPSDataServices` (present in the `usedComponentServices` part of the Component's contract). In this case, the `accuracy` variable is used in order to display it in the Transcript by using `updatePositionCircleOnMap: aGeoPosition radius: radius`.
+Next, we need to override the `currentPositionChanged: aGeoPosition` inherited from the `MolGNSSDataServices` (present in the `usedComponentServices` part of the Component's contract). In this case, the `accuracy` variable is used in order to display it in the Transcript by using `updatePositionCircleOnMap: aGeoPosition radius: radius`.
 ```smalltalk
-MolGPSMapImpl>>currentPositionChanged: aGeoPosition
+MolGNSSMapImpl>>currentPositionChanged: aGeoPosition
 	"Display a circle on the map view at the current position"
 
 	| radius |
-	radius := self getMolGPSDataServicesProvider
+	radius := self getMolGNSSDataServicesProvider
 		          getAccuracyRadiusInMeters.
 
 	self updatePositionCircleOnMap: aGeoPosition radius: radius
@@ -287,11 +287,11 @@ This is also why it's not possible to start two components of the same Type at a
 In a **Playground** (located in the **Browse** tab of Pharo):
 
 ```smalltalk
-MolGPSDataImpl start.
-MolGPSMapImpl start
+MolGNSSDataImpl start.
+MolGNSSMapImpl start
 ```
 The Pharo **Transcript** (also located in the **Browse** tab of Pharo), will start showing messages in the form of \
-'[Map] Receive new GPS position: x@x radius: x m';
+'[Map] Receive new GNSS position: x@x radius: x m';
 
 ### Starting a component with a name
 It's also possible to create a component with a name by using the following syntax: 
@@ -308,6 +308,6 @@ Components with a name are stopped using the same syntax as `start`, which is
 In a **Playground** (located in the **Browse** tab of Pharo):
 
 ```smalltalk
-MolGPSDataImpl stop.
-MolGPSMapImpl stop
+MolGNSSDataImpl stop.
+MolGNSSMapImpl stop
 ```
