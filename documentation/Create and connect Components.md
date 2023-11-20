@@ -91,7 +91,7 @@ With Molecule, we reuse any existing Class by augmenting that Class with Compone
 
 We must use the Molecule Component interface `MolComponentImpl`, which is a Trait, in the existing Class. Any class that implements this interface is usable as a Molecule component. Then, we assign the type Component to the class as a standard Molecule Component.
 
-![implementation contrat molecule](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/80934057-8607-48b3-be24-9562b79e719f) \
+![classes et composants Molecule](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/82fe912e-8db9-479f-ae0f-1d1d050318eb) \
 
 ## Define the contract for MolGNSSData
 For this tutorial, the GNSS needs to send its geographical data to the Map. \
