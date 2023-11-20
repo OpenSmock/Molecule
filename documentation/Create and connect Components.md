@@ -16,16 +16,16 @@ Trait named: #MolGNSSDataServices
 	instanceVariableNames: ''
 	package: 'MoleculeTutorial'
 ```
+¹ Trait: *an independent set of methods with their implementation and requirements (methods and variables). \
+Classes using a Trait automatically benefit from these methods, and must define that Trait’s requirements. \
+A Trait can be composed of multiple other traits.*
+
 We then add a Service to this Trait which is `getAccuracyRadiusInMeters`, which means that the `MolGNSSDataServices` is a provider of the `getAccuracyRadiusInMeters` Service
 ```smalltalk
  MolGNSSDataServices>>getAccuracyRadiusInMeters
 	"Gets and return the accuracy of the GNSS depending on quality of signal and quantity of connected satellites"
 	"method is left empty, will be defined in the Component that provides it"
 ```
-
-¹ Trait: *an independent set of methods with their implementation and requirements (methods and variables). \
-Classes using a Trait automatically benefit from these methods, and must define that Trait’s requirements. \
-A Trait can be composed of multiple other traits.*
 
 Then, we create an Event Trait (a Trait that uses the `MolComponentEvents` Trait)
 ```smalltalk
