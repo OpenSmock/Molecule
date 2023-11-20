@@ -2,6 +2,7 @@
 In this tutorial, we will create a first Component that produces an Event and provides a Service (a GNSS emitting geographical data). \
 Then we will create a second Component that uses the provided Service and consumes the produced Event (a Map acting as a display for the data). \
 The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works.
+A graphical form of the example is available on the [Molecule-Geographical-Position-Example](https://github.com/OpenSmock/Molecule-Geographical-Position-Example) repository.
 
 # STATIC PART: declaration
 
