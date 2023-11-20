@@ -1,7 +1,7 @@
 # Create and connect Components
 In this tutorial, we will create a first Component that produces an Event and provides a Service (a GNSS emitting geographical data). \
 Then we will create a second Component that uses the provided Service and consumes the produced Event (a Map acting as a display for the data). \
-The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works.
+The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works. \
 A graphical form of the example is available on the [Molecule-Geographical-Position-Example](https://github.com/OpenSmock/Molecule-Geographical-Position-Example) repository.
 
 # STATIC PART: declaration
@@ -9,20 +9,25 @@ A graphical form of the example is available on the [Molecule-Geographical-Posit
 ## Define services and events
 Code spaces beginning by `Trait` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
 
-First, we will create a Service Trait¹ 
-with a Service inside it.
+First, we create a Service Trait¹ (a Trait that uses the `MolComponentServices` Trait)
 ```smalltalk
 Trait named: #MolGNSSDataServices
 	uses: MolComponentServices
 	instanceVariableNames: ''
 	package: 'MoleculeTutorial'
 ```
+We then add a Service to this Trait which is `getAccuracyRadiusInMeters`, which means that the `MolGNSSDataServices` is a provider of the `getAccuracyRadiusInMeters` Service
+```smalltalk
+ MolGNSSDataServices>>getAccuracyRadiusInMeters
+	"Gets and return the accuracy of the GNSS depending on quality of signal and quantity of connected satellites"
+	"method is left empty, will be defined in the Component that provides it"
+```
 
 ¹ Trait: *an independent set of methods with their implementation and requirements (methods and variables). \
 Classes using a Trait automatically benefit from these methods, and must define that Trait’s requirements. \
 A Trait can be composed of multiple other traits.*
 
-Then, we create an Event interface with an Trait inside it.
+Then, we create an Event Trait (a Trait that uses the `MolComponentEvents` Trait)
 ```smalltalk
 Trait named: #MolGNSSDataEvents
 	uses: MolComponentEvents
@@ -30,20 +35,14 @@ Trait named: #MolGNSSDataEvents
 	package: 'MoleculeTutorial'
 ```
 
-Next, we need to add the Service and Event interfaces as suppliers (of a Service and an Event respectively).
-```smalltalk
- MolGNSSDataServices>>getAccuracyRadiusInMeters
-	"Gets and return the accuracy of the GNSS depending on quality of signal and quantity of connected satellites"
-	"method is left empty, will be defined in the Component that provides it"
-```
-
+This Event trait produces the `currentPositionChanged: aGeoPosition` Event
 ```smalltalk
  MolGNSSDataEvents>>currentPositionChanged: aGeoPosition
 	"Notify the current geographic position of the GNSSreceiver when changed"
 	"method is left empty, will be defined in the Component that consumes it"
 ```
 
-Note: Parameters are similar to Services, their Trait Type just need to be changed to `MolComponentParameters`
+Note: Parameters are similar to Services, the only difference being that they use the `MolComponentParameters` Trait
 ```smalltalk
 Trait named: #MolGNSSDataParameters
 	uses: MolComponentParameters
