@@ -305,8 +305,7 @@ It's also possible to create a component with a name by using the following synt
 This will be useful for [Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md), which determine which component of a given Type A receives events from which component of a given Type B, if multiple components of the same Type exist.
 
 ## Stopping a component
-Components are stopped using the `MolComponentImpl class>> stop` instruction, the syntax being similar to the `start` instruction since
-Components are stopped by `[componentName] stop`.
+Components are stopped using the `MolComponentImpl class>> stop` instruction, the syntax being similar to the `start` instruction since Components are stopped by `[componentName] stop`. \
 Components with a name are stopped using the same syntax as `start`, which is 
 `[componentName] stop: #[name]`.
 
