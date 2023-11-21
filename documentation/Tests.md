@@ -1,4 +1,5 @@
-To create quick tests for your components, you can create a package named [yourPackageName]-Examples or [yourPackageName]-Tests, then create an Object subclass named [yourPackageName]Examples, 
+# Tests
+To create quick tests for your Components, you can create a package named [yourPackageName]-Examples or [yourPackageName]-Tests, then create an Object subclass named [yourPackageName]Examples, 
 ```smalltalk
 Object subclass: #MolGPS-Examples
 	instanceVariableNames: ''
@@ -34,11 +35,14 @@ MolGPS-Examples>>stop
 	MolComponentManager cleanUp
 ```
 
-You also need to verify the order of components starting since a component that listens to another needs to be started before the latter one. Otherwise, events will be sent wthout any component listening to it, rendering it meaningless.
+## Order of Components
+You also need to verify the order of Components starting since a Component that listens to another needs to be started before the latter one. Otherwise, events will be sent wthout any component listening to it, rendering it meaningless.
 In this example, that means that `MolGPSMapImpl` needs to be started **after** `MolGPSDataImpl`.
 
-This test space can be useful for switching components on the fly, stopping a component to start another having a different Type (make sure that they have a different name or that the current launched component is stopped before the other of the same Type is launched).
+## Switching Components on the fly
+This test space can be useful for switching Components on the fly, stopping a component to start another having a different Type (make sure that they have a different name or that the current launched Component is stopped before the other of the same Type is launched).
 See the Molecule-Examples package for more examples on this.
 
+## Calling another script
 To call another script, you simply have to call it like a regular function with `self [script]` since the `self` here represents the current class (for methods located in the class side).
 The stop script could be for example launched in the `start` script after a certain period of time passed through `self stop`.
