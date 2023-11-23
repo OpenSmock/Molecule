@@ -112,13 +112,11 @@ Imagine that we want to reuse an open-source library that implements the behavio
 With Molecule, we reuse any existing Class by augmenting that Class with Component behavior. This Class becomes seamlessly usable as a Component in a Molecule architecture.
 
 We must use the Molecule Component interface `MolComponentImpl`, which is a Trait, in the existing Class. Any class that implements this interface is usable as a Molecule component. Then, we assign the type Component to the class as a standard Molecule Component.
-
 ![classes et composants Molecule](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/82fe912e-8db9-479f-ae0f-1d1d050318eb)
 
 ## Define the contract for MolGNSSData
 For this tutorial, the GNSS needs to send its geographical data to the Map. \
 In order to do that, its contract needs to be redefined to indicate which Services and Events are produced and provided by it.
-
 ![implementation contrat molecule](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a9c14388-0abe-4f09-8ac5-578054f98ad1)
 
 Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser**, accessible through the **Browse** tab of Pharo, click on the radio button located left to the Class side text, which is located in the middle of the **System Browser** window). \
