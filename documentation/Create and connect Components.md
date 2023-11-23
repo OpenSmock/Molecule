@@ -34,6 +34,31 @@ A graphical form of the example is available in the [Molecule-Geographical-Posit
 
 # STATIC PART: declaration
 
+## Define Component Types
+
+### Adding Component contract with a Component Type
+Whatever the method to create a Component (from scratch or with an existing Class) is, its contract first needs to be defined (for the two methods, the construction and assignment of the contract is the same).
+
+The Component Type implements the Component contract (used/provided Services, consumed/produced Events, used/provided Parameters). \
+The Type is implemented through a Trait. \
+Types don't have any methods on the Instance side of Pharo, their contract is to be defined by overriding some methods on the **Class side** of Pharo.
+
+#### Define the first Component Type MolGNSSData
+```smalltalk
+Trait named: #MolGNSSData
+	uses: MolComponentType
+	instanceVariableNames: ''
+	package: 'Molecule-Tutorial'
+```
+
+#### Define the second Component Type MolGNSSMap
+```smalltalk
+Trait named: #MolGNSSMap
+	uses: MolComponentType
+	instanceVariableNames: ''
+	package: 'Molecule-Tutorial'
+```
+
 ## Define services and events
 Code spaces beginning by `Trait` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
 
@@ -68,31 +93,6 @@ This Event trait produces the `currentPositionChanged: aGeoPosition` Event
  MolGNSSDataEvents>>currentPositionChanged: aGeoPosition
 	"Notify the current geographic position of the GNSSreceiver when changed"
 	"method is left empty, will be defined in the Component that consumes it"
-```
-
-## Define Component Types
-
-### Adding Component contract with a Component Type
-Whatever the method to create a Component (from scratch or with an existing Class) is, its contract first needs to be defined (for the two methods, the construction and assignment of the contract is the same).
-
-The Component Type implements the Component contract (used/provided Services, consumed/produced Events, used/provided Parameters). \
-The Type is implemented through a Trait. \
-Types don't have any methods on the Instance side of Pharo, their contract is to be defined by overriding some methods on the **Class side** of Pharo.
-
-#### Define the first Component Type MolGNSSData
-```smalltalk
-Trait named: #MolGNSSData
-	uses: MolComponentType
-	instanceVariableNames: ''
-	package: 'Molecule-Tutorial'
-```
-
-#### Define the second Component Type MolGNSSMap
-```smalltalk
-Trait named: #MolGNSSMap
-	uses: MolComponentType
-	instanceVariableNames: ''
-	package: 'Molecule-Tutorial'
 ```
 
 ## Create a Component implementation of a Type
