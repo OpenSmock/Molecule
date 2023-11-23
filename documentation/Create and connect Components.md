@@ -10,7 +10,7 @@ GPS (Global Positioning System) is the american subsystem of GNSS (Global Naviga
 		Define Component types
 	 		Adding Component contract with a Component Type
 	   			Define the first Component Type MolGNSSData
-	      			Define the second Component Type MolGNSSDataParameters
+	      			Define the second Component Type MolGNSSMap
 		Create a Component implementation of a Type
 	  		Create a new Component from scratch
 	    		Re-using an existing Class into a Component
@@ -66,14 +66,6 @@ This Event trait produces the `currentPositionChanged: aGeoPosition` Event
  MolGNSSDataEvents>>currentPositionChanged: aGeoPosition
 	"Notify the current geographic position of the GNSSreceiver when changed"
 	"method is left empty, will be defined in the Component that consumes it"
-```
-
-Note: Parameters are similar to Services, the only difference being that they use the `MolComponentParameters` Trait
-```smalltalk
-Trait named: #MolGNSSDataParameters
-	uses: MolComponentParameters
-	instanceVariableNames: ''
-	package: 'MoleculeTutorial'
 ```
 
 ## Define Component types
@@ -200,9 +192,9 @@ MolGNSSDataImpl>>getRandomizedGNSSPosition
 
 After that, the `MolGNSSDataImpl` Component needs to use this Service. \
 This is done by overriding 
-`MolComponentImpl class>>componentActivate`, invoked when a Component is started, \
-`MolComponentImpl class>>componentInitialize` when a Component is initialized (comes after starting) \
-`MolComponentImpl class>>componentPassivate`, invoked when a Component is stopped.
+- `MolComponentImpl class>>componentActivate`, invoked when a Component is started
+- `MolComponentImpl class>>componentInitialize` when a Component is initialized (comes after starting)
+- `MolComponentImpl class>>componentPassivate`, invoked when a Component is stopped
 
 ```smalltalk
 MolGNSSDataImpl>>componentInitialize
