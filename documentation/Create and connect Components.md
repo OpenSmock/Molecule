@@ -234,7 +234,8 @@ To return to `componentActivate`, after every 50 milliseconds, a random geograph
 Generated methods take the following forms:
 - get[componentName]EventsNotifier
 - get[componentName]EventsSubscriber
-- get[componentName]ServicesProvider \
+- get[componentName]ServicesProvider
+
 There is no need to manually type them.
 
 If you're not getting all the generated methods you should have, you can first click on the **Library** tab of Pharo, then select **Molecule** -> **Debug and Tools** and then click on **Define All Components**. If you're still not getting what you expected, you will need to verify what is put in your component's contract (no empty instance variable for example).
