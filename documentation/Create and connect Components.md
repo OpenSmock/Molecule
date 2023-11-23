@@ -1,7 +1,6 @@
-# Create and connect Components
+![transcript red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/4f6d1f18-6d56-45da-80af-51f8ae20eebf)# Create and connect Components
 - In this tutorial, we will create a first Component that produces an Event and provides a Service (a GNSS emitting geographical data)
 - We will then create a second Component that uses the provided Service and consumes the produced Event (a Map acting as a display for the data) \
-They're directly linked, in the sens that a change detected in the first Component is observable in real time in the second component.
 ![gps molecule without figure](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a949d2f8-c460-40be-985d-273881e5b3da) \
 GPS (Global Positioning System) is the american subsystem of GNSS (Global Navigation Satellite Systems).
 
@@ -36,6 +35,8 @@ A graphical form of the example is available in the [Molecule-Geographical-Posit
 # STATIC PART: declaration
 
 ## Define Component Types
+Code spaces beginning by `Trait` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
+![molecule examples red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/fc366d2f-aebd-49da-9dba-2c08da797211)
 
 ### Adding Component contract with a Component Type
 Whatever the method to create a Component (from scratch or with an existing Class) is, its contract first needs to be defined (for the two methods, the construction and assignment of the contract is the same).
@@ -43,6 +44,7 @@ Whatever the method to create a Component (from scratch or with an existing Clas
 The Component Type implements the Component contract (used/provided Services, consumed/produced Events, used/provided Parameters). \
 The Type is implemented through a Trait. \
 Types don't have any methods on the Instance side of Pharo, their contract is to be defined by overriding some methods on the **Class side** of Pharo.
+![class side red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/9a5556aa-d598-4277-a6d0-b31243ee6ecd)
 
 #### Define the first Component Type MolGNSSData
 ```smalltalk
@@ -61,8 +63,6 @@ Trait named: #MolGNSSMap
 ```
 
 ## Define Services and Events
-Code spaces beginning by `Trait` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
-
 First, we create a Service Trait¹ (a Trait that uses the `MolComponentServices` Trait)
 ```smalltalk
 Trait named: #MolGNSSDataServices
@@ -120,6 +120,8 @@ In order to do that, its contract needs to be redefined to indicate which Servic
 ![implementation contrat molecule](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a9c14388-0abe-4f09-8ac5-578054f98ad1)
 
 Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser**, accessible through the **Browser** tab of Pharo, click on the radio button located left to the Class side text, which is located in the middle of the **System Browser** window). \
+![class side red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/7b189b8a-1552-46df-a69d-44f78bb73848)
+
 The needed methods for the contract already exist (since the Components' Type use `MolComponentType`), they just need to be overridden. \
 A Component Type can provide multiple Services and Events (separated by a comma), there's just one each for this tutorial (each one being put between the curly brackets of the methods).
 
@@ -141,6 +143,7 @@ MolGNSSData>>providedComponentServices
 
 ## Create the Component implementation for MolGNSSData
 Code spaces beginning by `MolAbstractComponentImpl` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
+![molecule abstractcomponentimpl red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/5900b86d-791f-4e77-be7e-5abcfe577597)
 
 When this is all done, we can move on to create the GNSS Component, being `MolGNSSDataImpl`. This component uses the `MolGNSSData` Trait, used to define the Component's contract, as well as the `MolGNSSDataServices` interface which needs to be specified in order for the Component to provide its Service.
 ```smalltalk
@@ -177,7 +180,7 @@ MolGNSSDataImpl>>increaseAccuracy
 		self accuracy: nextAccuracy ]
 ```
 
-Then, override the `getAccuracyRadiusInMeters` Service (which will simply return `accuracy`). The override is done since the `getAccuracyRadiusInMeters` Service is declared in the `providedComponentServices` part of `MolGNSSData`'s contract. And since `MolGNSSDataImpl` is an implemmentation of `MolGNSSData`, the `getAccuracyRadiusInMeters` is implemented here.
+Then, override the `getAccuracyRadiusInMeters` Service (which will simply return `accuracy`)
 ```smalltalk
 MolGNSSDataImpl>>getAccuracyRadiusInMeters
 	"Get and return the accuracy of the GNSS depending quality of signal and quantity of connected satellites"
@@ -230,7 +233,8 @@ Generated methods take the following forms:
 - get[componentName]ServicesProvider
 There is no need to manually type them.
 
-If you're not getting all the generated methods you should have, you can first click on the **Library** tab of Pharo, then select **Molecule** -> **Debug and Tools** and then click on **Define All Components**. If you're still not getting what you expected, you will need to verify what is put in your component's contract (no empty instance variable for example). 
+If you're not getting all the generated methods you should have, you can first click on the **Library** tab of Pharo, then select **Molecule** -> **Debug and Tools** and then click on **Define All Components**. If you're still not getting what you expected, you will need to verify what is put in your component's contract (no empty instance variable for example).
+![molecule define all components red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/6a8e8696-0e55-4ac7-86de-a5d6e3fbbcdf)
 
 ```smalltalk
 MolGNSSDataImpl>>componentPassivate
@@ -269,6 +273,8 @@ MolGNSSMap>>usedComponentServices
 
 ## Define what the MolGNSSMapImpl Component does
 First off, this method is used to show in the Transcript (available from the **Browse** tab of Pharo) every position received from `MolGNSSDataImpl`.
+![transcript red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/d76a733f-ae31-4119-a54f-50ecef91e8e8)
+
 ```smalltalk
 MolGNSSMapImpl>>updatePositionCircleOnMap: aGeoPosition radius: radius
 	"Update geographic position of the received GNSS position circle with a precision radius"
@@ -327,7 +333,9 @@ MolGNSSDataImpl start.
 MolGNSSMapImpl start
 ```
 The Pharo **Transcript** (also located in the **Browse** tab of Pharo) will start showing messages in the form of \
+![transcript red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/cbd921c4-ad9b-4b40-8440-e693eb1a8e99)
 '[Map] Receive new GNSS position: x@x radius: x m';
+
 
 ### Starting a Component with a name
 It's also possible to create a component with a name by using the `MolComponentImpl class>>start: #[name]` method.
