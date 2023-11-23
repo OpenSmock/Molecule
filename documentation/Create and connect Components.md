@@ -25,7 +25,7 @@ GPS (Global Positioning System) is the american subsystem of GNSS (Global Naviga
 [DYNAMIC PART: Execution](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#dynamic-part-execution)
 * [Starting a Component](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#starting-a-component)
 	 - [Start the MolGNSSDataImpl and MolGNSSMapImpl components](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#start-the-molgnssdataimpl-and-molgnssmapimpl-components)
-	   - [Starting a component with a name](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#starting-a-component-with-a-name)
+	 - [Starting a component with a name](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#starting-a-component-with-a-name)
 * [Stopping a component](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#stopping-a-component)
 	 - [Stop the MolGNSSDataImpl and MolGNSSMapImpl components](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#stop-the-molgnssdataimpl-and-molgnssmapimpl-components)
 
