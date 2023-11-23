@@ -36,7 +36,7 @@ A graphical form of the example is available in the [Molecule-Geographical-Posit
 # STATIC PART: declaration
 
 ## Define Component Types
-Code spaces beginning by `Trait` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
+Code spaces beginning by `Trait` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo. \
 ![system browser red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/6ad72abf-b1bf-44f0-af5f-64ecfb8e2571)
 ![molecule examples red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/fc366d2f-aebd-49da-9dba-2c08da797211)
 
@@ -145,7 +145,7 @@ MolGNSSData>>providedComponentServices
 ```
 
 ## Create the Component implementation for MolGNSSData
-Code spaces beginning by `MolAbstractComponentImpl` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
+Code spaces beginning by `MolAbstractComponentImpl` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo. \
 ![system browser red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/cc44a9f9-673b-41f4-abee-c57516bff654)
 ![molecule abstractcomponentimpl red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/5900b86d-791f-4e77-be7e-5abcfe577597)
 
@@ -238,7 +238,7 @@ Generated methods take the following forms:
 There is no need to manually type them.
 
 If you're not getting all the generated methods you should have, you can first click on the **Library** tab of Pharo, then select **Molecule** -> **Debug and Tools** and then click on **Define All Components**. If you're still not getting what you expected, you will need to verify what is put in your component's contract (no empty instance variable for example).
-![molecule define all components red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/6a8e8696-0e55-4ac7-86de-a5d6e3fbbcdf)
+![molecule define all components red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/b4625c91-749e-478e-83c3-68ef47bc2070)
 
 ```smalltalk
 MolGNSSDataImpl>>componentPassivate
@@ -277,8 +277,6 @@ MolGNSSMap>>usedComponentServices
 
 ## Define what the MolGNSSMapImpl Component does
 First off, this method is used to show in the Transcript (available from the **Browse** tab of Pharo) every position received from `MolGNSSDataImpl`.
-![transcript red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/d76a733f-ae31-4119-a54f-50ecef91e8e8)
-
 ```smalltalk
 MolGNSSMapImpl>>updatePositionCircleOnMap: aGeoPosition radius: radius
 	"Update geographic position of the received GNSS position circle with a precision radius"
@@ -337,7 +335,7 @@ MolGNSSDataImpl start.
 MolGNSSMapImpl start
 ```
 The Pharo **Transcript** (also located in the **Browse** tab of Pharo) will start showing messages in the form of \
-![transcript red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/cbd921c4-ad9b-4b40-8440-e693eb1a8e99)
+![transcript red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/cbd921c4-ad9b-4b40-8440-e693eb1a8e99) \
 '[Map] Receive new GNSS position: x@x radius: x m';
 
 
