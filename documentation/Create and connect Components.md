@@ -198,7 +198,7 @@ MolGNSSDataImpl>>getRandomizedGNSSPosition
 	^ random next @ random next
  ```
 
-After that, the Component needs to call these methods and send them to the `MolGNSSMapImpl` (component created in the next part). \
+After that, the `MolGNSSDataImpl` Component needs to use this Service. \
 This is done by overriding 
 `MolComponentImpl class>>componentActivate`, invoked when a Component is started, \
 `MolComponentImpl class>>componentInitialize` when a Component is initialized (comes after starting) \
