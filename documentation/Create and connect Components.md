@@ -5,27 +5,27 @@
 GPS (Global Positioning System) is the american subsystem of GNSS (Global Navigation Satellite Systems).
 
 # Contents
-	# STATIC PART: declaration
-		## Define services and events
-		## Define Component types
-	 		### Adding Component contract with a Component Type
-	   			#### Define the first Component Type
-	      			#### Define the second Component Type
-		## Create a Component implementation of a Type
-	  		### Create a new Component from scratch
-	    		### Re-using an existing Class into a Component
-	      	## Define the contract for MolGNSSData
-	        ## Create the Component implementation for MolGNSSData
-		## Define what the GNSS Component does
-	 	## Create the Component implementation for MolGNSSMap
-	  	## Define the contract for MolGNSSMap
-	   	## Define what the Map Component does
-	# DYNAMIC PART: Execution
-		## Starting a Component
-	 		### Start the two components
-	   		### Starting a component with a name
-	     	## Stopping a component
-	      		## Stop the two components
+	STATIC PART: declaration
+		Define services and events
+		Define Component types
+	 		Adding Component contract with a Component Type
+	   			Define the first Component Type MolGNSSData
+	      			Define the second Component Type MolGNSSDataParameters
+		Create a Component implementation of a Type
+	  		Create a new Component from scratch
+	    		Re-using an existing Class into a Component
+	      	Define the contract for MolGNSSData
+	        Create the Component implementation for MolGNSSData
+		Define what the MolGNSSDataImpl Component does
+	 	Create the Component implementation for MolGNSSMap
+	  	Define the contract for MolGNSSMap
+	   	Define what the MolGNSSMapImpl Component does
+	DYNAMIC PART: Execution
+		Starting a Component
+	 		Start the two components MolGNSSDataImpl and MolGNSSMapImpl
+	   		Starting a component with a name
+	     	Stopping a component
+	      		Stop the two components MolGNSSDataImpl and MolGNSSMapImpl
 
 The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works. \
 A graphical form of the example is available in the [Molecule-Geographical-Position-Example](https://github.com/OpenSmock/Molecule-Geographical-Position-Example) repository.
@@ -85,7 +85,7 @@ The Component Type implements the Component contract (used/provided Services, co
 The Type is implemented through a Trait. \
 Types don't have any methods on the Instance side of Pharo, their contract is to be defined by overriding some methods on the **Class side** of Pharo.
 
-#### Define the first Component Type
+#### Define the first Component Type MolGNSSData
 ```smalltalk
 Trait named: #MolGNSSData
 	uses: MolComponentType
@@ -93,7 +93,7 @@ Trait named: #MolGNSSData
 	package: 'Molecule-Tutorial'
 ```
 
-#### Define the second Component Type
+#### Define the second Component Type MolGNSSMap
 ```smalltalk
 Trait named: #MolGNSSMap
 	uses: MolComponentType
@@ -156,7 +156,7 @@ MolAbstractComponentImpl subclass: #MolGNSSDataImpl
 	package: 'Molecule-Tutorial'
 ```
 
-## Define what the GNSS Component does
+## Define what the MolGNSSDataImpl Component does
 Next, we will need to specify what exactly the GNSS sends. This is where the previously declared instance variable `accuracy` comes into play. 
 First, create a getter and setter for it.
 ```smalltalk
@@ -261,7 +261,7 @@ MolGNSSMap>>usedComponentServices
 	^ { MolGNSSDataServices }
 ```
 
-## Define what the Map Component does
+## Define what the MolGNSSMapImpl Component does
 First off, this method is used to show in the Transcript (available from the **Browse** tab of Pharo) every position received from `MolGNSSDataImpl`.
 ```smalltalk
 MolGNSSMapImpl>>updatePositionCircleOnMap: aGeoPosition radius: radius
@@ -314,7 +314,7 @@ This is also why it's not possible to start two components of the same Type at a
 
 **add img**
 
-### Start the two components
+### Start the two components MolGNSSDataImpl and MolGNSSMapImpl
 In a **Playground** (located in the **Browse** tab of Pharo):
 
 ```smalltalk
@@ -334,7 +334,7 @@ Components are stopped using the `MolComponentImpl class>> stop` instruction, th
 Components with a name are stopped a similar method as `start`, which is 
 `[componentName] stop: #[name]`.
 
-## Stop the two components
+## Stop the two components MolGNSSDataImpl and MolGNSSMapImpl
 In a **Playground** (located in the **Browse** tab of Pharo):
 
 ```smalltalk
