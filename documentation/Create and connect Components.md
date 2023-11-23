@@ -328,14 +328,12 @@ The Pharo **Transcript** (also located in the **Browse** tab of Pharo) will star
 '[Map] Receive new GNSS position: x@x radius: x m';
 
 ### Starting a component with a name
-It's also possible to create a component with a name by using the following method: 
-`[componentName] start: #[name]`.
+It's also possible to create a component with a name by using the `MolComponentImpl class>>start: #[name]` method.
 This will be useful for [Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md), which determine which component of a given Type A receives events from which component of a given Type B, if multiple components of the same Type exist.
 
 ## Stopping a component
-Components are stopped using the `MolComponentImpl class>> stop` instruction, the method being similar to the `start` instruction since Components are stopped by `[componentName] stop`. \
-Components with a name are stopped a similar method as `start`, which is 
-`[componentName] stop: #[name]`.
+Components are stopped using the `MolComponentImpl class>>stop` instruction. \
+Components with a name are stopped a similar method as `start`, which is `MolComponentImpl class>>stop: #[name]`.
 
 ## Stop the two components MolGNSSDataImpl and MolGNSSMapImpl
 In a **Playground** (located in the **Browse** tab of Pharo):
