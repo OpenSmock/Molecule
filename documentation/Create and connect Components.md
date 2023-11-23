@@ -5,28 +5,28 @@
 GPS (Global Positioning System) is the american subsystem of GNSS (Global Navigation Satellite Systems).
 
 # Contents
-	[STATIC PART: declaration](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#static-part-declaration)
-		Define services and events
-		Define Component types
-	 		Adding Component contract with a Component Type
-	   			Define first Component Type MolGNSSData
-	      			Define the second Component Type MolGNSSMap
-		Create a Component implementation of a Type
-	  		Create a new Component from scratch
-	    		Re-using an existing Class into a Component
-	      	Define the contract for MolGNSSData
-	        Create the Component implementation for MolGNSSData
-		Define what the MolGNSSDataImpl Component does
-  			Generated methods
-	 	Create the Component implementation for MolGNSSMap
-	  	Define the contract for MolGNSSMap
-	   	Define what the MolGNSSMapImpl Component does
-	DYNAMIC PART: Execution
-		Starting a Component
-	 		Start the MolGNSSDataImpl and MolGNSSMapImpl components
-	   		Starting a component with a name
-	     	Stopping a component
-	      		Stop the MolGNSSDataImpl and MolGNSSMapImpl components
+[STATIC PART: declaration](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#static-part-declaration)
+	- Define services and events
+	- Define Component types
+	 	* Adding Component contract with a Component Type
+	   		+ Define first Component Type MolGNSSData
+	      		+ Define the second Component Type MolGNSSMap
+	- Create a Component implementation of a Type
+	  	* Create a new Component from scratch
+	    	* Re-using an existing Class into a Component
+	- Define the contract for MolGNSSData
+	- Create the Component implementation for MolGNSSData
+	- Define what the MolGNSSDataImpl Component does
+  		* Generated methods
+	- Create the Component implementation for MolGNSSMap
+	  	* Define the contract for MolGNSSMap
+		* Define what the MolGNSSMapImpl Component does
+DYNAMIC PART: Execution
+	- Starting a Component
+	 	* Start the MolGNSSDataImpl and MolGNSSMapImpl components
+	   	* Starting a component with a name
+	- Stopping a component
+	      	* Stop the MolGNSSDataImpl and MolGNSSMapImpl components
 
 The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works. \
 A graphical form of the example is available in the [Molecule-Geographical-Position-Example](https://github.com/OpenSmock/Molecule-Geographical-Position-Example) repository.
