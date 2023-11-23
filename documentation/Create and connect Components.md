@@ -232,6 +232,7 @@ If you're not getting all the generated methods you should have, you can first c
 
 ```smalltalk
 MolGNSSDataImpl>>componentPassivate
+	"stops the thread and resets it"
 
 	sendCurrentPositionThread ifNotNil: [ :e | e terminate ].
 	sendCurrentPositionThread := nil
@@ -289,7 +290,7 @@ MolGNSSMapImpl>>componentActivate
 	self getMolGNSSDataEventsSubscriber subscribe: self
 ```
 
-Stopping the component means that it will not listen anymore to the events produced by `MolGNSSDataEvents`.
+Stopping `MolGNSSMapImpl` means that it will not listen anymore to the events produced by `MolGNSSDataEvents`.
 ```smalltalk
 MolGNSSMapImpl>>componentPassivate
 
