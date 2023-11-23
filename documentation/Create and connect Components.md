@@ -336,7 +336,7 @@ This will be useful for [Producers](https://github.com/OpenSmock/Molecule/blob/m
 Components are stopped using the `MolComponentImpl class>>stop` instruction. \
 Components with a name are stopped a similar method as `start`, which is `MolComponentImpl class>>stop: #[name]`.
 
-## Stop the MolGNSSDataImpl and MolGNSSMapImpl components
+### Stop the MolGNSSDataImpl and MolGNSSMapImpl components
 In a **Playground** (located in the **Browse** tab of Pharo):
 
 ```smalltalk
