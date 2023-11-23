@@ -239,7 +239,7 @@ Generated methods take the following forms:
 There is no need to manually type them.
 
 If you're not getting all the generated methods you should have, you can first click on the **Library** tab of Pharo, then select **Molecule** -> **Debug and Tools** and then click on **Define All Components**. If you're still not getting what you expected, you will need to verify what is put in your component's contract (no empty instance variable for example).
-![molecule define all components red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/b4625c91-749e-478e-83c3-68ef47bc2070)
+![molecule define all components red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/4d3a2e7e-e320-48fa-bbc4-cb26d30823bc)
 
 ```smalltalk
 MolGNSSDataImpl>>componentPassivate
@@ -358,4 +358,4 @@ MolGNSSMapImpl stop
 To verify that all your Components are stopped, you can use `MolUtils allComponentInstancesOfType:` on the Type Trait of a Component. If it returns an empty list, it means that no Component is currently active.
 
 You can also use the **Inspect Component Manager** option of Molecule, available from the **Library tab of Pharo**. If the window shown doesn't have a *deployedComponents* field or is set to *nil*, it also means that no Component is currently active.
-![molecule inspect component manager red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/2a09ab48-ea3b-4f59-bc25-b32457321845)
+![molecule inspect component manager red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/ae61cd53-1835-488b-a5cc-9c4046b116eb)
