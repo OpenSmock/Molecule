@@ -6,7 +6,7 @@ GPS (Global Positioning System) is the american subsystem of GNSS (Global Naviga
 
 # Contents
 [STATIC PART: declaration](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#static-part-declaration)
-	- Define services and events
+	* Define services and events
 	- Define Component types
 	 	* Adding Component contract with a Component Type
 	   		+ Define first Component Type MolGNSSData
