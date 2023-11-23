@@ -357,3 +357,4 @@ To verify that all your Components are stopped, you can use `MolUtils allCompone
 
 You can also use the **Inspect Component Manager** option of Molecule, available from the **Library tab of Pharo**. If the window shown doesn't have a *deployedComponents* field or is set to *nil*, it also means that no Component is currently active.
 ![molecule inspect component manager red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/ae61cd53-1835-488b-a5cc-9c4046b116eb)
+![componentmanager](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/4228e992-ffc2-4236-b44c-9ba215b23473)
