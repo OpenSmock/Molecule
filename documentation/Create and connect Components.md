@@ -117,7 +117,7 @@ We must use the Molecule Component interface `MolComponentImpl`, which is a Trai
 ## Define the contract for MolGNSSData
 For this tutorial, the GNSS needs to send its geographical data to the Map. \
 In order to do that, its contract needs to be redefined to indicate which Services and Events are produced and provided by it.
-![implementation contrat molecule](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a9c14388-0abe-4f09-8ac5-578054f98ad1)
+![implementation contrat molecule](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a9c14388-0abe-4f09-8ac5-578054f98ad1) \
 Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser**, accessible through the **Browse** tab of Pharo, click on the radio button located left to the Class side text, which is located in the middle of the **System Browser** window). \
 ![system browser red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/7fa84d1d-45b4-4fe1-b524-6193fc7d6fec)
 ![class side red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/7b189b8a-1552-46df-a69d-44f78bb73848)
