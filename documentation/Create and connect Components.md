@@ -37,6 +37,7 @@ A graphical form of the example is available in the [Molecule-Geographical-Posit
 
 ## Define Component Types
 Code spaces beginning by `Trait` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
+![system browser red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/6ad72abf-b1bf-44f0-af5f-64ecfb8e2571)
 ![molecule examples red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/fc366d2f-aebd-49da-9dba-2c08da797211)
 
 ### Adding Component contract with a Component Type
@@ -120,7 +121,8 @@ In order to do that, its contract needs to be redefined to indicate which Servic
 
 ![implementation contrat molecule](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a9c14388-0abe-4f09-8ac5-578054f98ad1)
 
-Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser**, accessible through the **Browser** tab of Pharo, click on the radio button located left to the Class side text, which is located in the middle of the **System Browser** window). \
+Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser**, accessible through the **Browse** tab of Pharo, click on the radio button located left to the Class side text, which is located in the middle of the **System Browser** window). \
+![system browser red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/7fa84d1d-45b4-4fe1-b524-6193fc7d6fec)
 ![class side red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/7b189b8a-1552-46df-a69d-44f78bb73848)
 
 The needed methods for the contract already exist (since the Components' Type use `MolComponentType`), they just need to be overridden. \
@@ -144,6 +146,7 @@ MolGNSSData>>providedComponentServices
 
 ## Create the Component implementation for MolGNSSData
 Code spaces beginning by `MolAbstractComponentImpl` need to be put in the code space under *New class* in the **System Browser**, located in the **Browse** tab of Pharo.
+![system browser red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/cc44a9f9-673b-41f4-abee-c57516bff654)
 ![molecule abstractcomponentimpl red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/5900b86d-791f-4e77-be7e-5abcfe577597)
 
 When this is all done, we can move on to create the GNSS Component, being `MolGNSSDataImpl`. This component uses the `MolGNSSData` Trait, used to define the Component's contract, as well as the `MolGNSSDataServices` interface which needs to be specified in order for the Component to provide its Service.
