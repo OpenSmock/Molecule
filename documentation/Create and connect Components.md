@@ -1,5 +1,5 @@
 # Create and connect Components
-- In this tutorial, we will create a first Component that produces an Event and provides a Service (a GNSS emitting geographical data). \
+- In this tutorial, we will create a first Component that produces an Event and provides a Service (a GNSS emitting geographical data).
 - We will then create a second Component that uses the provided Service and consumes the produced Event (a Map acting as a display for the data). \
 ![gps molecule without figure](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a949d2f8-c460-40be-985d-273881e5b3da) \
 
