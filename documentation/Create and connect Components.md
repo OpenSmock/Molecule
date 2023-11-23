@@ -6,27 +6,27 @@ GPS (Global Positioning System) is the american subsystem of GNSS (Global Naviga
 
 # Contents
 [STATIC PART: declaration](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#static-part-declaration)
-	* Define services and events
-	- Define Component types
-	 	* Adding Component contract with a Component Type
-	   		+ Define first Component Type MolGNSSData
-	      		+ Define the second Component Type MolGNSSMap
-	- Create a Component implementation of a Type
-	  	* Create a new Component from scratch
-	    	* Re-using an existing Class into a Component
-	- Define the contract for MolGNSSData
-	- Create the Component implementation for MolGNSSData
-	- Define what the MolGNSSDataImpl Component does
-  		* Generated methods
-	- Create the Component implementation for MolGNSSMap
-	  	* Define the contract for MolGNSSMap
-		* Define what the MolGNSSMapImpl Component does
-DYNAMIC PART: Execution
-	- Starting a Component
-	 	* Start the MolGNSSDataImpl and MolGNSSMapImpl components
-	   	* Starting a component with a name
-	- Stopping a component
-	      	* Stop the MolGNSSDataImpl and MolGNSSMapImpl components
+	* [Define services and events](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-services-and-events)
+	- [Define Component types](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-component-types)
+	 	* [Adding Component contract with a Component Type](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#adding-component-contract-with-a-component-type)
+	   		+ [Define first Component Type MolGNSSData](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-the-first-component-type-molgnssdata)
+	      		+ [Define the second Component Type MolGNSSMap](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-the-second-component-type-molgnssmap)
+	- [Create a Component implementation of a Type](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#create-a-component-implementation-of-a-type)
+	  	* [Create a new Component from scratch](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#create-a-new-component-from-scratch)
+	    	* [Re-using an existing Class into a Component](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#re-using-an-existing-class-into-a-component)
+	- [Define the contract for MolGNSSData](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-the-contract-for-molgnssdata)
+	- [Create the Component implementation for MolGNSSData](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#create-the-component-implementation-for-molgnssdata)
+	- [Define what the MolGNSSDataImpl Component does](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-what-the-molgnssdataimpl-component-does)
+  		* [Generated methods](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#generated-methods)
+	- [Create the Component implementation for MolGNSSMap](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#create-the-component-implementation-for-molgnssmap)
+	  	* [Define the contract for MolGNSSMap](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-the-contract-for-molgnssmap)
+		* [Define what the MolGNSSMapImpl Component does](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-what-the-molgnssmapimpl-component-does)
+[DYNAMIC PART: Execution](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#dynamic-part-execution)
+	- [Starting a Component](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#starting-a-component)
+	 	* [Start the MolGNSSDataImpl and MolGNSSMapImpl components](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#start-the-molgnssdataimpl-and-molgnssmapimpl-components)
+	   	* [Starting a component with a name](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#starting-a-component-with-a-name)
+	- [Stopping a component](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#stopping-a-component)
+	      	* [Stop the MolGNSSDataImpl and MolGNSSMapImpl components](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#stop-the-molgnssdataimpl-and-molgnssmapimpl-components)
 
 The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works. \
 A graphical form of the example is available in the [Molecule-Geographical-Position-Example](https://github.com/OpenSmock/Molecule-Geographical-Position-Example) repository.
