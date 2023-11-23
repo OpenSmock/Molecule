@@ -9,11 +9,11 @@ A graphical form of the example is available in the [Molecule-Geographical-Posit
 
 # Contents
 [STATIC PART: declaration](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#static-part-declaration)
-* [Define services and events](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-services-and-events)
 * [Define Component Types](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-component-types)
 	- [Adding Component contract with a Component Type](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#adding-component-contract-with-a-component-type)
 	  	+ [Define first Component Type MolGNSSData](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-the-first-component-type-molgnssdata)
 	     + [Define the second Component Type MolGNSSMap](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-the-second-component-type-molgnssmap)
+* [Define services and events](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-services-and-events)
 * [Create a Component implementation of a Type](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#create-a-component-implementation-of-a-type)
 	- [Create a new Component from scratch](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#create-a-new-component-from-scratch)
 	- [Re-using an existing Class into a Component](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#re-using-an-existing-class-into-a-component)
