@@ -1,6 +1,7 @@
-![transcript red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/4f6d1f18-6d56-45da-80af-51f8ae20eebf)# Create and connect Components
+# Create and connect Components
 - In this tutorial, we will create a first Component that produces an Event and provides a Service (a GNSS emitting geographical data)
 - We will then create a second Component that uses the provided Service and consumes the produced Event (a Map acting as a display for the data) \
+They're directly linked, in the sense that a change detected in the first Component is observable in real time in the second component.
 ![gps molecule without figure](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a949d2f8-c460-40be-985d-273881e5b3da) \
 GPS (Global Positioning System) is the american subsystem of GNSS (Global Navigation Satellite Systems).
 
@@ -180,7 +181,7 @@ MolGNSSDataImpl>>increaseAccuracy
 		self accuracy: nextAccuracy ]
 ```
 
-Then, override the `getAccuracyRadiusInMeters` Service (which will simply return `accuracy`)
+Then, override the `getAccuracyRadiusInMeters` Service (which will simply return `accuracy`). The override is done since the `getAccuracyRadiusInMeters` Service is declared in the `providedComponentServices` part of `MolGNSSData`'s contract. And since `MolGNSSDataImpl` is an implemmentation of `MolGNSSData`, the `getAccuracyRadiusInMeters` is implemented here.
 ```smalltalk
 MolGNSSDataImpl>>getAccuracyRadiusInMeters
 	"Get and return the accuracy of the GNSS depending quality of signal and quantity of connected satellites"
