@@ -1,7 +1,31 @@
 # Create and connect Components
-In this tutorial, we will create a first Component that produces an Event and provides a Service (a GNSS emitting geographical data). \
-Then we will create a second Component that uses the provided Service and consumes the produced Event (a Map acting as a display for the data). \
+- In this tutorial, we will create a first Component that produces an Event and provides a Service (a GNSS emitting geographical data). \
+- We will then create a second Component that uses the provided Service and consumes the produced Event (a Map acting as a display for the data). \
 ![gps molecule without figure](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a949d2f8-c460-40be-985d-273881e5b3da) \
+
+# Contents
+# STATIC PART: declaration
+	## Define services and events
+	## Define Component types
+ 		### Adding Component contract with a Component Type
+   			#### Define the first Component Type
+      			#### Define the second Component Type
+	## Create a Component implementation of a Type
+  		### Create a new Component from scratch
+    		### Re-using an existing Class into a Component
+      	## Define the contract for MolGNSSData
+        ## Create the Component implementation for MolGNSSData
+	## Define what the GNSS Component does
+ 	## Create the Component implementation for MolGNSSMap
+  	## Define the contract for MolGNSSMap
+   	## Define what the Map Component does
+# DYNAMIC PART: Execution
+	## Starting a Component
+ 		### Start the two components
+   		### Starting a component with a name
+     	## Stopping a component
+      		## Stop the two components
+
 The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works. \
 A graphical form of the example is available in the [Molecule-Geographical-Position-Example](https://github.com/OpenSmock/Molecule-Geographical-Position-Example) repository.
 
