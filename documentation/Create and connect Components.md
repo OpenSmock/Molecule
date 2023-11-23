@@ -334,10 +334,9 @@ In a **Playground** (located in the **Browse** tab of Pharo):
 MolGNSSDataImpl start.
 MolGNSSMapImpl start
 ```
-The Pharo **Transcript** (also located in the **Browse** tab of Pharo) will start showing messages in the form of \
+The Pharo **Transcript** (also located in the **Browse** tab of Pharo) will start showing messages: \
 ![transcript red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/cbd921c4-ad9b-4b40-8440-e693eb1a8e99) \
-'[Map] Receive new GNSS position: x@x radius: x m';
-
+![transcript gnss](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/5346e6e8-6536-4d05-a875-d8954695b55b)
 
 ### Starting a Component with a name
 It's also possible to create a component with a name by using the `MolComponentImpl class>>start: #[name]` method.
