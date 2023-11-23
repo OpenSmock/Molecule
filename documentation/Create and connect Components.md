@@ -27,10 +27,10 @@ A graphical form of the example is available in the [Molecule-Geographical-Posit
 
 [DYNAMIC PART: Execution](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#dynamic-part-execution)
 * [Starting a Component](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#starting-a-component)
-	 - [Start the MolGNSSDataImpl and MolGNSSMapImpl components](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#start-the-molgnssdataimpl-and-molgnssmapimpl-components)
-	 - [Starting a component with a name](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#starting-a-component-with-a-name)
-* [Stopping a component](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#stopping-a-component)
-	 - [Stop the MolGNSSDataImpl and MolGNSSMapImpl components](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#stop-the-molgnssdataimpl-and-molgnssmapimpl-components)
+	 - [Start the MolGNSSDataImpl and MolGNSSMapImpl Components](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#start-the-molgnssdataimpl-and-molgnssmapimpl-components)
+	 - [Starting a Component with a name](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#starting-a-component-with-a-name)
+* [Stopping a Component](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#stopping-a-component)
+	 - [Stop the MolGNSSDataImpl and MolGNSSMapImpl Components](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#stop-the-molgnssdataimpl-and-molgnssmapimpl-components)
 
 # STATIC PART: declaration
 
@@ -319,7 +319,7 @@ This is also why it's not possible to start two components of the same Type at a
 
 **add img**
 
-### Start the MolGNSSDataImpl and MolGNSSMapImpl components
+### Start the MolGNSSDataImpl and MolGNSSMapImpl Components
 In a **Playground** (located in the **Browse** tab of Pharo):
 ```smalltalk
 MolGNSSDataImpl start.
@@ -328,15 +328,15 @@ MolGNSSMapImpl start
 The Pharo **Transcript** (also located in the **Browse** tab of Pharo) will start showing messages in the form of \
 '[Map] Receive new GNSS position: x@x radius: x m';
 
-### Starting a component with a name
+### Starting a Component with a name
 It's also possible to create a component with a name by using the `MolComponentImpl class>>start: #[name]` method.
 This will be useful for [Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md), which determine which component of a given Type A receives events from which component of a given Type B, if multiple components of the same Type exist.
 
-## Stopping a component
+## Stopping a Component
 Components are stopped using the `MolComponentImpl class>>stop` instruction. \
 Components with a name are stopped a similar method as `start`, which is `MolComponentImpl class>>stop: #[name]`.
 
-### Stop the MolGNSSDataImpl and MolGNSSMapImpl components
+### Stop the MolGNSSDataImpl and MolGNSSMapImpl Components
 In a **Playground** (located in the **Browse** tab of Pharo):
 
 ```smalltalk
