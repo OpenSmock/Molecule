@@ -358,3 +358,4 @@ MolGNSSMapImpl stop
 To verify that all your Components are stopped, you can use `MolUtils allComponentInstancesOfType:` on the Type Trait of a Component. If it returns an empty list, it means that no Component is currently active.
 
 You can also use the **Inspect Component Manager** option of Molecule, available from the **Library tab of Pharo**. If the window shown doesn't have a *deployedComponents* field or is set to *nil*, it also means that no Component is currently active.
+![molecule inspect component manager red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/2a09ab48-ea3b-4f59-bc25-b32457321845)
