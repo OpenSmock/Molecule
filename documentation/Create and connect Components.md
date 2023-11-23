@@ -53,14 +53,14 @@ Trait named: #MolGNSSDataParameters
 
 ## Define Component types
 
-## Adding Component contract with a Component Type
+### Adding Component contract with a Component Type
 Whatever the method to create a Component (from scratch or with an existing Class) is, its contract first needs to be defined (for the two methods, the construction and assignment of the contract is the same).
 
 The Component Type implements the Component contract (used/provided Services, consumed/produced Events, used/provided Parameters). \
 The Type is implemented through a Trait. \
 Types don't have any methods on the Instance side of Pharo, their contract is to be defined by overriding some methods on the **Class side** of Pharo.
 
-## Define the first Component Type
+#### Define the first Component Type
 ```smalltalk
 Trait named: #MolGNSSData
 	uses: MolComponentType
@@ -68,7 +68,7 @@ Trait named: #MolGNSSData
 	package: 'Molecule-Tutorial'
 ```
 
-## Define the second Component Type
+#### Define the second Component Type
 ```smalltalk
 Trait named: #MolGNSSMap
 	uses: MolComponentType
@@ -81,10 +81,10 @@ There are two ways to create a new Molecule Component :
 - Create a new Component from scratch : write a new Class inheriting from the Component hierarchy
 - Re-using an existing Class : augmenting that class with Component behavior
 
-## Create a new Component from scratch
+### Create a new Component from scratch
 To develop a new Component from scratch, a class needs to be created that must subclass the `MolAbstractComponentImpl` abstract Class.
 
-## Re-using an existing Class into a Component
+### Re-using an existing Class into a Component
 Imagine that we want to reuse an open-source library that implements the behavior for our use case. We want to reuse a class from this existing implementation in our application to add the capability to use this behavior. This class is not a Molecule Component, and does not share the same Class hierarchy as Molecule Components. Therefore this class does not answer the Molecule Component’s interface, and cannot be reused directly as a Component. To manually plug this Class into a molecule component, we have to write glue code for the component to use the API of this Class. This requires an additional effort to write non-functional code, which introduces noise in the application code. This makes such architecture less understandable and maintainable.
 
 With Molecule, we reuse any existing Class by augmenting that Class with Component behavior. This Class becomes seamlessly usable as a Component in a Molecule architecture.
