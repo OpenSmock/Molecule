@@ -4,6 +4,9 @@
 ![gps molecule without figure](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a949d2f8-c460-40be-985d-273881e5b3da) \
 GPS (Global Positioning System) is the american subsystem of GNSS (Global Navigation Satellite Systems).
 
+The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works. \
+A graphical form of the example is available in the [Molecule-Geographical-Position-Example](https://github.com/OpenSmock/Molecule-Geographical-Position-Example) repository.
+
 # Contents
 [STATIC PART: declaration](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#static-part-declaration)
 * [Define services and events](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-services-and-events)
@@ -28,9 +31,6 @@ GPS (Global Positioning System) is the american subsystem of GNSS (Global Naviga
 	 - [Starting a component with a name](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#starting-a-component-with-a-name)
 * [Stopping a component](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#stopping-a-component)
 	 - [Stop the MolGNSSDataImpl and MolGNSSMapImpl components](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#stop-the-molgnssdataimpl-and-molgnssmapimpl-components)
-
-The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works. \
-A graphical form of the example is available in the [Molecule-Geographical-Position-Example](https://github.com/OpenSmock/Molecule-Geographical-Position-Example) repository.
 
 # STATIC PART: declaration
 
