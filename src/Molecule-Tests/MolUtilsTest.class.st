@@ -358,6 +358,17 @@ MolUtilsTest >> testRemoveComponentNamed [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testRemoveComponentNamedIfAbsent [
+
+	| val |
+	val := MolUtils
+		       removeComponent: MolBasicComponentImpl
+		       named: #myComponentUnique
+		       ifAbsent: [ #Totoro ].
+	self assert: val equals: #Totoro
+]
+
+{ #category : #tests }
 MolUtilsTest >> testRemoveComponents [
 
 	| homeServices componentList |
@@ -502,6 +513,18 @@ MolUtilsTest >> testStopComponentNamed [
 				 isWaitingForActivation: MolBasicComponentImpl
 				 named: #myComponent)
 		equals: false
+]
+
+{ #category : #tests }
+MolUtilsTest >> testStopComponentNamedIfAbsent [
+
+	| homeServices deploymentServices result |
+	result := MolUtils stopComponent: MolBasicComponentImpl named: #myComponent ifAbsent: [ #totoro ].
+	
+	self
+		assert: result
+		equals: #totoro.
+
 ]
 
 { #category : #tests }

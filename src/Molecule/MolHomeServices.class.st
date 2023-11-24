@@ -306,49 +306,77 @@ MolHomeServices >> removeComponent: aComponentClass [
 
 { #category : #'life cycle' }
 MolHomeServices >> removeComponent: aComponentClass named: aName [
+
+	self removeComponent: aComponentClass named: aName ifAbsent: [
+		ComponentNotFoundError signal:
+			'Can not remove a non instanciated component'.
+		nil ]
+]
+
+{ #category : #'life cycle' }
+MolHomeServices >> removeComponent: aComponentClass named: aName ifAbsent: aBlock [
+
 	| removedComponent deployedComponentsOfThisClass |
-	(aComponentClass isNil or:[aName isNil]) ifTrue:[^nil].
-	
+	(aComponentClass isNil or: [ aName isNil ]) ifTrue: [ ^ nil ].
+
 	"Get to be removed component instance"
 	removedComponent := self instanceOf: aComponentClass named: aName.
-	removedComponent ifNil:[ ComponentNotFoundError signal: 'Can not remove a non instantiated component'. ^nil ].
-	
+	removedComponent ifNil: [
+		^aBlock value.
+		].
+
 	"Passivation of the component if activated"
-	(self isWaitingForActivation: aComponentClass named: aName) ifFalse: [ self passivateComponent: aComponentClass named: aName ].
-	waitingForActivation remove: removedComponent ifAbsent:[
-		"The Component has not been activated, log and proceed to the remove"
-		MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' has not been activated during the session.'.
-	].
-	
+	(self isWaitingForActivation: aComponentClass named: aName) ifFalse: [
+		self passivateComponent: aComponentClass named: aName ].
+	waitingForActivation
+		remove: removedComponent
+		ifAbsent: [ "The Component has not been activated, log and proceed to the remove"
+			MolUtils log:
+				aComponentClass printString , ' named: ' , aName printString
+				, ' has not been activated during the session.' ].
+
 	"Remove the component"
 	removedComponent componentRemove.
 	removedComponent componentConnector: nil.
-	removedComponent triggerEvent: #removeComponent with: removedComponent.
-	
+	removedComponent
+		triggerEvent: #removeComponent
+		with: removedComponent.
+
 	"Get deployed component instances of this component class"
-	deployedComponentsOfThisClass := self deployedComponents at: aComponentClass ifAbsent:[
-		MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is not a deployed component class.'.
-	].
-	
+	deployedComponentsOfThisClass := self deployedComponents
+		                                 at: aComponentClass
+		                                 ifAbsent: [
+			                                 MolUtils log:
+				                                 aComponentClass printString
+				                                 , ' named: ' , aName printString
+				                                 ,
+				                                 ' is not a deployed component class.' ].
+
 	"Remove the instance"
-	deployedComponentsOfThisClass removeKey: aName ifAbsent: [ 
-		MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is not a deployed component class.'.
-	].
+	deployedComponentsOfThisClass removeKey: aName ifAbsent: [
+		MolUtils log:
+			aComponentClass printString , ' named: ' , aName printString
+			, ' is not a deployed component class.' ].
 
 	"Resolve connections between components"
 	"Unlink component connection between this old component and not yet activated components"
-	waitingForActivation do: [ :waitingComponent | self resetComponentConnection: waitingComponent withRemovedComponent: removedComponent ].
-	"Unlink component connection between this old component and activated components"	
-	self deployedComponents keysAndValuesDo: [ :class :componentDictionary | 
-		componentDictionary valuesDo: [ :activatedComponent | 
-			self resetComponentConnection: activatedComponent withRemovedComponent: removedComponent.
-		] 
-	].
-	
+	waitingForActivation do: [ :waitingComponent |
+		self
+			resetComponentConnection: waitingComponent
+			withRemovedComponent: removedComponent ].
+	"Unlink component connection between this old component and activated components"
+	self deployedComponents keysAndValuesDo: [ :class :componentDictionary |
+		componentDictionary valuesDo: [ :activatedComponent |
+			self
+				resetComponentConnection: activatedComponent
+				withRemovedComponent: removedComponent ] ].
+
 	"Finish release of the component life-cycle"
 	removedComponent componentName: nil.
-	MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is removed.'.
-	^removedComponent
+	MolUtils log:
+		aComponentClass printString , ' named: ' , aName printString
+		, ' is removed.'.
+	^ removedComponent
 ]
 
 { #category : #private }

@@ -370,6 +370,29 @@ MolHomeServicesTest >> testRemoveComponentNamed [
 ]
 
 { #category : #tests }
+MolHomeServicesTest >> testRemoveComponentNamedIfAbsent [
+	"Test Component release on a remove"
+
+	| manager result catched |
+	manager := MolComponentManager default.
+	result := manager homeServices
+		          removeComponent: MolCompleteComponentImpl
+		          named: #testComponent
+		          ifAbsent: [ 'Totoro' ].
+	self assert: result equals: 'Totoro'.
+
+	result := 'NONE'.
+	[result := manager homeServices
+		          removeComponent: MolCompleteComponentImpl
+		          named: #testComponent] on: ComponentNotFoundError
+	do:[ catched := true].
+	self assert: result equals: 'NONE'.
+	self assert: catched equals: true.
+
+	
+]
+
+{ #category : #tests }
 MolHomeServicesTest >> testSeveralComponentsLifecycle [
 	"Test life cycle of several components"
 
