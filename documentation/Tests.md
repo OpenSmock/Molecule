@@ -35,12 +35,9 @@ MolGPS-Examples>>stop
 	MolComponentManager cleanUp
 ```
 
-## Order of Components
-You also need to verify the order of Components starting since a Component that listens to another needs to be started before the latter one. Otherwise, events will be sent wthout any component listening to it, rendering it meaningless.
-In this example, that means that `MolGPSMapImpl` needs to be started **after** `MolGPSDataImpl`.
-
 ## Switching Components on the fly
-This test space can be useful for switching Components on the fly, stopping a component to start another having a different Type (make sure that they have a different name or that the current launched Component is stopped before the other of the same Type is launched).
+This test space can be useful for switching Components on the fly, stopping a component to start another having the same Type. 
+Make sure that they have a different name or that the current launched Component is stopped before the other of the same Type is launched.
 See the Molecule-Examples package for more examples on this.
 
 ## Calling another script
