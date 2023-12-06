@@ -6,7 +6,7 @@ To do that, we need to specify each component's contract in order to achieve exa
 In the first component's contract, you will need to specify which events and services are respectively produced and provided. \
 For Events, it's done in `producedComponentEvents` \
 For Services, it's done in `providedComponentServices` \
-For Parameters, it's done in v`providedComponentParameters`
+For Parameters, it's done in `providedComponentParameters`
 
 In the second component's contract, you will need to specify which events and services are respectively consumed and used. \
 For Events, it's done in `consumedComponentEvents` \
