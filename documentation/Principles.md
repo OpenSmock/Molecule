@@ -20,10 +20,14 @@ The direct benefit of this approach is that it's possible for any existing class
 
 # Run-time management of Components
 ![ComponentManager](https://user-images.githubusercontent.com/49183340/162572598-0219f49d-8975-4dbb-8764-e3f379c58d69.png)
-All components are managed by the ComponentManager object. It maintains the list of component instances currently alive in the system. It's currently handled as a singleton. The ComponentManager class implements an API to instantiate and to remove each component, to associate them, to connect events, etc. This API is used to manage each component's life-cycle programmatically.
+All components are managed by the ComponentManager object. 
+It maintains the list of component instances currently alive in the system. 
+It's currently handled as a singleton. 
+The ComponentManager class implements an API to instantiate and to remove each component, to associate them, to connect events, etc. 
+This API is used to manage each component's life-cycle programmatically.
 
 # Components' life-cycle and states
-The activity of a component depends on contextual constraints such as the availability of a resource, the physical state of hardware elements, etc. To manage consumed resources accordingly, the life-cycle of a component has four possible states: Initialized, Activated, Passivated and Removed. \
+The activity of a component depends on contextual constraints such as the availability of a resource, the physical state of hardware elements, etc. To manage consumed resources accordingly, the life-cycle of a component has four possible states: Initialized, Activated, Passivated and Removed.
 ![Components lifecycle and states](https://user-images.githubusercontent.com/49183340/162570154-b39fc041-03f3-40d2-ad3f-30aac027a4b0.png)
 
 After its initialization, a component can switch from an Activated state to a Passivated state and conversely. When the life-cycle of a component is over, then it switches to the Removed state.
@@ -40,6 +44,25 @@ When a component is paused, it switches to the Passivated state. Then, the compo
 The terminal state of a component is the Removed state. When a component switches to this state, all of its resources are released. The ComponentManager removes that component from its list of alive components.
 
 Let us illustrate the use of these states with the example of a GUI window handled as a component. First, the window is instantiated by the component. Then the component state switches to Initialized. When the window is displayed on the desktop, the component’s state switches to Activated. When the window is reduced and its icon is stored into a task-bar, then the component switches to the Passivated state. As the window is only reduced, it can be re-opened very quickly. Finally, when the user closes the window, the component is first switched to Passivated, then to the Removed state.
+
+# Order of Components and Component not found
+Components do not need to be started in a specific order. 
+However, it is possible that a component may require a service or a parameter from another component that is not yet instantiated or active. 
+In this case, it is appropriate to use the methods of services and parameters to determine whether the requested interface is available or not.
+For that use:
+
+```smalltalk
+aServicesInterface isNotFoundServices "return true when not found".
+aParametersInterface isNotFoundParameters "return true when not found".
+```
+
+It is possible to do the same thing for event interfaces, but it is not necessary because if the component emitting events is not started, the event simply will not be emitted.
+
+```smalltalk
+anEventNotifier isNotFoundEventsNotifier "return true when not found".
+```
+
+Most of the time, interfaces that are not found are due to an error or a failure to specify the name (componentName) of the component being used, especially when it is not the default instance.
 
 # External links
 ## Specifications
