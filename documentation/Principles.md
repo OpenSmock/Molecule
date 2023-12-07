@@ -1,24 +1,3 @@
-Welcome to the Molecule wiki!
-
-# Introduction
-Molecule is a component oriented framework for Pharo. His Component architecture approach provides an adapted structuration to graphic user interface (GUI) or another software application which need Component features.
-
-Molecule provides a way to describe a software application as a component group.
-
-Molecule is a Light-weight implementation of the Corba Component Model (LCCM). It allows for the specification of components as in the Corba standard: provided and used services, produced and consumed events. However, Molecule components are only specified and instantiated locally. They are not exchanged nor shared through a standard object bus.
-
-Molecule supports completely transparent class augmentation into component (not necessary to add code manually), based on Traits.
-
-# Installation
-Pharo 8, 9, 10 and 11 :
-```smalltalk
-Metacello new
-   baseline: 'Molecule';
-   repository: 'github://OpenSmock/Molecule';
-   load.
-```
-Deprecated version of Molecule (1.1.x) for Pharo 6 and 7 is also available [here](https://github.com/OpenSmock/Molecule/tree/Molecule1.1.x).
-
 # Principles
 This section briefly presents what is a Molecule component and how it's dynamically managed.
 
@@ -41,10 +20,14 @@ The direct benefit of this approach is that it's possible for any existing class
 
 # Run-time management of Components
 ![ComponentManager](https://user-images.githubusercontent.com/49183340/162572598-0219f49d-8975-4dbb-8764-e3f379c58d69.png)
-All components are managed by the ComponentManager object. It maintains the list of component instances currently alive in the system. It's currently handled as a singleton. The ComponentManager class implements an API to instantiate and to remove each component, to associate them, to connect events, etc. This API is used to manage each component's life-cycle programmatically.
+All components are managed by the ComponentManager object. 
+It maintains the list of component instances currently alive in the system. 
+It's currently handled as a singleton. 
+The ComponentManager class implements an API to instantiate and to remove each component, to associate them, to connect events, etc. 
+This API is used to manage each component's life-cycle programmatically.
 
 # Components' life-cycle and states
-The activity of a component depends on contextual constraints such as the availability of a resource, the physical state of hardware elements, etc. To manage consumed resources accordingly, the life-cycle of a component has four possible states: Initialized, Activated, Passivated and Removed. \
+The activity of a component depends on contextual constraints such as the availability of a resource, the physical state of hardware elements, etc. To manage consumed resources accordingly, the life-cycle of a component has four possible states: Initialized, Activated, Passivated and Removed.
 ![Components lifecycle and states](https://user-images.githubusercontent.com/49183340/162570154-b39fc041-03f3-40d2-ad3f-30aac027a4b0.png)
 
 After its initialization, a component can switch from an Activated state to a Passivated state and conversely. When the life-cycle of a component is over, then it switches to the Removed state.
@@ -62,21 +45,25 @@ The terminal state of a component is the Removed state. When a component switche
 
 Let us illustrate the use of these states with the example of a GUI window handled as a component. First, the window is instantiated by the component. Then the component state switches to Initialized. When the window is displayed on the desktop, the component’s state switches to Activated. When the window is reduced and its icon is stored into a task-bar, then the component switches to the Passivated state. As the window is only reduced, it can be re-opened very quickly. Finally, when the user closes the window, the component is first switched to Passivated, then to the Removed state.
 
-# Tutorial section
-[Connecting two components](https://github.com/OpenSmock/Molecule/blob/main/documentation/Connecting%20two%20components.md) \
-[Create a new Molecule Component](https://github.com/OpenSmock/Molecule/blob/main/documentation/Create%20a%20new%20Molecule%20component.md) \
-[Creating Events](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Events.md) \
-[Creating Notifiers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Notifiers.md) \
-[Creating Parameters](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Parameters.md) \
-[Creating Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md) \
-[Facilitating tests](https://github.com/OpenSmock/Molecule/blob/main/documentation/Facilitating%20tests.md)
+# Order of Components and Component not found
+Components do not need to be started in a specific order. 
+However, it is possible that a component may require a service or a parameter from another component that is not yet instantiated or active. 
+In this case, it is appropriate to use the methods of services and parameters to determine whether the requested interface is available or not.
+For that use:
+
+```smalltalk
+aServicesInterface isNotFoundServices "return true when not found".
+aParametersInterface isNotFoundParameters "return true when not found".
+```
+
+It is possible to do the same thing for event interfaces, but it is not necessary because if the component emitting events is not started, the event simply will not be emitted.
+
+```smalltalk
+anEventNotifier isNotFoundEventsNotifier "return true when not found".
+```
+
+Most of the time, interfaces that are not found are due to an error or a failure to specify the name (componentName) of the component being used, especially when it is not the default instance.
 
 # External links
-## Publications
-[Molecule: live prototyping with component-oriented programming](https://inria.hal.science/hal-02966704/)
-[15 years of reuse experience in evolutionary prototyping for the defense industry](https://inria.hal.science/hal-02966691/preview/ICSR_15years.pdf)
-## Videos
-[Molecule: live prototyping with component-oriented programming](https://www.youtube.com/watch?v=Zfo3VkH2bVw)
-[15 years of reuse experience in evolutionary prototyping for the defense industry](https://www.youtube.com/watch?v=Zfo3VkH2bVw)
 ## Specifications
 [Learn more about CCM specifications](https://www.omg.org/spec/CCM/About-CCM/)
