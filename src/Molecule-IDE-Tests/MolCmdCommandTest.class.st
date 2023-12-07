@@ -65,3 +65,19 @@ MolCmdCommandTest >> testMolClassesCmdCommand [
 	self assert: menu selectedClasses size equals: 2.
 	self assert: menu selectedComponentClasses size equals: 2.
 ]
+
+{ #category : #tests }
+MolCmdCommandTest >> testMolCmdCommand [
+
+	"test browser molecule requirements"
+	SystemNavigation default allClasses do:[ :c |
+		self assert: (c respondsTo: #isTrait).
+		self assert: (c respondsTo: #isComponentClass).
+		c isTrait ifTrue:[
+			self assert: (c respondsTo: #isComponentType).
+			self assert: (c respondsTo: #isComponentServices).	
+			self assert: (c respondsTo: #isComponentEvents).	
+			self assert: (c respondsTo: #isComponentParameters).	
+		].
+	].
+]
