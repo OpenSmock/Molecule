@@ -191,26 +191,6 @@ MolGeoPosExampleLauncher swapGPS.
 MolGeoPosExampleLauncher stop.
 ```
 
-## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Incubator packages: our UI tools experimentation zone
-
-UI Tools are coming in the next versions of Molecule. They are currently in development in incubators packages, are ready to use but may be instable.
-
-![image](https://user-images.githubusercontent.com/49183340/151664721-feefb39a-6a9f-44b8-a54d-ef4f2b01bc65.png)
-![moleculeUITools](https://user-images.githubusercontent.com/49183340/120898493-5eb8e100-c62b-11eb-86c6-021dc25e5dd0.PNG)
-![MoleculeIncubator_EditorTest](https://user-images.githubusercontent.com/49183340/152546159-17f15103-2ac7-4938-8d8f-9de8ff60f3a8.gif)
-
-### Installing incubators packages:
-
-To install Molecule with incubator packages on your Pharo image you just need to execute the following script:
-
-```smalltalk
-Metacello new
-   baseline: 'MoleculeIncubator';
-   repository: 'github://OpenSmock/Molecule:main/src';
-   onConflictUseIncoming;
-   load.
-```
-
 ## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> To know more...
 
 Publications related to Molecule:
