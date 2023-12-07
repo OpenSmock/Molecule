@@ -167,10 +167,13 @@ MolComponentFactory class >> compileContractSelector: aSelector protocol: aProto
 	
 	"Notify pragma change after Trait compilation to be sure that the compiled method is applied to Trait users"
 	newMethod := aComponentType class compiledMethodAt: selector.
-	SystemAnnouncer uniqueInstance
-		methodChangedFrom: previousMethodOrNil
-		to: newMethod
-		oldProtocol: aProtocol
+	
+	SystemAnnouncer uniqueInstance announce: (
+		MethodModified 
+			methodChangedFrom: previousMethodOrNil
+			to: newMethod 
+			oldProtocol: aProtocol
+	)
 ]
 
 { #category : #pragma }
