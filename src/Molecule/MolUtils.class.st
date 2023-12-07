@@ -255,6 +255,16 @@ MolUtils class >> removeComponent: aComponentClass named: aName [
 ]
 
 { #category : #'quick lifecycle' }
+MolUtils class >> removeComponent: aComponentClass named: aName ifAbsent: aBlock [
+	"passivate quickly a component"
+
+	^MolComponentManager default homeServices
+		removeComponent: aComponentClass
+		named: aName
+		ifAbsent: aBlock
+]
+
+{ #category : #'quick lifecycle' }
 MolUtils class >> removeComponents: aComponentClassList [
 	"pâssivate quickly a list of components"
 
@@ -314,7 +324,14 @@ MolUtils class >> stopComponent: aComponentClass [
 MolUtils class >> stopComponent: aComponentClass named: aName [
 	"passivate and remove quickly a component"
 
-	self removeComponent: aComponentClass named: aName.
+	^self removeComponent: aComponentClass named: aName
+]
+
+{ #category : #'quick start and stop' }
+MolUtils class >> stopComponent: aComponentClass named: aName ifAbsent: aBlock [
+	"passivate and remove quickly a component"
+
+	^self removeComponent: aComponentClass named: aName ifAbsent: aBlock
 ]
 
 { #category : #'quick start and stop' }
