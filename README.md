@@ -14,7 +14,7 @@ Molecule supports completely transparent class augmentation into component (not 
 
 ## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Documentation
 
-Molecule documentation is available here: [Molecule Documentation Home](https://github.com/OpenSmock/Molecule/blob/main/documentation/Home.md)
+Molecule documentation is available here: [Molecule Documentation Home](https://github.com/OpenSmock/Molecule/blob/main/documentation/Table%20of%20contents.md)
 
 The documentation includes some tutorials, pattern description and examples. 
 
