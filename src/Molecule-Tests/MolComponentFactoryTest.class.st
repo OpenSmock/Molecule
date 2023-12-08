@@ -1171,6 +1171,31 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	self assert: (componentClass canPerform: #testGeneratedEventB) equals: false.
 ]
 
+{ #category : #'tests - component creation' }
+MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative5 [
+	"Alternative from issue 148 - Make a Component from scratch, try to reproduce the workflow of a component creator developper is this order : 
+	- Create Type
+	- Create empty Event interface
+	- Create native component implementation with the previously created component type
+	- Declare consumed Events in the Component Type
+	=> Check if the event notifier is generated"
+	
+	| componentClassNameSymbol componentClass |
+	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
+	
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
+	
+	self testCreateEmptyComponentEvents.
+	
+	componentClassNameSymbol := self generatedComponentClass2SymbolName.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationTag.
+	componentClass := self class environment at: componentClassNameSymbol.
+	
+	MolComponentFactory addProducedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
+	
+	self assert: (componentClass canPerform: #getMolTestGeneratedComponentEventsNotifier).
+]
+
 { #category : #'tests - protocol' }
 MolComponentFactoryTest >> testProtocolForComponentAccess [
 
