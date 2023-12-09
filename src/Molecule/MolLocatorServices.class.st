@@ -107,16 +107,16 @@ MolLocatorServices >> searchParametersProviderFor: aParametersTrait [
 
 { #category : #searching }
 MolLocatorServices >> searchParametersProviderFor: aParametersTrait named: aSymbol [
+
 	| comps itf |
-	
 	itf := aParametersTrait value.
 	comps := MolComponentManager default homeServices deployedComponents.
-	comps keysDo:[:comp | 
-		((comp isProvideParameters: itf) and: [(comps at: comp) includesKey: aSymbol]) ifTrue: [
-			^(comps at: comp) at: aSymbol
-		].
-	].
-	^MolNotFoundParametersProvider new interface: aParametersTrait name: aSymbol
+	comps keysDo: [ :comp |
+		((comp isProvideParameters: itf) and: [
+			 (comps at: comp) includesKey: aSymbol ]) ifTrue: [
+			^ (comps at: comp) at: aSymbol ] ].
+	
+	^ MolNotFoundParametersProvider interface: aParametersTrait name: aSymbol
 ]
 
 { #category : #searching }
@@ -127,13 +127,14 @@ MolLocatorServices >> searchServicesProviderFor: aServicesTrait [
 
 { #category : #searching }
 MolLocatorServices >> searchServicesProviderFor: aServicesTrait named: aSymbol [
+
 	| comps itf |
-	
 	itf := aServicesTrait value.
 	comps := MolComponentManager default homeServices deployedComponents.
-	comps keysDo: 
-			[:comp | 
-			((comp isProvideServices: itf) and: [(comps at: comp) includesKey: aSymbol]) 
-				ifTrue: [^(comps at: comp) at: aSymbol]].
-	^MolNotFoundServicesProvider new interface: aServicesTrait name: aSymbol
+	comps keysDo: [ :comp |
+		((comp isProvideServices: itf) and: [
+			 (comps at: comp) includesKey: aSymbol ]) ifTrue: [
+			^ (comps at: comp) at: aSymbol ] ].
+
+	^ MolNotFoundServicesProvider interface: aServicesTrait name: aSymbol
 ]
