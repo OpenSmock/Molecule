@@ -14,3 +14,10 @@ TMolParametersProvider >> isNotFoundParameters [
 
 	^ self isFoundParameters not
 ]
+
+{ #category : #protocol }
+TMolParametersProvider >> parametersDo: actionBlock ifNone: exceptionBlock [
+	"Call the parameters if found with the parameters interface as argument. If none execute an exception block"
+	
+	self explicitRequirement 
+]
