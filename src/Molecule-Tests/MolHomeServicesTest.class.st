@@ -109,23 +109,23 @@ MolHomeServicesTest >> testActivateComponentNamed [
 ]
 
 { #category : #test }
-MolHomeServicesTest >> testCheckInstantiationOfComponentNamed [
+MolHomeServicesTest >> testCheckComponentInstantiationPermissionNamed [
 
 	| homeServices result |
 	homeServices := MolComponentManager default homeServices.
 	
-	result := homeServices checkInstantiationOfComponent: nil named: nil. 
+	result := homeServices checkComponentInstantiationPermission: nil named: nil. 
 	self assert: result class equals: WrongComponentNameError.
 	
-	result := homeServices checkInstantiationOfComponent: MolCompleteComponentImpl named: #default. 
+	result := homeServices checkComponentInstantiationPermission: MolCompleteComponentImpl named: #default. 
 	self assert: result class equals: ComponentNotDeployedError.
 	
 	MolCompleteComponentImpl deploy.
-	result := homeServices checkInstantiationOfComponent: MolCompleteComponentImpl named: #default. 
+	result := homeServices checkComponentInstantiationPermission: MolCompleteComponentImpl named: #default. 
 	self assert: result isNil.
 	
 	MolCompleteComponentImpl start.
-	result := homeServices checkInstantiationOfComponent: MolCompleteComponentImpl named: #default. 
+	result := homeServices checkComponentInstantiationPermission: MolCompleteComponentImpl named: #default. 
 	self assert: result class equals: ComponentAlreadyExistsError.
 ]
 

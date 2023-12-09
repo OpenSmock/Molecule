@@ -69,7 +69,7 @@ MolHomeServices >> addDeployedComponent: aComponentClass [
 ]
 
 { #category : #private }
-MolHomeServices >> checkInstantiationOfComponent: aComponentClass named: aComponentName [
+MolHomeServices >> checkComponentInstantiationPermission: aComponentClass named: aComponentName [
 
 	| deployed component overridedTypes |
 	aComponentName ifNil: [
@@ -187,7 +187,7 @@ MolHomeServices >> instantiateComponent: aComponentClass named: aName [
 
 	| error component connector deployed |
 	aComponentClass ifNil: [ ^ nil ].
-	error := self checkInstantiationOfComponent: aComponentClass named: aName.
+	error := self checkComponentInstantiationPermission: aComponentClass named: aName.
 	error ifNotNil: [ error signal. ^ nil ].
 
 	component := aComponentClass new componentName: aName; yourself.
