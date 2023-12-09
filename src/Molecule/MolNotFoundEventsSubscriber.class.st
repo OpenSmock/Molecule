@@ -23,7 +23,14 @@ MolNotFoundEventsSubscriber >> interface: anInterface name: aName [
 	name := aName
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
+MolNotFoundEventsSubscriber >> isFoundEventsSubscriber [
+
+	^ false
+]
+
+{ #category : #testing }
 MolNotFoundEventsSubscriber >> isNotFoundEventsSubscriber [
-	^true
+
+	^ self isFoundEventsSubscriber not
 ]

@@ -23,7 +23,14 @@ MolNotFoundParametersProvider >> interface: anInterface name: aName [
 	name := aName
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
+MolNotFoundParametersProvider >> isFoundParameters [
+
+	^ false
+]
+
+{ #category : #testing }
 MolNotFoundParametersProvider >> isNotFoundParameters [
-	^true
+
+	^ self isFoundParameters not
 ]

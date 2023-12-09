@@ -149,8 +149,15 @@ MolEventSubscriber >> isAllOriginatorsLinked [
 ]
 
 { #category : #testing }
-MolEventSubscriber >> isNotFoundEventsSubscriber [ 
-	^false
+MolEventSubscriber >> isFoundEventsSubscriber [
+
+	^ true
+]
+
+{ #category : #testing }
+MolEventSubscriber >> isNotFoundEventsSubscriber [
+
+	^ self isFoundEventsSubscriber not
 ]
 
 { #category : #API }

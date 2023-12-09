@@ -23,7 +23,14 @@ MolNotFoundEventsNotifier >> interface: anInterface name: aName [
 	name := aName
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
+MolNotFoundEventsNotifier >> isFoundEventsNotifier [
+
+	^ false
+]
+
+{ #category : #testing }
 MolNotFoundEventsNotifier >> isNotFoundEventsNotifier [
-	^true
+
+	^ self isFoundEventsNotifier not
 ]

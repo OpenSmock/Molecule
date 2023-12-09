@@ -78,9 +78,16 @@ MolEventNotifier >> isActive [
 	^ isActive
 ]
 
-{ #category : #'initialize-release' }
-MolEventNotifier >> isNotFoundEventsNotifier [ 
-	^false
+{ #category : #testing }
+MolEventNotifier >> isFoundEventsNotifier [
+
+	^ true
+]
+
+{ #category : #testing }
+MolEventNotifier >> isNotFoundEventsNotifier [
+
+	^ self isFoundEventsNotifier not
 ]
 
 { #category : #accessing }

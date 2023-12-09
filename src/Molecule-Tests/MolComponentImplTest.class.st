@@ -327,42 +327,6 @@ MolComponentImplTest >> testForEventsUseProducer2 [
 ]
 
 { #category : #test }
-MolComponentImplTest >> testFoundNotifier [
-
-	| component |
-	component := MolUtils startComponent: MolCompleteComponentImpl.
-	
-	self assert: component getMolUsedEventsNotifier isNotFoundEventsNotifier not.
-]
-
-{ #category : #test }
-MolComponentImplTest >> testFoundParameters [
-
-	| component |
-	component := MolUtils startComponent: MolCompleteComponentImpl.
-	
-	self assert: component getMolUsedParametersProvider isNotFoundParameters not.
-]
-
-{ #category : #test }
-MolComponentImplTest >> testFoundServices [
-
-	| component |
-	component := MolUtils startComponent: MolCompleteComponentImpl.
-	
-	self assert: component getMolUsedServicesProvider isNotFoundServices not.
-]
-
-{ #category : #test }
-MolComponentImplTest >> testFoundSubscriber [
-
-	| component |
-	component := MolUtils startComponent: MolCompleteComponentImpl.
-	
-	self assert: component getMolUsedEventsSubscriber isNotFoundEventsSubscriber not.
-]
-
-{ #category : #test }
 MolComponentImplTest >> testGetComponentUsedWithWrongName [
 	"Connect two components with different types of component name"
 	| providerComponent userComponent |
@@ -424,6 +388,99 @@ MolComponentImplTest >> testIsComponent [
 	self deny: MolComponentImpl isComponentClass. "This class is not a component class, but users yes"
 ]
 
+{ #category : #test }
+MolComponentImplTest >> testIsFoundEventsNotifier [
+
+	| component |
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	
+	self assert: component getMolUsedEventsNotifier isFoundEventsNotifier.
+	self assert: component getMolUsedEventsNotifier isNotFoundEventsNotifier not.
+]
+
+{ #category : #test }
+MolComponentImplTest >> testIsFoundEventsSubscriber [
+
+	| component |
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	
+	self assert: component getMolUsedEventsSubscriber isFoundEventsSubscriber.
+	self assert: component getMolUsedEventsSubscriber isNotFoundEventsSubscriber not.
+]
+
+{ #category : #test }
+MolComponentImplTest >> testIsFoundParameters [
+
+	| component |
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	
+	self assert: component getMolUsedParametersProvider isFoundParameters.
+	self assert: component getMolUsedParametersProvider isNotFoundParameters not.
+	
+]
+
+{ #category : #test }
+MolComponentImplTest >> testIsFoundServices [
+
+	| component |
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	
+	self assert: component getMolUsedServicesProvider isFoundServices.
+	self assert: component getMolUsedServicesProvider isNotFoundServices not.
+]
+
+{ #category : #test }
+MolComponentImplTest >> testIsNotFoundEventsNotifier [
+
+	| component result |
+	component := MolCompleteComponentImpl new.
+	
+	self assert: component getMolUsedEventsNotifier isNotFoundEventsNotifier.
+	self assert: component getMolUsedEventsNotifier isFoundEventsNotifier not.
+	
+	result := component getMolUsedEventsNotifier event.
+	self assert: result isNil.
+]
+
+{ #category : #test }
+MolComponentImplTest >> testIsNotFoundParameters [
+
+	| component result |
+	component := MolCompleteComponentImpl new.
+	
+	self assert: component getMolUsedParametersProvider isNotFoundParameters.
+	self assert: component getMolUsedParametersProvider isFoundParameters not.
+	
+	result := component getMolUsedParametersProvider parameter.
+	self assert: result isNil.
+]
+
+{ #category : #test }
+MolComponentImplTest >> testIsNotFoundServices [
+
+	| component result |
+	component := MolCompleteComponentImpl new.
+	
+	self assert: component getMolUsedServicesProvider isNotFoundServices.
+	self assert: component getMolUsedServicesProvider isFoundServices not.
+	
+	result := component getMolUsedServicesProvider service.
+	self assert: result isNil.
+]
+
+{ #category : #test }
+MolComponentImplTest >> testIsNotFoundSubscriber [
+
+	| component |
+	component := MolCompleteComponentImpl new.
+	
+	self assert: component getMolUsedEventsSubscriber isNotFoundEventsSubscriber.
+	self assert: component getMolUsedEventsSubscriber isFoundEventsSubscriber not.
+	
+	component getMolUsedEventsSubscriber subscribe: self.
+	component getMolUsedEventsSubscriber unsubscribe: self.
+]
+
 { #category : #'test - contract' }
 MolComponentImplTest >> testIsOverrideComponentType [
 
@@ -457,54 +514,6 @@ MolComponentImplTest >> testIsSubscribed [
 	MolCompleteComponentImpl stop.
 	self assert: (component isSubscribed: MolUsedEvents) equals: false.
 	self assert: (component isSubscribed: MolUsedChildEvents) equals: false. "never be true"
-]
-
-{ #category : #test }
-MolComponentImplTest >> testNotFoundNotifier [
-
-	| component result |
-	component := MolCompleteComponentImpl new.
-	
-	self assert: component getMolUsedEventsNotifier isNotFoundEventsNotifier.
-	
-	result := component getMolUsedEventsNotifier event.
-	self assert: result isNil.
-]
-
-{ #category : #test }
-MolComponentImplTest >> testNotFoundParameters [
-
-	| component result |
-	component := MolCompleteComponentImpl new.
-	
-	self assert: component getMolUsedParametersProvider isNotFoundParameters.
-	
-	result := component getMolUsedParametersProvider parameter.
-	self assert: result isNil.
-]
-
-{ #category : #test }
-MolComponentImplTest >> testNotFoundServices [
-
-	| component result |
-	component := MolCompleteComponentImpl new.
-	
-	self assert: component getMolUsedServicesProvider isNotFoundServices.
-	
-	result := component getMolUsedServicesProvider service.
-	self assert: result isNil.
-]
-
-{ #category : #test }
-MolComponentImplTest >> testNotFoundSubscriber [
-
-	| component |
-	component := MolCompleteComponentImpl new.
-	
-	self assert: component getMolUsedEventsSubscriber isNotFoundEventsSubscriber.
-	
-	component getMolUsedEventsSubscriber subscribe: self.
-	component getMolUsedEventsSubscriber unsubscribe: self.
 ]
 
 { #category : #'test - contract' }

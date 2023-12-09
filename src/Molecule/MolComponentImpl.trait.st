@@ -416,13 +416,27 @@ MolComponentImpl >> isComponent [
 ]
 
 { #category : #testing }
+MolComponentImpl >> isFoundParameters [
+
+	^ true
+]
+
+{ #category : #testing }
+MolComponentImpl >> isFoundServices [
+
+	^ true
+]
+
+{ #category : #testing }
 MolComponentImpl >> isNotFoundParameters [
-	^false
+
+	^ self isFoundParameters not
 ]
 
 { #category : #testing }
 MolComponentImpl >> isNotFoundServices [
-	^false
+
+	^ self isFoundServices not
 ]
 
 { #category : #testing }

@@ -23,7 +23,14 @@ MolNotFoundServicesProvider >> interface: anInterface name: aName [
 	name := aName
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
+MolNotFoundServicesProvider >> isFoundServices [
+
+	^ false
+]
+
+{ #category : #testing }
 MolNotFoundServicesProvider >> isNotFoundServices [
-	^true
+
+	^ self isFoundServices not
 ]
