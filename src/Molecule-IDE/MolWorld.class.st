@@ -64,20 +64,22 @@ MolWorld class >> menu00MoleculeOn: aBuilder [
 { #category : #menu }
 MolWorld class >> menu10SystemStatusOn: aBuilder [
 	<worldMenu>
-	| label isRunning |
-	isRunning := MolComponentManager isRunningComponents.
-	label := isRunning 
-		ifTrue:['System is running Components'] 
-		ifFalse:['No Components are running'].
 	
 	(aBuilder item: #InspectComponents)
 		parent: #MoleculeStatus;
-		enabled: isRunning;
 		order: 1.0;
-		action: [ MolComponentManager default homeServices inspect ];
+		action: [
+			MolComponentManager isRunningComponents ifTrue:[
+				"Inspect home services"
+				MolComponentManager default homeServices inspect 
+			] ifFalse:[
+				"No component are running"
+				self inform: 'No components are running'
+			]. 
+		];
 		icon: MolIcon moleculeComponentIcon;
-		help: 'Component System Status, click to inspect running components';
-		label: label
+		help: 'Component System Status, click to inspect running components. If no components are running there is an popup on the bottom left of the main Pharo windows.';
+		label: 'Inspect running Components'
 ]
 
 { #category : #menu }
