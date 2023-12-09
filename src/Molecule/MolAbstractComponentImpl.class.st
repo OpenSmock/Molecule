@@ -15,5 +15,19 @@ Class {
 	#superclass : #Object,
 	#traits : 'MolComponentImpl',
 	#classTraits : 'MolComponentImpl classTrait',
-	#category : #'Molecule-Component'
+	#category : #'Molecule-Component Implementation'
 }
+
+{ #category : #protocol }
+MolAbstractComponentImpl >> parametersDo: actionBlock ifNone: exceptionBlock [
+	"Call the parameters if found with the parameters interface as argument. If none execute an exception block"
+	
+	actionBlock value: self
+]
+
+{ #category : #protocol }
+MolAbstractComponentImpl >> servicesDo: actionBlock ifNone: exceptionBlock [
+	"Call the services if found with the services interface as argument. If none execute an exception block"
+	
+	actionBlock value: self
+]

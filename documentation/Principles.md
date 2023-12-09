@@ -45,24 +45,63 @@ The terminal state of a component is the Removed state. When a component switche
 
 Let us illustrate the use of these states with the example of a GUI window handled as a component. First, the window is instantiated by the component. Then the component state switches to Initialized. When the window is displayed on the desktop, the component’s state switches to Activated. When the window is reduced and its icon is stored into a task-bar, then the component switches to the Passivated state. As the window is only reduced, it can be re-opened very quickly. Finally, when the user closes the window, the component is first switched to Passivated, then to the Removed state.
 
-# Order of Components and Component not found
-Components do not need to be started in a specific order. 
-However, it is possible that a component may require a service or a parameter from another component that is not yet instantiated or active. 
+# About Component start order and "Component not found" problems
+Important: Components do not need to be started in a specific order.
+But you can have a specific order in your starting strategy if you want: it is the developer's responsibility.
+If you need to use a Component that is not already started you can manage the availability of this Component with some testing and protocol methods.
+
+Most of the time, interfaces that are not found (i.e. required services) are dues to an error or a failure to specify the name (componentName) of the component being used, especially when it is not the default instance.
+
+How to find `not found stuff` problems ? 
+In the case of the application are not using a `default` component instance (if you need to use a specific component named instance), please check if your component is correctly setup with required `componentName`.
+For example, this setup is usualy done during the `componentInitialize` state :
+
+```smalltalk
+MyCompement>>componentInitialize
+
+self forServices: AnUsedServicesInterface useProvider: #anUsedComponentName.
+"..."
+self forParameters: AnUsedParametersInterface useProvider: #anUsedComponentName.
+"..."
+self forEvents: AConsumedEventsInterface useProducer: #anUsedComponentName.
+```
+
+Considering your are using a `default` Component instance, this setup is automaticaly done by Molecule in the background. 
+
+## How to manage services and parameters when required component is not already available 
+
+However, it is possible that a component may require a service or a parameter from another component that is not yet started.
+A typical use case of that is when the application starts some Components in thread. 
+During the execution some Component are not yet started due the parallel execution of threads.
 In this case, it is appropriate to use the methods of services and parameters to determine whether the requested interface is available or not.
-For that use:
+
+To execute when an interface is available:
 
 ```smalltalk
-aServicesInterface isNotFoundServices "return true when not found".
-aParametersInterface isNotFoundParameters "return true when not found".
+aServicesInterface servicesDo:[ :s | s aServiceMethod ] ifNone:[ "do something or not" ].
+aParametersInterface parametersDo:[ :p | p aParameterMethod ] ifNone:[ "do something or not" ].
 ```
 
-It is possible to do the same thing for event interfaces, but it is not necessary because if the component emitting events is not started, the event simply will not be emitted.
+To test if an interface is available:
 
 ```smalltalk
-anEventNotifier isNotFoundEventsNotifier "return true when not found".
+aServicesInterface isFoundServices "return true when found".
+aParametersInterface isFoundParameters "return true when found".
 ```
 
-Most of the time, interfaces that are not found are due to an error or a failure to specify the name (componentName) of the component being used, especially when it is not the default instance.
+## About events
+
+Molecule manage live connexions between Component which consumed events and Component which produced events.
+The availability of events interfaces is transparent by nature because events are received, not called.
+This is not necessary to test the availability of event subscribers or notifiers.
+
+It is possible to do: `anEventNotifier isNotFoundEventsNotifier`.
+In fact this can be never used because if an event notifier is not found it is a bug.
+If the emitter of a consumed event interface is not started, the event simply will not be emitted.
+
+It is possible to do: `anEventSubscriber isNotFoundSubscriber`.
+In fact this can be never used because if an event subcriber is not found it is a bug.
+An event subscriber facilitates event subscription without relying on the presence of the required component.
 
 # External links
 ## Specifications

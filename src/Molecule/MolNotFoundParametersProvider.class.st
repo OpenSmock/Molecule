@@ -3,27 +3,21 @@ I am used when a parameters provider is not found.
 "
 Class {
 	#name : #MolNotFoundParametersProvider,
-	#superclass : #Object,
-	#instVars : [
-		'interface',
-		'name'
-	],
+	#superclass : #MolNotFoundInterface,
+	#traits : 'TMolParametersProvider',
+	#classTraits : 'TMolParametersProvider classTrait',
 	#category : #'Molecule-Exceptions-NotFound'
 }
 
-{ #category : #'reflective operations' }
-MolNotFoundParametersProvider >> doesNotUnderstand: aMessage [ 
-	MolUtils log: 'Message ', aMessage selector, ' of ', interface printString, ' sended to interface named ', (name ifNil:['[nil]']).
-	^nil
+{ #category : #testing }
+MolNotFoundParametersProvider >> isFoundParameters [
+
+	^ false
 ]
 
-{ #category : #accessing }
-MolNotFoundParametersProvider >> interface: anInterface name: aName [ 
-	interface := anInterface.
-	name := aName
-]
-
-{ #category : #accessing }
-MolNotFoundParametersProvider >> isNotFoundParameters [
-	^true
+{ #category : #protocol }
+MolNotFoundParametersProvider >> parametersDo: actionBlock ifNone: exceptionBlock [
+	"Call the parameters if found with the parameters interface as argument. If none execute an exception block"
+	
+	exceptionBlock value
 ]

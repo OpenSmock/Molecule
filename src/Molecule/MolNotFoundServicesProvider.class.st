@@ -3,27 +3,21 @@ I am used when a service provider is not found.
 "
 Class {
 	#name : #MolNotFoundServicesProvider,
-	#superclass : #Object,
-	#instVars : [
-		'interface',
-		'name'
-	],
+	#superclass : #MolNotFoundInterface,
+	#traits : 'TMolServicesProvider',
+	#classTraits : 'TMolServicesProvider classTrait',
 	#category : #'Molecule-Exceptions-NotFound'
 }
 
-{ #category : #'reflective operations' }
-MolNotFoundServicesProvider >> doesNotUnderstand: aMessage [ 
-	MolUtils log: 'Message ', aMessage selector, ' of ', interface printString, ' sended to interface named ', (name ifNil:['[nil]']).
-	^nil
+{ #category : #testing }
+MolNotFoundServicesProvider >> isFoundServices [
+
+	^ false
 ]
 
-{ #category : #accessing }
-MolNotFoundServicesProvider >> interface: anInterface name: aName [ 
-	interface := anInterface.
-	name := aName
-]
-
-{ #category : #accessing }
-MolNotFoundServicesProvider >> isNotFoundServices [
-	^true
+{ #category : #protocol }
+MolNotFoundServicesProvider >> servicesDo: actionBlock ifNone: exceptionBlock [
+	"Call the services if found with the services interface as argument. If none execute an exception block"
+	
+	exceptionBlock value
 ]

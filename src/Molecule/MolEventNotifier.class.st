@@ -4,6 +4,8 @@ I am responsable for trigger events.
 Class {
 	#name : #MolEventNotifier,
 	#superclass : #Object,
+	#traits : 'TMolEventsNotifier',
+	#classTraits : 'TMolEventsNotifier classTrait',
 	#instVars : [
 		'interface',
 		'originator',
@@ -78,9 +80,10 @@ MolEventNotifier >> isActive [
 	^ isActive
 ]
 
-{ #category : #'initialize-release' }
-MolEventNotifier >> isNotFoundEventsNotifier [ 
-	^false
+{ #category : #testing }
+MolEventNotifier >> isFoundEventsNotifier [
+
+	^ true
 ]
 
 { #category : #accessing }

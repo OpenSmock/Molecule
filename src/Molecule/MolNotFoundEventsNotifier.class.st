@@ -3,27 +3,14 @@ I am used when an events notifier is not found.
 "
 Class {
 	#name : #MolNotFoundEventsNotifier,
-	#superclass : #Object,
-	#instVars : [
-		'interface',
-		'name'
-	],
+	#superclass : #MolNotFoundInterface,
+	#traits : 'TMolEventsNotifier',
+	#classTraits : 'TMolEventsNotifier classTrait',
 	#category : #'Molecule-Exceptions-NotFound'
 }
 
-{ #category : #'reflective operations' }
-MolNotFoundEventsNotifier >> doesNotUnderstand: aMessage [ 
-	MolUtils log: 'Message ', aMessage selector, ' of ', interface printString, ' sended to interface named ', (name ifNil:['[nil]']).
-	^nil
-]
+{ #category : #testing }
+MolNotFoundEventsNotifier >> isFoundEventsNotifier [
 
-{ #category : #accessing }
-MolNotFoundEventsNotifier >> interface: anInterface name: aName [ 
-	interface := anInterface.
-	name := aName
-]
-
-{ #category : #accessing }
-MolNotFoundEventsNotifier >> isNotFoundEventsNotifier [
-	^true
+	^ false
 ]
