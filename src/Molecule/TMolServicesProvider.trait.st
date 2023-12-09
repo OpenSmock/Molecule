@@ -14,3 +14,10 @@ TMolServicesProvider >> isNotFoundServices [
 
 	^ self isFoundServices not
 ]
+
+{ #category : #protocol }
+TMolServicesProvider >> servicesDo: actionBlock ifNone: exceptionBlock [
+	"Call the services if found with the services interface as argument. If none execute an exception block"
+	
+	self explicitRequirement 
+]

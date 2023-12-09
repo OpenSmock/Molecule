@@ -14,3 +14,10 @@ MolNotFoundServicesProvider >> isFoundServices [
 
 	^ false
 ]
+
+{ #category : #protocol }
+MolNotFoundServicesProvider >> servicesDo: actionBlock ifNone: exceptionBlock [
+	"Call the services if found with the services interface as argument. If none execute an exception block"
+	
+	exceptionBlock value
+]

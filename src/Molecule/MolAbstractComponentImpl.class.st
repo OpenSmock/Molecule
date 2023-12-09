@@ -17,3 +17,10 @@ Class {
 	#classTraits : 'MolComponentImpl classTrait',
 	#category : #'Molecule-Component Implementation'
 }
+
+{ #category : #protocol }
+MolAbstractComponentImpl >> servicesDo: actionBlock ifNone: exceptionBlock [
+	"Call the services if found with the services interface as argument. If none execute an exception block"
+	
+	actionBlock value: self
+]

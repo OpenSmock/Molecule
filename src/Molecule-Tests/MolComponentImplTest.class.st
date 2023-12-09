@@ -564,6 +564,25 @@ MolComponentImplTest >> testParametersProviders [
 ]
 
 { #category : #test }
+MolComponentImplTest >> testServicesDoIfNone [
+
+	| component exception |
+	"First: with found services"
+	component := MolUtils startComponent: MolCompleteComponentImpl.
+	component getMolUsedServicesProvider servicesDo: [ :s | 
+		self assert: s isFoundServices.
+		self assert: s service equals: #service.
+	] ifNone: [ self fail ].
+
+	"Second: with not found services"
+	component := MolCompleteComponentImpl new.
+	component getMolUsedServicesProvider servicesDo: [ :s | self fail ] ifNone: [ 
+		exception := true.
+	].
+	self assert: exception.
+]
+
+{ #category : #test }
 MolComponentImplTest >> testServicesProviders [
 
 	| component |
