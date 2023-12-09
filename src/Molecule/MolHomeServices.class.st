@@ -99,14 +99,14 @@ MolHomeServices >> checkInstantiationOfComponent: aComponentClass named: aCompon
 	aComponentClass componentType allProvidedServices do: [ :e |
 		(MolComponentManager default locatorServices
 			 searchServicesProviderFor: e
-			 named: aComponentName) isNotFoundServices ifFalse: [
+			 named: aComponentName) isFoundServices ifTrue: [
 			^ ComponentProvidedServicesAlreadyExistsError new messageText:
 				  'Can not instantiate a component with the same services and name of another component, please change the name of the component' ] ].
 
 	aComponentClass componentType allProvidedParameters do: [ :e |
 		(MolComponentManager default locatorServices
 			 searchParametersProviderFor: e
-			 named: aComponentName) isNotFoundParameters ifFalse: [
+			 named: aComponentName) isFoundParameters ifTrue: [
 			^ ComponentProvidedParametersAlreadyExistsError new messageText:
 				  'Can not instantiate a component with the same parameters and name of another component, please change the name of the component' ] ].
 
@@ -116,13 +116,13 @@ MolHomeServices >> checkInstantiationOfComponent: aComponentClass named: aCompon
 			type allProvidedServices do: [ :e |
 				(MolComponentManager default locatorServices
 					 searchServicesProviderFor: e
-					 named: aComponentName) isNotFoundServices ifFalse: [
+					 named: aComponentName) isFoundServices ifTrue: [
 					^ ComponentProvidedServicesAlreadyExistsError new messageText:
 						  '(Inheritance problem) Can not instantiate a component with the same services and name of another component, please change the name of the component' ] ].
 			type allProvidedParameters do: [ :e |
 				(MolComponentManager default locatorServices
 					 searchParametersProviderFor: e
-					 named: aComponentName) isNotFoundParameters ifFalse: [
+					 named: aComponentName) isFoundParameters ifTrue: [
 					^ ComponentProvidedServicesAlreadyExistsError new messageText:
 						  '(Inheritance problem) Can not instantiate a component with the same parameters and name of another component, please change the name of the component' ] ] ] ].
 	^ nil
@@ -187,16 +187,11 @@ MolHomeServices >> instantiateComponent: aComponentClass named: aName [
 
 	| error component connector deployed |
 	aComponentClass ifNil: [ ^ nil ].
-	error := self
-		         checkInstantiationOfComponent: aComponentClass
-		         named: aName.
-	error ifNotNil: [
-		error signal.
-		^ nil ].
+	error := self checkInstantiationOfComponent: aComponentClass named: aName.
+	error ifNotNil: [ error signal. ^ nil ].
 
-	component := aComponentClass new
-		             componentName: aName;
-		             yourself.
+	component := aComponentClass new componentName: aName; yourself.
+	
 	MolUtils log:
 		aComponentClass printString , ' named: ' , aName printString
 		, ' is instantiated.'.

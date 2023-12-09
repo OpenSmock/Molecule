@@ -108,6 +108,27 @@ MolHomeServicesTest >> testActivateComponentNamed [
 	self assert: component servicesProviders notEmpty
 ]
 
+{ #category : #test }
+MolHomeServicesTest >> testCheckInstantiationOfComponentNamed [
+
+	| homeServices result |
+	homeServices := MolComponentManager default homeServices.
+	
+	result := homeServices checkInstantiationOfComponent: nil named: nil. 
+	self assert: result class equals: WrongComponentNameError.
+	
+	result := homeServices checkInstantiationOfComponent: MolCompleteComponentImpl named: #default. 
+	self assert: result class equals: ComponentNotDeployedError.
+	
+	MolCompleteComponentImpl deploy.
+	result := homeServices checkInstantiationOfComponent: MolCompleteComponentImpl named: #default. 
+	self assert: result isNil.
+	
+	MolCompleteComponentImpl start.
+	result := homeServices checkInstantiationOfComponent: MolCompleteComponentImpl named: #default. 
+	self assert: result class equals: ComponentAlreadyExistsError.
+]
+
 { #category : #tests }
 MolHomeServicesTest >> testInstantiateComponent [
 	"Test Component properties after instantiation"
