@@ -76,11 +76,31 @@ Molecule Core has no dependencies.
 
 Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark), this package contains benchmarks for working on performances.
 
-## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Molecule Menu
+## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Molecule developer menus
 
-![image](https://github.com/OpenSmock/Molecule/assets/49183340/ef29b8f4-941a-45a6-b41e-bf6db9f78ec6)
+Molecule tries to offer a maximum number of Pharo user interface extensions to create and exploit components.
 
-Molecule system can be monitored and controlled from the dedicated `Molecule` library menu.
+### Library menu
+
+A molecule component system can be monitored and inspected from a dedicated `Molecule library menu`.
+![image](https://github.com/OpenSmock/Molecule/assets/49183340/28380e1b-37be-4456-a376-bb8dac70fd3f)
+
+This menu also includes a special section for `Debug and Tools`, providing access to advanced features.
+### Contextuals menu
+
+There are mutiple access to Molecule features from contextual menus.
+
+#### Packages contextual menu:
+![image](https://github.com/OpenSmock/Molecule/assets/49183340/1c4f9885-03e0-41dd-90db-eac077b34dcf)
+
+This menu provide `metrics` to have statistics on the Molecule code in selected packages.
+![image](https://github.com/OpenSmock/Molecule/assets/49183340/d083047b-ad95-42cf-a7f4-76242d2f6eec)
+
+#### Classes contextual menu:
+![image](https://github.com/OpenSmock/Molecule/assets/49183340/ac545c7b-9004-4728-a398-7cca42b0ed54)
+
+This menu provide actions and tools depending a selected classes.
+With this menu you can force to `define` a Component, specially if you have deactivated the Molecule dynamic update or if you have a bug during a Component contract changed.
 
 ## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Using Components
 
