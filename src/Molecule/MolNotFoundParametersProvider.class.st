@@ -4,6 +4,8 @@ I am used when a parameters provider is not found.
 Class {
 	#name : #MolNotFoundParametersProvider,
 	#superclass : #MolNotFoundInterface,
+	#traits : 'TMolParametersProvider',
+	#classTraits : 'TMolParametersProvider classTrait',
 	#category : #'Molecule-Exceptions-NotFound'
 }
 
@@ -11,10 +13,4 @@ Class {
 MolNotFoundParametersProvider >> isFoundParameters [
 
 	^ false
-]
-
-{ #category : #testing }
-MolNotFoundParametersProvider >> isNotFoundParameters [
-
-	^ self isFoundParameters not
 ]

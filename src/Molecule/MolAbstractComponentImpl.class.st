@@ -15,5 +15,5 @@ Class {
 	#superclass : #Object,
 	#traits : 'MolComponentImpl',
 	#classTraits : 'MolComponentImpl classTrait',
-	#category : #'Molecule-Component'
+	#category : #'Molecule-Component Implementation'
 }

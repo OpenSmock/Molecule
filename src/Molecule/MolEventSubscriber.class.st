@@ -4,6 +4,8 @@ I am responsable for subscribe event consumers to event providers.
 Class {
 	#name : #MolEventSubscriber,
 	#superclass : #Object,
+	#traits : 'TMolEventsSubscriber',
+	#classTraits : 'TMolEventsSubscriber classTrait',
 	#instVars : [
 		'events',
 		'originators',
@@ -152,12 +154,6 @@ MolEventSubscriber >> isAllOriginatorsLinked [
 MolEventSubscriber >> isFoundEventsSubscriber [
 
 	^ true
-]
-
-{ #category : #testing }
-MolEventSubscriber >> isNotFoundEventsSubscriber [
-
-	^ self isFoundEventsSubscriber not
 ]
 
 { #category : #API }

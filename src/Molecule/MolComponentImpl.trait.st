@@ -16,7 +16,9 @@ Trait {
 		'componentConnector',
 		'componentName'
 	],
-	#category : #'Molecule-Component'
+	#traits : 'TMolServicesProvider + TMolParametersProvider',
+	#classTraits : 'TMolServicesProvider classTrait + TMolParametersProvider classTrait',
+	#category : #'Molecule-Component Implementation'
 }
 
 { #category : #'life cycle' }
@@ -425,18 +427,6 @@ MolComponentImpl >> isFoundParameters [
 MolComponentImpl >> isFoundServices [
 
 	^ true
-]
-
-{ #category : #testing }
-MolComponentImpl >> isNotFoundParameters [
-
-	^ self isFoundParameters not
-]
-
-{ #category : #testing }
-MolComponentImpl >> isNotFoundServices [
-
-	^ self isFoundServices not
 ]
 
 { #category : #testing }

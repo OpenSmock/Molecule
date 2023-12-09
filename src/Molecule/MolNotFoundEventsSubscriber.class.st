@@ -4,6 +4,8 @@ I am used when an events subscriber is not found.
 Class {
 	#name : #MolNotFoundEventsSubscriber,
 	#superclass : #MolNotFoundInterface,
+	#traits : 'TMolEventsSubscriber',
+	#classTraits : 'TMolEventsSubscriber classTrait',
 	#category : #'Molecule-Exceptions-NotFound'
 }
 
@@ -11,10 +13,4 @@ Class {
 MolNotFoundEventsSubscriber >> isFoundEventsSubscriber [
 
 	^ false
-]
-
-{ #category : #testing }
-MolNotFoundEventsSubscriber >> isNotFoundEventsSubscriber [
-
-	^ self isFoundEventsSubscriber not
 ]

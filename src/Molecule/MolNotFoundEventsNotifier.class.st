@@ -4,6 +4,8 @@ I am used when an events notifier is not found.
 Class {
 	#name : #MolNotFoundEventsNotifier,
 	#superclass : #MolNotFoundInterface,
+	#traits : 'TMolEventsNotifier',
+	#classTraits : 'TMolEventsNotifier classTrait',
 	#category : #'Molecule-Exceptions-NotFound'
 }
 
@@ -11,10 +13,4 @@ Class {
 MolNotFoundEventsNotifier >> isFoundEventsNotifier [
 
 	^ false
-]
-
-{ #category : #testing }
-MolNotFoundEventsNotifier >> isNotFoundEventsNotifier [
-
-	^ self isFoundEventsNotifier not
 ]
