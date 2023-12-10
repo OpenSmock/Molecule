@@ -145,11 +145,11 @@ MolComponentFactory class >> addUsedServices: aComponentServices in: aComponentT
 	self compileContractSelector: 'usedComponentServices' protocol: self protocolForComponentServices interfaces: declaredUsedComponentServices type: aComponentType
 ]
 
-{ #category : #accessing }
+{ #category : #cleanup }
 MolComponentFactory class >> cleanUp [
 
 	<script: 'self cleanUp'>
-	isAutoComponentTypeUpdateActivated := false.
+	isAutoComponentTypeUpdateActivated := nil.
 	dirtyComponentTypeList := nil.
 	dirtyComponentImplList := nil.
 	
