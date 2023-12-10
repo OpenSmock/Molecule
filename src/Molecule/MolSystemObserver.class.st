@@ -74,6 +74,8 @@ MolSystemObserver class >> receiveClassModificationApplied: anAnnouncement [
 
 { #category : #receiving }
 MolSystemObserver class >> receiveIceAnnouncement: anAnnouncement [
+
+	"do nothing"
 ]
 
 { #category : #receiving }
