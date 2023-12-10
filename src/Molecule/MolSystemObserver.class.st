@@ -21,11 +21,11 @@ MolSystemObserver class >> active [
 { #category : #accessing }
 MolSystemObserver class >> componentFactory [
 
-	| componentFactoryClass |
-	componentFactoryClass := RGClassDefinition named: #MolComponentFactory.
+	| class |
+	class := RGClassDefinition named: #MolComponentFactory.
 	
-	componentFactoryClass isDefined
-		ifTrue: [ ^ componentFactoryClass realClass default ]
+	class isDefined
+		ifTrue: [ ^ class realClass default ]
 		ifFalse: [ ^ nil ]
 ]
 

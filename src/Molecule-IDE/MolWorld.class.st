@@ -7,6 +7,17 @@ Class {
 	#category : #'Molecule-IDE-Menus'
 }
 
+{ #category : #accessing }
+MolWorld class >> componentFactoryClass [
+
+	| class |
+	class := RGClassDefinition named: #MolComponentFactory.
+	
+	class isDefined
+		ifTrue: [ ^ class realClass ]
+		ifFalse: [ ^ nil ]
+]
+
 { #category : #scripts }
 MolWorld class >> defineAComponent [
 
@@ -171,6 +182,17 @@ MolWorld class >> menu60ReportBugOn: aBuilder [
 		action: [WebBrowser openOn: 'https://github.com/OpenSmock/Molecule/issues/new']
 ]
 
+{ #category : #accessing }
+MolWorld class >> molUtilsClass [
+
+	| class |
+	class := RGClassDefinition named: #MolUtils.
+	
+	class isDefined
+		ifTrue: [ ^ class realClass ]
+		ifFalse: [ ^ nil ]
+]
+
 { #category : #scripts }
 MolWorld class >> openDefineComponentDialog [
 
@@ -234,7 +256,10 @@ This action may be necessary if your system is broken.'
 { #category : #'menu - tools' }
 MolWorld class >> toolsMenu20ToggleLogsOn: aBuilder [
 	<worldMenu>
-	MolUtils isLogActive 
+	
+	| utilsClass |
+	utilsClass := self molUtilsClass ifNil:[ ^ self ].
+	utilsClass isLogActive 
 		ifFalse: [ 
 			(aBuilder item: #TurnOffMolLogs)
 				parent: #MoleculeDebug;
@@ -256,7 +281,10 @@ MolWorld class >> toolsMenu20ToggleLogsOn: aBuilder [
 { #category : #'menu - tools' }
 MolWorld class >> toolsMenu30ToggleDynamicContractUpdate: aBuilder [
 	<worldMenu>
-	MolComponentFactory default isDynamicContractUpdateActivated 
+	
+	| factoryClass |
+	factoryClass := self componentFactoryClass ifNil:[ ^ self ].
+	factoryClass default isDynamicContractUpdateActivated 
 		ifFalse: [ 
 			(aBuilder item: #TurnOffMolLogs)
 				parent: #MoleculeDebug;
