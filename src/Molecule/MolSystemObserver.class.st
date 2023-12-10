@@ -5,7 +5,8 @@ Class {
 	#name : #MolSystemObserver,
 	#superclass : #Object,
 	#classInstVars : [
-		'pragmaCollector'
+		'pragmaCollector',
+		'isActive'
 	],
 	#category : #'Molecule-Core'
 }
@@ -14,8 +15,10 @@ Class {
 MolSystemObserver class >> active [
 	<script>
 
+	self isActive ifTrue:[ ^ self ].
 	self subscribeMolPragmaAnnouncements.
-	self subscribeSystemAnnouncements
+	self subscribeSystemAnnouncements.
+	self isActive: true.
 ]
 
 { #category : #accessing }
@@ -35,15 +38,25 @@ MolSystemObserver class >> deactive [
 
 	self unsubscribeSystemAnnouncements.
 	self unsubscribeMolPragmaAnnouncements.
-
-	pragmaCollector release.
-	pragmaCollector := nil.
+	self isActive: false.
 ]
 
 { #category : #'class initialization' }
 MolSystemObserver class >> initialize [
 
 	self active
+]
+
+{ #category : #accessing }
+MolSystemObserver class >> isActive [
+
+	^ isActive ifNil:[ isActive := false ]
+]
+
+{ #category : #accessing }
+MolSystemObserver class >> isActive: anObject [
+
+	isActive := anObject
 ]
 
 { #category : #receiving }
@@ -149,7 +162,7 @@ MolSystemObserver class >> subscribeSystemAnnouncements [
 { #category : #announcements }
 MolSystemObserver class >> unsubscribeMolPragmaAnnouncements [
 
-	pragmaCollector release.
+	pragmaCollector ifNotNil: [ :e | e release ].
 	pragmaCollector := nil
 ]
 
