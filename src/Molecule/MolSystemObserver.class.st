@@ -18,6 +18,7 @@ MolSystemObserver class >> active [
 	self isActive ifTrue:[ ^ self ].
 	self subscribeMolPragmaAnnouncements.
 	self subscribeSystemAnnouncements.
+	self subscribeIceAnnouncements.
 	self isActive: true.
 ]
 
@@ -36,6 +37,7 @@ MolSystemObserver class >> componentFactory [
 MolSystemObserver class >> deactive [ 
 	<script>
 
+	self unsubscribeIceAnnouncements.
 	self unsubscribeSystemAnnouncements.
 	self unsubscribeMolPragmaAnnouncements.
 	self isActive: false.
@@ -86,9 +88,25 @@ MolSystemObserver class >> receiveClassModificationApplied: anAnnouncement [
 ]
 
 { #category : #receiving }
+MolSystemObserver class >> receiveClassRemoved: anAnnouncement [
+	"do nothing, traits are managing evolutions"
+]
+
+{ #category : #receiving }
 MolSystemObserver class >> receiveIceAnnouncement: anAnnouncement [
 
-	"do nothing"
+]
+
+{ #category : #receiving }
+MolSystemObserver class >> receiveMCPackageLoaderStarted: anAnnouncement [
+
+	self componentFactory ifNotNil:[ :e | e deactivateDynamicContractUpdate: false ]
+]
+
+{ #category : #receiving }
+MolSystemObserver class >> receiveMCPackageLoaderStopped: anAnnouncement [
+
+	self componentFactory ifNotNil:[ :e | e activateDynamicContractUpdate: false ]
 ]
 
 { #category : #receiving }
@@ -126,6 +144,14 @@ MolSystemObserver class >> release [
 ]
 
 { #category : #announcements }
+MolSystemObserver class >> subscribeIceAnnouncements [
+
+	| announcer |
+	announcer := Iceberg announcer.
+	announcer when: IceAnnouncement send: #receiveIceAnnouncement: to: self.
+]
+
+{ #category : #announcements }
 MolSystemObserver class >> subscribeMolPragmaAnnouncements [
 
 	pragmaCollector := (PragmaCollector new filter: [ :prg |
@@ -150,13 +176,21 @@ MolSystemObserver class >> subscribeSystemAnnouncements [
 	"Component events"
 	announcer when: ClassAdded send: #receiveClassAdded: to: self.
 	announcer when: ClassModificationApplied send: #receiveClassModificationApplied: to: self.
+	announcer when: ClassRemoved send: #receiveClassRemoved: to: self.
 
 	"Monticello events"
 	announcer when: MCVersionLoaderStarted send: #receiveMCVersionLoaderStarted: to: self.
 	announcer when: MCVersionLoaderStopped send: #receiveMCVersionLoaderStopped: to: self.
-	
-	"Iceberg events"
-	announcer when: IceAnnouncement send: #receiveIceAnnouncement: to: self.
+	announcer when: #MCPackageLoaderStarted send: #receiveMCPackageLoaderStarted: to: self.
+	announcer when: #MCPackageLoaderStopped send: #receiveMCPackageLoaderStopped: to: self.
+]
+
+{ #category : #announcements }
+MolSystemObserver class >> unsubscribeIceAnnouncements [
+
+	| announcer |
+	announcer := Iceberg announcer ifNil: [ ^ self ].
+	announcer unsubscribe: self
 ]
 
 { #category : #announcements }
