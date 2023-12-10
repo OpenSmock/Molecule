@@ -179,8 +179,8 @@ MolSystemObserver class >> subscribeSystemAnnouncements [
 	announcer when: ClassRemoved send: #receiveClassRemoved: to: self.
 
 	"Monticello events"
-	announcer when: MCVersionLoaderStarted send: #receiveMCVersionLoaderStarted: to: self.
-	announcer when: MCVersionLoaderStopped send: #receiveMCVersionLoaderStopped: to: self.
+	announcer when: #MCVersionLoaderStarted send: #receiveMCVersionLoaderStarted: to: self.
+	announcer when: #MCVersionLoaderStopped send: #receiveMCVersionLoaderStopped: to: self.
 	announcer when: #MCPackageLoaderStarted send: #receiveMCPackageLoaderStarted: to: self.
 	announcer when: #MCPackageLoaderStopped send: #receiveMCPackageLoaderStopped: to: self.
 ]
