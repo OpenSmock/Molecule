@@ -798,17 +798,19 @@ MolComponentFactoryTest >> testDefineComponentTypeImplementors [
 
 { #category : #tests }
 MolComponentFactoryTest >> testDefineDirtyComponents [
-	self assert: MolComponentFactory default dirtyComponentTypes isEmpty.
+
+	self assert: MolComponentFactory dirtyComponentTypeList isEmpty.
 
 	"Add a dirty component type manually"
-	MolComponentFactory default dirtyComponentTypes add: MolMyClientComponent.
-	MolComponentFactory default dirtyComponents add: MolMyClientComponentImpl.
-	self assert: MolComponentFactory default dirtyComponentTypes notEmpty.
-	self assert: MolComponentFactory default dirtyComponents notEmpty.
-	
+	MolComponentFactory dirtyComponentTypeList add: MolMyClientComponent.
+	MolComponentFactory dirtyComponentImplList add:
+		MolMyClientComponentImpl.
+	self assert: MolComponentFactory dirtyComponentTypeList notEmpty.
+	self assert: MolComponentFactory dirtyComponentImplList notEmpty.
+
 	MolComponentFactory defineDirtyComponents.
-	self assert: MolComponentFactory default dirtyComponentTypes isEmpty.
-	self assert: MolComponentFactory default dirtyComponents isEmpty.
+	self assert: MolComponentFactory dirtyComponentTypeList isEmpty.
+	self assert: MolComponentFactory dirtyComponentImplList isEmpty
 ]
 
 { #category : #tests }

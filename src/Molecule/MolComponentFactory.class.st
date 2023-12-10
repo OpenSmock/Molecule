@@ -17,6 +17,11 @@ Class {
 	#classVars : [
 		'Default'
 	],
+	#classInstVars : [
+		'isAutoComponentTypeUpdateActivated',
+		'dirtyComponentTypeList',
+		'dirtyComponentImplList'
+	],
 	#category : #'Molecule-Tools'
 }
 
@@ -179,7 +184,7 @@ MolComponentFactory class >> compileContractSelector: aSelector protocol: aProto
 { #category : #pragma }
 MolComponentFactory class >> componentContractPragmaSymbol [
 
-	^#componentContract
+	^ #componentContract
 ]
 
 { #category : #'component - creation' }
@@ -344,10 +349,46 @@ MolComponentFactory class >> defineDirtyComponents [
 	self default defineDirtyComponents
 ]
 
+{ #category : #accessing }
+MolComponentFactory class >> dirtyComponentImplList [
+
+	^ dirtyComponentImplList ifNil:[ dirtyComponentImplList := Set new ]
+]
+
+{ #category : #accessing }
+MolComponentFactory class >> dirtyComponentImplList: anObject [
+
+	dirtyComponentImplList := anObject
+]
+
+{ #category : #accessing }
+MolComponentFactory class >> dirtyComponentTypeList [
+
+	^ dirtyComponentTypeList ifNil:[ dirtyComponentTypeList := Set new ]
+]
+
+{ #category : #accessing }
+MolComponentFactory class >> dirtyComponentTypeList: anObject [
+
+	dirtyComponentTypeList := anObject
+]
+
 { #category : #'class initialization' }
 MolComponentFactory class >> initialize [
 
 	self default
+]
+
+{ #category : #accessing }
+MolComponentFactory class >> isAutoComponentTypeUpdateActivated [
+
+	^ isAutoComponentTypeUpdateActivated ifNil:[ isAutoComponentTypeUpdateActivated := true ]
+]
+
+{ #category : #accessing }
+MolComponentFactory class >> isAutoComponentTypeUpdateActivated: anObject [
+
+	isAutoComponentTypeUpdateActivated := anObject
 ]
 
 { #category : #'class initialization' }
@@ -447,7 +488,7 @@ MolComponentFactory >> componentChanged: aChangedClass [
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]
 	] ifFalse: [ 
-		dirtyComponents add: aChangedClass
+		self dirtyComponents add: aChangedClass
 	].
 ]
 
@@ -474,7 +515,7 @@ MolComponentFactory >> contractChanged: aComponentType [
 	self isDynamicContractUpdateActivated ifTrue: [ 
 		self defineComponentTypeImplementors: aComponentType
 	] ifFalse: [ 
-		dirtyComponentTypes add: aComponentType 
+		self dirtyComponentTypes add: aComponentType 
 	]
 ]
 
@@ -554,24 +595,65 @@ MolComponentFactory >> defineComponentTypeImplementors: aComponentType [
 { #category : #'dirty components' }
 MolComponentFactory >> defineDirtyComponents [
 	"Get all dirty Types and Components for defining them"
-	
-	dirtyComponentTypes do: [ :e | self defineComponentTypeImplementors: e ].
-	dirtyComponentTypes := Set new.
-	
-	dirtyComponents do: [ :e | self defineComponent: e ].
-	dirtyComponents := Set new.
+
+	MolComponentFactory dirtyComponentTypeList do: [ :e |
+		self defineComponentTypeImplementors: e ].
+	MolComponentFactory dirtyComponentTypeList: Set new.
+	MolComponentFactory dirtyComponentImplList do: [ :e |
+		self defineComponent: e ].
+	MolComponentFactory dirtyComponentImplList: Set new
 ]
 
 { #category : #'dirty components' }
 MolComponentFactory >> dirtyComponentTypes [
 
-	^dirtyComponentTypes 
+	self 
+		deprecated:'Use self class dirtyComponentTypeList' 
+		transformWith: '
+			`@receiver dirtyComponentTypes' 
+			-> 
+			'MolComponentFactory dirtyComponentTypeList'.
+
+	^ self class dirtyComponentTypeList
+]
+
+{ #category : #'dirty components' }
+MolComponentFactory >> dirtyComponentTypes: aSet [
+
+	self 
+		deprecated:'Use self class dirtyComponentTypeList:' 
+		transformWith: '
+			`@receiver dirtyComponentTypes: `@argument' 
+			-> 
+			'MolComponentFactory dirtyComponentTypeList: `@argument'.
+
+	self class dirtyComponentTypeList: aSet
 ]
 
 { #category : #'dirty components' }
 MolComponentFactory >> dirtyComponents [
 
-	^dirtyComponents
+	self 
+		deprecated:'Use self class dirtyComponentImplList' 
+		transformWith: '
+			`@receiver dirtyComponents' 
+			-> 
+			'MolComponentFactory dirtyComponentImplList'.
+
+	^ self class dirtyComponentImplList
+]
+
+{ #category : #'dirty components' }
+MolComponentFactory >> dirtyComponents: aSet [
+
+	self 
+		deprecated:'Use self class dirtyComponentImplList:' 
+		transformWith: '
+			`@receiver dirtyComponents: `@argument' 
+			-> 
+			'MolComponentFactory dirtyComponentImplList: `@argument'.
+
+	self class dirtyComponentImplList: aSet
 ]
 
 { #category : #'private - code generation' }
@@ -786,16 +868,17 @@ MolComponentFactory >> initialize [
 
 	super initialize.
 
-	dirtyComponentTypes := Set new.
-	dirtyComponents := Set new.
-	self initializePragmaAnnouncements.
-	self initializeSystemAnnouncements
+	"dirtyComponentTypes := Set new.
+	dirtyComponents := Set new."
+	"self initializePragmaAnnouncements.
+	self initializeSystemAnnouncements"
 ]
 
 { #category : #'initialize - release' }
 MolComponentFactory >> initializePragmaAnnouncements [
 	"Component Type Observer"
 	
+	self deprecated:'not used'.
 	pragmaCollector := (PragmaCollector new filter: [ :prg |  prg selector = self class componentContractPragmaSymbol ]) reset.
 	
 	pragmaCollector announcer 
@@ -808,6 +891,8 @@ MolComponentFactory >> initializePragmaAnnouncements [
 MolComponentFactory >> initializeSystemAnnouncements [
 	"Activate (or desactivate) component contract update when iceberge is used (or not)"
 	| announcer |
+	
+	self deprecated:'not used'.
 	announcer := SystemAnnouncer uniqueInstance weak.
 	announcer ifNil: [
 		MolUtils log: 'Error on Systems announcements initialization, system Announcer is nil'.
@@ -827,14 +912,27 @@ MolComponentFactory >> initializeSystemAnnouncements [
 { #category : #accessing }
 MolComponentFactory >> isDynamicContractUpdateActivated [
 
-	isDynamicContractUpdateActivated ifNil: [ isDynamicContractUpdateActivated := true ].
-	^ isDynamicContractUpdateActivated
+	self 
+		deprecated:'Use self class isAutoComponentTypeUpdateActivated' 
+		transformWith: '
+			`@receiver isDynamicContractUpdateActivated' 
+			-> 
+			'MolComponentFactory isAutoComponentTypeUpdateActivated'.
+		
+	^ self class isAutoComponentTypeUpdateActivated
 ]
 
 { #category : #accessing }
 MolComponentFactory >> isDynamicContractUpdateActivated: aBoolean [
 
-	isDynamicContractUpdateActivated := aBoolean
+	self 
+		deprecated:'Use self class isAutoComponentTypeUpdateActivated' 
+		transformWith: '
+			`@receiver isDynamicContractUpdateActivated: `@argument' 
+			-> 
+			'MolComponentFactory isAutoComponentTypeUpdateActivated: `@argument'.
+
+	self class isAutoComponentTypeUpdateActivated: aBoolean
 ]
 
 { #category : #'private - code generation' }
@@ -862,11 +960,11 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsAdding: aTraitsLi
 { #category : #'initialize - release' }
 MolComponentFactory >> release [
 
-	self releaseSystemAnnouncements.
-	self releasePragmaAnnouncements.
-	isDynamicContractUpdateActivated := false.
-	dirtyComponentTypes := nil.
-	dirtyComponents := nil.
+	"self releaseSystemAnnouncements.
+	self releasePragmaAnnouncements."
+	"isDynamicContractUpdateActivated := false."
+	"dirtyComponentTypes := nil.
+	dirtyComponents := nil."
 
 	super release
 ]
@@ -874,6 +972,7 @@ MolComponentFactory >> release [
 { #category : #'initialize - release' }
 MolComponentFactory >> releasePragmaAnnouncements [
 
+	self deprecated:'not used'.
 	pragmaCollector release.
 	pragmaCollector := nil
 ]
@@ -882,6 +981,7 @@ MolComponentFactory >> releasePragmaAnnouncements [
 MolComponentFactory >> releaseSystemAnnouncements [
 
 	| announcer |
+	self deprecated:'not used'.
 	announcer := SystemAnnouncer uniqueInstance.
 	announcer ifNil: [ ^ self ].
 	announcer unsubscribe: self
