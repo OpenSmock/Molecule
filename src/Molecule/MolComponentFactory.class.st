@@ -149,6 +149,10 @@ MolComponentFactory class >> addUsedServices: aComponentServices in: aComponentT
 MolComponentFactory class >> cleanUp [
 
 	<script: 'self cleanUp'>
+	isAutoComponentTypeUpdateActivated := false.
+	dirtyComponentTypeList := nil.
+	dirtyComponentImplList := nil.
+	
 	Default ifNil: [ ^ self ].
 	Default release.
 	Default := nil
