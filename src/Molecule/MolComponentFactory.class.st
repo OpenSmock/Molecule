@@ -611,16 +611,19 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 { #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aComponent [
 
+	| evt |
 	self removeOldConsumedEventsComponentAccessorsFor: aComponent.
-	
-	(aComponent haveComponentType and:[aComponent haveOwnComponentType]) ifFalse: [ ^ self ].
-	
-	self 
-		generateComponentAccessorsFor: #consumedEvents 
-		withList: aComponent componentType consumedComponentEvents 
-		in: aComponent 
+
+	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
+		ifFalse: [ ^ self ].
+
+	evt := self getConsumedComponentEvents: aComponent.
+
+	self
+		generateComponentAccessorsFor: #consumedEvents
+		withList: evt
+		in: aComponent
 		suffix: 'Subscriber'
-	
 ]
 
 { #category : #'code generation' }
@@ -640,30 +643,49 @@ MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aCom
 { #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aComponent [
 
-	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
-	
-	(aComponent haveComponentType and:[aComponent haveOwnComponentType]) ifFalse: [ ^ self ].
-	
-	self 
-		generateComponentAccessorsFor: #usedParameters 
-		withList: aComponent componentType usedComponentParameters 
-		in: aComponent 
+	| params |
+	self removeOldUsedParametersAndServicesComponentAccessorsFor:
+		aComponent.
+
+	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
+		ifFalse: [ ^ self ].
+
+	params := self getUsedComponentParameters: aComponent.
+
+	self
+		generateComponentAccessorsFor: #usedParameters
+		withList: params
+		in: aComponent
 		suffix: 'Provider'
-	
 ]
 
 { #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aComponent [
- 
-	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
-	
-	(aComponent haveComponentType and:[aComponent haveOwnComponentType]) ifFalse: [ ^ self ].
-	
-	self 
-		generateComponentAccessorsFor: #usedServices 
-		withList: aComponent componentType usedComponentServices 
-		in: aComponent 
+
+	| svcs |
+	self removeOldUsedParametersAndServicesComponentAccessorsFor:
+		aComponent.
+
+	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
+		ifFalse: [ ^ self ].
+
+	svcs := self getUsedComponentServices: aComponent.
+
+	self
+		generateComponentAccessorsFor: #usedServices
+		withList: svcs
+		in: aComponent
 		suffix: 'Provider'
+]
+
+{ #category : #accessing }
+MolComponentFactory >> getConsumedComponentEvents: aComponent [
+
+	| evt |
+	evt := Set new.
+	evt addAll: aComponent componentType consumedComponentEvents.
+	evt addAll: aComponent consumedComponentEvents.
+	^ evt
 ]
 
 { #category : #'private - code generation' }
@@ -721,6 +743,25 @@ MolComponentFactory >> getSourceCodeFor: aSymbol trait: aTrait selector: aSelect
 	aSymbol = #usedServices ifTrue:[^self getUsedServicesSourceCodeFor: aTrait selector: aSelector ].
 	aSymbol = #usedParameters ifTrue:[^self getUsedParametersSourceCodeFor: aTrait selector: aSelector ].
 	^ self error: 'Component Type contract category not supported'.
+]
+
+{ #category : #accessing }
+MolComponentFactory >> getUsedComponentParameters: aComponent [
+
+	| params |
+	params := Set new.
+	params addAll: aComponent componentType usedComponentParameters.
+	params addAll: aComponent usedComponentParameters.
+	^params
+]
+
+{ #category : #accessing }
+MolComponentFactory >> getUsedComponentServices: aComponent [
+| svcs |
+svcs := Set new.
+	svcs addAll: aComponent componentType usedComponentServices.
+	svcs addAll: aComponent usedComponentServices.
+	^svcs
 ]
 
 { #category : #'private - code generation' }
@@ -921,19 +962,23 @@ MolComponentFactory >> removeOldProducedEventsComponentAccessorsFor: aComponent 
 
 { #category : #'code generation' }
 MolComponentFactory >> removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent [
- 	"remove old used parameters but not the existing or used services"
+	"remove old used parameters but not the existing or used services"
+
 	| toBeRemoveProviderSelectors |
-	toBeRemoveProviderSelectors := (aComponent selectors select:[ :s |  'get*Provider' match: (s asString)]) asOrderedCollection.
-	
+	toBeRemoveProviderSelectors := (aComponent selectors select: [ :s |
+		                                'get*Provider' match: s asString ])
+		                               asOrderedCollection.
+
 	"check if the selectors are already in the current used parameters or used services, in case don't remove them"
-	aComponent haveComponentType ifTrue:[
-		aComponent componentType usedComponentParameters do:[ :e | 
-			toBeRemoveProviderSelectors copy do:[ :sel | ('get', e printString, 'Provider' = sel) ifTrue:[toBeRemoveProviderSelectors remove: sel]].
-		].
-		aComponent componentType usedComponentServices do:[ :e | 
-			toBeRemoveProviderSelectors copy do:[ :sel | ('get', e printString, 'Provider' = sel) ifTrue:[toBeRemoveProviderSelectors remove: sel]].
-		].
-	].
-	
-	toBeRemoveProviderSelectors do:[ :s | aComponent removeSelector: s].
+	aComponent haveComponentType ifTrue: [
+		(self getUsedComponentParameters:  aComponent) do: [ :e |
+			toBeRemoveProviderSelectors copy do: [ :sel |
+				'get' , e printString , 'Provider' = sel ifTrue: [
+					toBeRemoveProviderSelectors remove: sel ] ] ].
+		(self getUsedComponentServices:  aComponent) do: [ :e |
+			toBeRemoveProviderSelectors copy do: [ :sel |
+				'get' , e printString , 'Provider' = sel ifTrue: [
+					toBeRemoveProviderSelectors remove: sel ] ] ] ].
+
+	toBeRemoveProviderSelectors do: [ :s | aComponent removeSelector: s ]
 ]

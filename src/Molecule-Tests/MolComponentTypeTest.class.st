@@ -116,6 +116,21 @@ MolComponentTypeTest >> testProvidedComponentServicesmeters [
 ]
 
 { #category : #tests }
+MolComponentTypeTest >> testUsedAndGeneratedComponentImplServices [
+
+	self assert:
+		MolCompleteComponent3Impl componentType usedComponentServices size
+		= 1.
+	self assert: MolCompleteComponent3Impl usedComponentServices size = 2.
+	MolCompleteComponent3Impl removeSelector:
+		#getMolUsedServices2Provider.
+	MolCompleteComponent3Impl removeSelector: #getMolUsedServicesProvider.
+	MolCompleteComponent3Impl defineComponent.
+	self assert: (MolCompleteComponent3Impl compiledMethodAt: #getMolUsedServicesProvider ifAbsent: [nil]) isNotNil.
+	self assert: (MolCompleteComponent3Impl compiledMethodAt: #getMolUsedServices2Provider ifAbsent: [nil]) isNotNil.
+]
+
+{ #category : #tests }
 MolComponentTypeTest >> testUsedComponentParameters [
 
 	self assert: MolComponentType usedComponentParameters isEmpty.
