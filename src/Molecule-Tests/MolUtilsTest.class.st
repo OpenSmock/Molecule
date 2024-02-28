@@ -240,6 +240,34 @@ MolUtilsTest >> testLog2 [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testOfferedTypes [
+
+	"Not used services"
+	| types |
+	self assert: (MolUtils offeredTypes: nil) isEmpty. "test with nil"
+	self assert: (MolUtils offeredTypes: Trait) isEmpty. "test with no component interface object"
+	self assert: (MolUtils offeredTypes: MolUnusedServices) isEmpty. "test with unused interface"
+	
+	"Type used services"
+	types := MolUtils offeredTypes: MolUsedServices.
+	self assert: types size equals: 2.
+	self assert: (types at: 1) equals: MolCompleteComponent.
+	self assert: (types at: 2) equals: MolCompleteComponent2.
+	
+	"Type provide events"
+	types := MolUtils offeredTypes: MolUsedEvents.
+	self assert: types size equals: 2.
+	self assert: (types at: 1) equals: MolCompleteComponent.
+	self assert: (types at: 2) equals: MolCompleteComponent2.
+	
+	"Type used parameters"
+	types := MolUtils offeredTypes: MolUsedParameters.
+	self assert: types size equals: 2.
+	self assert: (types at: 1) equals: MolCompleteComponent.
+	self assert: (types at: 2) equals: MolCompleteComponent2.
+]
+
+{ #category : #tests }
 MolUtilsTest >> testPassivateComponentNamed [
 
 	| homeServices deploymentServices |
@@ -393,6 +421,34 @@ MolUtilsTest >> testRemoveComponents [
 		assert:
 		(homeServices isWaitingForActivation: MolCompleteComponentImpl)
 		equals: false
+]
+
+{ #category : #tests }
+MolUtilsTest >> testRequiredTypes [
+
+	"Not used services"
+	| types |
+	self assert: (MolUtils requiredTypes: nil) isEmpty. "test with nil"
+	self assert: (MolUtils requiredTypes: Trait) isEmpty. "test with no component interface object"
+	self assert: (MolUtils requiredTypes: MolUnusedServices) isEmpty. "test with unused interface"
+	
+	"Type used services"
+	types := MolUtils requiredTypes: MolUsedServices.
+	self assert: types size equals: 2.
+	self assert: (types at: 1) equals: MolCompleteComponent.
+	self assert: (types at: 2) equals: MolCompleteComponent2.
+	
+	"Type provide events"
+	types := MolUtils requiredTypes: MolUsedEvents.
+	self assert: types size equals: 2.
+	self assert: (types at: 1) equals: MolCompleteComponent.
+	self assert: (types at: 2) equals: MolCompleteComponent2.
+	
+	"Type used parameters"
+	types := MolUtils requiredTypes: MolUsedParameters.
+	self assert: types size equals: 2.
+	self assert: (types at: 1) equals: MolCompleteComponent.
+	self assert: (types at: 2) equals: MolCompleteComponent2.
 ]
 
 { #category : #tests }

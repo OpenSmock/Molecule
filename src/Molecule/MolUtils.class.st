@@ -200,6 +200,29 @@ MolUtils class >> log: aString [
 	self traceCr: '[Molecule] ' , string
 ]
 
+{ #category : #'component contract' }
+MolUtils class >> offeredTypes: arg1 [
+
+	| tmp1 |
+	tmp1 := Set new.
+	arg1 ifNil: [ ^ tmp1 asOrderedCollection ].
+	arg1 isTrait ifFalse: [ ^ tmp1 asOrderedCollection ].
+	(arg1 isComponentServices not and: [
+		 arg1 isComponentEvents not and: [ arg1 isComponentParameters not ] ])
+		ifTrue: [ ^ tmp1 asOrderedCollection ].
+	MolComponentType users do: [ :arg2 |
+		arg1 isComponentServices
+			ifTrue: [
+			(arg2 isProvideServices: arg1) ifTrue: [ tmp1 add: arg2 ] ]
+			ifFalse: [
+				arg1 isComponentEvents
+					ifTrue: [
+					(arg2 isProduceEvents: arg1) ifTrue: [ tmp1 add: arg2 ] ]
+					ifFalse: [
+					(arg2 isProvideParameters: arg1) ifTrue: [ tmp1 add: arg2 ] ] ] ].
+	^ tmp1 asOrderedCollection
+]
+
 { #category : #'quick lifecycle' }
 MolUtils class >> passivateComponent: aComponentClass named: aName [
 	"passivate quickly a component"
@@ -272,6 +295,32 @@ MolUtils class >> removeComponents: aComponentClassList [
 	aComponentClassList do:[ :componentClass | 
 		MolComponentManager default homeServices removeComponent: componentClass.
 	].
+]
+
+{ #category : #'component contract' }
+MolUtils class >> requiredTypes: aComponentContractInterface [
+	"Get types that are part of a component contract required as Services, Events, or Parameters interface"
+
+	| list |
+	list := Set new.
+	aComponentContractInterface ifNil:[ ^ list asOrderedCollection ].
+	aComponentContractInterface isTrait ifFalse:[ ^ list asOrderedCollection ].
+	(aComponentContractInterface isComponentServices not and:[aComponentContractInterface isComponentEvents not and:[aComponentContractInterface isComponentParameters not]]) ifTrue:[ ^ list asOrderedCollection ].
+	
+	"Collect all required"
+	MolComponentType users do:[ :type | 
+		aComponentContractInterface isComponentServices ifTrue:[ 
+			(type isUseServices: aComponentContractInterface) ifTrue:[ list add: type ].
+		] ifFalse:[
+			aComponentContractInterface isComponentEvents ifTrue:[ 
+				(type isConsumeEvents: aComponentContractInterface) ifTrue:[ list add: type ].
+			] ifFalse:[
+				(type isUseParameters: aComponentContractInterface) ifTrue:[ list add: type ].
+			].
+		].
+	].
+
+	^ list asOrderedCollection  
 ]
 
 { #category : #log }
