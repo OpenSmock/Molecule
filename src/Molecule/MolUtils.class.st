@@ -200,6 +200,32 @@ MolUtils class >> log: aString [
 	self traceCr: '[Molecule] ' , string
 ]
 
+{ #category : #'component contract' }
+MolUtils class >> offeredTypes: aComponentContractInterface [
+	"Get types that are part of a component contract offered as Services, Events, or Parameters interface"
+
+	| list |
+	list := Set new.
+	aComponentContractInterface ifNil:[ ^ list asOrderedCollection ].
+	aComponentContractInterface isTrait ifFalse:[ ^ list asOrderedCollection ].
+	(aComponentContractInterface isComponentServices not and:[aComponentContractInterface isComponentEvents not and:[aComponentContractInterface isComponentParameters not]]) ifTrue:[ ^ list asOrderedCollection ].
+	
+	"Collect all required"
+	MolComponentType users do:[ :type | 
+		aComponentContractInterface isComponentServices ifTrue:[ 
+			(type isProvideServices: aComponentContractInterface) ifTrue:[ list add: type ].
+		] ifFalse:[
+			aComponentContractInterface isComponentEvents ifTrue:[ 
+				(type isProduceEvents: aComponentContractInterface) ifTrue:[ list add: type ].
+			] ifFalse:[
+				(type isProvideParameters: aComponentContractInterface) ifTrue:[ list add: type ].
+			].
+		].
+	].
+
+	^ list asOrderedCollection  
+]
+
 { #category : #'quick lifecycle' }
 MolUtils class >> passivateComponent: aComponentClass named: aName [
 	"passivate quickly a component"
@@ -272,6 +298,32 @@ MolUtils class >> removeComponents: aComponentClassList [
 	aComponentClassList do:[ :componentClass | 
 		MolComponentManager default homeServices removeComponent: componentClass.
 	].
+]
+
+{ #category : #'component contract' }
+MolUtils class >> requiredTypes: aComponentContractInterface [
+	"Get types that are part of a component contract required as Services, Events, or Parameters interface"
+
+	| list |
+	list := Set new.
+	aComponentContractInterface ifNil:[ ^ list asOrderedCollection ].
+	aComponentContractInterface isTrait ifFalse:[ ^ list asOrderedCollection ].
+	(aComponentContractInterface isComponentServices not and:[aComponentContractInterface isComponentEvents not and:[aComponentContractInterface isComponentParameters not]]) ifTrue:[ ^ list asOrderedCollection ].
+	
+	"Collect all required"
+	MolComponentType users do:[ :type | 
+		aComponentContractInterface isComponentServices ifTrue:[ 
+			(type isUseServices: aComponentContractInterface) ifTrue:[ list add: type ].
+		] ifFalse:[
+			aComponentContractInterface isComponentEvents ifTrue:[ 
+				(type isConsumeEvents: aComponentContractInterface) ifTrue:[ list add: type ].
+			] ifFalse:[
+				(type isUseParameters: aComponentContractInterface) ifTrue:[ list add: type ].
+			].
+		].
+	].
+
+	^ list asOrderedCollection  
 ]
 
 { #category : #log }
