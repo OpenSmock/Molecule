@@ -2,7 +2,7 @@ Class {
 	#name : #BaselineOfMolecule,
 	#superclass : #BaselineOf,
 	#instVars : [
-		'previousDynamicContractUpdateActivated'
+		'isPreviouslyAutoComponentTypeUpdateActivated'
 	],
 	#category : #BaselineOfMolecule
 }
@@ -31,12 +31,17 @@ BaselineOfMolecule >> baseline: spec [
 BaselineOfMolecule >> postload: loader package: packageSpec [
 	"Reload new Molecule tools"
 
-	(Smalltalk globals includesKey: #MolComponentManager) ifFalse:[ ^self ].
-	(Smalltalk globals classNamed: #MolComponentManager) cleanUp.
-	"Rebuild all components"
+	| componentManagerClass |
+	componentManagerClass := RGClassDefinition named: #MolComponentManager.
+	componentManagerClass isDefined ifFalse:[ ^ self ].
+	componentManagerClass realClass cleanUp.
+
+	"Define all components after loading"
 	MolComponentFactory defineAllComponents.
-	"Reactive dynamic contract update if necessary"
-	(previousDynamicContractUpdateActivated ifNil:[false]) ifFalse:[
+	MolSystemObserver active.
+	
+	"Active auto ComponentType update if necessary"
+	(isPreviouslyAutoComponentTypeUpdateActivated ifNil:[ false ]) ifFalse:[
 		MolComponentFactory default activateDynamicContractUpdate.	
 	].
 ]
@@ -45,9 +50,12 @@ BaselineOfMolecule >> postload: loader package: packageSpec [
 BaselineOfMolecule >> preload: loader package: packageSpec [
 	"If a Molecule component system is running, confirm loading and cleanUp before installation of the new version"
 	
-	(Smalltalk globals includesKey: #MolComponentManager) ifFalse:[ ^self ].
-	previousDynamicContractUpdateActivated := false.
-	(Smalltalk globals classNamed: #MolComponentManager) isRunningComponents ifTrue:[ 
+	| componentManagerClass |
+	componentManagerClass := RGClassDefinition named: #MolComponentManager.
+	componentManagerClass isDefined ifFalse:[ ^ self ].
+	
+	isPreviouslyAutoComponentTypeUpdateActivated := false.
+	componentManagerClass realClass isRunningComponents ifTrue:[ 
 		(Smalltalk ui theme
 		proceedIn: Morph new 
 		text: 'Warning, you are going to modify Molecule then components are started, do you want to continue ?'
@@ -57,7 +65,8 @@ BaselineOfMolecule >> preload: loader package: packageSpec [
 		].
 	].
  
-	(Smalltalk globals classNamed: #MolComponentManager) cleanUp.
-	previousDynamicContractUpdateActivated := MolComponentFactory default isDynamicContractUpdateActivated.
+	componentManagerClass realClass cleanUp.
+	isPreviouslyAutoComponentTypeUpdateActivated := MolComponentFactory default isDynamicContractUpdateActivated.
 	MolComponentFactory default deactivateDynamicContractUpdate.
+	MolSystemObserver deactive.
 ]
