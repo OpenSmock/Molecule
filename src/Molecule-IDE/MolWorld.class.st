@@ -171,13 +171,6 @@ MolWorld class >> menu60ReportBugOn: aBuilder [
 		action: [WebBrowser openOn: 'https://github.com/OpenSmock/Molecule/issues/new']
 ]
 
-{ #category : #'instance creation' }
-MolWorld class >> newComponent [
-
-	<script>
-	MolNewComponentLibrary new open
-]
-
 { #category : #scripts }
 MolWorld class >> openDefineComponentDialog [
 
@@ -241,18 +234,6 @@ This action may be necessary if your system is broken.'
 		help:
 			'Cleanup all Molecule system instances and components of the image';
 				withSeparatorAfter
-]
-
-{ #category : #'menu - tools' }
-MolWorld class >> toolsMenu120DefineComponentOn: aBuilder [
-
-	<worldMenu>
-	(aBuilder item: #MoleculeNewComponent)
-		parent: #MoleculeDebug;
-		order: 12.0;
-		action: [ self newComponent ];
-		icon: (self iconNamed: #smallUpdate);
-		label: 'New Component'
 ]
 
 { #category : #'menu - tools' }
