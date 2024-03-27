@@ -128,7 +128,6 @@ MolInterfaces >> browseLastSelectedElement [
 
 	"see https://github.com/OpenSmock/Molecule/pull/168#issuecomment-2020688480"
 
-	self flag: 'to do'.
 	requiredList whenSelectionChangedDo: [ offeredList selectItem: nil ].
 	offeredList whenSelectionChangedDo: [ requiredList selectItem: nil ]
 ]
