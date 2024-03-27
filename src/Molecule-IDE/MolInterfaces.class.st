@@ -20,8 +20,7 @@ Class {
 		'eventsProduced',
 		'parametersProvided',
 		'servicesProvided',
-		'implemList',
-		'menuList'
+		'implemList'
 	],
 	#category : #'Molecule-IDE-Tools'
 }
@@ -124,6 +123,17 @@ MolInterfaces >> applyFilter [
 ]
 
 { #category : #initialization }
+MolInterfaces >> browseLastSelectedElement [
+	"the Browse button always browses the last selected Trait, no matter in which list it is. However, selecting an element in a list, selecting another element in the other list then selecting again the first element opens the one in the other list since the selection of the first list isn't emptied. This method is here to remedy to this problem"
+
+	"see https://github.com/OpenSmock/Molecule/pull/168#issuecomment-2020688480"
+
+	self flag: 'to do'.
+	requiredList whenSelectionChangedDo: [ offeredList selectItem: nil ].
+	offeredList whenSelectionChangedDo: [ requiredList selectItem: nil ]
+]
+
+{ #category : #initialization }
 MolInterfaces >> buttonBrowseAction [
 	"an implementation needs to be selected in order to browse it. The last selected one (for both lists) being the one browsed"
 
@@ -137,6 +147,8 @@ MolInterfaces >> connectPresenters [
 	"enables the Browse button if a Type is selected, disables it if another mode is chosen since the lists are reset and the selection could point to nothing in particular"
 
 	dropList whenSelectionChangedDo: [ buttonBrowse disable ].
+	
+	self browseLastSelectedElement.
 
 	self enableBrowseButton: requiredList.
 	self enableBrowseButton: offeredList
