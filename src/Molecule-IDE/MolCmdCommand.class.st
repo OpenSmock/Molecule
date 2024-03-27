@@ -6,7 +6,6 @@ Class {
 	#superclass : #CmdCommand,
 	#instVars : [
 		'selectedItems',
-		'items',
 		'executionResult'
 	],
 	#category : #'Molecule-IDE-Menus'
