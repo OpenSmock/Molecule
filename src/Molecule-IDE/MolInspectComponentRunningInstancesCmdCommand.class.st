@@ -1,7 +1,7 @@
 Class {
 	#name : #MolInspectComponentRunningInstancesCmdCommand,
 	#superclass : #MolClassesCmdCommand,
-	#category : #'Molecule-IDE-Menus'
+	#category : #'Molecule-IDE'
 }
 
 { #category : #activation }
