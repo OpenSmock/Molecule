@@ -1,6 +1,6 @@
 Class {
 	#name : #MolInterfaces,
-	#superclass : #MolOptions,
+	#superclass : #MolOptionsPresenter,
 	#instVars : [
 		'selectedInterface',
 		'requiredList',

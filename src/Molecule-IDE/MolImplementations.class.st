@@ -1,6 +1,6 @@
 Class {
 	#name : #MolImplementations,
-	#superclass : #MolOptions,
+	#superclass : #MolOptionsPresenter,
 	#instVars : [
 		'selectedType'
 	],
