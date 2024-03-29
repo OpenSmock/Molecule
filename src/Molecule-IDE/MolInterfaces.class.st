@@ -261,12 +261,12 @@ MolInterfaces >> initializePresenters [
 		            addItemLabeled: 'Required XOR Offered'
 		            do: [ self xorMode ].
 
-	requiredList := SpFilteringListDoubleClickPresenter new.
+	requiredList := MolSpFilteringListDoubleClickPresenter new.
 	requiredList
 		displayIcon: [ :elem | self iconNamed: elem systemIconName ];
 		contextMenu: [ self listMenu ].
 
-	offeredList := SpFilteringListDoubleClickPresenter new.
+	offeredList := MolSpFilteringListDoubleClickPresenter new.
 	offeredList
 		displayIcon: [ :elem | self iconNamed: elem systemIconName ];
 		contextMenu: [ self listMenu ]

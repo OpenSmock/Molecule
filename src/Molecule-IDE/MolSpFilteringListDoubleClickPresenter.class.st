@@ -1,18 +1,18 @@
 Class {
-	#name : #SpFilteringListDoubleClickPresenter,
+	#name : #MolSpFilteringListDoubleClickPresenter,
 	#superclass : #SpFilteringListPresenter,
 	#category : #'Molecule-IDE-Tools'
 }
 
 { #category : #simulation }
-SpFilteringListDoubleClickPresenter >> connectPresenters [
+MolSpFilteringListDoubleClickPresenter >> connectPresenters [
 
 	super connectPresenters.
 	self doubleClickActivated
 ]
 
 { #category : #simulation }
-SpFilteringListDoubleClickPresenter >> doubleClickActivated [
+MolSpFilteringListDoubleClickPresenter >> doubleClickActivated [
 	"activates the Browse functionality by double-clicking an element"
 
 	| item |
@@ -22,7 +22,7 @@ SpFilteringListDoubleClickPresenter >> doubleClickActivated [
 ]
 
 { #category : #simulation }
-SpFilteringListDoubleClickPresenter >> initializePresenters [
+MolSpFilteringListDoubleClickPresenter >> initializePresenters [
 	"changes the original 'Filter...' placeholder text to 'Hit return to accept'"
 
 	super initializePresenters.
