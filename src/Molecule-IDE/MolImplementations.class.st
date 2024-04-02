@@ -1,6 +1,6 @@
 Class {
 	#name : #MolImplementations,
-	#superclass : #MolOptions,
+	#superclass : #MolOptionsPresenter,
 	#instVars : [
 		'selectedType'
 	],
@@ -41,7 +41,7 @@ MolImplementations >> initializePresenters [
 
 	super initializePresenters.
 
-	implementationList := SpFilteringListDoubleClickPresenter new.
+	implementationList := MolSpFilteringListDoubleClickPresenter new.
 	implementationList displayIcon: [ :elem |
 		self iconNamed: elem systemIconName ]
 ]
