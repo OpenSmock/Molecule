@@ -1,5 +1,5 @@
 Class {
-	#name : #MolImplementationsTest,
+	#name : #MolImplementationsPresenterTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'clockImplementations',
@@ -9,20 +9,20 @@ Class {
 }
 
 { #category : #running }
-MolImplementationsTest >> setUp [
+MolImplementationsPresenterTest >> setUp [
 
 	super setUp.
 
 	"Put here a common initialization logic for tests"
-	clockImplementations := MolImplementations new.
+	clockImplementations := MolImplementationsPresenter new.
 	clockImplementations type: MolMyClockComponent.
 
-	geoPosImplementations := MolImplementations new.
+	geoPosImplementations := MolImplementationsPresenter new.
 	geoPosImplementations type: MolGeoPosEquipmentType.
 ]
 
 { #category : #running }
-MolImplementationsTest >> testBrowseButtonActivated [
+MolImplementationsPresenterTest >> testBrowseButtonActivated [
 
 	| enabled |
 	clockImplementations implementationList selectItem:
@@ -33,7 +33,7 @@ MolImplementationsTest >> testBrowseButtonActivated [
 ]
 
 { #category : #running }
-MolImplementationsTest >> testFilter [
+MolImplementationsPresenterTest >> testFilter [
 
 	| implementations |
 	geoPosImplementations implementationList filterListItems: 'gps'.
@@ -43,7 +43,7 @@ MolImplementationsTest >> testFilter [
 ]
 
 { #category : #running }
-MolImplementationsTest >> testSelectingImplementation [
+MolImplementationsPresenterTest >> testSelectingImplementation [
 
 	clockImplementations implementationList selectItem: MolMyClockComponentImpl.
 
@@ -53,7 +53,7 @@ MolImplementationsTest >> testSelectingImplementation [
 ]
 
 { #category : #running }
-MolImplementationsTest >> testTitle [
+MolImplementationsPresenterTest >> testTitle [
 
 	self assert: [
 		clockImplementations title = 'MolMyClockComponent Implementations' ]

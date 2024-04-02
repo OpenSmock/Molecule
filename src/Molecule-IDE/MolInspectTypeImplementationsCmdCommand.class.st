@@ -34,7 +34,7 @@ MolInspectTypeImplementationsCmdCommand >> execute [
 	| selectedType implem emptyArray |
 	selectedType := self selectedTypeClass.
 
-	implem := MolImplementations new.
+	implem := MolImplementationsPresenter new.
 	emptyArray := Array new: 0.
 
 	"condition and ifTrue: are executed only if multiple Traits were/are selected in the System Browser, since this option only supports one Type selected at a time"
