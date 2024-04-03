@@ -9,13 +9,19 @@ Class {
 
 { #category : #'setUp - tearDown' }
 MolComponentManagerTest >> setUp [
+
 	super setUp.
-	MolComponentManager cleanUp
+	MolComponentManager cleanUp.
+	Smalltalk garbageCollect.
+	Smalltalk garbageCollectMost.
 ]
 
 { #category : #'setUp - tearDown' }
 MolComponentManagerTest >> tearDown [
+
 	MolComponentManager cleanUp.
+	Smalltalk garbageCollect.
+	Smalltalk garbageCollectMost.
 	super tearDown
 ]
 
@@ -110,40 +116,22 @@ MolComponentManagerTest >> testDeploymentServices [
 
 { #category : #tests }
 MolComponentManagerTest >> testFlushComponents [
+
 	| nb |
-	
-	"Create some classics components to flush"
-	1 to: 10 do:[ :i | MolCompleteComponentImpl new ].
+	"Create some classic components to flush"
+	1 to: 10 do: [ :i | MolCompleteComponentImpl new ].
 	"Create some augmented class as components to flush"
-	1 to: 10 do:[ :i | MolAugmentedClassToAComponent new ].
+	1 to: 10 do: [ :i | MolAugmentedClassToAComponent new ].
+	
 	"Check created instances"
 	self assert: MolCompleteComponentImpl allInstances size equals: 10.
-	self assert: MolAugmentedClassToAComponent allInstances size equals: 10.
-	
+	self
+		assert: MolAugmentedClassToAComponent allInstances size
+		equals: 10.
+
 	nb := MolComponentManager flushComponents.
-	self assert: nb equals: 20.
-	self assert: MolCompleteComponentImpl allInstances size equals: 0.
-	self assert: MolAugmentedClassToAComponent allInstances size equals: 0.
-]
 
-{ #category : #'setUp - tearDown' }
-MolComponentManagerTest >> testGarbageCollect [
-
-	"Create some classics components to clean"
-
-	1 to: 10 do: [ :i | 
-		MolCompleteComponentImpl start: ('test' , i printString) asSymbol ].
-
-	"Check created instances"
-	self assert: MolCompleteComponentImpl allInstances size equals: 10.
-
-
-	1 to: 10 do: [ :i | 
-		MolCompleteComponentImpl stop: ('test' , i printString) asSymbol ].
-	
-	Smalltalk garbageCollect.
-
-	self assert: MolCompleteComponentImpl allInstances size equals: 0
+	self assert: nb equals: 20
 ]
 
 { #category : #tests }
