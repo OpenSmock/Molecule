@@ -59,36 +59,45 @@ MolComponentManager class >> cleanUp: aBoolean [
 
 { #category : #cleanup }
 MolComponentManager class >> deepCleanUp [
+
 	<script: 'self deepCleanUp'>
 	| i j |
-	
 	"Try to remove non garbaged component instances"
 	Smalltalk garbageCollect.
-	
+	Smalltalk garbageCollectMost.
+
 	self cleanUp.
 	MolUtils log: 'Starting a deep cleanUp.'.
-	MolComponentFactory allInstancesDo: [ :factory | (factory == MolComponentFactory default) ifFalse:[factory release]].
+	MolComponentFactory allInstancesDo: [ :factory |
+		factory == MolComponentFactory default ifFalse: [ factory release ] ].
 	i := self flushComponents.
 	j := i.
-	
-	"Try to reflush"
-	i > 0 ifTrue:[
-		(Delay forMilliseconds: 500) wait.
-		j := self flushComponents.
-	].
-	
-	MolUtils log: 'Deep Cleanup: ',i printString,' lost component(s) found and released.'.
-	i <= 0 ifFalse:[
-		j <= 0 ifFalse:[
-			MolUtils showInformation: 'Warning : Cannot release ',i printString,' component(s) after two clean pass, please try again to confirm correct cleanup.'.
-		] ifTrue:[
-			MolUtils showInformation: 'Clean success : ',i printString,' lost component(s) found and released.'.
-		].
-	] ifTrue:[
-		MolUtils showInformation: 'No problem : image was clean.'.
-	].
 
-	MolUtils log: 'End of the deep cleanUp.'.
+	"Try to reflush"
+	i > 0 ifTrue: [
+		
+		Smalltalk garbageCollect.
+		Smalltalk garbageCollectMost.
+		
+		(Delay forMilliseconds: 500) wait.
+		j := self flushComponents ].
+
+	MolUtils log: 'Deep Cleanup: ' , i printString
+		, ' lost component(s) found and released.'.
+	i <= 0
+		ifFalse: [
+			j <= 0
+				ifFalse: [
+					MolUtils showInformation:
+						'Warning : Cannot release ' , i printString
+						,
+						' component(s) after two clean pass, please try again to confirm correct cleanup.' ]
+				ifTrue: [
+					MolUtils showInformation: 'Clean success : ' , i printString
+						, ' lost component(s) found and released.' ] ]
+		ifTrue: [ MolUtils showInformation: 'No problem : image was clean.' ].
+
+	MolUtils log: 'End of the deep cleanUp.'
 ]
 
 { #category : #singleton }
@@ -104,23 +113,25 @@ MolComponentManager class >> default [
 
 { #category : #'initialize-release' }
 MolComponentManager class >> flushComponents [
-	"Flush all components : detect all component class instances of the Pharo image and disconnect each componentconnector, return number of flushed components"
+	"Flush all components : detect all component class instances of the Pharo image and disconnect each component connector, return number of flushed components"
+
 	| i |
 	i := 0.
 	"First : search direct component class subinstances (inheritance from MolAbstractComponentImpl class)"
-	MolAbstractComponentImpl allSubInstancesDo:[ :component | 
-		component componentConnector: nil. i := i + 1.
-	].
-	"Second : search augmented class as a component instances (using the MolComponentImpl trait)"
-	MolComponentImpl users do: [ :impl | 
-		impl allInstances do: [:component | component componentConnector: nil. i := i + 1].
-	].	
-	
+	MolAbstractComponentImpl allSubInstancesDo: [ :component |
+		component componentConnector: nil.
+		i := i + 1 ].
+	"Second : search augmented class component instances (using the MolComponentImpl trait)"
+	MolComponentImpl users do: [ :impl |
+		impl allInstances do: [ :component |
+			component componentConnector: nil.
+			i := i + 1 ] ].
+
 	SmalltalkImage cleanUp.
 	Smalltalk garbageCollect.
 	Smalltalk garbageCollectMost.
-	
-	^i
+
+	^ i
 ]
 
 { #category : #'initialize-release' }
