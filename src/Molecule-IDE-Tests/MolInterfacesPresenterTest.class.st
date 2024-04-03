@@ -1,5 +1,5 @@
 Class {
-	#name : #MolInterfacesTest,
+	#name : #MolInterfacesPresenterTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'localTimeEvents'
@@ -8,17 +8,17 @@ Class {
 }
 
 { #category : #running }
-MolInterfacesTest >> setUp [
+MolInterfacesPresenterTest >> setUp [
 
 	super setUp.
 
 	"Put here a common initialization logic for tests"
-	localTimeEvents := MolInterfaces new.
+	localTimeEvents := MolInterfacesPresenter new.
 	localTimeEvents interface: MolMyLocalTimeEvents.
 ]
 
 { #category : #running }
-MolInterfacesTest >> testBrowseButtonActivated [
+MolInterfacesPresenterTest >> testBrowseButtonActivated [
 
 	| enabled |
 	localTimeEvents requiredList selectItem: MolMyAlarmComponent.
@@ -27,28 +27,28 @@ MolInterfacesTest >> testBrowseButtonActivated [
 ]
 
 { #category : #running }
-MolInterfacesTest >> testRequiredAnd [
+MolInterfacesPresenterTest >> testRequiredAnd [
 
 	localTimeEvents dropList selectItem: 'Required AND Offered'.
 	self assert: [ localTimeEvents requiredList items size = 0 ]
 ]
 
 { #category : #running }
-MolInterfacesTest >> testRequiredOr [
+MolInterfacesPresenterTest >> testRequiredOr [
 	"no need to select an option since OR is selected by default"
 
 	self assert: [ localTimeEvents requiredList items size = 2 ]
 ]
 
 { #category : #running }
-MolInterfacesTest >> testRequiredXor [
+MolInterfacesPresenterTest >> testRequiredXor [
 
 	localTimeEvents dropList selectItem: 'Required XOR Offered'.
 	self assert: [ localTimeEvents requiredList items size = 2 ]
 ]
 
 { #category : #running }
-MolInterfacesTest >> testTitle [
+MolInterfacesPresenterTest >> testTitle [
 
 	self assert: [ localTimeEvents title = 'MolMyLocalTimeEvents events' ]
 ]

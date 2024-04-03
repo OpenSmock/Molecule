@@ -34,7 +34,7 @@ MolInspectInterfacesImplementationsCmdCommand >> execute [
 	| selectedInterface emptyArray interface |
 	selectedInterface := self selectedInterfaceClass.
 
-	interface := MolInterfaces new.
+	interface := MolInterfacesPresenter new.
 	emptyArray := Array new: 0.
 
 	"condition and ifTrue: are executed only if multiple Traits were/are selected in the System Browser, since this option only supports one Type selected at a time"

@@ -1,5 +1,5 @@
 Class {
-	#name : #MolImplementations,
+	#name : #MolImplementationsPresenter,
 	#superclass : #MolOptionsPresenter,
 	#instVars : [
 		'selectedType'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #initialization }
-MolImplementations >> buttonBrowseAction [
+MolImplementationsPresenter >> buttonBrowseAction [
 	"an implementation needs to be selected in order to browse it"
 
 	| item |
@@ -20,7 +20,7 @@ MolImplementations >> buttonBrowseAction [
 ]
 
 { #category : #initialization }
-MolImplementations >> connectPresenters [
+MolImplementationsPresenter >> connectPresenters [
 	"enables the Browse button if an implementation is selected"
 
 	implementationList whenSelectionChangedDo: [
@@ -28,7 +28,7 @@ MolImplementations >> connectPresenters [
 ]
 
 { #category : #initialization }
-MolImplementations >> defaultLayout [
+MolImplementationsPresenter >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		  add: implementationList;
@@ -37,7 +37,7 @@ MolImplementations >> defaultLayout [
 ]
 
 { #category : #initialization }
-MolImplementations >> initializePresenters [
+MolImplementationsPresenter >> initializePresenters [
 
 	super initializePresenters.
 
@@ -47,13 +47,13 @@ MolImplementations >> initializePresenters [
 ]
 
 { #category : #initialization }
-MolImplementations >> title [
+MolImplementationsPresenter >> title [
 
 	^ selectedType asString , ' Implementations'
 ]
 
 { #category : #initialization }
-MolImplementations >> type: aType [
+MolImplementationsPresenter >> type: aType [
 	"when the Type Trait is given, loads the list"
 
 	"only one Type can be selected in the System Browser at a time"

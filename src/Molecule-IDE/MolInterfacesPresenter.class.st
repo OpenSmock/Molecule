@@ -1,5 +1,5 @@
 Class {
-	#name : #MolInterfaces,
+	#name : #MolInterfacesPresenter,
 	#superclass : #MolOptionsPresenter,
 	#instVars : [
 		'selectedInterface',
@@ -26,7 +26,7 @@ Class {
 }
 
 { #category : #initialization }
-MolInterfaces >> addTrait: trait IfInterfaceCorrespondsIn: interfaceList forList: interfaceForScreenList [
+MolInterfacesPresenter >> addTrait: trait IfInterfaceCorrespondsIn: interfaceList forList: interfaceForScreenList [
 	"adds the interfaces that appear in the relevant parts of the component contract to lists in order to show them after using requiredList and offeredList"
 
 	interfaceList ifNotNil: [
@@ -36,7 +36,7 @@ MolInterfaces >> addTrait: trait IfInterfaceCorrespondsIn: interfaceList forList
 ]
 
 { #category : #adding }
-MolInterfaces >> addTypesInInterfaceList: trait [
+MolInterfacesPresenter >> addTypesInInterfaceList: trait [
 	"add a Trait to the lists if it corresponds to a part of their component contract"
 
 	typeInterface = 'Events' ifTrue: [
@@ -80,7 +80,7 @@ MolInterfaces >> addTypesInInterfaceList: trait [
 ]
 
 { #category : #adding }
-MolInterfaces >> addTypesInInterfaceLists [
+MolInterfacesPresenter >> addTypesInInterfaceLists [
 
 	selectedInterface = '' ifTrue: [ ^ self ].
 	
@@ -92,7 +92,7 @@ MolInterfaces >> addTypesInInterfaceLists [
 ]
 
 { #category : #'as yet unclassified' }
-MolInterfaces >> andMode [
+MolInterfacesPresenter >> andMode [
 	"if a Type appears in both columns (is both required and offered), show it in both columns"
 	"doesn't show it in either if it only appears once"
 
@@ -110,7 +110,7 @@ MolInterfaces >> andMode [
 ]
 
 { #category : #initialization }
-MolInterfaces >> applyFilter [
+MolInterfacesPresenter >> applyFilter [
 	"used when changing boolean operator modes in order to conserve the filters typed, for both the required and offered interfaces"
 
 	| requiredListFilter offeredListFilter |
@@ -123,7 +123,7 @@ MolInterfaces >> applyFilter [
 ]
 
 { #category : #initialization }
-MolInterfaces >> browseLastSelectedElement [
+MolInterfacesPresenter >> browseLastSelectedElement [
 	"the Browse button always browses the last selected Trait, no matter in which list it is. However, selecting an element in a list, selecting another element in the other list then selecting again the first element opens the one in the other list since the selection of the first list isn't emptied. This method is here to remedy to this problem"
 
 	"see https://github.com/OpenSmock/Molecule/pull/168#issuecomment-2020688480"
@@ -133,7 +133,7 @@ MolInterfaces >> browseLastSelectedElement [
 ]
 
 { #category : #initialization }
-MolInterfaces >> buttonBrowseAction [
+MolInterfacesPresenter >> buttonBrowseAction [
 	"an implementation needs to be selected in order to browse it. The last selected one (for both lists) being the one browsed"
 
 	| item |
@@ -142,7 +142,7 @@ MolInterfaces >> buttonBrowseAction [
 ]
 
 { #category : #initialization }
-MolInterfaces >> connectPresenters [
+MolInterfacesPresenter >> connectPresenters [
 	"enables the Browse button if a Type is selected, disables it if another mode is chosen since the lists are reset and the selection could point to nothing in particular"
 
 	dropList whenSelectionChangedDo: [ buttonBrowse disable ].
@@ -154,7 +154,7 @@ MolInterfaces >> connectPresenters [
 ]
 
 { #category : #initialization }
-MolInterfaces >> defaultLayout [
+MolInterfacesPresenter >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		  add: 'Component Types which are using this interface:'
@@ -176,7 +176,7 @@ MolInterfaces >> defaultLayout [
 ]
 
 { #category : #initialization }
-MolInterfaces >> determineTypeInterface [
+MolInterfacesPresenter >> determineTypeInterface [
 	"determines the type of the selected interface (Events, Parameters or Services) using the relevant Molecule methods (isComponent[Events/Parameters/Services])"
 
 	| events parameters services |
@@ -193,14 +193,14 @@ MolInterfaces >> determineTypeInterface [
 ]
 
 { #category : #initialization }
-MolInterfaces >> dropList [
+MolInterfacesPresenter >> dropList [
 	"used for test purposes"
 
 	^ dropList
 ]
 
 { #category : #initialization }
-MolInterfaces >> emptyLists [
+MolInterfacesPresenter >> emptyLists [
 	"since the implementations change when switching from one boolean operator to another, the lists of implementations need to be reset"
 
 	"is also used to initialize them since this method is called at the start of required[And/Or/Xor]OfferedMode"
@@ -217,7 +217,7 @@ MolInterfaces >> emptyLists [
 ]
 
 { #category : #initialization }
-MolInterfaces >> enableBrowseButton: listOnScreen [
+MolInterfacesPresenter >> enableBrowseButton: listOnScreen [
 	"determines which list was the last one selected, necessary for using the Browse button"
 
 	listOnScreen whenSelectionChangedDo: [
@@ -226,7 +226,7 @@ MolInterfaces >> enableBrowseButton: listOnScreen [
 ]
 
 { #category : #'as yet unclassified' }
-MolInterfaces >> fillRequiredAndOfferedLists [
+MolInterfacesPresenter >> fillRequiredAndOfferedLists [
 	"used for the and mode"
 
 	requiredList items: listImplementationBoth.
@@ -234,7 +234,7 @@ MolInterfaces >> fillRequiredAndOfferedLists [
 ]
 
 { #category : #initialization }
-MolInterfaces >> initializePresenters [
+MolInterfacesPresenter >> initializePresenters [
 
 	"Required OR Offered selected by default in the drop down list"
 
@@ -273,7 +273,7 @@ MolInterfaces >> initializePresenters [
 ]
 
 { #category : #initialization }
-MolInterfaces >> interface: anInterface [
+MolInterfacesPresenter >> interface: anInterface [
 	"when an interface is given, loads the filtering lists"
 
 	"only one interface can be selected at a time"
@@ -286,7 +286,7 @@ MolInterfaces >> interface: anInterface [
 ]
 
 { #category : #initialization }
-MolInterfaces >> interfaceListAssignment: interfaceList for: listOnScreen [
+MolInterfacesPresenter >> interfaceListAssignment: interfaceList for: listOnScreen [
 	"adds the Types to a list if they are required or offered by the selected interface"
 
 	listOnScreen ifNotNil: [
@@ -295,7 +295,7 @@ MolInterfaces >> interfaceListAssignment: interfaceList for: listOnScreen [
 ]
 
 { #category : #initialization }
-MolInterfaces >> listMenu [
+MolInterfacesPresenter >> listMenu [
 
 	^ self newMenu addItem: [ :item |
 		  item
@@ -306,14 +306,14 @@ MolInterfaces >> listMenu [
 ]
 
 { #category : #initialization }
-MolInterfaces >> offeredList [
+MolInterfacesPresenter >> offeredList [
 	"used for test purposes"
 
 	^ offeredList
 ]
 
 { #category : #'as yet unclassified' }
-MolInterfaces >> orMode [
+MolInterfacesPresenter >> orMode [
 	"if an implementation requires or provides the selected interface, make it appear in the correct column"
 
 	"is selected by default"
@@ -328,7 +328,7 @@ MolInterfaces >> orMode [
 ]
 
 { #category : #'as yet unclassified' }
-MolInterfaces >> require: listRequired andOffer: listOffered [
+MolInterfacesPresenter >> require: listRequired andOffer: listOffered [
 		"adds the items in the lists shown on screen if the interface is both required and offered by an implementation"
 
 	listRequired do: [ :interfaceRequired |
@@ -338,7 +338,7 @@ MolInterfaces >> require: listRequired andOffer: listOffered [
 ]
 
 { #category : #'as yet unclassified' }
-MolInterfaces >> require: listRequired xorOffer: listOffered [
+MolInterfacesPresenter >> require: listRequired xorOffer: listOffered [
 	"removes the items in the lists shown on screen if the interface is both required and offered by an implementation"
 
 	listRequired do: [ :interfaceRequired |
@@ -349,7 +349,7 @@ MolInterfaces >> require: listRequired xorOffer: listOffered [
 ]
 
 { #category : #'as yet unclassified' }
-MolInterfaces >> requireOrOffer [
+MolInterfacesPresenter >> requireOrOffer [
 	"adds the items in the lists shown on screen if the interface is required or offered by a Type"
 
 	self interfaceListAssignment: eventsConsumedList for: requiredList.
@@ -362,19 +362,19 @@ MolInterfaces >> requireOrOffer [
 ]
 
 { #category : #initialization }
-MolInterfaces >> requiredList [
+MolInterfacesPresenter >> requiredList [
 	"used for test purposes"
 
 	^ requiredList
 ]
 
 { #category : #initialization }
-MolInterfaces >> seeComponentImplementations [
+MolInterfacesPresenter >> seeComponentImplementations [
 	"code based on the execute method in MolInspectTypeImplementationsCmdCommand without the multiple selection part since multiple elements can't be chosen at the same time in requiredList and offeredList"
 
 	| selectedType implem |
 	selectedType := implementationList selectedItem.
-	implem := MolImplementations new.
+	implem := MolImplementationsPresenter new.
 
 	selectedType isComponentType ifTrue: [
 		implem type: selectedType.
@@ -382,13 +382,13 @@ MolInterfaces >> seeComponentImplementations [
 ]
 
 { #category : #initialization }
-MolInterfaces >> title [
+MolInterfacesPresenter >> title [
 
 	^ selectedInterface asString , ' ' , typeInterface asLowercase
 ]
 
 { #category : #'as yet unclassified' }
-MolInterfaces >> xorMode [
+MolInterfacesPresenter >> xorMode [
 	"boolean operator equivalent to OR minus AND, show a Type only if it exists and doesn't appear in both columns (requires or offers the interface, but not both)"
 
 	self emptyLists.
