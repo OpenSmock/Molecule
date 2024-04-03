@@ -1,34 +1,36 @@
 Class {
-	#name : #MolInspectComponentRunningInstancesCmdCommand,
-	#superclass : #MolClassesCmdCommand,
-	#category : #'Molecule-IDE-Menus'
+	#name : 'MolInspectComponentRunningInstancesCmdCommand',
+	#superclass : 'MolClassesCmdCommand',
+	#category : 'Molecule-IDE-Menus',
+	#package : 'Molecule-IDE',
+	#tag : 'Menus'
 }
 
-{ #category : #activation }
+{ #category : 'activation' }
 MolInspectComponentRunningInstancesCmdCommand class >> browserMenuActivation [
 	<classAnnotation>
 	^CmdContextMenuActivation byItemOf: MolCmdMenuGroup for: ClyFullBrowserClassContext.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolInspectComponentRunningInstancesCmdCommand >> defaultMenuIconName [
 
 	^ 'glamorousInspect'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolInspectComponentRunningInstancesCmdCommand >> defaultMenuItemName [
 
 	^ 'Inspect running components'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolInspectComponentRunningInstancesCmdCommand >> description [
 
 	^'Show a list of actually running component instances of this component'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolInspectComponentRunningInstancesCmdCommand >> execute [
 	| selectedComponents instanceList |
 

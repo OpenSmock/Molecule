@@ -2,12 +2,14 @@
 Theses tests are writted to check error during component design, for example mistake from developper
 "
 Class {
-	#name : #MolDirtyComponentTest,
-	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases'
+	#name : 'MolDirtyComponentTest',
+	#superclass : 'TestCase',
+	#category : 'Molecule-Tests-Cases',
+	#package : 'Molecule-Tests',
+	#tag : 'Cases'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 MolDirtyComponentTest >> cleanGeneratedClassesAndTraits [
 	"Clean generated stuff by each tests"
 	<script: 'self new cleanGeneratedClassesAndTraits'>
@@ -16,26 +18,26 @@ MolDirtyComponentTest >> cleanGeneratedClassesAndTraits [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolDirtyComponentTest >> generatedDirtyTypeImplementationSymbol [
 
 	^ #MolDirtyImpl
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolDirtyComponentTest >> generationTag [
 
 	^ 'Molecule-Tests-Resources - Generated'
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 MolDirtyComponentTest >> setUp [
 
 	MolComponentManager cleanUp.
 	self cleanGeneratedClassesAndTraits.
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 MolDirtyComponentTest >> tearDown [
 
 	(Delay forMilliseconds: 10) wait.
@@ -43,7 +45,7 @@ MolDirtyComponentTest >> tearDown [
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolDirtyComponentTest >> testDirtyTypeWithInstanceVariableInsteadOfComponentTraits [
 
 	"Create a component using a dirty Type"

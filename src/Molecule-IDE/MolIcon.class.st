@@ -5,24 +5,26 @@ To encode icons :
 (Base64MimeConverter mimeEncode: 'moleculeIcon.png' asFileReference binaryReadStream) contents.
 "
 Class {
-	#name : #MolIcon,
-	#superclass : #Object,
+	#name : 'MolIcon',
+	#superclass : 'Object',
 	#classInstVars : [
 		'moleculeIcon',
 		'moleculeComponentIcon',
 		'icons'
 	],
-	#category : #'Molecule-IDE-Assets'
+	#category : 'Molecule-IDE-Assets',
+	#package : 'Molecule-IDE',
+	#tag : 'Assets'
 }
 
-{ #category : #tools }
+{ #category : 'tools' }
 MolIcon class >> cleanIcons [
 	<script>
 
 	icons := Dictionary new.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolIcon class >> icons [
 
 	<script: 'self icons inspect'>
@@ -30,14 +32,14 @@ MolIcon class >> icons [
 	^ icons
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolIcon class >> moleculeComponentIcon [
 	<script: 'self moleculeComponentIcon inspect'>
 
 	^ self icons at: #component ifAbsentPut: [ Form fromBinaryStream: self moleculeComponentIconEncoding base64Decoded readStream ]
 ]
 
-{ #category : #encoding }
+{ #category : 'encoding' }
 MolIcon class >> moleculeComponentIconEncoding [
 
 	^ 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAPCAYAAADtc08vAAAACXBIWXMAAAKxAAACsQFSNozK
@@ -56,14 +58,14 @@ bm7Gnt7ei7uPHNaSkpZh09XWZmBkRA3P5y9eMDS0tX6XEBa67+frp3bnzp1PT548mcXY09Nz
 PsLAwMBLSiAiAwC1tUwQC5xQzwAAAABJRU5ErkJggg=='
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolIcon class >> moleculeIcon [
 	<script: 'self moleculeIcon inspect'>
 	
 	^ self icons at: #molecule ifAbsentPut: [ Form fromBinaryStream: self moleculeIconEncoding base64Decoded readStream ]
 ]
 
-{ #category : #encoding }
+{ #category : 'encoding' }
 MolIcon class >> moleculeIconEncoding [
 
 	^ 'iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAACXBIWXMAAAMnAAADJwEZpzWL

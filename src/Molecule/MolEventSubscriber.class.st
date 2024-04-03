@@ -2,8 +2,8 @@
 I am responsable for subscribe event consumers to event providers.
 "
 Class {
-	#name : #MolEventSubscriber,
-	#superclass : #Object,
+	#name : 'MolEventSubscriber',
+	#superclass : 'Object',
 	#traits : 'TMolEventsSubscriber',
 	#classTraits : 'TMolEventsSubscriber classTrait',
 	#instVars : [
@@ -13,10 +13,12 @@ Class {
 		'observersConnection',
 		'mutex'
 	],
-	#category : #'Molecule-Core'
+	#category : 'Molecule-Core',
+	#package : 'Molecule',
+	#tag : 'Core'
 }
 
-{ #category : #constructor }
+{ #category : 'constructor' }
 MolEventSubscriber class >> events: aComponentEvents originators: aSubscribersList [
 
 	| eventSubscriber |
@@ -25,7 +27,7 @@ MolEventSubscriber class >> events: aComponentEvents originators: aSubscribersLi
 	^ eventSubscriber
 ]
 
-{ #category : #originators }
+{ #category : 'originators' }
 MolEventSubscriber >> addOriginator: aComponent [
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ self ].
 	(self includesOriginator: aComponent) ifTrue: [ ^ self ].
@@ -35,13 +37,13 @@ MolEventSubscriber >> addOriginator: aComponent [
 	aComponent when: #removeComponent send: #removeOriginator: to: self.
 ]
 
-{ #category : #originators }
+{ #category : 'originators' }
 MolEventSubscriber >> addOriginators: aComponentList [
 	aComponentList ifNil:[ ^ self ].
 	aComponentList do: [:e | self addOriginator: e]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolEventSubscriber >> connectAllOriginatorsTo: aComponent [
 
 	self mutex criticalReleasingOnError:[ | set |
@@ -56,7 +58,7 @@ MolEventSubscriber >> connectAllOriginatorsTo: aComponent [
 	].
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolEventSubscriber >> connectOriginator: componentName to: aComponent [
 	"Connect a component to event pipeline"
 
@@ -68,7 +70,7 @@ MolEventSubscriber >> connectOriginator: componentName to: aComponent [
 	].
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolEventSubscriber >> disconnectAllOriginatorsFrom: aComponent [
 	self mutex criticalReleasingOnError:[ | set | 
 		set := self observersConnection at: aComponent ifAbsent: [nil].
@@ -83,7 +85,7 @@ MolEventSubscriber >> disconnectAllOriginatorsFrom: aComponent [
 	].
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolEventSubscriber >> disconnectOriginator: componentName from: aComponent [
 	"private method, do not use directly"
 	
@@ -95,12 +97,12 @@ MolEventSubscriber >> disconnectOriginator: componentName from: aComponent [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolEventSubscriber >> events [
 	^ events
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolEventSubscriber >> events: aComponentEvents originators: aComponentList [
 
 	(aComponentEvents isNil and:[aComponentEvents isTrait not and:[aComponentEvents isComponentEvents not]]) ifTrue:[ ^ self ].
@@ -111,7 +113,7 @@ MolEventSubscriber >> events: aComponentEvents originators: aComponentList [
 	aComponentList do: [ :c | self addOriginator: c].
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolEventSubscriber >> getObserversFrom: aComponent [
 	| observers |
 	observers := OrderedCollection new.
@@ -128,19 +130,19 @@ MolEventSubscriber >> getObserversFrom: aComponent [
 	^ observers 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolEventSubscriber >> getOriginatorsConnectedKeys [
 
 	^ (self originatorsLinks select:[ :v | v notNil ]) keys
 ]
 
-{ #category : #originators }
+{ #category : 'originators' }
 MolEventSubscriber >> includesOriginator: aComponent [
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ false ].
 	^ self originators includes: aComponent
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolEventSubscriber >> isAllOriginatorsLinked [
 	"All is empty"
 	(self originatorsLinks isEmpty and:[self originators isEmpty]) ifTrue:[ ^ true ].
@@ -150,13 +152,13 @@ MolEventSubscriber >> isAllOriginatorsLinked [
 	^ (self originatorsLinks values includes: nil) not
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolEventSubscriber >> isFoundEventsSubscriber [
 
 	^ true
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 MolEventSubscriber >> isSubscribed: aComponent [
 	
 	| isSubscribed |
@@ -172,7 +174,7 @@ MolEventSubscriber >> isSubscribed: aComponent [
 	^ isSubscribed
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolEventSubscriber >> isWaitingForSubscription [
 	^ self isAllOriginatorsLinked not
 		or: [ (self observersConnection values
@@ -181,7 +183,7 @@ MolEventSubscriber >> isWaitingForSubscription [
 				isNotEmpty ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolEventSubscriber >> linkOriginator: aComponent [
 	| originator |
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ self ].
@@ -197,37 +199,37 @@ MolEventSubscriber >> linkOriginator: aComponent [
 	self originatorsLinks at: aComponent componentName put: aComponent
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolEventSubscriber >> linkOriginators: aComponentList [
 	aComponentList ifNil:[ ^ self ].
 	aComponentList do: [:e | self linkOriginator: e]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolEventSubscriber >> mutex [
 	mutex ifNil: [ mutex := Semaphore forMutualExclusion ].
 	^ mutex
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolEventSubscriber >> observersConnection [
 	observersConnection ifNil: [ observersConnection := Dictionary new ].
 	^ observersConnection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolEventSubscriber >> originators [
 	originators ifNil: [ originators := OrderedCollection new ].
 	^ originators
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolEventSubscriber >> originatorsLinks [
 	originatorsLinks ifNil: [originatorsLinks := Dictionary new].
 	^originatorsLinks
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolEventSubscriber >> release [
 
 	events := nil.
@@ -238,7 +240,7 @@ MolEventSubscriber >> release [
 	super release
 ]
 
-{ #category : #originators }
+{ #category : 'originators' }
 MolEventSubscriber >> removeOriginator: aComponent [
 	| observersList |
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ self ].
@@ -253,7 +255,7 @@ MolEventSubscriber >> removeOriginator: aComponent [
 	].
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 MolEventSubscriber >> subscribe: aComponent [
 
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ false ].
@@ -268,12 +270,12 @@ MolEventSubscriber >> subscribe: aComponent [
 	self connectAllOriginatorsTo: aComponent
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolEventSubscriber >> subscribeAllWaiting [
 	self observersConnection keysDo: [ :comp | self connectAllOriginatorsTo: comp ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolEventSubscriber >> unlinkOriginator: aComponent [
 	| originator |
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ self ].
@@ -287,7 +289,7 @@ MolEventSubscriber >> unlinkOriginator: aComponent [
 	self originatorsLinks at: aComponent componentName put: nil
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 MolEventSubscriber >> unsubscribe: aComponent [
 
 	(aComponent isNil or:[aComponent isComponent not]) ifTrue:[ ^ false ].

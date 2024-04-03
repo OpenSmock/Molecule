@@ -2,14 +2,16 @@
 I am used when an events subscriber is not found.
 "
 Class {
-	#name : #MolNotFoundEventsSubscriber,
-	#superclass : #MolNotFoundInterface,
+	#name : 'MolNotFoundEventsSubscriber',
+	#superclass : 'MolNotFoundInterface',
 	#traits : 'TMolEventsSubscriber',
 	#classTraits : 'TMolEventsSubscriber classTrait',
-	#category : #'Molecule-Exceptions-NotFound'
+	#category : 'Molecule-Exceptions-NotFound',
+	#package : 'Molecule',
+	#tag : 'Exceptions-NotFound'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolNotFoundEventsSubscriber >> isFoundEventsSubscriber [
 
 	^ false

@@ -1,17 +1,19 @@
 Class {
-	#name : #MolCompleteComponentChildImpl,
-	#superclass : #MolCompleteComponentImpl,
+	#name : 'MolCompleteComponentChildImpl',
+	#superclass : 'MolCompleteComponentImpl',
 	#traits : 'MolCompleteComponentChild + MolUsedChildEvents + MolUsedChildServices + MolUsedChildParameters',
 	#classTraits : 'MolCompleteComponentChild classTrait + MolUsedChildEvents classTrait + MolUsedChildServices classTrait + MolUsedChildParameters classTrait',
-	#category : #'Molecule-Tests-Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components',
+	#package : 'Molecule-Tests',
+	#tag : 'Resources - Components'
 }
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolCompleteComponentChildImpl >> getMolUsedChildEventsNotifier [
 	^self eventsNotifiers at: MolUsedChildEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolUsedChildEvents name: nil].
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolCompleteComponentChildImpl >> getMolUsedChildEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolUsedChildEvents.
@@ -23,7 +25,7 @@ MolCompleteComponentChildImpl >> getMolUsedChildEventsSubscriber [
 	^eventsSubscriber
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolCompleteComponentChildImpl >> getMolUsedChildParametersProvider [
 	| parametersSymbol parametersProvider itf |
 
@@ -35,7 +37,7 @@ MolCompleteComponentChildImpl >> getMolUsedChildParametersProvider [
 	^parametersProvider
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolCompleteComponentChildImpl >> getMolUsedChildServicesProvider [
 	| servicesSymbol servicesProvider itf |
 

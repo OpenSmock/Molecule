@@ -11,6 +11,8 @@ Naming conventions :
 The difference between the parameters and the services is semantic.
 "
 Trait {
-	#name : #MolComponentServices,
-	#category : #'Molecule-Component Contract'
+	#name : 'MolComponentServices',
+	#category : 'Molecule-Component Contract',
+	#package : 'Molecule',
+	#tag : 'Component Contract'
 }

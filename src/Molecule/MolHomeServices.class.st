@@ -7,16 +7,18 @@ See examples of my use in Tests and Examples packages.
 
 "
 Class {
-	#name : #MolHomeServices,
-	#superclass : #Object,
+	#name : 'MolHomeServices',
+	#superclass : 'Object',
 	#instVars : [
 		'deployedComponents',
 		'waitingForActivation'
 	],
-	#category : #'Molecule-Core'
+	#category : 'Molecule-Core',
+	#package : 'Molecule',
+	#tag : 'Core'
 }
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> activateAllComponents [
 	| waitingComponents |
 	
@@ -26,13 +28,13 @@ MolHomeServices >> activateAllComponents [
 	]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> activateComponent: aComponentClass [
 
 	^ self activateComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> activateComponent: aComponentClass named: aName [
 	| component |
 	
@@ -63,12 +65,12 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 	^ component
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> addDeployedComponent: aComponentClass [
 	self deployedComponents at: aComponentClass ifAbsentPut: [Dictionary new]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> checkComponentInstantiationPermission: aComponentClass named: aComponentName [
 
 	| deployed component overridedTypes |
@@ -128,24 +130,24 @@ MolHomeServices >> checkComponentInstantiationPermission: aComponentClass named:
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolHomeServices >> deployedComponents [
 	^ deployedComponents
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolHomeServices >> initialize [
 	super initialize.
 	deployedComponents := Dictionary new.
 	waitingForActivation := Set new.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolHomeServices >> instanceOf: aClass named: aName [
 	^(self deployedComponents at: aClass ifAbsent: [^nil]) at: aName ifAbsent: [^nil]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instanciateAllComponents [
 
 	self deprecated: 'Use instantiateAllComponents'
@@ -153,7 +155,7 @@ MolHomeServices >> instanciateAllComponents [
 	self instantiateAllComponents
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instanciateComponent: aComponentClass [
 
 	self deprecated: 'Use instantiateComponent:'
@@ -161,7 +163,7 @@ MolHomeServices >> instanciateComponent: aComponentClass [
 	^ self instantiateComponent: aComponentClass
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 
 	self deprecated: 'Use instantiateComponent: named:'
@@ -169,20 +171,20 @@ MolHomeServices >> instanciateComponent: aComponentClass named: aName [
 	^ self instantiateComponent: aComponentClass named: aName
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instantiateAllComponents [
 
 	self deployedComponents keysDo: [ :aClass |
 		self instantiateComponent: aClass ]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instantiateComponent: aComponentClass [
 
 	^ self instantiateComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> instantiateComponent: aComponentClass named: aName [
 
 	| error component connector deployed |
@@ -211,19 +213,19 @@ MolHomeServices >> instantiateComponent: aComponentClass named: aName [
 	^ component
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> isDeployedComponent: aComponentClass [
 
 	^ self deployedComponents includesKey: aComponentClass
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolHomeServices >> isWaitingForActivation: aComponentClass [
 
 	^ self isWaitingForActivation: aComponentClass named: MolUtils defaultComponentName
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolHomeServices >> isWaitingForActivation: aComponentClass named: aComponentName [
 	| component |
 
@@ -233,7 +235,7 @@ MolHomeServices >> isWaitingForActivation: aComponentClass named: aComponentName
 		ifTrue: [^false]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> passivateAllComponents [
 	self deployedComponents do: [ :aDictionary | 
 		aDictionary keysAndValuesDo: [ :aName :aComponent | 
@@ -242,13 +244,13 @@ MolHomeServices >> passivateAllComponents [
 	]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> passivateComponent: aComponentClass [
 
 	^ self passivateComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> passivateComponent: aComponentClass named: aName [
 	| component |
 	
@@ -276,7 +278,7 @@ MolHomeServices >> passivateComponent: aComponentClass named: aName [
 	^ component
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolHomeServices >> release [
 	self removeAllComponents.
 	deployedComponents := nil.
@@ -284,7 +286,7 @@ MolHomeServices >> release [
 	super release.
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> removeAllComponents [
 	| components |
 	components := self deployedComponents.
@@ -293,13 +295,13 @@ MolHomeServices >> removeAllComponents [
 	]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> removeComponent: aComponentClass [
 
 	^ self removeComponent: aComponentClass named: MolUtils defaultComponentName
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> removeComponent: aComponentClass named: aName [
 
 	self removeComponent: aComponentClass named: aName ifAbsent: [
@@ -308,7 +310,7 @@ MolHomeServices >> removeComponent: aComponentClass named: aName [
 		nil ]
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolHomeServices >> removeComponent: aComponentClass named: aName ifAbsent: aBlock [
 
 	| removedComponent deployedComponentsOfThisClass |
@@ -374,7 +376,7 @@ MolHomeServices >> removeComponent: aComponentClass named: aName ifAbsent: aBloc
 	^ removedComponent
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> removeDeployedComponent: aComponentClass [
 	"Remove a deployed component"
 	self deployedComponents at: aComponentClass ifPresent:[ :compDict | 
@@ -388,7 +390,7 @@ MolHomeServices >> removeDeployedComponent: aComponentClass [
 	] ifAbsent:[ ^self ].
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolHomeServices >> resetComponentConnection: aComponent withRemovedComponent: aRemovedComponent [
 	"Unlink component connections with a removed component, this action reset component connexion in case of a new instance appears"
 	| eventAndComponentNameAssocList eventsSubscribers |
@@ -422,7 +424,7 @@ MolHomeServices >> resetComponentConnection: aComponent withRemovedComponent: aR
 	].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolHomeServices >> waitingForActivation [
 	^ waitingForActivation
 ]

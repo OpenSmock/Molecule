@@ -2,19 +2,21 @@
 I am used to test some methods of LocatorServices
 "
 Class {
-	#name : #MolCompleteComponentImpl,
-	#superclass : #MolAbstractComponentImpl,
+	#name : 'MolCompleteComponentImpl',
+	#superclass : 'MolAbstractComponentImpl',
 	#traits : 'MolCompleteComponent + MolUsedEvents + MolUsedServices + MolUsedParameters',
 	#classTraits : 'MolCompleteComponent classTrait + MolUsedEvents classTrait + MolUsedServices classTrait + MolUsedParameters classTrait',
-	#category : #'Molecule-Tests-Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components',
+	#package : 'Molecule-Tests',
+	#tag : 'Resources - Components'
 }
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolCompleteComponentImpl >> getMolUsedEventsNotifier [
 	^self eventsNotifiers at: MolUsedEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolUsedEvents name: nil].
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolCompleteComponentImpl >> getMolUsedEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolUsedEvents.
@@ -26,7 +28,7 @@ MolCompleteComponentImpl >> getMolUsedEventsSubscriber [
 	^eventsSubscriber
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolCompleteComponentImpl >> getMolUsedParametersProvider [
 	| parametersSymbol parametersProvider itf |
 
@@ -38,7 +40,7 @@ MolCompleteComponentImpl >> getMolUsedParametersProvider [
 	^parametersProvider
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolCompleteComponentImpl >> getMolUsedServicesProvider [
 	| servicesSymbol servicesProvider itf |
 

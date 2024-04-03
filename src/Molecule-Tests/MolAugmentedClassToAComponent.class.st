@@ -1,19 +1,21 @@
 Class {
-	#name : #MolAugmentedClassToAComponent,
-	#superclass : #Object,
+	#name : 'MolAugmentedClassToAComponent',
+	#superclass : 'Object',
 	#traits : 'MolComponentImpl + MolCompleteComponent + MolUsedEvents + MolUsedServices + MolUsedParameters',
 	#classTraits : 'MolComponentImpl classTrait + MolCompleteComponent classTrait + MolUsedEvents classTrait + MolUsedServices classTrait + MolUsedParameters classTrait',
-	#category : #'Molecule-Tests-Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components',
+	#package : 'Molecule-Tests',
+	#tag : 'Resources - Components'
 }
 
-{ #category : #'existing class API' }
+{ #category : 'existing class API' }
 MolAugmentedClassToAComponent >> existingInterfaceA [
 	"Return true"
 
 	^ true 
 ]
 
-{ #category : #'existing class API' }
+{ #category : 'existing class API' }
 MolAugmentedClassToAComponent >> existingInterfaceB [
 	"Return true and send an event"
 
@@ -21,7 +23,7 @@ MolAugmentedClassToAComponent >> existingInterfaceB [
 	^ true
 ]
 
-{ #category : #'existing class API' }
+{ #category : 'existing class API' }
 MolAugmentedClassToAComponent >> existingInterfaceC [
 	"Return true and use a service and a parameter"
 
@@ -31,12 +33,12 @@ MolAugmentedClassToAComponent >> existingInterfaceC [
 	^ true
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolAugmentedClassToAComponent >> getMolUsedEventsNotifier [
 	^self eventsNotifiers at: MolUsedEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolUsedEvents name: nil].
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolAugmentedClassToAComponent >> getMolUsedEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolUsedEvents.
@@ -48,7 +50,7 @@ MolAugmentedClassToAComponent >> getMolUsedEventsSubscriber [
 	^eventsSubscriber
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolAugmentedClassToAComponent >> getMolUsedParametersProvider [
 	| parametersSymbol parametersProvider itf |
 
@@ -60,7 +62,7 @@ MolAugmentedClassToAComponent >> getMolUsedParametersProvider [
 	^parametersProvider
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolAugmentedClassToAComponent >> getMolUsedServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
@@ -72,12 +74,12 @@ MolAugmentedClassToAComponent >> getMolUsedServicesProvider [
 	^servicesProvider
 ]
 
-{ #category : #parameters }
+{ #category : 'parameters' }
 MolAugmentedClassToAComponent >> parameter [
 	^ #parameter2
 ]
 
-{ #category : #service }
+{ #category : 'service' }
 MolAugmentedClassToAComponent >> service [
 	^ #service2
 ]

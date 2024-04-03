@@ -1,22 +1,24 @@
 Class {
-	#name : #MolExtensionsTest,
-	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases'
+	#name : 'MolExtensionsTest',
+	#superclass : 'TestCase',
+	#category : 'Molecule-Tests-Cases',
+	#package : 'Molecule-Tests',
+	#tag : 'Cases'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolExtensionsTest >> setUp [
 
 	MolComponentManager cleanUp
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolExtensionsTest >> tearDown [
 
 	MolComponentManager cleanUp
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolExtensionsTest >> testHaveComponentType [
 
 	self deny: MolAbstractComponentImpl haveComponentType.
@@ -24,7 +26,7 @@ MolExtensionsTest >> testHaveComponentType [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolExtensionsTest >> testIsComponentClass [
 
 	self deny: Object isComponentClass.
@@ -34,7 +36,7 @@ MolExtensionsTest >> testIsComponentClass [
 	self deny: MolMyClientComponentImpl class isComponentClass.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolExtensionsTest >> testIsComponentType [
 
 	self deny: MolComponentImpl isComponentType.

@@ -1,10 +1,12 @@
 Class {
-	#name : #MolPackagesCmdCommand,
-	#superclass : #MolCmdCommand,
-	#category : #'Molecule-IDE-Menus'
+	#name : 'MolPackagesCmdCommand',
+	#superclass : 'MolCmdCommand',
+	#category : 'Molecule-IDE-Menus',
+	#package : 'Molecule-IDE',
+	#tag : 'Menus'
 }
 
-{ #category : #activation }
+{ #category : 'activation' }
 MolPackagesCmdCommand class >> canBeExecutedInContext: aToolContext [
 	"Open only if the package contains Molecule entities"
 
@@ -29,19 +31,19 @@ MolPackagesCmdCommand class >> canBeExecutedInContext: aToolContext [
 		  found ~= false ]
 ]
 
-{ #category : #activation }
+{ #category : 'activation' }
 MolPackagesCmdCommand class >> isAbstract [
 
 	^ self = MolPackagesCmdCommand
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 MolPackagesCmdCommand >> selectedPackages [
 
 	^ selectedItems collect: [ :p | p browserItem actualObject ]
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 MolPackagesCmdCommand >> selectedPackagesClasses [
 
 	| classes |

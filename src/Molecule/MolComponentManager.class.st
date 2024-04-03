@@ -4,8 +4,8 @@ I am responsable for manage all the instances of the system. I have a deployment
 This component framework is based on Lightweight CCM (CORBA Component Model). It allows to have an architecture driven by components.
 "
 Class {
-	#name : #MolComponentManager,
-	#superclass : #Object,
+	#name : 'MolComponentManager',
+	#superclass : 'Object',
 	#instVars : [
 		'deploymentServices',
 		'locatorServices',
@@ -14,10 +14,12 @@ Class {
 	#classVars : [
 		'Default'
 	],
-	#category : #'Molecule-Core'
+	#category : 'Molecule-Core',
+	#package : 'Molecule',
+	#tag : 'Core'
 }
 
-{ #category : #cleanup }
+{ #category : 'cleanup' }
 MolComponentManager class >> cleanUp [
 
 	<script: 'self cleanUp'>
@@ -50,48 +52,58 @@ MolComponentManager class >> cleanUp [
 	MolUtils log: 'End of the cleanUp.'
 ]
 
-{ #category : #cleanup }
+{ #category : 'cleanup' }
 MolComponentManager class >> cleanUp: aBoolean [
 	"Pharo System CleanUp implementation"
 	
 	self deepCleanUp.
 ]
 
-{ #category : #cleanup }
+{ #category : 'cleanup' }
 MolComponentManager class >> deepCleanUp [
+
 	<script: 'self deepCleanUp'>
 	| i j |
-	
 	"Try to remove non garbaged component instances"
 	Smalltalk garbageCollect.
-	
+	Smalltalk garbageCollectMost.
+
 	self cleanUp.
 	MolUtils log: 'Starting a deep cleanUp.'.
-	MolComponentFactory allInstancesDo: [ :factory | (factory == MolComponentFactory default) ifFalse:[factory release]].
+	MolComponentFactory allInstancesDo: [ :factory |
+		factory == MolComponentFactory default ifFalse: [ factory release ] ].
 	i := self flushComponents.
 	j := i.
-	
+
 	"Try to reflush"
-	i > 0 ifTrue:[
+	i > 0 ifTrue: [
+		
+		Smalltalk garbageCollect.
+		Smalltalk garbageCollectMost.
+		
 		(Delay forMilliseconds: 500) wait.
-		j := self flushComponents.
-	].
-	
-	MolUtils log: 'Deep Cleanup: ',i printString,' lost component(s) found and released.'.
-	i <= 0 ifFalse:[
-		j <= 0 ifFalse:[
-			MolUtils showInformation: 'Warning : Cannot release ',i printString,' component(s) after two clean pass, please try again to confirm correct cleanup.'.
-		] ifTrue:[
-			MolUtils showInformation: 'Clean success : ',i printString,' lost component(s) found and released.'.
-		].
-	] ifTrue:[
-		MolUtils showInformation: 'No problem : image was clean.'.
+		j := self flushComponents 
 	].
 
-	MolUtils log: 'End of the deep cleanUp.'.
+	MolUtils log: 'Deep Cleanup: ' , i printString
+		, ' lost component(s) found and released.'.
+	i <= 0
+		ifFalse: [
+			j <= 0
+				ifFalse: [
+					MolUtils showInformation:
+						'Warning : Cannot release ' , i printString
+						,
+						' component(s) after two clean pass, please try again to confirm correct cleanup.' ]
+				ifTrue: [
+					MolUtils showInformation: 'Clean success : ' , i printString
+						, ' lost component(s) found and released.' ] ]
+		ifTrue: [ MolUtils showInformation: 'No problem : image was clean.' ].
+
+	MolUtils log: 'End of the deep cleanUp.'
 ]
 
-{ #category : #singleton }
+{ #category : 'singleton' }
 MolComponentManager class >> default [
 	<script: 'self default inspect'>
 	
@@ -102,28 +114,26 @@ MolComponentManager class >> default [
 	^Default
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager class >> flushComponents [
-	"Flush all components : detect all component class instances of the Pharo image and disconnect each componentconnector, return number of flushed components"
+	"Flush all components : detect all component class instances of the Pharo image and disconnect each component connector, return number of flushed components"
+
 	| i |
 	i := 0.
 	"First : search direct component class subinstances (inheritance from MolAbstractComponentImpl class)"
-	MolAbstractComponentImpl allSubInstancesDo:[ :component | 
-		component componentConnector: nil. i := i + 1.
-	].
-	"Second : search augmented class as a component instances (using the MolComponentImpl trait)"
-	MolComponentImpl users do: [ :impl | 
-		impl allInstances do: [:component | component componentConnector: nil. i := i + 1].
-	].	
-	
-	SmalltalkImage cleanUp.
-	Smalltalk garbageCollect.
-	Smalltalk garbageCollectMost.
-	
-	^i
+	MolAbstractComponentImpl allSubInstancesDo: [ :component |
+		component componentConnector: nil.
+		i := i + 1 ].
+	"Second : search augmented class component instances (using the MolComponentImpl trait)"
+	MolComponentImpl users do: [ :impl |
+		impl allInstances do: [ :component |
+			component componentConnector: nil.
+			i := i + 1 ] ].
+
+	^ i
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager class >> isInitialized [
 	"Test if the Component Manager is initialized"
 
@@ -131,7 +141,7 @@ MolComponentManager class >> isInitialized [
 	^ Default notNil
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager class >> isRunningComponents [
 	<script:'self isRunningComponents inspect'>
 	"Test if somes components are started and running"
@@ -145,25 +155,25 @@ MolComponentManager class >> isRunningComponents [
 	^false
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager >> cleanUp [
 
 	self class cleanUp
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolComponentManager >> deploymentServices [
 
 	^ deploymentServices
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolComponentManager >> homeServices [
 
 	^ homeServices
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager >> initialize [
 	super initialize.
 	deploymentServices := MolDeploymentServices new.
@@ -171,13 +181,13 @@ MolComponentManager >> initialize [
 	homeServices := MolHomeServices new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolComponentManager >> locatorServices [
 
 	^ locatorServices
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 MolComponentManager >> release [
 	deploymentServices release.
 	locatorServices release.

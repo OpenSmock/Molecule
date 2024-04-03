@@ -11,21 +11,23 @@ If the component has only one implementation, it is not necessary to precise som
 
 "
 Class {
-	#name : #MolAbstractComponentImpl,
-	#superclass : #Object,
+	#name : 'MolAbstractComponentImpl',
+	#superclass : 'Object',
 	#traits : 'MolComponentImpl',
 	#classTraits : 'MolComponentImpl classTrait',
-	#category : #'Molecule-Component Implementation'
+	#category : 'Molecule-Component Implementation',
+	#package : 'Molecule',
+	#tag : 'Component Implementation'
 }
 
-{ #category : #protocol }
+{ #category : 'protocol' }
 MolAbstractComponentImpl >> parametersDo: actionBlock ifNone: exceptionBlock [
 	"Call the parameters if found with the parameters interface as argument. If none execute an exception block"
 	
 	actionBlock value: self
 ]
 
-{ #category : #protocol }
+{ #category : 'protocol' }
 MolAbstractComponentImpl >> servicesDo: actionBlock ifNone: exceptionBlock [
 	"Call the services if found with the services interface as argument. If none execute an exception block"
 	

@@ -1,8 +1,10 @@
 Trait {
-	#name : #MolTestNoComponentTraitB,
-	#category : #'Molecule-Tests-Resources - Contracts'
+	#name : 'MolTestNoComponentTraitB',
+	#category : 'Molecule-Tests-Resources - Contracts',
+	#package : 'Molecule-Tests',
+	#tag : 'Resources - Contracts'
 }
 
-{ #category : #API }
+{ #category : 'API' }
 MolTestNoComponentTraitB >> methodOfNoComponentTrait [
 ]

@@ -4,12 +4,14 @@ I am responsible for the deployment of components in a system.  A component not 
 See examples of my use in Tests and Examples packages.
 "
 Class {
-	#name : #MolDeploymentServices,
-	#superclass : #Object,
-	#category : #'Molecule-Core'
+	#name : 'MolDeploymentServices',
+	#superclass : 'Object',
+	#category : 'Molecule-Core',
+	#package : 'Molecule',
+	#tag : 'Core'
 }
 
-{ #category : #deployment }
+{ #category : 'deployment' }
 MolDeploymentServices >> deployComponentImplementation: aComponentClass [
 	(aComponentClass isNil or:[aComponentClass isClass not or:[aComponentClass isComponentClass not]]) ifTrue: [ ^ NotAComponentClassError signal: 'Cannot allow no Component class deployment'. ].
 	(aComponentClass haveComponentType) ifFalse: [ ^ NotATypedComponentClassError signal: 'Cannot allow no Typed Component class deployment' ].
@@ -17,7 +19,7 @@ MolDeploymentServices >> deployComponentImplementation: aComponentClass [
 	MolComponentManager default homeServices addDeployedComponent: aComponentClass
 ]
 
-{ #category : #deployment }
+{ #category : 'deployment' }
 MolDeploymentServices >> isDeployedComponentImplementation: aComponentClass [
 	(aComponentClass isNil or:[aComponentClass isClass not or:[aComponentClass isComponentClass not]]) ifTrue: [ ^ NotAComponentClassError signal: 'Cannot allow no Component class deployment'. ].
 	(aComponentClass haveComponentType) ifFalse: [ ^ NotATypedComponentClassError signal: 'Cannot allow no Typed Component class deployment' ].
@@ -25,7 +27,7 @@ MolDeploymentServices >> isDeployedComponentImplementation: aComponentClass [
 	^MolComponentManager default homeServices isDeployedComponent: aComponentClass
 ]
 
-{ #category : #deployment }
+{ #category : 'deployment' }
 MolDeploymentServices >> undeployComponentImplementation: aComponentClass [ 
 	(aComponentClass isNil or:[aComponentClass isClass not or:[aComponentClass isComponentClass not]]) ifTrue: [ ^ NotAComponentClassError signal: 'Cannot allow no Component class undeployment'. ].
 	(aComponentClass haveComponentType) ifFalse: [ ^ NotATypedComponentClassError signal: 'Cannot allow no Typed Component class undeployment' ].

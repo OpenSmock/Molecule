@@ -4,26 +4,28 @@ I am an exemple of client which uses the services and can change parameters of a
 Because I am a component implementation, you can force my automatic definition. To do it,  use class method 'self defineComponent'.
 "
 Class {
-	#name : #MolMyClientComponentImpl,
-	#superclass : #MolAbstractComponentImpl,
+	#name : 'MolMyClientComponentImpl',
+	#superclass : 'MolAbstractComponentImpl',
 	#traits : 'MolMyClientComponent',
 	#classTraits : 'MolMyClientComponent classTrait',
-	#category : #'Molecule-Tests-Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components',
+	#package : 'Molecule-Tests',
+	#tag : 'Resources - Components'
 }
 
-{ #category : #services }
+{ #category : 'services' }
 MolMyClientComponentImpl >> connect [
 
 	^ self getMolMySocketServicesProvider connect
 ]
 
-{ #category : #services }
+{ #category : 'services' }
 MolMyClientComponentImpl >> disconnect [
 
 	^ self getMolMySocketServicesProvider disconnect
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolMyClientComponentImpl >> getMolMySocketParametersProvider [
 	| parametersSymbol parametersProvider itf |
 
@@ -35,7 +37,7 @@ MolMyClientComponentImpl >> getMolMySocketParametersProvider [
 	^parametersProvider
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolMyClientComponentImpl >> getMolMySocketServicesProvider [
 	| servicesSymbol servicesProvider itf |
 
@@ -47,25 +49,25 @@ MolMyClientComponentImpl >> getMolMySocketServicesProvider [
 	^servicesProvider
 ]
 
-{ #category : #services }
+{ #category : 'services' }
 MolMyClientComponentImpl >> send: aMessage [
 
 	^ self getMolMySocketServicesProvider send: aMessage
 ]
 
-{ #category : #parameters }
+{ #category : 'parameters' }
 MolMyClientComponentImpl >> setIp: anIpAddress [
 
 	^ self getMolMySocketParametersProvider setIp: anIpAddress 
 ]
 
-{ #category : #parameters }
+{ #category : 'parameters' }
 MolMyClientComponentImpl >> setPort: aPort [
 
 	^ self getMolMySocketParametersProvider setPort: aPort 
 ]
 
-{ #category : #parameters }
+{ #category : 'parameters' }
 MolMyClientComponentImpl >> setProtocol: aProtocl [
 
 	^ self getMolMySocketParametersProvider setProtocol: aProtocl 

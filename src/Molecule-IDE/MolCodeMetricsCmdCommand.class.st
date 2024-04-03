@@ -1,40 +1,42 @@
 Class {
-	#name : #MolCodeMetricsCmdCommand,
-	#superclass : #MolPackagesCmdCommand,
-	#category : #'Molecule-IDE-Menus'
+	#name : 'MolCodeMetricsCmdCommand',
+	#superclass : 'MolPackagesCmdCommand',
+	#category : 'Molecule-IDE-Menus',
+	#package : 'Molecule-IDE',
+	#tag : 'Menus'
 }
 
-{ #category : #activation }
+{ #category : 'activation' }
 MolCodeMetricsCmdCommand class >> browserMenuActivation [
 	<classAnnotation>
 	^ CmdContextMenuActivation byItemOf: MolCmdMenuGroup for: ClyFullBrowserPackageContext
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolCodeMetricsCmdCommand >> aboutText [
 
 	^ 'Molecule metrics'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolCodeMetricsCmdCommand >> defaultMenuIconName [
 
 	^'smallLanguage'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolCodeMetricsCmdCommand >> defaultMenuItemName [
 
 	^ 'Metrics'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolCodeMetricsCmdCommand >> description [
 
 	^'Display metrics about Molecule entities from selected packages'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolCodeMetricsCmdCommand >> execute [
 	| presenter stream metrics |
 	presenter := SpTextPresenter new.
@@ -54,7 +56,7 @@ MolCodeMetricsCmdCommand >> execute [
 	presenter withWindowDo: [ :w | w title: self titleForSelectedItems; aboutText: self aboutText ].
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 MolCodeMetricsCmdCommand >> titleForSelectedItems [
 
 	| nbPackages |

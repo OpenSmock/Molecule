@@ -6,31 +6,33 @@ You can force me to be quiet, by using instance variable and methods activateCom
 Because I am a component implementation, you can force my automatic definition. To do it,  use class method 'self defineComponent'.
 "
 Class {
-	#name : #MolMyWarnerComponentImpl,
-	#superclass : #MolAbstractComponentImpl,
+	#name : 'MolMyWarnerComponentImpl',
+	#superclass : 'MolAbstractComponentImpl',
 	#traits : 'MolMyWarnerComponent',
 	#classTraits : 'MolMyWarnerComponent classTrait',
-	#category : #'Molecule-Tests-Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components',
+	#package : 'Molecule-Tests',
+	#tag : 'Resources - Components'
 }
 
-{ #category : #event }
+{ #category : 'event' }
 MolMyWarnerComponentImpl >> failureEvent [
 
 	self getMolMyStateChangeEventsNotifier failure: (1 to: 5) atRandom
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolMyWarnerComponentImpl >> getMolMyStateChangeEventsNotifier [
 	^self eventsNotifiers at: MolMyStateChangeEvents ifAbsent: [^MolNotFoundEventsNotifier new interface: MolMyStateChangeEvents name: nil].
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 MolMyWarnerComponentImpl >> maintenanceEvent [
 
 	self getMolMyStateChangeEventsNotifier maintenance
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 MolMyWarnerComponentImpl >> operationalEvent [
 
 	self getMolMyStateChangeEventsNotifier operational

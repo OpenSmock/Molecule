@@ -2,24 +2,26 @@
 A MolUtilsTest is a test class for testing the behavior of MolUtils
 "
 Class {
-	#name : #MolUtilsTest,
-	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases'
+	#name : 'MolUtilsTest',
+	#superclass : 'TestCase',
+	#category : 'Molecule-Tests-Cases',
+	#package : 'Molecule-Tests',
+	#tag : 'Cases'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> setUp [
 
 	MolComponentManager cleanUp
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> tearDown [
 
 	MolComponentManager cleanUp
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testActivateComponentNamed [
 
 	| homeServices deploymentServices |
@@ -42,7 +44,7 @@ MolUtilsTest >> testActivateComponentNamed [
 		equals: false
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testActivateComponents [
 
 	| homeServices componentList |
@@ -55,7 +57,7 @@ MolUtilsTest >> testActivateComponents [
 	self assert: (homeServices isWaitingForActivation: MolCompleteComponentImpl) equals: false.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testAllComponentInstancesOfType [
 
 	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) isEmpty.
@@ -73,7 +75,7 @@ MolUtilsTest >> testAllComponentInstancesOfType [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testComponentType [
 
 	self assert: (MolUtils componentType: nil) isNil.
@@ -85,7 +87,7 @@ MolUtilsTest >> testComponentType [
 	self assert: (MolUtils componentType: MolCompleteComponent) isNil.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testConsumedComponentEvents [
 
 	self assert: (MolUtils consumedComponentEvents: nil) isEmpty.
@@ -104,7 +106,7 @@ MolUtilsTest >> testConsumedComponentEvents [
 	self assert: (MolUtils consumedComponentEvents: MolComponentEvents) isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testCreateAllComponents [
 	"MolUtils>createAllComponents instanciate and activate all deployed components"
 
@@ -128,7 +130,7 @@ MolUtilsTest >> testCreateAllComponents [
 			 MolCompleteComponentImpl) not
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testDeployAndInitializeComponentNamed [
 
 	| homeServices deploymentServices |
@@ -150,7 +152,7 @@ MolUtilsTest >> testDeployAndInitializeComponentNamed [
 		equals: true
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testDeployAndInitializeComponents [
 
 	| homeServices deploymentServices componentList |
@@ -178,7 +180,7 @@ MolUtilsTest >> testDeployAndInitializeComponents [
 		equals: true
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testInstanceKindOf [
 	"Test method instanceKindOf: of Utils"
 
@@ -190,7 +192,7 @@ MolUtilsTest >> testInstanceKindOf [
 	self assert: (MolUtils instanceKindOf: MolBasicComponentImpl) notNil
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testInstanceOf [
 
 	| instance |
@@ -200,7 +202,7 @@ MolUtilsTest >> testInstanceOf [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testIsComponentOrComponentClass [
 
 	self assert: (MolUtils isComponentOrComponentClass: nil) equals: false.
@@ -215,7 +217,7 @@ MolUtilsTest >> testIsComponentOrComponentClass [
 	self assert: (MolUtils isComponentOrComponentClass: MolComponentEvents) equals: false.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testLog [
 
 	| activate |
@@ -227,7 +229,7 @@ MolUtilsTest >> testLog [
 	self assert: MolUtils isLogActive equals: activate not.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testLog2 [
 
 	| activate |
@@ -239,7 +241,7 @@ MolUtilsTest >> testLog2 [
 	MolUtils  isLogActive: (activate).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testOfferedTypes [
 
 	"Not used services"
@@ -267,7 +269,7 @@ MolUtilsTest >> testOfferedTypes [
 	self assert: (types includes: MolCompleteComponent2).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testPassivateComponentNamed [
 
 	| homeServices deploymentServices |
@@ -292,7 +294,7 @@ MolUtilsTest >> testPassivateComponentNamed [
 		equals: true
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testPassivateComponents [
 
 	| homeServices componentList |
@@ -305,7 +307,7 @@ MolUtilsTest >> testPassivateComponents [
 	self assert: (homeServices isWaitingForActivation: MolCompleteComponentImpl) equals: true.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testProducedComponentEvents [
 
 	self assert: (MolUtils producedComponentEvents: nil) isEmpty.
@@ -324,7 +326,7 @@ MolUtilsTest >> testProducedComponentEvents [
 	self assert: (MolUtils producedComponentEvents: MolComponentEvents) isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testProvidedComponentParameters [
 
 	self assert: (MolUtils providedComponentParameters: nil) isEmpty.
@@ -343,7 +345,7 @@ MolUtilsTest >> testProvidedComponentParameters [
 	self assert: (MolUtils providedComponentParameters: MolComponentEvents) isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testProvidedComponentServices [
 
 	self assert: (MolUtils providedComponentServices: nil) isEmpty.
@@ -362,7 +364,7 @@ MolUtilsTest >> testProvidedComponentServices [
 	self assert: (MolUtils providedComponentServices: MolComponentEvents) isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testRemoveComponentNamed [
 
 	| homeServices deploymentServices |
@@ -385,7 +387,7 @@ MolUtilsTest >> testRemoveComponentNamed [
 		equals: false
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testRemoveComponentNamedIfAbsent [
 
 	| val |
@@ -396,7 +398,7 @@ MolUtilsTest >> testRemoveComponentNamedIfAbsent [
 	self assert: val equals: #Totoro
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testRemoveComponents [
 
 	| homeServices componentList |
@@ -423,7 +425,7 @@ MolUtilsTest >> testRemoveComponents [
 		equals: false
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testRequiredTypes [
 
 	"Not used services"
@@ -451,7 +453,7 @@ MolUtilsTest >> testRequiredTypes [
 	self assert: (types includes: MolCompleteComponent2).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testShowInformation [
 	MolUtils showInformation: nil.
 	MolUtils showInformation: #test.
@@ -460,7 +462,7 @@ MolUtilsTest >> testShowInformation [
 	MolUtils showInformation: 'My Information Message'.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testStartComponent [
 
 	| homeServices deploymentServices |
@@ -477,7 +479,7 @@ MolUtilsTest >> testStartComponent [
 		equals: false
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testStartComponentNamed [
 
 	| homeServices deploymentServices |
@@ -497,7 +499,7 @@ MolUtilsTest >> testStartComponentNamed [
 		equals: false
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testStartComponents [
 
 	| homeServices deploymentServices componentList |
@@ -525,7 +527,7 @@ MolUtilsTest >> testStartComponents [
 		equals: false
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testStopComponent [
 
 	| homeServices deploymentServices |
@@ -546,7 +548,7 @@ MolUtilsTest >> testStopComponent [
 		equals: false
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testStopComponentNamed [
 
 	| homeServices deploymentServices |
@@ -571,7 +573,7 @@ MolUtilsTest >> testStopComponentNamed [
 		equals: false
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testStopComponentNamedIfAbsent [
 
 	| homeServices deploymentServices result |
@@ -583,7 +585,7 @@ MolUtilsTest >> testStopComponentNamedIfAbsent [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testStopComponents [
 
 	| homeServices deploymentServices componentList |
@@ -621,7 +623,7 @@ MolUtilsTest >> testStopComponents [
 		equals: false
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testUsedComponentParameters [
 
 	self assert: (MolUtils usedComponentParameters: nil) isEmpty.
@@ -640,7 +642,7 @@ MolUtilsTest >> testUsedComponentParameters [
 	self assert: (MolUtils usedComponentParameters: MolComponentEvents) isEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolUtilsTest >> testUsedComponentServices [
 
 	self assert: (MolUtils usedComponentServices: nil) isEmpty.

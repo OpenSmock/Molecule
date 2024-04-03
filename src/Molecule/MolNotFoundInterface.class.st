@@ -1,26 +1,28 @@
 Class {
-	#name : #MolNotFoundInterface,
-	#superclass : #Object,
+	#name : 'MolNotFoundInterface',
+	#superclass : 'Object',
 	#instVars : [
 		'interface',
 		'name'
 	],
-	#category : #'Molecule-Exceptions-NotFound'
+	#category : 'Molecule-Exceptions-NotFound',
+	#package : 'Molecule',
+	#tag : 'Exceptions-NotFound'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolNotFoundInterface class >> interface: anInterface name: aName [
 
 	^ self new interface: anInterface; name: aName; yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolNotFoundInterface class >> isAbstract [
 
 	^ self = MolNotFoundInterface
 ]
 
-{ #category : #'reflective operations' }
+{ #category : 'reflective operations' }
 MolNotFoundInterface >> doesNotUnderstand: aMessage [
 	"Return nil as a result and log the interface call for debugging"
 
@@ -31,32 +33,32 @@ MolNotFoundInterface >> doesNotUnderstand: aMessage [
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolNotFoundInterface >> interface [
 
 	^ interface
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolNotFoundInterface >> interface: anObject [
 
 	interface := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolNotFoundInterface >> interface: anInterface name: aName [
 
 	self interface: anInterface.
 	self name: aName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolNotFoundInterface >> name [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolNotFoundInterface >> name: anObject [
 
 	name := anObject

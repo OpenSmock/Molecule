@@ -1,1 +1,1 @@
-Package { #name : #'Molecule-IDE' }
+Package { #name : 'Molecule-IDE' }

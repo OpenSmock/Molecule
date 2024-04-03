@@ -2,37 +2,39 @@
 Class for the menu => right click on a component
 "
 Class {
-	#name : #MolCmdMenuGroup,
-	#superclass : #CmdMenuGroup,
-	#category : #'Molecule-IDE-Menus'
+	#name : 'MolCmdMenuGroup',
+	#superclass : 'CmdMenuGroup',
+	#category : 'Molecule-IDE-Menus',
+	#package : 'Molecule-IDE',
+	#tag : 'Menus'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolCmdMenuGroup >> buildContextMenu: aMenu [
 
 	aMenu addLine.
 	super buildContextMenu: aMenu
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolCmdMenuGroup >> description [
 
 	^ 'Molecule contextual menu'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolCmdMenuGroup >> icon [
 
 	^ MolIcon moleculeIcon
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolCmdMenuGroup >> name [
 
 	^ 'Molecule'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolCmdMenuGroup >> order [
 	"Idea to put molecule group to the end of menu"
 

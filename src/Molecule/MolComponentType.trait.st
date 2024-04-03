@@ -14,11 +14,13 @@ See traits ComponentEvents, ComponentServices and ComponentParameters for more i
 Then, create a component implementation by using AbstractComponentImpl or ComponentImpl. Traits and methods are automatically added by ComponentFactory>defineComponent.
 "
 Trait {
-	#name : #MolComponentType,
-	#category : #'Molecule-Component Contract'
+	#name : 'MolComponentType',
+	#category : 'Molecule-Component Contract',
+	#package : 'Molecule',
+	#tag : 'Component Contract'
 }
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> allConsumedEvents [
 	| collection |
 	
@@ -32,7 +34,7 @@ MolComponentType classSide >> allConsumedEvents [
 	^ collection asOrderedCollection
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> allProducedEvents [
 	| collection |
 	
@@ -46,7 +48,7 @@ MolComponentType classSide >> allProducedEvents [
 	^ collection asOrderedCollection
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> allProvidedParameters [
 	| collection |
 	
@@ -60,7 +62,7 @@ MolComponentType classSide >> allProvidedParameters [
 	^ collection asOrderedCollection 
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> allProvidedServices [
 	| collection |
 	
@@ -74,7 +76,7 @@ MolComponentType classSide >> allProvidedServices [
 	^ collection asOrderedCollection 
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> allUsedParameters [
 	| collection |
 	
@@ -88,7 +90,7 @@ MolComponentType classSide >> allUsedParameters [
 	^ collection asOrderedCollection 
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> allUsedServices [
 	| collection |
 	
@@ -102,13 +104,13 @@ MolComponentType classSide >> allUsedServices [
 	^ collection asOrderedCollection 
 ]
 
-{ #category : #'accessing - events' }
+{ #category : 'accessing - events' }
 MolComponentType classSide >> consumedComponentEvents [
 	<componentContract>
 	^ {}
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> isConsumeEvents: anEventsTrait [
 	anEventsTrait ifNil:[ ^ false ].
 	anEventsTrait isComponentEvents
@@ -116,7 +118,7 @@ MolComponentType classSide >> isConsumeEvents: anEventsTrait [
 		ifTrue: [ ^ self allConsumedEvents includes: anEventsTrait ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> isProduceEvents: anEventsTrait [
 	anEventsTrait ifNil: [ ^ false ].
 	anEventsTrait isComponentEvents
@@ -124,7 +126,7 @@ MolComponentType classSide >> isProduceEvents: anEventsTrait [
 		ifTrue: [ ^ self allProducedEvents includes: anEventsTrait ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> isProvideParameters: aParametersTrait [
 	aParametersTrait ifNil: [ ^false ].
 	aParametersTrait isComponentParameters
@@ -132,7 +134,7 @@ MolComponentType classSide >> isProvideParameters: aParametersTrait [
 		ifTrue: [ ^ self allProvidedParameters includes: aParametersTrait ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> isProvideServices: aServicesTrait [
 	aServicesTrait ifNil: [ ^ false ].
 	aServicesTrait isComponentServices
@@ -140,7 +142,7 @@ MolComponentType classSide >> isProvideServices: aServicesTrait [
 		ifTrue: [ ^ self allProvidedServices includes: aServicesTrait ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> isUseParameters: aParametersTrait [
 	aParametersTrait ifNil: [ ^ false ].
 	aParametersTrait isComponentParameters
@@ -148,7 +150,7 @@ MolComponentType classSide >> isUseParameters: aParametersTrait [
 		ifTrue: [ ^ self allUsedParameters includes: aParametersTrait ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolComponentType classSide >> isUseServices: aServicesTrait [
 	aServicesTrait ifNil: [ ^ false ].
 	aServicesTrait isComponentServices
@@ -156,31 +158,31 @@ MolComponentType classSide >> isUseServices: aServicesTrait [
 		ifTrue: [ ^ self allUsedServices includes: aServicesTrait ]
 ]
 
-{ #category : #'accessing - events' }
+{ #category : 'accessing - events' }
 MolComponentType classSide >> producedComponentEvents [
 	<componentContract>
 	^ {} 
 ]
 
-{ #category : #'accessing - parameters' }
+{ #category : 'accessing - parameters' }
 MolComponentType classSide >> providedComponentParameters [
 	<componentContract>
 	^ {} 
 ]
 
-{ #category : #'accessing - services' }
+{ #category : 'accessing - services' }
 MolComponentType classSide >> providedComponentServices [
 	<componentContract>
 	^ {} 
 ]
 
-{ #category : #'accessing - parameters' }
+{ #category : 'accessing - parameters' }
 MolComponentType classSide >> usedComponentParameters [
 	<componentContract>
 	^ {} 
 ]
 
-{ #category : #'accessing - services' }
+{ #category : 'accessing - services' }
 MolComponentType classSide >> usedComponentServices [
 	<componentContract>
 	^ {}

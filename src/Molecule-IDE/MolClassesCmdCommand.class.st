@@ -1,10 +1,12 @@
 Class {
-	#name : #MolClassesCmdCommand,
-	#superclass : #MolCmdCommand,
-	#category : #'Molecule-IDE-Menus'
+	#name : 'MolClassesCmdCommand',
+	#superclass : 'MolCmdCommand',
+	#category : 'Molecule-IDE-Menus',
+	#package : 'Molecule-IDE',
+	#tag : 'Menus'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolClassesCmdCommand class >> canBeExecutedInContext: aToolContext [
 	| list selectedItem selected |
 	
@@ -23,19 +25,19 @@ MolClassesCmdCommand class >> canBeExecutedInContext: aToolContext [
 	^list includes: (self class environment at: selected asSymbol) .
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolClassesCmdCommand class >> isAbstract [
 
 	^ self = MolClassesCmdCommand
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 MolClassesCmdCommand >> selectedClasses [
 
 	^ selectedItems collect:[ :p | p browserItem actualObject ]
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 MolClassesCmdCommand >> selectedComponentClasses [
 
 	^ self selectedClasses select:[ :c | c isComponentClass ].

@@ -2,24 +2,26 @@
 A MolDeploymentServicesTest is a test class for testing the behavior of MolDeploymentServices
 "
 Class {
-	#name : #MolDeploymentServicesTest,
-	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases'
+	#name : 'MolDeploymentServicesTest',
+	#superclass : 'TestCase',
+	#category : 'Molecule-Tests-Cases',
+	#package : 'Molecule-Tests',
+	#tag : 'Cases'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolDeploymentServicesTest >> setUp [ 
 	
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolDeploymentServicesTest >> tearDown [  
 	
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolDeploymentServicesTest >> testDeployAlreadyDeployedImplementation [
 	| manager |
 	
@@ -36,7 +38,7 @@ MolDeploymentServicesTest >> testDeployAlreadyDeployedImplementation [
 	self assert: manager homeServices deployedComponents size equals: 0.	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolDeploymentServicesTest >> testDeployComponentImplementation [
 	| manager isError |
 	
@@ -62,7 +64,7 @@ MolDeploymentServicesTest >> testDeployComponentImplementation [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolDeploymentServicesTest >> testDeploymentServices [
 	| manager |
 	
@@ -86,7 +88,7 @@ MolDeploymentServicesTest >> testDeploymentServices [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolDeploymentServicesTest >> testIsDeployedComponentImplementation [
 	| manager isError |
 	
@@ -112,7 +114,7 @@ MolDeploymentServicesTest >> testIsDeployedComponentImplementation [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolDeploymentServicesTest >> testUndeployANotDeployComponent [
 	| manager |
 	
@@ -122,7 +124,7 @@ MolDeploymentServicesTest >> testUndeployANotDeployComponent [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 MolDeploymentServicesTest >> testUndeployComponentImplementation [
 	| manager isError |
 	

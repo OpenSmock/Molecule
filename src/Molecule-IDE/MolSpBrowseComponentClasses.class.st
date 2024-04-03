@@ -2,16 +2,18 @@
 window spec after click on inspect in molActionsMenu
 "
 Class {
-	#name : #MolSpBrowseComponentClasses,
-	#superclass : #SpPresenter,
+	#name : 'MolSpBrowseComponentClasses',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'items',
 		'table'
 	],
-	#category : #'Molecule-IDE-Spec2'
+	#category : 'Molecule-IDE-Spec2',
+	#package : 'Molecule-IDE',
+	#tag : 'Spec2'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 MolSpBrowseComponentClasses class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -22,7 +24,7 @@ MolSpBrowseComponentClasses class >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MolSpBrowseComponentClasses >> initializePresenters [ 
 	"add table"
 	table := self newTreeTable.
@@ -51,7 +53,7 @@ MolSpBrowseComponentClasses >> initializePresenters [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 MolSpBrowseComponentClasses >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
@@ -60,13 +62,13 @@ MolSpBrowseComponentClasses >> initializeWindow: aWindowPresenter [
 		windowIcon: MolIcon moleculeIcon.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolSpBrowseComponentClasses >> items [
 
 	^ items
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolSpBrowseComponentClasses >> items: anObject [
 
 	items := anObject

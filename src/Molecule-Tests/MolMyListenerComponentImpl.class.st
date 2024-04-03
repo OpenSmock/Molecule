@@ -6,49 +6,51 @@ When I am passivate, I stop to listen events. So I can not change my internal st
 Because I am a component implementation, you can force my automatic definition. To do it,  use class method 'self defineComponent'.
 "
 Class {
-	#name : #MolMyListenerComponentImpl,
-	#superclass : #MolAbstractComponentImpl,
+	#name : 'MolMyListenerComponentImpl',
+	#superclass : 'MolAbstractComponentImpl',
 	#traits : 'MolMyListenerComponent + MolMyStateChangeEvents',
 	#classTraits : 'MolMyListenerComponent classTrait + MolMyStateChangeEvents classTrait',
 	#instVars : [
 		'currentState',
 		'failureLevel'
 	],
-	#category : #'Molecule-Tests-Resources - Components'
+	#category : 'Molecule-Tests-Resources - Components',
+	#package : 'Molecule-Tests',
+	#tag : 'Resources - Components'
 }
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolMyListenerComponentImpl >> componentActivate [
 
 	self getMolMyStateChangeEventsSubscriber subscribe: self.
 ]
 
-{ #category : #'life cycle' }
+{ #category : 'life cycle' }
 MolMyListenerComponentImpl >> componentPassivate [
 
 	self getMolMyStateChangeEventsSubscriber unsubscribe: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolMyListenerComponentImpl >> currentState [
 
 	^ currentState
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 MolMyListenerComponentImpl >> failure: aLevel [
 
 	currentState := #failure.
 	failureLevel := aLevel.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolMyListenerComponentImpl >> failureLevel [
 
 	^ failureLevel
 ]
 
-{ #category : #'component accessing' }
+{ #category : 'component accessing' }
 MolMyListenerComponentImpl >> getMolMyStateChangeEventsSubscriber [
 	| eventsSymbol eventsSubscriber itf |
 	itf := MolMyStateChangeEvents.
@@ -60,13 +62,13 @@ MolMyListenerComponentImpl >> getMolMyStateChangeEventsSubscriber [
 	^eventsSubscriber
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 MolMyListenerComponentImpl >> maintenance [
 
 	currentState := #maintenance
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 MolMyListenerComponentImpl >> operational [
 
 	currentState := #operational

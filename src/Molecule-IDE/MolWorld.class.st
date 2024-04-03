@@ -2,12 +2,14 @@
 Commands for World menu
 "
 Class {
-	#name : #MolWorld,
-	#superclass : #Object,
-	#category : #'Molecule-IDE-Menus'
+	#name : 'MolWorld',
+	#superclass : 'Object',
+	#category : 'Molecule-IDE-Menus',
+	#package : 'Molecule-IDE',
+	#tag : 'Menus'
 }
 
-{ #category : #scripts }
+{ #category : 'scripts' }
 MolWorld class >> defineAComponent [
 
 	<script>
@@ -16,30 +18,34 @@ MolWorld class >> defineAComponent [
 	component ifNotNil: [ :e | MolComponentFactory defineComponent: e ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 MolWorld class >> doComponentManagerCleanUpCatchingErrors [
-	"Clean the current ComponentManager, ignore errors when appears and show a report if necessary"
+	"Clean the current ComponentManager, ignore errors when they appear and show a report if necessary"
+
 	| error |
-		
-	[ MolComponentManager cleanUp ] on: Error do:[ :e | | result |
-		error := e.
-		result := UIManager default 
-			confirm: 'Continue or debug error ?' 
-			label: 'Molecule - Cleanup freezed by an error' 
-			trueChoice: 'Continue' falseChoice: 'Debug' cancelChoice: 'Cancel' default: false.
-		
-		result = true ifTrue:[ error resume ]. 
-		result = false ifTrue:[ error debug ]. 
-	].
-	
-	error ifNil: [ 
-		MolUtils showInformation: 'Cleanup done'.
-	 ] ifNotNil: [ 
-		MolUtils showInformation: 'Error during cleanup, try to re-clean to be safe.'.
-	 ].
+	[ MolComponentManager cleanUp ]
+		on: Error
+		do: [ :e |
+			| result |
+			error := e.
+			result := UIManager default
+				          confirm: 'Continue or debug error ?'
+				          label: 'Molecule - Cleanup freezed by an error'
+				          trueChoice: 'Continue'
+				          falseChoice: 'Debug'
+				          cancelChoice: 'Cancel'
+				          default: false.
+
+			result ifTrue: [ error resume ] ifFalse: [ error debug ] ].
+
+	error
+		ifNil: [ MolUtils showInformation: 'Cleanup done' ]
+		ifNotNil: [
+			MolUtils showInformation:
+				'Error during cleanup, try to re-clean to be safe.' ]
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 MolWorld class >> menu00MoleculeOn: aBuilder [
 
 	<worldMenu>
@@ -61,7 +67,7 @@ MolWorld class >> menu00MoleculeOn: aBuilder [
 		]
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 MolWorld class >> menu10SystemStatusOn: aBuilder [
 	<worldMenu>
 	
@@ -82,7 +88,7 @@ MolWorld class >> menu10SystemStatusOn: aBuilder [
 		label: 'Inspect running Components'
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 MolWorld class >> menu20DebugOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDebug)
@@ -93,7 +99,7 @@ MolWorld class >> menu20DebugOn: aBuilder [
 		order: 1.0
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 MolWorld class >> menu21BrowseClassesOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeBrowseClasses)
@@ -105,7 +111,7 @@ MolWorld class >> menu21BrowseClassesOn: aBuilder [
 		action: [ MolSpBrowseComponentClasses new open ]
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 MolWorld class >> menu30ComponentManagerCleanUpOn: aBuilder [
 	<worldMenu>
 
@@ -130,7 +136,7 @@ MolWorld class >> menu30ComponentManagerCleanUpOn: aBuilder [
 		label: 'Cleanup'
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 MolWorld class >> menu40ExamplesOn: aBuilder [
 	<worldMenu>
 	"Check if the examples package exists"
@@ -147,7 +153,7 @@ MolWorld class >> menu40ExamplesOn: aBuilder [
 		icon: (self iconNamed: #smallHome)
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 MolWorld class >> menu50GithubOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #GitHub)
@@ -159,7 +165,7 @@ MolWorld class >> menu50GithubOn: aBuilder [
 		action: [WebBrowser openOn: 'https://github.com/OpenSmock/Molecule']
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 MolWorld class >> menu60ReportBugOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #ReportBug)
@@ -171,7 +177,7 @@ MolWorld class >> menu60ReportBugOn: aBuilder [
 		action: [WebBrowser openOn: 'https://github.com/OpenSmock/Molecule/issues/new']
 ]
 
-{ #category : #scripts }
+{ #category : 'scripts' }
 MolWorld class >> openDefineComponentDialog [
 
 	<script>
@@ -185,7 +191,7 @@ MolWorld class >> openDefineComponentDialog [
 	^ retValue answer
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu100DefineAllComponentsOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDefineAllComponents)
@@ -202,7 +208,7 @@ This action may be necessary in the event of a Molecule update.' label: 'Molecul
 		withSeparatorAfter 
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu10DefineComponentOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDefineComponent)
@@ -213,7 +219,7 @@ MolWorld class >> toolsMenu10DefineComponentOn: aBuilder [
 		label: 'Define a Component...'
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu110DeepCleanUp: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeClearComponent)
@@ -231,7 +237,7 @@ This action may be necessary if your system is broken.'
 		help: 'Cleanup all Molecule system instances and components of the image'
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu20ToggleLogsOn: aBuilder [
 	<worldMenu>
 	MolUtils isLogActive 
@@ -253,7 +259,7 @@ MolWorld class >> toolsMenu20ToggleLogsOn: aBuilder [
 		].
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu30ToggleDynamicContractUpdate: aBuilder [
 	<worldMenu>
 	MolComponentFactory default isDynamicContractUpdateActivated 
@@ -277,7 +283,7 @@ MolWorld class >> toolsMenu30ToggleDynamicContractUpdate: aBuilder [
 	aBuilder withSeparatorAfter
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu40InspectAllComponentInstances: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectAllComponentInstances)
@@ -298,7 +304,7 @@ MolWorld class >> toolsMenu40InspectAllComponentInstances: aBuilder [
 		help:'Advanced function : Inspect all components including components not in the current running system. If you are not sure try to inspect current system running components.'
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu50InspectComponentManager: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectComponentManager)
@@ -309,7 +315,7 @@ MolWorld class >> toolsMenu50InspectComponentManager: aBuilder [
 		label: 'Inspect the Component manager'
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu60InspectComponentFactory: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectComponentFactory)
@@ -320,7 +326,7 @@ MolWorld class >> toolsMenu60InspectComponentFactory: aBuilder [
 		label: 'Inspect the Component factory'
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu70InspectDirtyComponents: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectDirtyComponents)
@@ -331,7 +337,7 @@ MolWorld class >> toolsMenu70InspectDirtyComponents: aBuilder [
 		label: 'Inspect dirty Components'
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu80InspectDirtyComponentTypes: aBuilder [
 	<worldMenu>
 	(aBuilder item: #InspectDirtyComponentTypes)
@@ -343,7 +349,7 @@ MolWorld class >> toolsMenu80InspectDirtyComponentTypes: aBuilder [
 		withSeparatorAfter
 ]
 
-{ #category : #'menu - tools' }
+{ #category : 'menu - tools' }
 MolWorld class >> toolsMenu90DefineDirtyComponentsOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #MoleculeDefineDirtyComponents)

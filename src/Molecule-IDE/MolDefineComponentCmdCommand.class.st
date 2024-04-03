@@ -1,34 +1,36 @@
 Class {
-	#name : #MolDefineComponentCmdCommand,
-	#superclass : #MolClassesCmdCommand,
-	#category : #'Molecule-IDE-Menus'
+	#name : 'MolDefineComponentCmdCommand',
+	#superclass : 'MolClassesCmdCommand',
+	#category : 'Molecule-IDE-Menus',
+	#package : 'Molecule-IDE',
+	#tag : 'Menus'
 }
 
-{ #category : #activation }
+{ #category : 'activation' }
 MolDefineComponentCmdCommand class >> browserMenuActivation [
 	<classAnnotation>
 	^CmdContextMenuActivation byItemOf: MolCmdMenuGroup for: ClyFullBrowserClassContext.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolDefineComponentCmdCommand >> defaultMenuIconName [
 
 	^ 'smallUpdate'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolDefineComponentCmdCommand >> defaultMenuItemName [
 
 	^ 'Define'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolDefineComponentCmdCommand >> description [
 
 	^'Define this component: force to generate methods from contract definition'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolDefineComponentCmdCommand >> execute [
 	| componentsToDefine nbOfDefinedComponents |
 	

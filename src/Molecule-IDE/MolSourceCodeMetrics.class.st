@@ -1,43 +1,45 @@
 Class {
-	#name : #MolSourceCodeMetrics,
-	#superclass : #Object,
+	#name : 'MolSourceCodeMetrics',
+	#superclass : 'Object',
 	#instVars : [
 		'classes'
 	],
-	#category : #'Molecule-IDE-Tools'
+	#category : 'Molecule-IDE-Tools',
+	#package : 'Molecule-IDE',
+	#tag : 'Tools'
 }
 
-{ #category : #constructor }
+{ #category : 'constructor' }
 MolSourceCodeMetrics class >> classes: aListOfClasses [
 
 	^ self new classes: aListOfClasses; yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolSourceCodeMetrics >> classes [
 
 	^ classes ifNil:[ classes := OrderedCollection new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolSourceCodeMetrics >> classes: anObject [
 
 	classes := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 MolSourceCodeMetrics >> componentClasses [
 
 	^ self classes select: [ :c | c isComponentClass ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbAugmentedClassAsComponents [
 
 	^ (self componentClasses reject: [ :comp | comp allSuperclasses includes: MolAbstractComponentImpl ]) size
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbClasseMethods [
 
 	| nbClasseMethods |
@@ -46,31 +48,31 @@ MolSourceCodeMetrics >> nbClasseMethods [
 	^ nbClasseMethods
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbClasses [
 
 	^ (self classes select: [ :c | c isClass ]) size
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbComponentTypes [
 
 	^ (self classes select:[ :c | c isTrait and:[ c isComponentType ] ]) size
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbComponents [
 
 	^ self componentClasses size
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbEventsInterfaces [
 
 	^ (self classes select:[ :c | c isTrait and:[ c isComponentEvents ] ]) size
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbInstanceMethods [
 
 	| nbInstanceMethods |
@@ -79,37 +81,37 @@ MolSourceCodeMetrics >> nbInstanceMethods [
 	^ nbInstanceMethods
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbNativeComponents [
 
 	^ (self componentClasses select: [ :comp | comp allSuperclasses includes: MolAbstractComponentImpl ]) size
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbParametersInterfaces [
 
 	^ (self classes select:[ :c | c isTrait and:[ c isComponentParameters ] ]) size
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbServicesInterfaces [
 
 	^ (self classes select:[ :c | c isTrait and:[ c isComponentServices ] ]) size
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 MolSourceCodeMetrics >> nbTraits [
 
 	^ (self classes select: [ :c | c isTrait ]) size
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 MolSourceCodeMetrics >> printMetrics [
 
 	^ self printString
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 MolSourceCodeMetrics >> printOn: aStream [
 	"Print metrics on a Stream"
 

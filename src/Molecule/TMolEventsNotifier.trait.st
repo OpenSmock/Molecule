@@ -1,15 +1,17 @@
 Trait {
-	#name : #TMolEventsNotifier,
-	#category : #'Molecule-Component Implementation'
+	#name : 'TMolEventsNotifier',
+	#category : 'Molecule-Component Implementation',
+	#package : 'Molecule',
+	#tag : 'Component Implementation'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 TMolEventsNotifier >> isFoundEventsNotifier [
 
 	self explicitRequirement
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 TMolEventsNotifier >> isNotFoundEventsNotifier [
 
 	^ self isFoundEventsNotifier not
