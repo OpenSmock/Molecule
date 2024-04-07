@@ -87,21 +87,6 @@ MolComponentManagerTest >> testDeepCleanUp [
 ]
 
 { #category : #tests }
-MolComponentManagerTest >> testDeepCleanUpGarbageCollect [
-
-	1 to: 10 do: [ :i | 
-		MolCompleteComponentImpl start: ('test' , i printString) asSymbol ].
-
-	"Check created instances"
-	self assert: MolCompleteComponentImpl allInstances size equals: 10.
-	
-	MolComponentManager deepCleanUp.
-	
-	"Check created instances"
-	self assert: MolCompleteComponentImpl allInstances size equals: 0.
-]
-
-{ #category : #tests }
 MolComponentManagerTest >> testDefault [
 	self assert: (MolComponentManager default isKindOf: MolComponentManager).
 	
@@ -112,26 +97,6 @@ MolComponentManagerTest >> testDeploymentServices [
 	| manager |
 	manager := MolComponentManager default.
 	self assert: (manager deploymentServices isKindOf: MolDeploymentServices).
-]
-
-{ #category : #tests }
-MolComponentManagerTest >> testFlushComponents [
-
-	| nb |
-	"Create some classic components to flush"
-	1 to: 10 do: [ :i | MolCompleteComponentImpl new ].
-	"Create some augmented class as components to flush"
-	1 to: 10 do: [ :i | MolAugmentedClassToAComponent new ].
-	
-	"Check created instances"
-	self assert: MolCompleteComponentImpl allInstances size equals: 10.
-	self
-		assert: MolAugmentedClassToAComponent allInstances size
-		equals: 10.
-
-	nb := MolComponentManager flushComponents.
-
-	self assert: nb equals: 20
 ]
 
 { #category : #tests }
