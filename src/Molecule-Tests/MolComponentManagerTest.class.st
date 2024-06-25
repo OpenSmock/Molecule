@@ -38,6 +38,22 @@ MolComponentManagerTest >> testCleanUp [
 	
 ]
 
+{ #category : #tests }
+MolComponentManagerTest >> testCleanUpAnnouncements [
+| announcement list selection |
+announcement := nil.
+	SystemAnnouncer uniqueInstance when: MolComponentInstanciated do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentPassivated do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentInstanciated do:[ :a | announcement := a ].
+	list := MolAnnouncement withAllSubclasses.
+	selection := SystemAnnouncer uniqueInstance subscriptions subscriptions select: [  :e | list includes: e announcementClass] .
+	self assert: (selection size > 0).
+	MolComponentManager cleanupMolAnnouncements.
+	selection := SystemAnnouncer uniqueInstance subscriptions subscriptions select: [  :e | list includes: e announcementClass] .
+	self assert: (selection size = 0).
+	
+]
+
 { #category : #'tests - general' }
 MolComponentManagerTest >> testCleanUpIgnoreErrors [
 	"Start a manuel tree of components and clean up, components are removed during the cleanUp but some componentRemove methods should remove again an already removed component : a error is reach but ignored during a cleanUp"

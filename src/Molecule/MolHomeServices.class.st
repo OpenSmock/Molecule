@@ -56,7 +56,8 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 	MolComponentManager default locatorServices resolveWaitingSubscriptions: component.
 	
 	component componentActivate.
-	component triggerEvent: #activateComponent with: component.
+	self announcer announce: (MolComponentActivated new 
+		component: component; componentName: aName; yourself).
 	
 	MolUtils log: aComponentClass printString , ' named: ' , aName printString , ' is activated.'.
 	
@@ -66,6 +67,12 @@ MolHomeServices >> activateComponent: aComponentClass named: aName [
 { #category : #private }
 MolHomeServices >> addDeployedComponent: aComponentClass [
 	self deployedComponents at: aComponentClass ifAbsentPut: [Dictionary new]
+]
+
+{ #category : #announcer }
+MolHomeServices >> announcer [
+
+	^ SystemAnnouncer uniqueInstance
 ]
 
 { #category : #private }
@@ -135,9 +142,10 @@ MolHomeServices >> deployedComponents [
 
 { #category : #'initialize-release' }
 MolHomeServices >> initialize [
+
 	super initialize.
 	deployedComponents := Dictionary new.
-	waitingForActivation := Set new.
+	waitingForActivation := Set new
 ]
 
 { #category : #accessing }
@@ -191,11 +199,6 @@ MolHomeServices >> instantiateComponent: aComponentClass named: aName [
 	error ifNotNil: [ error signal. ^ nil ].
 
 	component := aComponentClass new componentName: aName; yourself.
-	
-	MolUtils log:
-		aComponentClass printString , ' named: ' , aName printString
-		, ' is instantiated.'.
-
 	deployed := self deployedComponents at: aComponentClass.
 	deployed at: component componentName put: component.
 
@@ -203,7 +206,12 @@ MolHomeServices >> instantiateComponent: aComponentClass named: aName [
 	connector := MolComponentConnector new.
 	component componentConnector: connector.
 	component componentInitialize.
-	component triggerEvent: #instantiateComponent with: component.
+	self announcer announce: (MolComponentInstanciated new 
+		component: component; componentName: aName; yourself).
+
+	MolUtils log:
+		aComponentClass printString , ' named: ' , aName printString
+		, ' is instantiated.'.
 
 	"add the component to waiting activation list"
 	waitingForActivation add: component.
@@ -266,8 +274,9 @@ MolHomeServices >> passivateComponent: aComponentClass named: aName [
 
 	component componentPassivate.
 	component componentConnector passivateComponent.
-	component triggerEvent: #passivateComponent with: component.
-	
+	self announcer announce: (MolComponentPassivated new 
+		component: component; componentName: aName; yourself).
+		
 	MolUtils log: aComponentClass printString , ' named: ' , aName printString, ' is passivated.'.
 
 	"add in waiting activation list"
@@ -278,10 +287,11 @@ MolHomeServices >> passivateComponent: aComponentClass named: aName [
 
 { #category : #'initialize-release' }
 MolHomeServices >> release [
+
 	self removeAllComponents.
 	deployedComponents := nil.
 	waitingForActivation := nil.
-	super release.
+	super release
 ]
 
 { #category : #'life cycle' }
@@ -333,10 +343,7 @@ MolHomeServices >> removeComponent: aComponentClass named: aName ifAbsent: aBloc
 	"Remove the component"
 	removedComponent componentRemove.
 	removedComponent componentConnector: nil.
-	removedComponent
-		triggerEvent: #removeComponent
-		with: removedComponent.
-
+	
 	"Get deployed component instances of this component class"
 	deployedComponentsOfThisClass := self deployedComponents
 		                                 at: aComponentClass
@@ -368,9 +375,14 @@ MolHomeServices >> removeComponent: aComponentClass named: aName ifAbsent: aBloc
 
 	"Finish release of the component life-cycle"
 	removedComponent componentName: nil.
+
+	self announcer announce: (MolComponentRemoved new 
+		component: removedComponent; componentName: aName; yourself).
+	
 	MolUtils log:
 		aComponentClass printString , ' named: ' , aName printString
 		, ' is removed.'.
+		
 	^ removedComponent
 ]
 

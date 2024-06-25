@@ -47,6 +47,8 @@ MolComponentManager class >> cleanUp [
 	notifiers do: [ :n | n release ].
 	subscribers do: [ :n | n release ].
 	
+	self cleanupMolAnnouncements.
+	
 	MolUtils log: 'End of the cleanUp.'
 ]
 
@@ -55,6 +57,14 @@ MolComponentManager class >> cleanUp: aBoolean [
 	"Pharo System CleanUp implementation"
 	
 	self deepCleanUp.
+]
+
+{ #category : #cleanup }
+MolComponentManager class >> cleanupMolAnnouncements [
+<script>
+| registeredList |
+registeredList := SystemAnnouncer uniqueInstance subscriptions subscriptions select: [  :e | self isMolAnnoucement: e announcementClass ].
+registeredList do: [ :r | SystemAnnouncer uniqueInstance subscriptions remove: r].
 ]
 
 { #category : #cleanup }
@@ -140,6 +150,14 @@ MolComponentManager class >> isInitialized [
 
 	<script: 'self isInitialized inspect'>
 	^ Default notNil
+]
+
+{ #category : #cleanup }
+MolComponentManager class >> isMolAnnoucement: aClass [
+
+	MolAnnouncement withAllSubclasses do: [ :a |
+		a = aClass ifTrue: [ ^ true ] ].
+	^ false
 ]
 
 { #category : #'initialize-release' }
