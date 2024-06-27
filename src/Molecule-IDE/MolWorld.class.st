@@ -215,20 +215,25 @@ MolWorld class >> toolsMenu10DefineComponentOn: aBuilder [
 
 { #category : #'menu - tools' }
 MolWorld class >> toolsMenu110DeepCleanUp: aBuilder [
+
 	<worldMenu>
 	(aBuilder item: #MoleculeClearComponent)
 		parent: #MoleculeDebug;
 		order: 11.0;
 		icon: (self iconNamed: #stop);
-		action: [| result |
+		action: [
+			| result |
 			"Confirmation window"
-			result := UIManager default confirm: 'Do you want to scan and clean all the Molecule Components of your Pharo image ? 
-This action may be necessary if your system is broken.' 
-				label: 'Molecule - Confirmation'.
-			result ifTrue:[ MolComponentManager deepCleanUp]. 
-		];
+			result := UIManager default
+				          confirm:
+					          'Do you want to scan and clean all the Molecule Components of your Pharo image ? 
+This action may be necessary if your system is broken.'
+				          label: 'Molecule - Confirmation'.
+			result ifTrue: [ MolComponentManager deepCleanUp ] ];
 		label: 'Garbage, cleanup and release all components';
-		help: 'Cleanup all Molecule system instances and components of the image'
+		help:
+			'Cleanup all Molecule system instances and components of the image';
+				withSeparatorAfter
 ]
 
 { #category : #'menu - tools' }
