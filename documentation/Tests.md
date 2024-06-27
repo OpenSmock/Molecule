@@ -1,5 +1,5 @@
 # Tests
-To create quick tests for your Components, you can create a package named [yourPackageName]-Examples or [yourPackageName]-Tests, then create an Object subclass named [yourPackageName]Examples, 
+To create quick tests for your Components, you can create a package named `[yourPackageName]-Examples` or `[yourPackageName]-Tests`, then create an Object subclass named `[yourPackageName]Examples`,
 ```smalltalk
 Object subclass: #MolGPS-Examples
 	instanceVariableNames: ''
@@ -7,7 +7,7 @@ Object subclass: #MolGPS-Examples
 	package: 'Molecule-Tutorial'
 ```
 then display the **Class side** of this class.
-This then allows the creation of methods for different test cases.
+This allows the creation of methods for different test cases.
 
 One practical thing is putting a `<script>` tag at the start of your methods. This will create a small icon next to your method in order to launch it without the use of a Playground.
 ```smalltalk
@@ -37,8 +37,8 @@ MolGPS-Examples>>stop
 
 ## Switching Components on the fly
 This test space can be useful for switching Components on the fly, stopping a component to start another having the same Type. 
-Make sure that they have a different name or that the current launched Component is stopped before the other of the same Type is launched.
-See the Molecule-Examples package for more examples on this.
+Make sure that they have a different name or that the current launched Component is stopped before the other of the same Type is launched. \
+See the [Molecule-Examples](https://github.com/OpenSmock/Molecule/tree/main/src/Molecule-Examples) package for more examples on this.
 
 ## Calling another script
 To call another script, you simply have to call it like a regular function with `self [script]` since the `self` here represents the current class (for methods located in the class side).
