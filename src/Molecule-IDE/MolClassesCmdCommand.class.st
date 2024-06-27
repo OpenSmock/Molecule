@@ -1,7 +1,7 @@
 Class {
 	#name : #MolClassesCmdCommand,
 	#superclass : #MolCmdCommand,
-	#category : #'Molecule-IDE'
+	#category : #'Molecule-IDE-Menus'
 }
 
 { #category : #testing }
