@@ -111,7 +111,7 @@ When right-clicking a Trait that uses the `MolComponentType` Trait, a new option
 Clicking this option opens this window, showing all the Component implementations of a Type Trait. \
 The title of the window indicates the name of the Type Trait. \
 Clicking an implementation activates the Browse button, which is used to open it in the **System Browser** of Pharo (double-clicking also works). \
-Typing in the filtering list (above the two window buttons) filters the list of implementations.
+Typing in the filtering list (above the two window buttons) filters the implementations' list.
 
 ### See Component users
 ![contextual menu see component users](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/8a9aaa63-33f8-46ea-a638-fc896fc2a60c) \
@@ -121,7 +121,7 @@ When right-clicking a interface (that is, a Trait that uses the `MolComponentEve
 The title of the window indicates the name of the Type Trait as well as the type of interfaces it is about (events, parameters or services). \
 In columns are shown the Type Trait requiring and offering this interface. \
 Clicking a Type Trait activates the Browse button, which is used to open it in the **System Browser** of Pharo (double-clicking also works). \
-Typing in a filtering list (below the columns) filters the relevant list of Type Traits.
+Typing in a filtering list (below the columns) filters the relevant Type Traits' list.
 
 ## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Using Components
 
