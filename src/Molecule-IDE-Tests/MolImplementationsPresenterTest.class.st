@@ -12,6 +12,7 @@ Class {
 MolImplementationsPresenterTest >> setUp [
 
 	super setUp.
+	MolComponentManager cleanUp.
 
 	"Put here a common initialization logic for tests"
 	clockImplementations := MolImplementationsPresenter new.
@@ -19,6 +20,13 @@ MolImplementationsPresenterTest >> setUp [
 
 	geoPosImplementations := MolImplementationsPresenter new.
 	geoPosImplementations type: MolGeoPosEquipmentType.
+]
+
+{ #category : #running }
+MolImplementationsPresenterTest >> tearDown [ 
+
+	MolComponentManager cleanUp.
+	super tearDown
 ]
 
 { #category : #running }
