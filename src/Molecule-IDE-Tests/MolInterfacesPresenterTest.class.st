@@ -11,10 +11,18 @@ Class {
 MolInterfacesPresenterTest >> setUp [
 
 	super setUp.
+	MolComponentManager cleanUp.
 
 	"Put here a common initialization logic for tests"
 	localTimeEvents := MolInterfacesPresenter new.
 	localTimeEvents interface: MolMyLocalTimeEvents.
+]
+
+{ #category : #running }
+MolInterfacesPresenterTest >> tearDown [ 
+
+	MolComponentManager cleanUp.
+	super tearDown
 ]
 
 { #category : #running }
