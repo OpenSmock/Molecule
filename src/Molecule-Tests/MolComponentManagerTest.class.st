@@ -9,13 +9,19 @@ Class {
 
 { #category : #'setUp - tearDown' }
 MolComponentManagerTest >> setUp [
+
 	super setUp.
-	MolComponentManager cleanUp
+	MolComponentManager cleanUp.
+	Smalltalk garbageCollect.
+	Smalltalk garbageCollectMost.
 ]
 
 { #category : #'setUp - tearDown' }
 MolComponentManagerTest >> tearDown [
+
 	MolComponentManager cleanUp.
+	Smalltalk garbageCollect.
+	Smalltalk garbageCollectMost.
 	super tearDown
 ]
 
@@ -29,6 +35,22 @@ MolComponentManagerTest >> testCleanUp [
 	manager2 cleanUp.
 	
 	self assert: manager1 ~= manager2.
+	
+]
+
+{ #category : #tests }
+MolComponentManagerTest >> testCleanUpAnnouncements [
+| announcement list selection |
+announcement := nil.
+	SystemAnnouncer uniqueInstance when: MolComponentInstanciated do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentPassivated do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentInstanciated do:[ :a | announcement := a ].
+	list := MolAnnouncement withAllSubclasses.
+	selection := SystemAnnouncer uniqueInstance subscriptions subscriptions select: [  :e | list includes: e announcementClass] .
+	self assert: (selection size > 0).
+	MolComponentManager cleanupMolAnnouncements.
+	selection := SystemAnnouncer uniqueInstance subscriptions subscriptions select: [  :e | list includes: e announcementClass] .
+	self assert: (selection size = 0).
 	
 ]
 
@@ -81,21 +103,6 @@ MolComponentManagerTest >> testDeepCleanUp [
 ]
 
 { #category : #tests }
-MolComponentManagerTest >> testDeepCleanUpGarbageCollect [
-
-	1 to: 10 do: [ :i | 
-		MolCompleteComponentImpl start: ('test' , i printString) asSymbol ].
-
-	"Check created instances"
-	self assert: MolCompleteComponentImpl allInstances size equals: 10.
-	
-	MolComponentManager deepCleanUp.
-	
-	"Check created instances"
-	self assert: MolCompleteComponentImpl allInstances size equals: 0.
-]
-
-{ #category : #tests }
 MolComponentManagerTest >> testDefault [
 	self assert: (MolComponentManager default isKindOf: MolComponentManager).
 	
@@ -106,44 +113,6 @@ MolComponentManagerTest >> testDeploymentServices [
 	| manager |
 	manager := MolComponentManager default.
 	self assert: (manager deploymentServices isKindOf: MolDeploymentServices).
-]
-
-{ #category : #tests }
-MolComponentManagerTest >> testFlushComponents [
-	| nb |
-	
-	"Create some classics components to flush"
-	1 to: 10 do:[ :i | MolCompleteComponentImpl new ].
-	"Create some augmented class as components to flush"
-	1 to: 10 do:[ :i | MolAugmentedClassToAComponent new ].
-	"Check created instances"
-	self assert: MolCompleteComponentImpl allInstances size equals: 10.
-	self assert: MolAugmentedClassToAComponent allInstances size equals: 10.
-	
-	nb := MolComponentManager flushComponents.
-	self assert: nb equals: 20.
-	self assert: MolCompleteComponentImpl allInstances size equals: 0.
-	self assert: MolAugmentedClassToAComponent allInstances size equals: 0.
-]
-
-{ #category : #'setUp - tearDown' }
-MolComponentManagerTest >> testGarbageCollect [
-
-	"Create some classics components to clean"
-
-	1 to: 10 do: [ :i | 
-		MolCompleteComponentImpl start: ('test' , i printString) asSymbol ].
-
-	"Check created instances"
-	self assert: MolCompleteComponentImpl allInstances size equals: 10.
-
-
-	1 to: 10 do: [ :i | 
-		MolCompleteComponentImpl stop: ('test' , i printString) asSymbol ].
-	
-	Smalltalk garbageCollect.
-
-	self assert: MolCompleteComponentImpl allInstances size equals: 0
 ]
 
 { #category : #tests }

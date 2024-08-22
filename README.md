@@ -102,6 +102,26 @@ This menu provides `metrics` to have statistics on the Molecule code in selected
 This menu provides actions and tools depending on the selected classes.
 With this menu you can force to `define` a Component, specially if you have deactivated the Molecule dynamic update or if you have a bug when a Component contract changed.
 
+### See Component implementations
+![contextual menu see component implementations](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a4221985-0578-4e95-a133-831548e0f5ef) \
+When right-clicking a Trait that uses the `MolComponentType` Trait, a new option appears in the `Molecule` sub-menu (as shown above):
+
+![see component implementations github](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/68a94948-d6a0-4dce-9c67-2d1974b78fdf) \
+Clicking this option opens this window, showing all the Component implementations of a Type Trait. \
+The title of the window indicates the name of the Type Trait. \
+Clicking an implementation activates the Browse button, which is used to open it in the **System Browser** of Pharo (double-clicking also works). \
+Typing in the filtering list (above the two window buttons) filters the implementations' list.
+
+### See Component users
+![contextual menu see component users](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/8a9aaa63-33f8-46ea-a638-fc896fc2a60c) \
+When right-clicking a interface (that is, a Trait that uses the `MolComponentEvents`, `MolComponentParameters` or `MolComponentServices` Traits), a new option appears in the `Molecule` sub-menu (as shown above):
+
+![See component users github](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/682f388b-78a6-41d4-a3c4-2377fb7e9cf5) \
+The title of the window indicates the name of the Type Trait as well as the type of interfaces it is about (events, parameters or services). \
+In columns are shown the Type Trait requiring and offering this interface. \
+Clicking a Type Trait activates the Browse button, which is used to open it in the **System Browser** of Pharo (double-clicking also works). \
+Typing in a filtering list (below the columns) filters the relevant Type Traits' list.
+
 ## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Using Components
 
 ### Start and stop method

@@ -5,14 +5,14 @@ They're directly linked, in the sense that a change detected in the first Compon
 ![gps molecule without figure](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a949d2f8-c460-40be-985d-273881e5b3da) \
 GPS (Global Positioning System) is the american subsystem of GNSS (Global Navigation Satellite Systems).
 
-The complete GNSS example is present in the **Molecule-Examples** package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works. \
+The complete GNSS example is present in the [Molecule-Examples](https://github.com/OpenSmock/Molecule/tree/main/src/Molecule-Examples) package, but if it's your first time using Molecule, you should follow this tutorial step-by-step in order to understand how Molecule works. \
 A graphical form of the example is available in the [Molecule-Geographical-Position-Example](https://github.com/OpenSmock/Molecule-Geographical-Position-Example) repository.
 
 # Contents
 [STATIC PART: declaration](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#static-part-declaration)
 * [Define Component Types](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-component-types)
 	- [Adding Component contract with a Component Type](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#adding-component-contract-with-a-component-type)
-	  	+ [Define first Component Type MolGNSSData](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-the-first-component-type-molgnssdata)
+	  	+ [Define the first Component Type MolGNSSData](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-the-first-component-type-molgnssdata)
 	     + [Define the second Component Type MolGNSSMap](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-the-second-component-type-molgnssmap)
 * [Define Services and Events](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#define-services-and-events)
 * [Create a Component implementation of a Type](https://github.com/OpenSmock/Molecule/blob/documentation/documentation/Create%20and%20connect%20Components.md#create-a-component-implementation-of-a-type)
@@ -100,8 +100,8 @@ This Event trait produces the `currentPositionChanged: aGeoPosition` Event
 
 ## Create a Component implementation of a Type
 There are two ways to create a new Molecule Component :
-- Create a new Component from scratch : write a new Class inheriting from the Component hierarchy
-- Re-using an existing Class : augmenting that class with Component behavior
+- Create a new Component from scratch: write a new Class inheriting from the Component hierarchy
+- Re-using an existing Class: augmenting that class with Component behavior
 
 ### Create a new Component from scratch
 To develop a new Component from scratch, a class needs to be created that must subclass the `MolAbstractComponentImpl` abstract Class.
@@ -118,7 +118,7 @@ We must use the Molecule Component interface `MolComponentImpl`, which is a Trai
 For this tutorial, the GNSS needs to send its geographical data to the Map. \
 In order to do that, its contract needs to be redefined to indicate which Services and Events are produced and provided by it.
 ![implementation contrat molecule](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/a9c14388-0abe-4f09-8ac5-578054f98ad1) \
-Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser**, accessible through the **Browse** tab of Pharo, click on the radio button located left to the Class side text, which is located in the middle of the **System Browser** window). \
+Redefining a Component's contract is done on the **Class side** of Pharo (in the **System Browser** which is accessible through the **Browse** tab of Pharo, click on the radio button located left to the Class side text which is located in the middle of the **System Browser** window). \
 ![system browser red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/7fa84d1d-45b4-4fe1-b524-6193fc7d6fec)
 ![class side red](https://github.com/Eliott-Guevel/Molecule-various-fixes/assets/76944457/7b189b8a-1552-46df-a69d-44f78bb73848)
 
@@ -181,7 +181,7 @@ MolGNSSDataImpl>>increaseAccuracy
 		self accuracy: nextAccuracy ]
 ```
 
-Then, override the `getAccuracyRadiusInMeters` Service (which will simply return `accuracy`). The override is done since the `getAccuracyRadiusInMeters` Service is declared in the `providedComponentServices` part of `MolGNSSData`'s contract. And since `MolGNSSDataImpl` is an implemmentation of `MolGNSSData`, the `getAccuracyRadiusInMeters` is implemented here.
+Then, override the `getAccuracyRadiusInMeters` Service (which will simply return `accuracy`). The override is done since the `getAccuracyRadiusInMeters` Service is declared in the `providedComponentServices` part of `MolGNSSData`'s contract. And since `MolGNSSDataImpl` is an implementation of `MolGNSSData`, the `getAccuracyRadiusInMeters` is implemented here.
 ```smalltalk
 MolGNSSDataImpl>>getAccuracyRadiusInMeters
 	"Get and return the accuracy of the GNSS depending quality of signal and quantity of connected satellites"
@@ -229,9 +229,9 @@ To quickly detail this method, we first need to examine `getMolGNSSDataEventsNot
 To return to `componentActivate`, after every 50 milliseconds, a random geographical position is generated which is sent through the `currentPositionChanged: aGeoPosition` Event.
 
 Generated methods take the following forms:
-- get[componentName]EventsNotifier
-- get[componentName]EventsSubscriber
-- get[componentName]ServicesProvider
+- `get[componentName]EventsNotifier`
+- `get[componentName]EventsSubscriber`
+- `get[componentName]ServicesProvider`
 
 There is no need to manually type them.
 
@@ -247,7 +247,7 @@ MolGNSSDataImpl>>componentPassivate
 ```
 
 ## Create the Component implementation for MolGNSSMap
-Same way as `MolGNSSDataImpl`, we can move on to create the Map Component, being `MolGNSSMapImpl`. This component uses the `MolGNSSMap` Trait, used to define the Component's contract, as well as the `MolGNSSDataEvents` interface, which needs to be specified in order for the Component to consume its Service.
+Same way as `MolGNSSDataImpl`, we can move on to create the Map Component, being `MolGNSSMapImpl`. This component uses the `MolGNSSMap` Trait, used to define the Component's contract, as well as the `MolGNSSDataEvents` interface which needs to be specified in order for the Component to consume its Service.
 ```smalltalk
 MolAbstractComponentImpl subclass: #MolGNSSMapImpl
 	uses: MolGNSSMap + MolGNSSDataEvents
@@ -338,7 +338,7 @@ The Pharo **Transcript** (also located in the **Browse** tab of Pharo) will star
 
 ### Starting a Component with a name
 It's also possible to create a component with a name by using the `MolComponentImpl class>>start: #[name]` method.
-This will be useful for [Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md), which determine which component of a given Type A receives events from which component of a given Type B, if multiple components of the same Type exist.
+This will be useful for [Producers](https://github.com/OpenSmock/Molecule/blob/main/documentation/Creating%20Producers.md), which determine which component of a given Type A receives events from which component of a given Type B if multiple components of the same Type exist.
 
 ## Stopping a Component
 Components are stopped using the `MolComponentImpl class>>stop` instruction. \
