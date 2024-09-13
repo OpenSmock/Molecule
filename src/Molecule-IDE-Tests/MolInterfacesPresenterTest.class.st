@@ -37,7 +37,7 @@ MolInterfacesPresenterTest >> testBrowseButtonActivated [
 { #category : #running }
 MolInterfacesPresenterTest >> testRequiredAnd [
 
-	localTimeEvents dropList selectItem: 'Required AND Offered'.
+	localTimeEvents dropList selectItem: 'Required and Offered'.
 	self assert: [ localTimeEvents requiredList items size = 0 ]
 ]
 
@@ -45,13 +45,14 @@ MolInterfacesPresenterTest >> testRequiredAnd [
 MolInterfacesPresenterTest >> testRequiredOr [
 	"no need to select an option since OR is selected by default"
 
+	localTimeEvents dropList selectItem: 'Required and/or Offered'.
 	self assert: [ localTimeEvents requiredList items size = 2 ]
 ]
 
 { #category : #running }
 MolInterfacesPresenterTest >> testRequiredXor [
 
-	localTimeEvents dropList selectItem: 'Required XOR Offered'.
+	localTimeEvents dropList selectItem: 'Required or Offered (XOR)'.
 	self assert: [ localTimeEvents requiredList items size = 2 ]
 ]
 
