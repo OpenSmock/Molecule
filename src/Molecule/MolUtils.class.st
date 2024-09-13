@@ -47,6 +47,13 @@ MolUtils class >> allComponentInstancesOfType: aComponentType [
 	^oc
 ]
 
+{ #category : #private }
+MolUtils class >> allComponentTypes [
+	"Return all ComponentTypes traits"
+
+	^ self environment allTraits select: [ :t | t isComponentType ]
+]
+
 { #category : #'component contract' }
 MolUtils class >> componentType: aComponentOrComponentClass [
 	"Get component type of a component or a component class, return nil if no type was found"
@@ -211,7 +218,7 @@ MolUtils class >> offeredTypes: aComponentContractInterface [
 	(aComponentContractInterface isComponentServices not and:[aComponentContractInterface isComponentEvents not and:[aComponentContractInterface isComponentParameters not]]) ifTrue:[ ^ list asOrderedCollection ].
 	
 	"Collect all required"
-	MolComponentType users do:[ :type | 
+	self allComponentTypes do:[ :type | 
 		aComponentContractInterface isComponentServices ifTrue:[ 
 			(type isProvideServices: aComponentContractInterface) ifTrue:[ list add: type ].
 		] ifFalse:[
@@ -311,7 +318,7 @@ MolUtils class >> requiredTypes: aComponentContractInterface [
 	(aComponentContractInterface isComponentServices not and:[aComponentContractInterface isComponentEvents not and:[aComponentContractInterface isComponentParameters not]]) ifTrue:[ ^ list asOrderedCollection ].
 	
 	"Collect all required"
-	MolComponentType users do:[ :type | 
+	self allComponentTypes do:[ :type | 
 		aComponentContractInterface isComponentServices ifTrue:[ 
 			(type isUseServices: aComponentContractInterface) ifTrue:[ list add: type ].
 		] ifFalse:[
