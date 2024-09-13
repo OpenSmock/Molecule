@@ -6,7 +6,6 @@ Class {
 		'requiredList',
 		'offeredList',
 		'dropList',
-		'typeInterface',
 		'servicesProvidedList',
 		'eventsConsumedList',
 		'parametersUsedList',
@@ -39,7 +38,7 @@ MolInterfacesPresenter >> addTrait: trait IfInterfaceCorrespondsIn: interfaceLis
 MolInterfacesPresenter >> addTypesInInterfaceList: trait [
 	"add a Trait to the lists if it corresponds to a part of their component contract"
 
-	typeInterface = 'Events' ifTrue: [
+	selectedInterface isComponentEvents ifTrue: [
 		eventsConsumed := trait allConsumedEvents.
 		self
 			addTrait: trait
@@ -52,7 +51,7 @@ MolInterfacesPresenter >> addTypesInInterfaceList: trait [
 			IfInterfaceCorrespondsIn: eventsProduced
 			forList: eventsProducedList ].
 
-	typeInterface = 'Parameters' ifTrue: [
+	selectedInterface isComponentParameters ifTrue: [
 		parametersUsed := trait allUsedParameters.
 		self
 			addTrait: trait
@@ -65,7 +64,7 @@ MolInterfacesPresenter >> addTypesInInterfaceList: trait [
 			IfInterfaceCorrespondsIn: parametersProvided
 			forList: parametersProvidedList ].
 
-	typeInterface = 'Services' ifTrue: [
+	selectedInterface isComponentServices ifTrue: [
 		servicesUsed := trait allUsedServices.
 		self
 			addTrait: trait
@@ -82,7 +81,7 @@ MolInterfacesPresenter >> addTypesInInterfaceList: trait [
 { #category : #adding }
 MolInterfacesPresenter >> addTypesInInterfaceLists [
 
-	selectedInterface = '' ifTrue: [ ^ self ].
+	selectedInterface ifNil: [ ^ self ].
 	
 	(MolUtils requiredTypes: selectedInterface) do: [ :trait |
 		self addTypesInInterfaceList: trait ].
@@ -91,7 +90,7 @@ MolInterfacesPresenter >> addTypesInInterfaceLists [
 		self addTypesInInterfaceList: trait ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MolInterfacesPresenter >> andMode [
 	"if a Type appears in both columns (is both required and offered), show it in both columns"
 	"doesn't show it in either if it only appears once"
@@ -176,23 +175,6 @@ MolInterfacesPresenter >> defaultLayout [
 ]
 
 { #category : #initialization }
-MolInterfacesPresenter >> determineTypeInterface [
-	"determines the type of the selected interface (Events, Parameters or Services) using the relevant Molecule methods (isComponent[Events/Parameters/Services])"
-
-	| events parameters services |
-	events := 'Events'.
-	parameters := 'Parameters'.
-	services := 'Services'.
-
-	selectedInterface isComponentEvents ifTrue: [
-		typeInterface := events ].
-	selectedInterface isComponentParameters ifTrue: [
-		typeInterface := parameters ].
-	selectedInterface isComponentServices ifTrue: [
-		typeInterface := services ]
-]
-
-{ #category : #initialization }
 MolInterfacesPresenter >> dropList [
 	"used for test purposes"
 
@@ -225,7 +207,7 @@ MolInterfacesPresenter >> enableBrowseButton: listOnScreen [
 		listOnScreen selectedItem ifNotNil: [ buttonBrowse enable ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MolInterfacesPresenter >> fillRequiredAndOfferedLists [
 	"used for the and mode"
 
@@ -241,7 +223,7 @@ MolInterfacesPresenter >> initializePresenters [
 	super initializePresenters.
 
 		"set to a placeholder value since the name of the interface is given after in execute: in the contextual menu side of things (MolInspectInterfaceImplementationsCmdCommand)"
-	selectedInterface := ''.
+	selectedInterface := nil.
 
 	eventsConsumedList := OrderedCollection new.
 	parametersUsedList := OrderedCollection new.
@@ -254,11 +236,11 @@ MolInterfacesPresenter >> initializePresenters [
 	"drop list, no width property"
 	dropList := self newDropList
 		            help: 'Component Types which are using this interface:';
-		            addItemLabeled: 'Required OR Offered'
+		            addItemLabeled: 'Required and/or Offered'
 		            do: [ self orMode ];
-		            addItemLabeled: 'Required AND Offered'
+		            addItemLabeled: 'Required and Offered'
 		            do: [ self andMode ];
-		            addItemLabeled: 'Required XOR Offered'
+		            addItemLabeled: 'Required or Offered (XOR)'
 		            do: [ self xorMode ].
 
 	requiredList := MolSpFilteringListDoubleClickPresenter new.
@@ -279,7 +261,6 @@ MolInterfacesPresenter >> interface: anInterface [
 	"only one interface can be selected at a time"
 
 	selectedInterface := anInterface.
-	self determineTypeInterface.
 	implemList := self listImplementations: anInterface.
 
 	self orMode
@@ -312,7 +293,7 @@ MolInterfacesPresenter >> offeredList [
 	^ offeredList
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MolInterfacesPresenter >> orMode [
 	"if an implementation requires or provides the selected interface, make it appear in the correct column"
 
@@ -327,7 +308,7 @@ MolInterfacesPresenter >> orMode [
 	self applyFilter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MolInterfacesPresenter >> require: listRequired andOffer: listOffered [
 		"adds the items in the lists shown on screen if the interface is both required and offered by an implementation"
 
@@ -337,7 +318,7 @@ MolInterfacesPresenter >> require: listRequired andOffer: listOffered [
 				listImplementationBoth add: interfaceRequired ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MolInterfacesPresenter >> require: listRequired xorOffer: listOffered [
 	"removes the items in the lists shown on screen if the interface is both required and offered by an implementation"
 
@@ -348,7 +329,7 @@ MolInterfacesPresenter >> require: listRequired xorOffer: listOffered [
 				listOffered remove: interfaceRequired ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MolInterfacesPresenter >> requireOrOffer [
 	"adds the items in the lists shown on screen if the interface is required or offered by a Type"
 
@@ -384,10 +365,19 @@ MolInterfacesPresenter >> seeComponentImplementations [
 { #category : #initialization }
 MolInterfacesPresenter >> title [
 
-	^ selectedInterface asString , ' ' , typeInterface asLowercase
+	| typeName |
+	selectedInterface ifNil: [ ^ 'No Molecule interface' ].
+
+	typeName := 'events'.
+	selectedInterface isComponentParameters ifTrue: [
+		typeName := 'parameters' ].
+	selectedInterface isComponentServices ifTrue: [
+		typeName := 'services' ].
+
+	^ selectedInterface asString , ' ' , typeName
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MolInterfacesPresenter >> xorMode [
 	"boolean operator equivalent to OR minus AND, show a Type only if it exists and doesn't appear in both columns (requires or offers the interface, but not both)"
 
