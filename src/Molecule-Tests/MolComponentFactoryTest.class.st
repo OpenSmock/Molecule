@@ -265,6 +265,21 @@ MolComponentFactoryTest >> testComponentContractChanged [
 ]
 
 { #category : #tests }
+MolComponentFactoryTest >> testComponentContractImplGeneration [
+
+	| toFind |
+	MolCompleteComponentOverloadImpl defineComponent.
+	toFind := { #getMolUsedEventsNotifier. #getMolUsedParametersProvider.
+	          #getMolUsedServicesProvider. #getMolUsedEventsSubscriber.
+	          #getMolUsedEventsSubscriber. #getMolUsedEvents2Notifier.
+	          #getMolUsedParameters2Provider.
+	          #getMolUsedServices2Provider }.
+	toFind := toFind reject: [ :e |
+		          MolCompleteComponentOverloadImpl allSelectors includes: e ].
+	self assert: toFind isEmpty
+]
+
+{ #category : #tests }
 MolComponentFactoryTest >> testComponentFactoryDefaultClass [
 	MolComponentFactory cleanUp.
 
