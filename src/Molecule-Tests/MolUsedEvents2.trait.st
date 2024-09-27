@@ -1,3 +1,6 @@
+"
+I am a event trait used for impl overloading test
+"
 Trait {
 	#name : #MolUsedEvents2,
 	#traits : 'MolComponentEvents',

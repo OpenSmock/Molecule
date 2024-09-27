@@ -1,3 +1,6 @@
+"
+I am a component impl overloading my contract for impl purpose
+"
 Class {
 	#name : #MolCompleteComponentOverloadImpl,
 	#superclass : #MolAbstractComponentImpl,

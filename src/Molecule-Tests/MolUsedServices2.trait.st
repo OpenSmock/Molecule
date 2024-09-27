@@ -1,3 +1,6 @@
+"
+I am a services trait used for impl overloading test
+"
 Trait {
 	#name : #MolUsedServices2,
 	#traits : 'MolComponentServices',

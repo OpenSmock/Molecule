@@ -1,3 +1,6 @@
+"
+I am a param trait used for impl overloading test
+"
 Trait {
 	#name : #MolUsedParameters2,
 	#traits : 'MolComponentParameters',
