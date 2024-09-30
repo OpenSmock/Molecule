@@ -464,18 +464,23 @@ MolComponentFactory >> componentChangedAnnouncement: anAnnouncement [
 ]
 
 { #category : #announcements }
-MolComponentFactory >> contractChanged: aComponentType [
-	
-	aComponentType ifNil: [ ^ self error: '[Molecule] Error on contract changed notification.' ].
-	aComponentType isTrait ifFalse:[ ^ self ].
-	aComponentType isObsolete ifTrue:[ ^ self ].
-	aComponentType isComponentType ifFalse:[ ^ self ].
-	
-	self isDynamicContractUpdateActivated ifTrue: [ 
-		self defineComponentTypeImplementors: aComponentType
-	] ifFalse: [ 
-		dirtyComponentTypes add: aComponentType 
-	]
+MolComponentFactory >> contractChanged: aComponentOrType [
+
+	| class |
+	(MolUtils isComponentOrComponentClass: aComponentOrType) ifTrue: [
+		self isDynamicContractUpdateActivated ifTrue: [
+			class := aComponentOrType isClass ifTrue:[ aComponentOrType ] ifFalse:[ aComponentOrType class ].
+			self defineComponent: class ] ].
+	aComponentOrType ifNil: [
+		^ self error: '[Molecule] Error on contract changed notification.' ].
+
+	aComponentOrType isTrait ifFalse: [ ^ self ].
+	aComponentOrType isObsolete ifTrue: [ ^ self ].
+	aComponentOrType isComponentType ifFalse: [ ^ self ].
+
+	self isDynamicContractUpdateActivated
+		ifTrue: [ self defineComponentTypeImplementors: aComponentOrType ]
+		ifFalse: [ dirtyComponentTypes add: aComponentOrType ]
 ]
 
 { #category : #announcements }
@@ -611,28 +616,39 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 { #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aComponent [
 
+	| toDefine |
 	self removeOldConsumedEventsComponentAccessorsFor: aComponent.
-	
-	(aComponent haveComponentType and:[aComponent haveOwnComponentType]) ifFalse: [ ^ self ].
-	
-	self 
-		generateComponentAccessorsFor: #consumedEvents 
-		withList: aComponent componentType consumedComponentEvents 
-		in: aComponent 
+
+	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
+		ifFalse: [ ^ self ].
+
+	toDefine := Set new.
+	toDefine addAll: aComponent componentType consumedComponentEvents.
+	toDefine addAll: aComponent consumedComponentEvents.
+
+	self
+		generateComponentAccessorsFor: #consumedEvents
+		withList: toDefine
+		in: aComponent
 		suffix: 'Subscriber'
-	
 ]
 
 { #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aComponent [
 
+	| toDefine |
 	self removeOldProducedEventsComponentAccessorsFor: aComponent.
-	
-	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ]) ifFalse: [ ^ self ].
+
+	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
+		ifFalse: [ ^ self ].
+
+	toDefine := Set new.
+	toDefine addAll: aComponent componentType producedComponentEvents.
+	toDefine addAll: aComponent producedComponentEvents.
 
 	self
 		generateComponentAccessorsFor: #producedEvents
-		withList: aComponent componentType producedComponentEvents
+		withList: toDefine
 		in: aComponent
 		suffix: 'Notifier'
 ]
@@ -640,29 +656,42 @@ MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aCom
 { #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aComponent [
 
-	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
-	
-	(aComponent haveComponentType and:[aComponent haveOwnComponentType]) ifFalse: [ ^ self ].
-	
-	self 
-		generateComponentAccessorsFor: #usedParameters 
-		withList: aComponent componentType usedComponentParameters 
-		in: aComponent 
+	| toDefine |
+	self removeOldUsedParametersAndServicesComponentAccessorsFor:
+		aComponent.
+
+	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
+		ifFalse: [ ^ self ].
+
+	toDefine := Set new.
+	toDefine addAll: aComponent componentType usedComponentParameters.
+	toDefine addAll: aComponent usedComponentParameters.
+
+	self
+		generateComponentAccessorsFor: #usedParameters
+		withList: toDefine
+		in: aComponent
 		suffix: 'Provider'
-	
 ]
 
 { #category : #'code generation' }
 MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aComponent [
- 
-	self removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent.
-	
-	(aComponent haveComponentType and:[aComponent haveOwnComponentType]) ifFalse: [ ^ self ].
-	
-	self 
-		generateComponentAccessorsFor: #usedServices 
-		withList: aComponent componentType usedComponentServices 
-		in: aComponent 
+
+	| toDefine |
+	self removeOldUsedParametersAndServicesComponentAccessorsFor:
+		aComponent.
+
+	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
+		ifFalse: [ ^ self ].
+
+	toDefine := Set new.
+	toDefine addAll: aComponent componentType usedComponentServices.
+	toDefine addAll: aComponent usedComponentServices.
+
+	self
+		generateComponentAccessorsFor: #usedServices
+		withList: toDefine
+		in: aComponent
 		suffix: 'Provider'
 ]
 
@@ -889,51 +918,71 @@ MolComponentFactory >> releaseSystemAnnouncements [
 
 { #category : #'code generation' }
 MolComponentFactory >> removeOldConsumedEventsComponentAccessorsFor: aComponent [
- 	"remove old consumed events but not the existing"
-	| toBeRemoveConsumedSelectors |
-	toBeRemoveConsumedSelectors := (aComponent selectors select:[ :s |  'get*Subscriber' match: (s asString)]) asOrderedCollection.
-	
+	"remove old consumed events but not the existing"
+
+	| toBeRemoveConsumedSelectors toPreserve |
+	toBeRemoveConsumedSelectors := (aComponent selectors select: [ :s |
+		                                'get*Subscriber' match: s asString ])
+		                               asOrderedCollection.
+
 	"check if the selectors are already in the current consumed events, in case don't remove them"
-	aComponent haveComponentType ifTrue:[
-		aComponent componentType consumedComponentEvents do:[ :e | 
-			toBeRemoveConsumedSelectors copy do:[ :sel | ('get', e printString, 'Subscriber' = sel) ifTrue:[toBeRemoveConsumedSelectors remove: sel]].
-		].
-	].
-	
-	toBeRemoveConsumedSelectors do:[ :s | aComponent removeSelector: s].
+	aComponent haveComponentType ifTrue: [
+		toPreserve := Set new.
+		toPreserve addAll: aComponent componentType consumedComponentEvents.
+		toPreserve addAll: aComponent consumedComponentEvents.
+		
+		toPreserve do: [ :e |
+			toBeRemoveConsumedSelectors copy do: [ :sel |
+				'get' , e printString , 'Subscriber' = sel ifTrue: [
+					toBeRemoveConsumedSelectors remove: sel ] ] ] ].
+
+	toBeRemoveConsumedSelectors do: [ :s | aComponent removeSelector: s ]
 ]
 
 { #category : #'code generation' }
 MolComponentFactory >> removeOldProducedEventsComponentAccessorsFor: aComponent [
- 	"remove old produced events but not the existing"
-	| toBeRemoveProducedSelectors |
-	toBeRemoveProducedSelectors := (aComponent selectors select:[ :s |  'get*Notifier' match: (s asString)]) asOrderedCollection.
-	
+	"remove old produced events but not the existing"
+
+	| toBeRemoveProducedSelectors toPreserve |
+	toBeRemoveProducedSelectors := (aComponent selectors select: [ :s |
+		                                'get*Notifier' match: s asString ])
+		                               asOrderedCollection.
+
 	"check if the selectors are already in the current produced events, in case don't remove them"
-	aComponent haveComponentType ifTrue:[
-		aComponent componentType producedComponentEvents do:[ :e | 
-			toBeRemoveProducedSelectors copy do:[ :sel | ('get', e printString, 'Notifier' = sel) ifTrue:[toBeRemoveProducedSelectors remove: sel]].
-		].
-	].
-	
-	toBeRemoveProducedSelectors do:[ :s | aComponent removeSelector: s].
+	aComponent haveComponentType ifTrue: [
+		toPreserve := Set new.
+		toPreserve addAll: aComponent componentType producedComponentEvents.
+		toPreserve addAll: aComponent producedComponentEvents.
+		
+		toPreserve do: [ :e |
+			toBeRemoveProducedSelectors copy do: [ :sel |
+				'get' , e printString , 'Notifier' = sel ifTrue: [
+					toBeRemoveProducedSelectors remove: sel ] ] ] ].
+
+	toBeRemoveProducedSelectors do: [ :s | aComponent removeSelector: s ]
 ]
 
 { #category : #'code generation' }
 MolComponentFactory >> removeOldUsedParametersAndServicesComponentAccessorsFor: aComponent [
- 	"remove old used parameters but not the existing or used services"
-	| toBeRemoveProviderSelectors |
-	toBeRemoveProviderSelectors := (aComponent selectors select:[ :s |  'get*Provider' match: (s asString)]) asOrderedCollection.
-	
+	"remove old used parameters but not the existing or used services"
+
+	| toBeRemoveProviderSelectors toPreserve |
+	toBeRemoveProviderSelectors := (aComponent selectors select: [ :s |
+		                                'get*Provider' match: s asString ])
+		                               asOrderedCollection.
+
 	"check if the selectors are already in the current used parameters or used services, in case don't remove them"
-	aComponent haveComponentType ifTrue:[
-		aComponent componentType usedComponentParameters do:[ :e | 
-			toBeRemoveProviderSelectors copy do:[ :sel | ('get', e printString, 'Provider' = sel) ifTrue:[toBeRemoveProviderSelectors remove: sel]].
-		].
-		aComponent componentType usedComponentServices do:[ :e | 
-			toBeRemoveProviderSelectors copy do:[ :sel | ('get', e printString, 'Provider' = sel) ifTrue:[toBeRemoveProviderSelectors remove: sel]].
-		].
-	].
-	
-	toBeRemoveProviderSelectors do:[ :s | aComponent removeSelector: s].
+	aComponent haveComponentType ifTrue: [
+		toPreserve := Set new.
+		toPreserve addAll: aComponent componentType usedComponentParameters.
+		toPreserve addAll: aComponent usedComponentParameters.
+		toPreserve addAll: aComponent componentType usedComponentServices.
+		toPreserve addAll: aComponent usedComponentServices.
+
+		toPreserve do: [ :e |
+			toBeRemoveProviderSelectors copy do: [ :sel |
+				'get' , e printString , 'Provider' = sel ifTrue: [
+					toBeRemoveProviderSelectors remove: sel ] ] ]].
+
+	toBeRemoveProviderSelectors do: [ :s | aComponent removeSelector: s ]
 ]

@@ -67,11 +67,21 @@ MolUtils class >> componentType: aComponentOrComponentClass [
 { #category : #'component contract' }
 MolUtils class >> consumedComponentEvents: anObject [
 	"Get consumed events of an object, return nil if no events was found"
-	
-	| componentType |
-	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
-	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
-	^ componentType ifNotNil: [ :e | ^ e consumedComponentEvents ] ifNil: [ ^ {} ]
+
+	| componentType set |
+	anObject isTrait ifFalse: [
+		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
+	componentType := (anObject isTrait and: [ anObject isComponentType ])
+		                 ifTrue: [ anObject ]
+		                 ifFalse: [ self componentType: anObject ].
+	^ componentType
+		  ifNotNil: [ :e | set := Set new.
+			  (anObject class respondsTo: #consumedComponentEvents)
+				  ifTrue: [ set addAll: anObject class consumedComponentEvents ]
+				  ifFalse: [ set addAll: anObject consumedComponentEvents ].
+			  set addAll: e consumedComponentEvents.
+			  ^ set asArray  ]
+		  ifNil: [ ^ {  } ]
 ]
 
 { #category : #'quick creation' }
@@ -253,31 +263,62 @@ MolUtils class >> passivateComponents: aComponentClassList [
 { #category : #'component contract' }
 MolUtils class >> producedComponentEvents: anObject [
 	"Get produced events of an object, return nil if no events was found"
-	
-	| componentType |
-	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
-	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
-	^ componentType ifNotNil: [ :e | ^ e producedComponentEvents ] ifNil: [ ^ {} ]
+
+	| componentType set |
+	anObject isTrait ifFalse: [
+		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
+	componentType := (anObject isTrait and: [ anObject isComponentType ])
+		                 ifTrue: [ anObject ]
+		                 ifFalse: [ self componentType: anObject ].
+	^ componentType
+		  ifNotNil: [ :e | set := Set new.
+			  (anObject class respondsTo: #producedComponentEvents)
+				  ifTrue: [
+				  set addAll: anObject class producedComponentEvents ]
+				  ifFalse: [ set addAll: anObject producedComponentEvents ].
+			  set addAll: e producedComponentEvents.
+			  ^ set asArray  ]
+		  ifNil: [ ^ {  } ]
 ]
 
 { #category : #'component contract' }
 MolUtils class >> providedComponentParameters: anObject [
 	"Get provided parameters of an object, return nil if no parameters was found"
-	
-	| componentType |
-	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
-	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
-	^ componentType ifNotNil: [ :e | ^ e providedComponentParameters ] ifNil: [ ^ {} ]
+
+	| componentType set |
+	anObject isTrait ifFalse: [
+		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
+	componentType := (anObject isTrait and: [ anObject isComponentType ])
+		                 ifTrue: [ anObject ]
+		                 ifFalse: [ self componentType: anObject ].
+	^ componentType
+		  ifNotNil: [ :e | set := Set new.
+			  (anObject class respondsTo: #providedComponentParameters)
+				  ifTrue: [ set addAll: anObject class providedComponentParameters ]
+				  ifFalse: [ set addAll: anObject providedComponentParameters ].
+			  set addAll: e providedComponentParameters.
+			  ^ set asArray ]
+		  ifNil: [ ^ {  } ]
 ]
 
 { #category : #'component contract' }
 MolUtils class >> providedComponentServices: anObject [
 	"Get provided services of an object, return nil if no services was found"
+
+	| componentType set |
+	anObject isTrait ifFalse: [
+		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
+	componentType := (anObject isTrait and: [ anObject isComponentType ])
+		                 ifTrue: [ anObject ]
+		                 ifFalse: [ self componentType: anObject ].
 	
-	| componentType |
-	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
-	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
-	^ componentType ifNotNil: [ :e | ^ e providedComponentServices ] ifNil: [ ^ {} ]
+	^ componentType
+		  ifNotNil: [ :e | set := Set new.	
+	(anObject class respondsTo: #providedComponentServices) ifTrue:[
+	set addAll: anObject class providedComponentServices] ifFalse:[set addAll: anObject providedComponentServices].
+	set addAll: e providedComponentServices.
+	^set asArray. ]
+		  ifNil: [ ^ {  } ]
 ]
 
 { #category : #'quick lifecycle' }
@@ -413,19 +454,39 @@ MolUtils class >> toggleLog [
 { #category : #'component contract' }
 MolUtils class >> usedComponentParameters: anObject [
 	"Get used parameters of an object, return nil if no parameters was found"
-	
-	| componentType |
-	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
-	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
-	^ componentType ifNotNil: [ :e | ^ e usedComponentParameters ] ifNil: [ ^ {} ]
+
+	| componentType set |
+	anObject isTrait ifFalse: [
+		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
+	componentType := (anObject isTrait and: [ anObject isComponentType ])
+		                 ifTrue: [ anObject ]
+		                 ifFalse: [ self componentType: anObject ].
+	^ componentType
+		  ifNotNil: [ :e | set := Set new.
+			  (anObject class respondsTo: #usedComponentParameters)
+				  ifTrue: [ set addAll: anObject class usedComponentParameters ]
+				  ifFalse: [ set addAll: anObject usedComponentParameters ].
+			  set addAll: e usedComponentParameters.
+			  ^ set asArray ]
+		  ifNil: [ ^ {  } ]
 ]
 
 { #category : #'component contract' }
 MolUtils class >> usedComponentServices: anObject [
 	"Get used services of an object, return nil if no services was found"
-	
-	| componentType |
-	anObject isTrait ifFalse: [ (self isComponentOrComponentClass: anObject) ifFalse: [ ^ {} ] ]. 
-	componentType := (anObject isTrait and:[ anObject isComponentType]) ifTrue:[ anObject ] ifFalse: [ self componentType: anObject ].
-	^ componentType ifNotNil: [ :e | ^ e usedComponentServices ] ifNil: [ ^ {} ]
+
+	| componentType set |
+	anObject isTrait ifFalse: [
+		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
+	componentType := (anObject isTrait and: [ anObject isComponentType ])
+		                 ifTrue: [ anObject ]
+		                 ifFalse: [ self componentType: anObject ].
+	^ componentType
+		  ifNotNil: [ :e | set := Set new.
+			  (anObject class respondsTo: #usedComponentServices)
+				  ifTrue: [ set addAll: anObject class usedComponentServices ]
+				  ifFalse: [ set addAll: anObject usedComponentServices ].
+			  set addAll: e usedComponentServices.
+			  ^ set asArray  ]
+		  ifNil: [ ^ {  } ]
 ]
