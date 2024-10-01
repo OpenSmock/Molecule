@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #tests }
+MolWorldTest >> testOpenDefineComponentDialog [
+
+	MolWorld openDefineComponentDialog
+]
+
+{ #category : #tests }
 MolWorldTest >> testWorldMenu [
 	| menuElements moleculeMenuEntry libraryMenu |
 	
