@@ -52,7 +52,7 @@ MolComponentAnnouncementTest >> testAnnounceInstanciated [
 
 	| announcement component component2 |
 	announcement := nil.
-	SystemAnnouncer uniqueInstance when: MolComponentInstanciated do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentInstantiated do:[ :a | announcement := a ].
 
 	"test by standard instanciation"
 	MolMyUserComponentImpl deploy.

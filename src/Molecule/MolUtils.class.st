@@ -96,7 +96,7 @@ MolUtils class >> createAllComponents [
 	components keysDo: [ :aClass | homeServices activateComponent: aClass ]
 ]
 
-{ #category : #accessing }
+{ #category : #name }
 MolUtils class >> defaultComponentName [
 	"Used when a component instanciation is not nammed"
 
@@ -129,6 +129,33 @@ MolUtils class >> deployAndInitializeComponents: aComponentClassList [
 	].
 
 	^ components
+]
+
+{ #category : #private }
+MolUtils class >> doRandomComponentNameForType: aComponentType [
+
+	^ (aComponentType printString, (Random new next * 10000000) rounded printString) asSymbol
+	
+]
+
+{ #category : #name }
+MolUtils class >> generateComponentNameForType: aComponentType [
+
+	| instances componentName usedNames found |
+	aComponentType ifNil: [ ^ nil ].
+	componentName := self doRandomComponentNameForType: aComponentType.
+	found := false.
+
+	"check if the name is not used"
+	[ found ] whileFalse: [
+		instances := self allComponentInstancesOfType: aComponentType.
+		usedNames := instances collect: [ :c | c componentName ].
+		componentName := self doRandomComponentNameForType: aComponentType.
+		found := usedNames isEmpty
+			         ifTrue: [ true ]
+			         ifFalse: [ (usedNames includes: componentName) not ] ].
+
+	^ componentName
 ]
 
 { #category : #accessing }

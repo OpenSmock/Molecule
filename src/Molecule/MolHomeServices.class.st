@@ -206,7 +206,7 @@ MolHomeServices >> instantiateComponent: aComponentClass named: aName [
 	connector := MolComponentConnector new.
 	component componentConnector: connector.
 	component componentInitialize.
-	self announcer announce: (MolComponentInstanciated new 
+	self announcer announce: (MolComponentInstantiated new 
 		component: component; componentName: aName; yourself).
 
 	MolUtils log:
