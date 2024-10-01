@@ -40,18 +40,29 @@ MolComponentManagerTest >> testCleanUp [
 
 { #category : #tests }
 MolComponentManagerTest >> testCleanUpAnnouncements [
-| announcement list selection |
-announcement := nil.
-	SystemAnnouncer uniqueInstance when: MolComponentInstantiated do:[ :a | announcement := a ].
-	SystemAnnouncer uniqueInstance when: MolComponentPassivated do:[ :a | announcement := a ].
-	SystemAnnouncer uniqueInstance when: MolComponentInstantiated do:[ :a | announcement := a ].
+
+	| announcement list selection |
+	announcement := nil.
+	SystemAnnouncer uniqueInstance
+		when: MolComponentInstantiated
+		do: [ :a | announcement := a ]
+		for: self.
+	SystemAnnouncer uniqueInstance
+		when: MolComponentPassivated
+		do: [ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance
+		when: MolComponentInstantiated
+		do: [ :a | announcement := a ].
 	list := MolAnnouncement withAllSubclasses.
-	selection := SystemAnnouncer uniqueInstance subscriptions subscriptions select: [  :e | list includes: e announcementClass] .
-	self assert: (selection size > 0).
+	selection := SystemAnnouncer uniqueInstance subscriptions
+		             subscriptions select: [ :e |
+		             list includes: e announcementClass ].
+	self assert: selection size > 0.
 	MolComponentManager cleanupMolAnnouncements.
-	selection := SystemAnnouncer uniqueInstance subscriptions subscriptions select: [  :e | list includes: e announcementClass] .
-	self assert: (selection size = 0).
-	
+	selection := SystemAnnouncer uniqueInstance subscriptions
+		             subscriptions select: [ :e |
+		             list includes: e announcementClass ].
+	self assert: selection size = 0
 ]
 
 { #category : #'tests - general' }
