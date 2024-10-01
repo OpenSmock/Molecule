@@ -7,7 +7,9 @@ Class {
 { #category : #tests }
 MolWorldTest >> testOpenDefineComponentDialog [
 
-	MolWorld openDefineComponentDialog
+	| dialog |
+	dialog := MolWorld openDefineComponentDialog.
+	self assert: dialog notNil.
 ]
 
 { #category : #tests }
