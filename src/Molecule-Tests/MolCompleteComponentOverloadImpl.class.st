@@ -36,7 +36,9 @@ MolCompleteComponentOverloadImpl class >> providedComponentParameters [
 MolCompleteComponentOverloadImpl class >> providedComponentServices [
 
 	<componentContract>
-	^ { MolUsedServices. MolUsedServices2 }
+	^ { 
+		  MolUsedServices.
+		  MolUsedServices2 }
 ]
 
 { #category : #'accessing - parameters' }
@@ -56,6 +58,12 @@ MolCompleteComponentOverloadImpl class >> usedComponentServices [
 { #category : #events }
 MolCompleteComponentOverloadImpl >> event [
 	^ #event
+]
+
+{ #category : #events }
+MolCompleteComponentOverloadImpl >> event2 [
+ 
+	^ #event2
 ]
 
 { #category : #'component accessing' }
@@ -145,7 +153,20 @@ MolCompleteComponentOverloadImpl >> parameter [
 	^ #parameter
 ]
 
+{ #category : #'parameters 2' }
+MolCompleteComponentOverloadImpl >> parameter2 [
+
+	^ #parameter2 
+]
+
 { #category : #service }
 MolCompleteComponentOverloadImpl >> service [
+"test"
 	^ #service
+]
+
+{ #category : #'service 2' }
+MolCompleteComponentOverloadImpl >> service2 [
+"test2"
+	^ #service2
 ]

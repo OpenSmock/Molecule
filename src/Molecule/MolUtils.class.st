@@ -75,12 +75,13 @@ MolUtils class >> consumedComponentEvents: anObject [
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
 	^ componentType
-		  ifNotNil: [ :e | set := Set new.
+		  ifNotNil: [ :e |
+			  set := Set new.
+			set addAll: e consumedComponentEvents.
 			  (anObject class respondsTo: #consumedComponentEvents)
 				  ifTrue: [ set addAll: anObject class consumedComponentEvents ]
 				  ifFalse: [ set addAll: anObject consumedComponentEvents ].
-			  set addAll: e consumedComponentEvents.
-			  ^ set asArray  ]
+			  ^ set asArray ]
 		  ifNil: [ ^ {  } ]
 ]
 
@@ -271,13 +272,14 @@ MolUtils class >> producedComponentEvents: anObject [
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
 	^ componentType
-		  ifNotNil: [ :e | set := Set new.
+		  ifNotNil: [ :e |
+			  set := Set new.
+			set addAll: e producedComponentEvents.
 			  (anObject class respondsTo: #producedComponentEvents)
-				  ifTrue: [
-				  set addAll: anObject class producedComponentEvents ]
+				  ifTrue: [ set addAll: anObject class producedComponentEvents ]
 				  ifFalse: [ set addAll: anObject producedComponentEvents ].
-			  set addAll: e producedComponentEvents.
-			  ^ set asArray  ]
+			  
+			  ^ set asArray ]
 		  ifNil: [ ^ {  } ]
 ]
 
@@ -292,11 +294,14 @@ MolUtils class >> providedComponentParameters: anObject [
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
 	^ componentType
-		  ifNotNil: [ :e | set := Set new.
+		  ifNotNil: [ :e |
+			  set := Set new.
+			set addAll: e providedComponentParameters.
 			  (anObject class respondsTo: #providedComponentParameters)
-				  ifTrue: [ set addAll: anObject class providedComponentParameters ]
+				  ifTrue: [
+				  set addAll: anObject class providedComponentParameters ]
 				  ifFalse: [ set addAll: anObject providedComponentParameters ].
-			  set addAll: e providedComponentParameters.
+			  
 			  ^ set asArray ]
 		  ifNil: [ ^ {  } ]
 ]
@@ -311,13 +316,16 @@ MolUtils class >> providedComponentServices: anObject [
 	componentType := (anObject isTrait and: [ anObject isComponentType ])
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
-	
+
 	^ componentType
-		  ifNotNil: [ :e | set := Set new.	
-	(anObject class respondsTo: #providedComponentServices) ifTrue:[
-	set addAll: anObject class providedComponentServices] ifFalse:[set addAll: anObject providedComponentServices].
-	set addAll: e providedComponentServices.
-	^set asArray. ]
+		  ifNotNil: [ :e |
+			  set := Set new.
+			set addAll: e providedComponentServices.
+			  (anObject class respondsTo: #providedComponentServices)
+				  ifTrue: [ set addAll: anObject class providedComponentServices ]
+				  ifFalse: [ set addAll: anObject providedComponentServices ].
+			  
+			  ^ set asArray ]
 		  ifNil: [ ^ {  } ]
 ]
 
@@ -462,11 +470,12 @@ MolUtils class >> usedComponentParameters: anObject [
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
 	^ componentType
-		  ifNotNil: [ :e | set := Set new.
+		  ifNotNil: [ :e |
+			  set := Set new.
+			  set addAll: e usedComponentParameters.
 			  (anObject class respondsTo: #usedComponentParameters)
 				  ifTrue: [ set addAll: anObject class usedComponentParameters ]
 				  ifFalse: [ set addAll: anObject usedComponentParameters ].
-			  set addAll: e usedComponentParameters.
 			  ^ set asArray ]
 		  ifNil: [ ^ {  } ]
 ]
@@ -475,18 +484,19 @@ MolUtils class >> usedComponentParameters: anObject [
 MolUtils class >> usedComponentServices: anObject [
 	"Get used services of an object, return nil if no services was found"
 
-	| componentType set |
+	| componentType set | 
 	anObject isTrait ifFalse: [
 		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
 	componentType := (anObject isTrait and: [ anObject isComponentType ])
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
 	^ componentType
-		  ifNotNil: [ :e | set := Set new.
+		  ifNotNil: [ :e |
+			  set := Set new.
+			  set addAll: e usedComponentServices.
 			  (anObject class respondsTo: #usedComponentServices)
 				  ifTrue: [ set addAll: anObject class usedComponentServices ]
 				  ifFalse: [ set addAll: anObject usedComponentServices ].
-			  set addAll: e usedComponentServices.
-			  ^ set asArray  ]
+			  ^ set asArray ]
 		  ifNil: [ ^ {  } ]
 ]
