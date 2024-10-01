@@ -28,9 +28,9 @@ MolDefineComponentCmdCommand >> description [
 	^'Define this component: force to generate methods from contract definition'
 ]
 
-{ #category : #accessing }
+{ #category : #execution }
 MolDefineComponentCmdCommand >> execute [
-	| componentsToDefine nbOfDefinedComponents |
+	| componentsToDefine nbOfDefinedComponents text |
 	
 	componentsToDefine := self selectedComponentClasses.
 	componentsToDefine do:[ :c | MolComponentFactory defineComponent: c ].
@@ -38,5 +38,9 @@ MolDefineComponentCmdCommand >> execute [
 	nbOfDefinedComponents := componentsToDefine size.
 	self executionResult: nbOfDefinedComponents.
 	
-	self inform: nbOfDefinedComponents asString, ' component', (nbOfDefinedComponents > 1 ifTrue:['s'] ifFalse:['']) ,' defined'.
+	text := nbOfDefinedComponents = 1 
+		ifTrue:[ 'Define component: ', componentsToDefine first printString ] 
+		ifFalse:[ nbOfDefinedComponents asString, ' component', (nbOfDefinedComponents > 1 ifTrue:['s'] ifFalse:['']) ,' defined' ].
+	
+	MolUtils showInformation: text.
 ]

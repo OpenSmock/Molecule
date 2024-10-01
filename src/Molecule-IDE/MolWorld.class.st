@@ -8,12 +8,37 @@ Class {
 }
 
 { #category : #scripts }
+MolWorld class >> answerComponentToDefine [
+
+	<script>
+	| retValue dialogWindow |
+	dialogWindow := self openDefineComponentDialog ifNil:[ ^ self ].
+	retValue := dialogWindow openModal.
+	^ retValue answer
+]
+
+{ #category : #'private - pharo11 remove' }
+MolWorld class >> classSearchIn: classes [
+
+	self flag:'labordep: #190 this method come from MCSearchFacade. Need to replace it by a Spec2 utils'.
+
+	^ ListDialogWindow new
+		  getList: [ :r | classes select: [ :e | r search: e name ] ];
+		  displayBlock: [ :e | e name ];
+		  title: 'Class search' translated;
+		  yourself
+]
+
+{ #category : #scripts }
 MolWorld class >> defineAComponent [
 
 	<script>
 	| component |
-	component := self openDefineComponentDialog.
-	component ifNotNil: [ :e | MolComponentFactory defineComponent: e ]
+	component := self answerComponentToDefine.
+	component ifNotNil: [ :e | 
+		MolComponentFactory defineComponent: e.
+		MolUtils showInformation: ('Define component: ', component printString).
+	]
 ]
 
 { #category : #actions }
@@ -171,18 +196,17 @@ MolWorld class >> menu60ReportBugOn: aBuilder [
 		action: [WebBrowser openOn: 'https://github.com/OpenSmock/Molecule/issues/new']
 ]
 
-{ #category : #scripts }
+{ #category : #private }
 MolWorld class >> openDefineComponentDialog [
-
-	<script>
-	| searchClass list retValue |
+	| dialogWindow list |
+	
 	list := SystemNavigation default allClasses select: [ :c | 
 		        c isTrait not and: [ 
 			        (c allSuperclasses includes: Object) and: [ c isComponentClass ] ] ].
-	searchClass := MCSearchFacade classSearchIn: list.
-	searchClass title: 'Select the Molecule Component to define'.
-	retValue := searchClass openModal.
-	^ retValue answer
+	
+	dialogWindow := self classSearchIn: list.
+	dialogWindow title: 'Select the Molecule Component to define'.
+	^ dialogWindow 
 ]
 
 { #category : #'menu - tools' }

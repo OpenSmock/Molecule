@@ -5,6 +5,14 @@ Class {
 }
 
 { #category : #tests }
+MolWorldTest >> testOpenDefineComponentDialog [
+
+	| dialog |
+	dialog := MolWorld openDefineComponentDialog.
+	self assert: dialog notNil.
+]
+
+{ #category : #tests }
 MolWorldTest >> testWorldMenu [
 	| menuElements moleculeMenuEntry libraryMenu |
 	
