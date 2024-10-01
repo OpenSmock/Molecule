@@ -4,7 +4,7 @@ A MolComponentInstanciatedTest is a test class for testing the behavior of MolCo
 Class {
 	#name : #MolComponentAnnouncementTest,
 	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Announcements'
+	#category : #'Molecule-Tests-Cases'
 }
 
 { #category : #running }

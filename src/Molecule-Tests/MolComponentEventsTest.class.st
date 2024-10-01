@@ -4,7 +4,7 @@ A MolComponentEventsTest is a test class for testing the behavior of MolComponen
 Class {
 	#name : #MolComponentEventsTest,
 	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases - Component Contract'
+	#category : #'Molecule-Tests-Cases'
 }
 
 { #category : #tests }
