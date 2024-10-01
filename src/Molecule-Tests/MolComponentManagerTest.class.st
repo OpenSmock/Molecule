@@ -42,9 +42,9 @@ MolComponentManagerTest >> testCleanUp [
 MolComponentManagerTest >> testCleanUpAnnouncements [
 | announcement list selection |
 announcement := nil.
-	SystemAnnouncer uniqueInstance when: MolComponentInstanciated do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentInstantiated do:[ :a | announcement := a ].
 	SystemAnnouncer uniqueInstance when: MolComponentPassivated do:[ :a | announcement := a ].
-	SystemAnnouncer uniqueInstance when: MolComponentInstanciated do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentInstantiated do:[ :a | announcement := a ].
 	list := MolAnnouncement withAllSubclasses.
 	selection := SystemAnnouncer uniqueInstance subscriptions subscriptions select: [  :e | list includes: e announcementClass] .
 	self assert: (selection size > 0).
