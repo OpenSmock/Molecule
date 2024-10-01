@@ -622,9 +622,7 @@ MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aCom
 	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
 		ifFalse: [ ^ self ].
 
-	toDefine := Set new.
-	toDefine addAll: aComponent componentType consumedComponentEvents.
-	toDefine addAll: aComponent consumedComponentEvents.
+	toDefine := MolUtils consumedComponentEvents: aComponent.
 
 	self
 		generateComponentAccessorsFor: #consumedEvents
@@ -642,9 +640,7 @@ MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aCom
 	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
 		ifFalse: [ ^ self ].
 
-	toDefine := Set new.
-	toDefine addAll: aComponent componentType producedComponentEvents.
-	toDefine addAll: aComponent producedComponentEvents.
+	toDefine := MolUtils producedComponentEvents: aComponent.
 
 	self
 		generateComponentAccessorsFor: #producedEvents
@@ -663,9 +659,7 @@ MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aCom
 	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
 		ifFalse: [ ^ self ].
 
-	toDefine := Set new.
-	toDefine addAll: aComponent componentType usedComponentParameters.
-	toDefine addAll: aComponent usedComponentParameters.
+	toDefine := MolUtils usedComponentParameters: aComponent.
 
 	self
 		generateComponentAccessorsFor: #usedParameters
@@ -684,9 +678,7 @@ MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aCompo
 	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
 		ifFalse: [ ^ self ].
 
-	toDefine := Set new.
-	toDefine addAll: aComponent componentType usedComponentServices.
-	toDefine addAll: aComponent usedComponentServices.
+	toDefine := MolUtils usedComponentServices: aComponent.
 
 	self
 		generateComponentAccessorsFor: #usedServices

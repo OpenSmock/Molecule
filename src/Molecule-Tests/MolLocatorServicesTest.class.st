@@ -200,3 +200,18 @@ MolLocatorServicesTest >> testSearchServicesProviderForNamed [
 	self assert: servicesProvider isNotFoundServices not.
 	self assert: (servicesProvider isKindOf: MolCompleteComponentImpl)
 ]
+
+{ #category : #tests }
+MolLocatorServicesTest >> testSearchServicesProviderForOverloader [
+
+	| manager servicesProvider |
+	manager := MolComponentManager default.
+	manager deploymentServices deployComponentImplementation:
+		MolCompleteComponentOverloadImpl.
+	manager homeServices instantiateComponent: MolCompleteComponentOverloadImpl.
+	servicesProvider := manager locatorServices
+		                    searchServicesProviderFor: MolUsedServices2.
+
+	self assert: servicesProvider isNotFoundServices not.
+	self assert: (servicesProvider isKindOf: MolCompleteComponentOverloadImpl)
+]
