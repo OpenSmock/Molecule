@@ -382,8 +382,8 @@ MolComponentImplTest >> testHaveOwnComponentType [
 	self assert: MolBasicSubComponentImpl haveOwnComponentType equals: false.
 ]
 
-{ #category : #'tests - contract' }
-MolComponentImplTest >> testIsComponent [
+{ #category : #tests }
+MolComponentImplTest >> testIsComponentClass [
 
 	self deny: MolComponentImpl isComponentClass. "This class is not a component class, but users yes"
 ]

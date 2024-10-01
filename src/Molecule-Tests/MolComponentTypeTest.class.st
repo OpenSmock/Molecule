@@ -4,7 +4,7 @@ A MolComponentTypeTest is a test class for testing the behavior of MolComponentT
 Class {
 	#name : #MolComponentTypeTest,
 	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases - Component Contract'
+	#category : #'Molecule-Tests-Cases'
 }
 
 { #category : #tests }

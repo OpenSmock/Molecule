@@ -414,6 +414,7 @@ MolComponentImpl >> forServices: aServicesTrait useProvider: aComponentName [
 
 { #category : #testing }
 MolComponentImpl >> isComponent [
+
 	^ true
 ]
 

@@ -4,7 +4,7 @@ A MolComponentParametersTest is a test class for testing the behavior of MolComp
 Class {
 	#name : #MolComponentParametersTest,
 	#superclass : #TestCase,
-	#category : #'Molecule-Tests-Cases - Component Contract'
+	#category : #'Molecule-Tests-Cases'
 }
 
 { #category : #tests }
