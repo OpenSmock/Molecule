@@ -179,6 +179,12 @@ MolComponentImpl classSide >> start: aComponentName [
 ]
 
 { #category : #'start & stop' }
+MolComponentImpl classSide >> startWithGeneratedName [
+
+	^ self start: (MolUtils generateComponentNameForType: self componentType)
+]
+
+{ #category : #'start & stop' }
 MolComponentImpl classSide >> stop [
 
 	^ MolUtils stopComponent: self
@@ -448,4 +454,11 @@ MolComponentImpl >> servicesProviders [
 	^ self componentConnector
 		ifNotNil: [ :e | e servicesProviders ]
 		ifNil: [ MolComponentConnector defaultServicesProviders ]
+]
+
+{ #category : #stop }
+MolComponentImpl >> stop [
+	"Stop me, whatever my name is"
+
+	self class stop: self componentName
 ]

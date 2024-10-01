@@ -659,6 +659,21 @@ MolComponentImplTest >> testStart2 [
 ]
 
 { #category : #'tests - component creation' }
+MolComponentImplTest >> testStartWithGeneratedName [
+
+	| instance instance2 |
+	instance := MolCompleteComponentImpl startWithGeneratedName.
+	self assert: instance componentName notNil.
+	self assert: instance componentName isSymbol.
+	
+	instance2 := MolCompleteComponentImpl startWithGeneratedName.
+	self assert: instance2 componentName notNil.
+	self assert: instance2 componentName isSymbol.
+	self deny: instance componentName equals: instance2 componentName.
+	
+]
+
+{ #category : #'tests - component creation' }
 MolComponentImplTest >> testStartWithName [
 
 	MolCompleteComponentImpl deploy.
@@ -706,6 +721,7 @@ MolComponentImplTest >> testStartWithWrongNames [
 
 { #category : #'tests - component creation' }
 MolComponentImplTest >> testStop [
+
 	MolCompleteComponentImpl start.
 	MolCompleteComponentImpl stop.
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) equals: nil.
@@ -714,4 +730,17 @@ MolComponentImplTest >> testStop [
 	MolCompleteComponentImpl stop: #compA.
 	self assert: (MolUtils instanceOf: MolCompleteComponentImpl named: #compA) equals: nil.
 	
+]
+
+{ #category : #'tests - component creation' }
+MolComponentImplTest >> testStopInstance [
+
+	| instance |
+	instance := MolCompleteComponentImpl start.
+	instance stop.
+	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) equals: nil.
+	
+	instance := MolCompleteComponentImpl start: #test.
+	instance stop.
+	self assert: (MolUtils instanceOf: MolCompleteComponentImpl) equals: nil.
 ]
