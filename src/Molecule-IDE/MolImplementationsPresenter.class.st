@@ -47,6 +47,15 @@ MolImplementationsPresenter >> initializePresenters [
 ]
 
 { #category : #initialization }
+MolImplementationsPresenter >> listImplementations: aComponentType [
+	"necessary to use a Collection or one of its subclasses (Array in this case) to retrieve implementations of the selected Type Trait"
+
+	(aComponentType = '' or: aComponentType = OrderedCollection new)
+		ifFalse: [
+			^ (MolUtils allComponentImplementationClassesOfType: aComponentType) asArray ]
+]
+
+{ #category : #initialization }
 MolImplementationsPresenter >> title [
 
 	^ selectedType asString , ' Implementations'

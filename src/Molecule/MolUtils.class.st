@@ -31,20 +31,40 @@ MolUtils class >> activateComponents: aComponentClassList [
 ]
 
 { #category : #accessing }
+MolUtils class >> allComponentImplementationClassesOfType: aComponentType [
+	"Return a list of component Class which are implemented a component Type"
+	
+	| list |
+	list := Set new.	
+	aComponentType users do:[ :class |
+		"class should be another trait or a component impl class"
+		class isTrait 
+			ifFalse:[ 
+				list add: class. 
+				list addAll: (class allSubclasses) ] 
+			ifTrue:[ list addAll: (self allComponentImplementationClassesOfType: class) ].
+	].
+
+	^ list asOrderedCollection
+]
+
+{ #category : #accessing }
 MolUtils class >> allComponentInstancesOfType: aComponentType [
 
-	| oc homeServices |
+	| oc homeServices classes |
 	(aComponentType notNil and:[aComponentType isTrait and:[aComponentType isComponentType]]) ifFalse:[^OrderedCollection new].
 	
 	oc := OrderedCollection new.
 	homeServices := MolComponentManager default homeServices.
-	aComponentType users do:[ :class | 
-		(homeServices isDeployedComponent: class) ifTrue:[
-			oc addAll: (homeServices deployedComponents at: class) values.
+	
+	classes := self allComponentImplementationClassesOfType: aComponentType.
+	classes do:[ :c |
+		(homeServices isDeployedComponent: c) ifTrue:[				
+			oc addAll: (homeServices deployedComponents at: c) values.
 		]
 	].
 	
-	^oc
+	^ oc
 ]
 
 { #category : #private }
