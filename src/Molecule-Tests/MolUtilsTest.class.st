@@ -56,6 +56,12 @@ MolUtilsTest >> testActivateComponents [
 ]
 
 { #category : #tests }
+MolUtilsTest >> testAllComponentImplementationClassesOfType [
+
+	self assert: (MolUtils allComponentImplementationClassesOfType: MolCompleteComponent) size equals: 5.
+]
+
+{ #category : #tests }
 MolUtilsTest >> testAllComponentInstancesOfType [
 
 	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) isEmpty.
@@ -67,6 +73,24 @@ MolUtilsTest >> testAllComponentInstancesOfType [
 	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) size = 3.
 	
 	MolUtils startComponent: MolCompleteComponentImpl named: #compD.
+	
+	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) size = 4.
+	
+	
+]
+
+{ #category : #tests }
+MolUtilsTest >> testAllComponentInstancesOfType2 [
+
+	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) isEmpty.
+
+	MolUtils startComponent: MolCompleteComponentChild2Impl named: #compA.
+	MolUtils startComponent: MolCompleteComponentChild2Impl named: #compB.
+	MolUtils startComponent: MolCompleteComponentChild2Impl named: #compC.
+	
+	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) size = 3.
+	
+	MolUtils startComponent: MolCompleteComponentChild2Impl named: #compD.
 	
 	self assert: (MolUtils allComponentInstancesOfType: MolCompleteComponent) size = 4.
 	
