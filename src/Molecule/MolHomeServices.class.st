@@ -148,6 +148,19 @@ MolHomeServices >> initialize [
 	waitingForActivation := Set new
 ]
 
+{ #category : #'as yet unclassified' }
+MolHomeServices >> inspectionDeployedComponentsGraph [
+
+	<inspectorPresentationOrder: 0 title: 'Deployed Components Graph'>
+	| canvas components |
+	components := self deployedComponents flatCollect: #values.
+   canvas := MolComponentToRoassal canvasFromMultipleComponents: components.
+
+	^ SpRoassalInspectorPresenter new
+		  canvas: canvas;
+		  yourself
+]
+
 { #category : #accessing }
 MolHomeServices >> instanceOf: aClass named: aName [
 	^(self deployedComponents at: aClass ifAbsent: [^nil]) at: aName ifAbsent: [^nil]

@@ -202,6 +202,12 @@ MolComponentImpl classSide >> undeploy [
 	^ MolComponentManager default deploymentServices undeployComponentImplementation: self
 ]
 
+{ #category : #converting }
+MolComponentImpl >> asRSMoleculeShape [
+
+	^ MolComponentToRoassal graphFromSingleComponent: self
+]
+
 { #category : #'life cycle' }
 MolComponentImpl >> componentActivate [
 	"here write the code corresponding to component activation phase"
