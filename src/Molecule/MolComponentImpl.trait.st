@@ -424,6 +424,16 @@ MolComponentImpl >> forServices: aServicesTrait useProvider: aComponentName [
 		ifFalse: [ MolUtils log: self printString, '>forServices:useProvider: try to link a non services trait for services ' ]
 ]
 
+{ #category : #'as yet unclassified' }
+MolComponentImpl >> inspectionComponent [
+
+	<inspectorPresentationOrder: 830 title: 'Component'>
+
+	^ SpRoassalInspectorPresenter new
+		  canvas: (MolComponentToRoassal canvasFromSingleComponent: self);
+		  yourself
+]
+
 { #category : #testing }
 MolComponentImpl >> isComponent [
 
