@@ -21,12 +21,13 @@ MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfCompon
 
 	dictionaryEvents := Dictionary new.
 	aCollectionOfComponents collect: [ :comp |
-		comp servicesProviders keys , comp parametersProviders keys
-		, comp eventsSubscribers keys do: [ :event |
+		comp servicesProviders associations
+		, comp parametersProviders associations
+		, comp eventsSubscribers associations do: [ :eventAndName |
 			dictionaryEvents
-				at: event
-				ifPresent: [ :l | l add: comp ]
-				ifAbsentPut: [ OrderedCollection with: comp ] ] ].
+				at: eventAndName key
+				ifPresent: [ :l | l add: eventAndName value -> comp ]
+				ifAbsentPut: [ OrderedCollection with: eventAndName value -> comp ] ] ].
 
 	lineBuilder := RSLineBuilder arrowedLine
 		               canvas: canvas;
@@ -37,16 +38,22 @@ MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfCompon
 			dictionaryEvents
 				at: event
 				ifPresent: [ :allComponentsForEvent |
-					lineBuilder useAssociations:
-						(allComponentsForEvent collect: [ :compTarget |
-							 compSource -> compTarget ]) ]
+					| matchingComponents |
+					matchingComponents := allComponentsForEvent select: [ :compTarget |
+						                      compSource componentName = compTarget key ].
+					matchingComponents
+						ifNotEmpty: [ :val |
+							lineBuilder useAssociations:
+								(val collect: [ :each | compSource -> each value ]) ]
+						ifEmpty: [
+							self flag: #TODO "No components habs the correct componentName for this contract ..." ] ]
 				ifAbsent: [
-					self flag: #TODO "No components has been found for this contract ..." ] ] ].
+					self flag: #TODO "No components has the event for this contract ..." ] ] ].
 
 	RSForceBasedLayout new
 		doNotUseProgressBar;
-		length: 400;
-		charge: -2000;
+		length: 3000;
+		charge: 1;
 		on: canvas nodes.
 
 	canvas @ RSCanvasController.
