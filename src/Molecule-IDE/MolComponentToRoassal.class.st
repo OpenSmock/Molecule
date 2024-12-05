@@ -89,7 +89,7 @@ MolComponentToRoassal class >> associationsAllUsedServicesAndTargetsFor: aMolCom
 { #category : #'instance creation' }
 MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfComponents [
 
-	| canvas componentShapes allEventShapes allContracts allContractSources allContractTargets lineBuilder |
+	| canvas componentShapes allEventShapes allContracts allContractSources allContractTargets lineBuilder ghostLineBuilder |
 	canvas := RSCanvas new.
 	componentShapes := aCollectionOfComponents collect: [ :comp |
 		                   comp asRSMoleculeShape ].
@@ -114,6 +114,11 @@ MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfCompon
 		               canvas: canvas;
 		               shapes: allEventShapes;
 		               withBorderAttachPoint.
+	ghostLineBuilder := RSLineBuilder line
+		                    canvas: canvas;
+		                    shapes: componentShapes;
+		                    color: Color transparent;
+		                    withBorderAttachPoint.
 
 	allContractSources do: [ :source |
 		| allAssociatedTargets |
@@ -121,13 +126,33 @@ MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfCompon
 			                        target eventClass = source eventClass and: [
 				                        target name = source name ] ].
 		allAssociatedTargets do: [ :target |
-			lineBuilder useAssociation: source -> target ] ].
+			lineBuilder useAssociation: source -> target.
+			ghostLineBuilder useAssociation: source component -> target component ] ].
 
-	RSForceBasedLayout new
+	"RSForceBasedLayout new
 		doNotUseProgressBar;
 		length: 3000;
 		charge: -1000;
+		on: canvas nodes."
+
+	"RSGridLayout new
+		lineItemsCount: 10;
+		gapSize: 1;
+		on: canvas nodes."
+	"RSHorizontalTreeLayout new
+	horizontalGap: 500;
+	on: canvas nodes;
+	yourself."
+	
+	RSConditionalLayout new
+		ifNotConnectedThen: RSVerticalLineLayout new;
+		else: (RSClusteringLayout new
+				 clustersLayout: RSGridLayout new;
+				 forEachLayout: (RSHorizontalTreeLayout new horizontalGap: 500; yourself));
 		on: canvas nodes.
+
+	"RSHorizontalTreeLayout new on: canvas nodes."
+	"RSClusterRadialTreeLayout new on: canvas nodes."
 
 	canvas @ RSCanvasController.
 	canvas zoomToFit.
