@@ -213,15 +213,15 @@ MolComponentToRoassal class >> connectorsInOn: aMolComponent [
 	services := self
 		            connectorsFromMolRSContracts:
 		            (self associationsAllUsedServicesAndTargetsFor:
-			             aMolComponent).
+			             aMolComponent) sorted.
 	events := self
 		          connectorsFromMolRSContracts:
 		          (self associationsAllConsumedEventsAndTargetsFor:
-			           aMolComponent).
+			           aMolComponent) sorted.
 	parameters := self
 		              connectorsFromMolRSContracts:
 		              (self associationsAllUsedParametersAndTargetsFor:
-			               aMolComponent).
+			               aMolComponent) sorted.
 
 	connectors := RSComposite new
 		              shapes: services , events , parameters;
@@ -286,13 +286,13 @@ MolComponentToRoassal class >> connectorsOutOn: aMolComponent [
 
 	services := self connectorsFromMolRSContracts:
 		            (self associationsAllProvidedServicesAndTargetsFor:
-			             aMolComponent).
+			             aMolComponent) sorted.
 	events := self connectorsFromMolRSContracts:
 		          (self associationsAllProducedEventsAndTargetsFor:
-			           aMolComponent).
+			           aMolComponent) sorted.
 	parameters := self connectorsFromMolRSContracts:
 		              (self associationsAllProvidedParametersAndTargetsFor:
-			               aMolComponent).
+			               aMolComponent) sorted.
 
 	connectors := RSComposite new
 		              shapes: services , events , parameters;
