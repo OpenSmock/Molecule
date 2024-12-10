@@ -10,6 +10,12 @@ Class {
 	#category : #'Molecule-IDE-Inspectors'
 }
 
+{ #category : #comparing }
+MolRSContractModel >> <= aMolRSContractModel [
+
+	^ self eventClass name < aMolRSContractModel eventClass name
+]
+
 { #category : #accessing }
 MolRSContractModel >> color [
 
