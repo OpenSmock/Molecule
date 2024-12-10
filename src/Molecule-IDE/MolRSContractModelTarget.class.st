@@ -1,3 +1,6 @@
+"
+I represent a Molecule contract on a component that consume this contract.
+"
 Class {
 	#name : #MolRSContractModelTarget,
 	#superclass : #MolRSContractModel,

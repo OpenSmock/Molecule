@@ -1,8 +1,8 @@
 "
 I am a utility class to transform a Molecule component into a Roassal graph.
 
-Use #graphFromSingleComponent: aMolComponent to have a RSShape of the Molecule component.
-Use #canvasFromMultipleComponents: aCollection to have a RSCanvas of multiple Molecule components.
+Use `#canvasFromSingleComponent: aMolComponent` to have a `RSCanvas` of a single `MolComponentImpl`.
+Use `#canvasFromMultipleComponents: aCollection` to have a `RSCanvas` of multiple `MolComponentImpl`.
 
 "
 Class {
@@ -11,7 +11,7 @@ Class {
 	#category : #'Molecule-IDE-Inspectors'
 }
 
-{ #category : #'instance creation' }
+{ #category : #model }
 MolComponentToRoassal class >> associationsAllConsumedEventsAndTargetsFor: aMolComponent [
 
 	^ aMolComponent componentConnector eventsSubscribers associations
@@ -24,7 +24,7 @@ MolComponentToRoassal class >> associationsAllConsumedEventsAndTargetsFor: aMolC
 				  yourself ]
 ]
 
-{ #category : #'instance creation' }
+{ #category : #model }
 MolComponentToRoassal class >> associationsAllProducedEventsAndTargetsFor: aMolComponent [
 
 	^ aMolComponent class allProducedEvents collect: [ :event |
@@ -38,7 +38,7 @@ MolComponentToRoassal class >> associationsAllProducedEventsAndTargetsFor: aMolC
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : #model }
 MolComponentToRoassal class >> associationsAllProvidedParametersAndTargetsFor: aMolComponent [
 
 	^ aMolComponent class allProvidedParameters collect: [ :event |
@@ -50,7 +50,7 @@ MolComponentToRoassal class >> associationsAllProvidedParametersAndTargetsFor: a
 				  yourself ].
 ]
 
-{ #category : #'instance creation' }
+{ #category : #model }
 MolComponentToRoassal class >> associationsAllProvidedServicesAndTargetsFor: aMolComponent [
 
 	^ aMolComponent class allProvidedServices collect: [ :event |
@@ -62,7 +62,7 @@ MolComponentToRoassal class >> associationsAllProvidedServicesAndTargetsFor: aMo
 				  yourself ].
 ]
 
-{ #category : #'instance creation' }
+{ #category : #model }
 MolComponentToRoassal class >> associationsAllUsedParametersAndTargetsFor: aMolComponent [
 
 	^ aMolComponent componentConnector parametersProviders associations collect: [ :asso |
@@ -74,7 +74,7 @@ MolComponentToRoassal class >> associationsAllUsedParametersAndTargetsFor: aMolC
 				  yourself ]
 ]
 
-{ #category : #'instance creation' }
+{ #category : #model }
 MolComponentToRoassal class >> associationsAllUsedServicesAndTargetsFor: aMolComponent [
 
 	^ aMolComponent componentConnector servicesProviders associations collect: [ :asso |
@@ -95,6 +95,8 @@ MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfCompon
 		                   comp asRSMoleculeShape ].
 	canvas addAll: componentShapes.
 
+	"We need tor recover all the contract shape in the roassal elements tree.
+	The code is a bit spaghetti ..."
 	allEventShapes := componentShapes flatCollect: [ :a |
 		                  | tempCollection |
 		                  tempCollection := a children select: [ :b |
@@ -104,12 +106,10 @@ MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfCompon
 			                    each model isComponent ]) flatCollect:
 			                   #children) select: [ :c | c model isNotNil ] ].
 
-	allContracts := allEventShapes collect: #model.
-	allContractSources := allContracts select: [ :each |
-		                      each isContractSource ].
-	allContractTargets := allContracts reject: [ :each |
-		                      each isContractSource ].
-
+	"We create the link between the element.
+	We need to types of links:
+	- the displayed arrow that will be created by the `lineBuilder`.
+	- an invisible link that will be used for the layout that will be created by the `ghostLineBuilder`."
 	lineBuilder := RSLineBuilder arrowedLine
 		               canvas: canvas;
 		               shapes: allEventShapes;
@@ -120,6 +120,11 @@ MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfCompon
 		                    color: Color transparent;
 		                    withBorderAttachPoint.
 
+	allContracts := allEventShapes collect: #model.
+	allContractSources := allContracts select: [ :each |
+		                      each isContractSource ].
+	allContractTargets := allContracts reject: [ :each |
+		                      each isContractSource ].
 	allContractSources do: [ :source |
 		| allAssociatedTargets |
 		allAssociatedTargets := allContractTargets select: [ :target |
@@ -127,32 +132,21 @@ MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfCompon
 				                        target name = source name ] ].
 		allAssociatedTargets do: [ :target |
 			lineBuilder useAssociation: source -> target.
-			ghostLineBuilder useAssociation: source component -> target component ] ].
+			ghostLineBuilder useAssociation:
+				source component -> target component ] ].
 
-	"RSForceBasedLayout new
-		doNotUseProgressBar;
-		length: 3000;
-		charge: -1000;
-		on: canvas nodes."
-
-	"RSGridLayout new
-		lineItemsCount: 10;
-		gapSize: 1;
-		on: canvas nodes."
-	"RSHorizontalTreeLayout new
-	horizontalGap: 500;
-	on: canvas nodes;
-	yourself."
-	
+	"We create a layout for the components:
+	- if they are not connected: they will be aligned on the top-left corner.
+	- if they are connected: they will be displayed as a RSHorizontalTreeLayout, all trees will be ina a RSGridLayout."
 	RSConditionalLayout new
-		ifNotConnectedThen: RSVerticalLineLayout new;
+		ifNotConnectedThen: (RSVerticalLineLayout new gapSize: 20; yourself);
 		else: (RSClusteringLayout new
-				 clustersLayout: RSGridLayout new;
-				 forEachLayout: (RSHorizontalTreeLayout new horizontalGap: 500; yourself));
+				 clustersLayout: (RSGridLayout new gapSize: 20; yourself);
+				 forEachLayout: (RSHorizontalTreeLayout new
+						  horizontalGap: 500;
+						  verticalGap: 20;
+						  yourself));
 		on: canvas nodes.
-
-	"RSHorizontalTreeLayout new on: canvas nodes."
-	"RSClusterRadialTreeLayout new on: canvas nodes."
 
 	canvas @ RSCanvasController.
 	canvas zoomToFit.
@@ -171,7 +165,50 @@ MolComponentToRoassal class >> canvasFromSingleComponent: aMolComponent [
 ]
 
 { #category : #'instance creation' }
-MolComponentToRoassal class >> connectorsFromMolRSContracts: aCollectionOfMolRSContractModel [
+MolComponentToRoassal class >> contractFromMolComponentImpl: aMolComponent [
+
+	| contractsAll contractsIn contractsOut model |
+	contractsIn := self contractsInFor: aMolComponent.
+	contractsOut := self contractsOutFor: aMolComponent.
+
+	model := contractsIn model asOrderedCollection
+	         , contractsOut model asOrderedCollection.
+
+	(contractsIn children isEmpty and: [
+		 contractsOut children isNotEmpty ]) ifTrue: [
+		contractsIn
+			add: (RSBox new
+					 extent: contractsOut extent;
+					 color: Color transparent;
+					 model: aMolComponent;
+					 yourself);
+			adjustToChildren ].
+	(contractsOut children isEmpty and: [
+		 contractsIn children isNotEmpty ]) ifTrue: [
+		contractsOut
+			add: (RSBox new
+					 extent: contractsIn extent;
+					 color: Color transparent;
+					 model: aMolComponent;
+					 yourself);
+			adjustToChildren ].
+
+	contractsAll := RSComposite new
+		                shapes: {
+				                contractsIn.
+				                contractsOut };
+		                yourself.
+	contractsAll model: model.
+
+	RSHorizontalLineLayout new
+		alignTop;
+		on: contractsAll shapes.
+	contractsAll adjustToChildren.
+	^ contractsAll
+]
+
+{ #category : #'instance creation' }
+MolComponentToRoassal class >> contractsFromMolRSContracts: aCollectionOfMolRSContractModel [
 
 	^ aCollectionOfMolRSContractModel collect: [ :rsContractModel |
 		  | linkBox eventBox eventName |
@@ -207,24 +244,21 @@ MolComponentToRoassal class >> connectorsFromMolRSContracts: aCollectionOfMolRSC
 ]
 
 { #category : #'instance creation' }
-MolComponentToRoassal class >> connectorsInOn: aMolComponent [
+MolComponentToRoassal class >> contractsInFor: aMolComponent [
 
 	| connectors services events parameters |
-	services := self
-		            connectorsFromMolRSContracts:
+	services := self contractsFromMolRSContracts:
 		            (self associationsAllUsedServicesAndTargetsFor:
 			             aMolComponent) sorted.
-	events := self
-		          connectorsFromMolRSContracts:
+	events := self contractsFromMolRSContracts:
 		          (self associationsAllConsumedEventsAndTargetsFor:
 			           aMolComponent) sorted.
-	parameters := self
-		              connectorsFromMolRSContracts:
+	parameters := self contractsFromMolRSContracts:
 		              (self associationsAllUsedParametersAndTargetsFor:
 			               aMolComponent) sorted.
 
 	connectors := RSComposite new
-		              shapes: services , events , parameters;
+		              shapes: events , services , parameters;
 		              yourself.
 	connectors model: (connectors shapes collect: #model).
 
@@ -237,65 +271,21 @@ MolComponentToRoassal class >> connectorsInOn: aMolComponent [
 ]
 
 { #category : #'instance creation' }
-MolComponentToRoassal class >> connectorsOn: aMolComponent [
-
-	| connectors connectorsIn connectorsOut model |
-	connectorsIn := self connectorsInOn: aMolComponent.
-	connectorsOut := self connectorsOutOn: aMolComponent.
-
-	model := connectorsIn model asOrderedCollection
-	         , connectorsOut model asOrderedCollection.
-
-	(connectorsIn children isEmpty and: [
-		 connectorsOut children isNotEmpty ]) ifTrue: [
-		connectorsIn
-			add: (RSBox new
-					 extent: connectorsOut extent;
-					 color: Color transparent;
-					 model: aMolComponent;
-					 yourself);
-			adjustToChildren ].
-	(connectorsOut children isEmpty and: [
-		 connectorsIn children isNotEmpty ]) ifTrue: [
-		connectorsOut
-			add: (RSBox new
-					 extent: connectorsIn extent;
-					 color: Color transparent;
-					 model: aMolComponent;
-					 yourself);
-			adjustToChildren ].
-
-	connectors := RSComposite new
-		              shapes: {
-				              connectorsIn.
-				              connectorsOut };
-		              yourself.
-	connectors model: model.
-
-	RSHorizontalLineLayout new
-		alignTop;
-		on: connectors shapes.
-	connectors adjustToChildren.
-	^ connectors
-]
-
-{ #category : #'instance creation' }
-MolComponentToRoassal class >> connectorsOutOn: aMolComponent [
+MolComponentToRoassal class >> contractsOutFor: aMolComponent [
 
 	| connectors services events parameters |
-
-	services := self connectorsFromMolRSContracts:
+	services := self contractsFromMolRSContracts:
 		            (self associationsAllProvidedServicesAndTargetsFor:
 			             aMolComponent) sorted.
-	events := self connectorsFromMolRSContracts:
+	events := self contractsFromMolRSContracts:
 		          (self associationsAllProducedEventsAndTargetsFor:
 			           aMolComponent) sorted.
-	parameters := self connectorsFromMolRSContracts:
+	parameters := self contractsFromMolRSContracts:
 		              (self associationsAllProvidedParametersAndTargetsFor:
 			               aMolComponent) sorted.
 
 	connectors := RSComposite new
-		              shapes: services , events , parameters;
+		              shapes: events , services , parameters;
 		              yourself.
 	connectors model: (connectors shapes collect: #model).
 
@@ -311,54 +301,6 @@ MolComponentToRoassal class >> connectorsOutOn: aMolComponent [
 MolComponentToRoassal class >> eventColor [
 
 	^ Color blue muchLighter
-]
-
-{ #category : #'instance creation' }
-MolComponentToRoassal class >> graphFromSingleComponent: aMolComponent [
-
-	| classNameLabel componentNameLabel connectors composite |
-	classNameLabel := RSLabel new
-		                  text: aMolComponent className;
-		                  color: Color black lighter lighter;
-		                  italic;
-		                  fontSize: 14;
-		                  yourself.
-	componentNameLabel := RSLabel new
-		                      text: aMolComponent componentName;
-		                      color: Color black;
-		                      fontSize: 18;
-		                      yourself.
-
-	connectors := self connectorsOn: aMolComponent.
-
-	RSVerticalLineLayout new
-		alignCenter;
-		on: {
-				componentNameLabel.
-				classNameLabel.
-				connectors }.
-
-	composite := RSComposite new
-		             draggable;
-		             popupText: [ :comp | comp componentName ];
-		             model: aMolComponent;
-		             withBorder;
-		             color: Color gray muchLighter;
-		             shapes: {
-				             componentNameLabel.
-				             classNameLabel.
-				             connectors };
-		             yourself.
-	composite adjustToChildren.
-	composite extent: composite extent + (0 @ 20).
-	composite @ (RSMenuActivable new menuDo: [ :aMenuMorph :anRSBox |
-		 aMenuMorph
-			 add: 'Inspect'
-			 target: aMolComponent
-			 selector: #inspect
-			 argument: #(  ) ]).
-
-	^ composite
 ]
 
 { #category : #color }
