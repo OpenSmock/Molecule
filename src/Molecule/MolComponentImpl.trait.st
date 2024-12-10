@@ -202,12 +202,6 @@ MolComponentImpl classSide >> undeploy [
 	^ MolComponentManager default deploymentServices undeployComponentImplementation: self
 ]
 
-{ #category : #converting }
-MolComponentImpl >> asRSMoleculeShape [
-
-	^ MolComponentToRoassal graphFromSingleComponent: self
-]
-
 { #category : #'life cycle' }
 MolComponentImpl >> componentActivate [
 	"here write the code corresponding to component activation phase"
@@ -422,16 +416,6 @@ MolComponentImpl >> forServices: aServicesTrait useProvider: aComponentName [
 	(aServicesTrait traits includes: MolComponentServices)
 		ifTrue: [self servicesProviders at: aServicesTrait put: aComponentName]
 		ifFalse: [ MolUtils log: self printString, '>forServices:useProvider: try to link a non services trait for services ' ]
-]
-
-{ #category : #'as yet unclassified' }
-MolComponentImpl >> inspectionComponent [
-
-	<inspectorPresentationOrder: 830 title: 'Component'>
-
-	^ SpRoassalInspectorPresenter new
-		  canvas: (MolComponentToRoassal canvasFromSingleComponent: self);
-		  yourself
 ]
 
 { #category : #testing }
