@@ -21,7 +21,7 @@ MolComponentToRoassal class >> associationsAllConsumedEventsAndTargetsFor: aMolC
 				  name: asso value;
 				  component: aMolComponent;
 				  color: self eventColor;
-				  rsLogo: self eventLogo;
+				  rsLogo: self eventLogoIn;
 				  yourself ]
 ]
 
@@ -34,7 +34,7 @@ MolComponentToRoassal class >> associationsAllProducedEventsAndTargetsFor: aMolC
 			  name: aMolComponent componentName;
 			  component: aMolComponent;
 			  color: self eventColor;
-			  rsLogo: self eventLogo;
+			  rsLogo: self eventLogoOut;
 			  yourself ]
 ]
 
@@ -47,7 +47,7 @@ MolComponentToRoassal class >> associationsAllProvidedParametersAndTargetsFor: a
 			  name: aMolComponent componentName;
 			  component: aMolComponent;
 			  color: self parameterColor;
-			  rsLogo: self parameterLogo;
+			  rsLogo: self parameterLogoOut;
 			  yourself ]
 ]
 
@@ -60,7 +60,7 @@ MolComponentToRoassal class >> associationsAllProvidedServicesAndTargetsFor: aMo
 			  name: aMolComponent componentName;
 			  component: aMolComponent;
 			  color: self serviceColor;
-			rsLogo: self serviceLogo;
+			  rsLogo: self serviceLogoOut;
 			  yourself ]
 ]
 
@@ -74,7 +74,7 @@ MolComponentToRoassal class >> associationsAllUsedParametersAndTargetsFor: aMolC
 				  name: asso value;
 				  component: aMolComponent;
 				  color: self parameterColor;
-				rsLogo: self parameterLogo;
+				  rsLogo: self parameterLogoIn;
 				  yourself ]
 ]
 
@@ -88,7 +88,7 @@ MolComponentToRoassal class >> associationsAllUsedServicesAndTargetsFor: aMolCom
 				  name: asso value;
 				  component: aMolComponent;
 				  color: self serviceColor;
-				rsLogo: self serviceLogo;
+				  rsLogo: self serviceLogoIn;
 				  yourself ]
 ]
 
@@ -327,22 +327,42 @@ MolComponentToRoassal class >> eventColor [
 
 { #category : #'as yet unclassified' }
 MolComponentToRoassal class >> eventLogo [
-	
+
 	| rsLogoIn rsLogoOut |
 	rsLogoIn := RSPieSlice new
+		            withBorder;
 		            externalRadius: 12;
 		            innerRadius: 9;
-		            alphaAngle: 90;
-		            betaAngle: -90;
+		            alphaAngle: -90;
+		            betaAngle: 90;
 		            color: self eventColor;
 		            yourself.
 	rsLogoOut := RSCircle new
+		             withBorder;
 		             color: self eventColor;
 		             size: 10 asPoint;
 		             yourself.
 	^ RSComposite new shapes: {
 			  rsLogoIn.
 			  rsLogoOut }
+]
+
+{ #category : #'as yet unclassified' }
+MolComponentToRoassal class >> eventLogoIn [
+
+	| rsLogo |
+	rsLogo := self eventLogo.
+	rsLogo nodes second color: Color transparent; border: nil.
+	^ rsLogo 
+]
+
+{ #category : #'as yet unclassified' }
+MolComponentToRoassal class >> eventLogoOut [
+
+	| rsLogo |
+	rsLogo := self eventLogo.
+	rsLogo nodes first color: Color transparent; border: nil.
+	^ rsLogo 
 ]
 
 { #category : #color }
@@ -356,16 +376,48 @@ MolComponentToRoassal class >> parameterLogo [
 
 	| rsLogoIn rsLogoOut |
 	rsLogoIn := RSPolygon new
-		            points: { 0@12 . 12@12 . 12 @ -12 . 0 @ -12 . 0 @ -9 . 9 @ -9 . 9@9 . 0 @ 9 };
+	withBorder;
+		            points: {
+				            (0 @ 12).
+				            (12 @ 12).
+				            (12 @ -12).
+				            (0 @ -12).
+				            (0 @ -9).
+				            (9 @ -9).
+				            (9 @ 9).
+				            (0 @ 9) };
 		            color: self parameterColor;
 		            yourself.
 	rsLogoOut := RSBox new
+	withBorder;
 		             color: self parameterColor;
 		             size: 10 asPoint;
 		             yourself.
 	^ RSComposite new shapes: {
 			  rsLogoIn.
 			  rsLogoOut }
+]
+
+{ #category : #'as yet unclassified' }
+MolComponentToRoassal class >> parameterLogoIn [
+
+	| rsLogo |
+	rsLogo := self parameterLogo.
+	rsLogo nodes second
+		color: Color transparent;
+		border: nil.
+	^ rsLogo
+]
+
+{ #category : #'as yet unclassified' }
+MolComponentToRoassal class >> parameterLogoOut [
+
+	| rsLogo |
+	rsLogo := self parameterLogo.
+	rsLogo nodes first
+		color: Color transparent;
+		border: nil.
+	^ rsLogo
 ]
 
 { #category : #color }
@@ -379,6 +431,7 @@ MolComponentToRoassal class >> serviceLogo [
 
 	| rsLogoIn rsLogoOut |
 	rsLogoIn := RSPolygon new
+	withBorder;
 		            points: {
 				            (0 @ 12).
 				            (12 @ 0).
@@ -389,6 +442,7 @@ MolComponentToRoassal class >> serviceLogo [
 		            color: self serviceColor;
 		            yourself.
 	rsLogoOut := RSPolygon new
+	withBorder;
 		             points: {
 				             (0 @ 5).
 				             (5 @ 0).
@@ -399,6 +453,28 @@ MolComponentToRoassal class >> serviceLogo [
 	^ RSComposite new shapes: {
 			  rsLogoIn.
 			  rsLogoOut }
+]
+
+{ #category : #'as yet unclassified' }
+MolComponentToRoassal class >> serviceLogoIn [
+
+	| rsLogo |
+	rsLogo := self serviceLogo.
+	rsLogo nodes second
+		color: Color transparent;
+		border: nil.
+	^ rsLogo
+]
+
+{ #category : #'as yet unclassified' }
+MolComponentToRoassal class >> serviceLogoOut [
+
+	| rsLogo |
+	rsLogo := self serviceLogo.
+	rsLogo nodes first
+		color: Color transparent;
+		border: nil.
+	^ rsLogo
 ]
 
 { #category : #'see class side' }
