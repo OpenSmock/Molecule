@@ -21,6 +21,7 @@ MolComponentToRoassal class >> associationsAllConsumedEventsAndTargetsFor: aMolC
 				  name: asso value;
 				  component: aMolComponent;
 				  color: self eventColor;
+				  rsLogo: self eventLogo;
 				  yourself ]
 ]
 
@@ -28,61 +29,66 @@ MolComponentToRoassal class >> associationsAllConsumedEventsAndTargetsFor: aMolC
 MolComponentToRoassal class >> associationsAllProducedEventsAndTargetsFor: aMolComponent [
 
 	^ aMolComponent class allProducedEvents collect: [ :event |
-		MolRSContractModelSource new
-				  eventClass: event;
-				  name: aMolComponent componentName;
-				  component: aMolComponent;
-				  color: self eventColor;
-				  yourself ].
-
-
+		  MolRSContractModelSource new
+			  eventClass: event;
+			  name: aMolComponent componentName;
+			  component: aMolComponent;
+			  color: self eventColor;
+			  rsLogo: self eventLogo;
+			  yourself ]
 ]
 
 { #category : #model }
 MolComponentToRoassal class >> associationsAllProvidedParametersAndTargetsFor: aMolComponent [
 
 	^ aMolComponent class allProvidedParameters collect: [ :event |
-		MolRSContractModelSource new
-				  eventClass: event;
-				  name: aMolComponent componentName;
-				  component: aMolComponent;
-				  color: self parameterColor;
-				  yourself ].
+		  MolRSContractModelSource new
+			  eventClass: event;
+			  name: aMolComponent componentName;
+			  component: aMolComponent;
+			  color: self parameterColor;
+			  rsLogo: self parameterLogo;
+			  yourself ]
 ]
 
 { #category : #model }
 MolComponentToRoassal class >> associationsAllProvidedServicesAndTargetsFor: aMolComponent [
 
 	^ aMolComponent class allProvidedServices collect: [ :event |
-		MolRSContractModelSource new
-				  eventClass: event;
-				  name: aMolComponent componentName;
-				  component: aMolComponent;
-				  color: self serviceColor;
-				  yourself ].
+		  MolRSContractModelSource new
+			  eventClass: event;
+			  name: aMolComponent componentName;
+			  component: aMolComponent;
+			  color: self serviceColor;
+			rsLogo: self serviceLogo;
+			  yourself ]
 ]
 
 { #category : #model }
 MolComponentToRoassal class >> associationsAllUsedParametersAndTargetsFor: aMolComponent [
 
-	^ aMolComponent componentConnector parametersProviders associations collect: [ :asso |
+	^ aMolComponent componentConnector parametersProviders associations
+		  collect: [ :asso |
 			  MolRSContractModelTarget new
 				  eventClass: asso key;
 				  name: asso value;
 				  component: aMolComponent;
 				  color: self parameterColor;
+				rsLogo: self parameterLogo;
 				  yourself ]
 ]
 
 { #category : #model }
 MolComponentToRoassal class >> associationsAllUsedServicesAndTargetsFor: aMolComponent [
 
-	^ aMolComponent componentConnector servicesProviders associations collect: [ :asso |
+	^ aMolComponent componentConnector servicesProviders associations
+		  collect: [ :asso |
 			  MolRSContractModelTarget new
 				  eventClass: asso key;
 				  name: asso value;
 				  component: aMolComponent;
 				  color: self serviceColor;
+				rsLogo: self serviceLogo;
 				  yourself ]
 ]
 
@@ -132,16 +138,26 @@ MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfCompon
 				                        target name = source name ] ].
 		allAssociatedTargets do: [ :target |
 			lineBuilder useAssociation: source -> target.
+			"We use the rsShape included in the model to update the logo display on the graph."
+			source rsLogoActivate.
+			target rsLogoActivate.
 			ghostLineBuilder useAssociation:
 				source component -> target component ] ].
+	
+	"We change the color of not connected components"
+	componentShapes reject: [ :shape | shape hasLines ] thenDo: [ :notConnectedComponent | notConnectedComponent color: Color yellow muchLighter ].
 
 	"We create a layout for the components:
 	- if they are not connected: they will be aligned on the top-left corner.
 	- if they are connected: they will be displayed as a RSHorizontalTreeLayout, all trees will be ina a RSGridLayout."
 	RSConditionalLayout new
-		ifNotConnectedThen: (RSVerticalLineLayout new gapSize: 20; yourself);
+		ifNotConnectedThen: (RSVerticalLineLayout new
+				 gapSize: 20;
+				 yourself);
 		else: (RSClusteringLayout new
-				 clustersLayout: (RSGridLayout new gapSize: 20; yourself);
+				 clustersLayout: (RSGridLayout new
+						  gapSize: 20;
+						  yourself);
 				 forEachLayout: (RSHorizontalTreeLayout new
 						  horizontalGap: 500;
 						  verticalGap: 20;
@@ -211,7 +227,7 @@ MolComponentToRoassal class >> contractFromMolComponentImpl: aMolComponent [
 MolComponentToRoassal class >> contractsFromMolRSContracts: aCollectionOfMolRSContractModel [
 
 	^ aCollectionOfMolRSContractModel collect: [ :rsContractModel |
-		  | linkBox eventBox eventName |
+		  | linkBox eventBox eventName logo |
 		  eventName := RSLabel new
 			               text: rsContractModel eventClass printString;
 			               color: Color black;
@@ -229,15 +245,21 @@ MolComponentToRoassal class >> contractsFromMolRSContracts: aCollectionOfMolRSCo
 			             color: Color transparent;
 			             model: rsContractModel;
 			             yourself.
+		  logo := rsContractModel rsLogo.
 		  rsContractModel isContractSource
-			  ifTrue: [ linkBox position: eventBox extent x / 2 @ 0 ]
-			  ifFalse: [ linkBox position: eventBox extent x / -2 @ 0 ].
+			  ifTrue: [
+				  linkBox position: eventBox extent x / 2 @ 0.
+				  logo position: eventBox extent x / -2 - 16 @ 0 ]
+			  ifFalse: [
+				  linkBox position: eventBox extent x / -2 @ 0.
+				  logo position: eventBox extent x / 2 + 16 @ 0 ].
 
 		  RSComposite new
 			  shapes: {
 					  linkBox.
 					  eventBox.
-					  eventName };
+					  eventName.
+					  logo };
 			  adjustToChildren;
 			  model: rsContractModel eventClass;
 			  yourself ]
@@ -303,16 +325,80 @@ MolComponentToRoassal class >> eventColor [
 	^ Color blue muchLighter
 ]
 
+{ #category : #'as yet unclassified' }
+MolComponentToRoassal class >> eventLogo [
+	
+	| rsLogoIn rsLogoOut |
+	rsLogoIn := RSPieSlice new
+		            externalRadius: 12;
+		            innerRadius: 9;
+		            alphaAngle: 90;
+		            betaAngle: -90;
+		            color: self eventColor;
+		            yourself.
+	rsLogoOut := RSCircle new
+		             color: self eventColor;
+		             size: 10 asPoint;
+		             yourself.
+	^ RSComposite new shapes: {
+			  rsLogoIn.
+			  rsLogoOut }
+]
+
 { #category : #color }
 MolComponentToRoassal class >> parameterColor [
 
 	^ Color red muchLighter
 ]
 
+{ #category : #'as yet unclassified' }
+MolComponentToRoassal class >> parameterLogo [
+
+	| rsLogoIn rsLogoOut |
+	rsLogoIn := RSPolygon new
+		            points: { 0@12 . 12@12 . 12 @ -12 . 0 @ -12 . 0 @ -9 . 9 @ -9 . 9@9 . 0 @ 9 };
+		            color: self parameterColor;
+		            yourself.
+	rsLogoOut := RSBox new
+		             color: self parameterColor;
+		             size: 10 asPoint;
+		             yourself.
+	^ RSComposite new shapes: {
+			  rsLogoIn.
+			  rsLogoOut }
+]
+
 { #category : #color }
 MolComponentToRoassal class >> serviceColor [
 
 	^ Color green muchLighter
+]
+
+{ #category : #'as yet unclassified' }
+MolComponentToRoassal class >> serviceLogo [
+
+	| rsLogoIn rsLogoOut |
+	rsLogoIn := RSPolygon new
+		            points: {
+				            (0 @ 12).
+				            (12 @ 0).
+				            (0 @ -12).
+				            (0 @ -9).
+				            (9 @ 0).
+				            (0 @ 9) };
+		            color: self serviceColor;
+		            yourself.
+	rsLogoOut := RSPolygon new
+		             points: {
+				             (0 @ 5).
+				             (5 @ 0).
+				             (0 @ -5).
+				             (-5 @ -0) };
+		             color: self serviceColor;
+		             yourself.
+	^ RSComposite new shapes: {
+			  rsLogoIn.
+			  rsLogoOut }
 ]
 
 { #category : #'see class side' }
