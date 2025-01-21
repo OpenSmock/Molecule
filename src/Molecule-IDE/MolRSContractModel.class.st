@@ -16,7 +16,8 @@ Class {
 		'component',
 		'name',
 		'eventClass',
-		'color'
+		'color',
+		'rsLogo'
 	],
 	#category : #'Molecule-IDE-Inspectors'
 }
@@ -85,4 +86,21 @@ MolRSContractModel >> name: anObject [
 MolRSContractModel >> rsCornerRadius [
 
 	^ self shouldBeImplemented
+]
+
+{ #category : #'as yet unclassified' }
+MolRSContractModel >> rsLogo [
+
+	^ rsLogo
+]
+
+{ #category : #accessing }
+MolRSContractModel >> rsLogo: aRSComposite [ 
+	rsLogo := aRSComposite
+]
+
+{ #category : #'as yet unclassified' }
+MolRSContractModel >> rsLogoActivate [
+
+	self rsLogo nodes do: [ :each | each color: (self color alpha: 1; adjustSaturation: 0.3 brightness: 0.09); withBorder ]
 ]
