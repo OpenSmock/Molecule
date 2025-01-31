@@ -14,15 +14,17 @@ Class {
 { #category : #model }
 MolComponentToRoassal class >> associationsAllConsumedEventsAndTargetsFor: aMolComponent [
 
-	^ aMolComponent componentConnector eventsSubscribers associations
-		  collect: [ :asso |
-			  MolRSContractModelTarget new
-				  eventClass: asso key;
-				  name: asso value;
-				  component: aMolComponent;
-				  color: self eventColor;
-				  rsLogo: self eventLogoIn;
-				  yourself ]
+	^ aMolComponent componentConnector
+		  ifNotNil: [ :e |
+			  e eventsSubscribers associations collect: [ :asso |
+				  MolRSContractModelTarget new
+					  eventClass: asso key;
+					  name: asso value;
+					  component: aMolComponent;
+					  color: self eventColor;
+					  rsLogo: self eventLogoIn;
+					  yourself ] ]
+		  ifNil: [ OrderedCollection new ]
 ]
 
 { #category : #model }
@@ -67,29 +69,33 @@ MolComponentToRoassal class >> associationsAllProvidedServicesAndTargetsFor: aMo
 { #category : #model }
 MolComponentToRoassal class >> associationsAllUsedParametersAndTargetsFor: aMolComponent [
 
-	^ aMolComponent componentConnector parametersProviders associations
-		  collect: [ :asso |
-			  MolRSContractModelTarget new
-				  eventClass: asso key;
-				  name: asso value;
-				  component: aMolComponent;
-				  color: self parameterColor;
-				  rsLogo: self parameterLogoIn;
-				  yourself ]
+	^ aMolComponent componentConnector
+		  ifNotNil: [ :e |
+			  e parametersProviders associations collect: [ :asso |
+				  MolRSContractModelTarget new
+					  eventClass: asso key;
+					  name: asso value;
+					  component: aMolComponent;
+					  color: self parameterColor;
+					  rsLogo: self parameterLogoIn;
+					  yourself ] ]
+		  ifNil: [ OrderedCollection new ]
 ]
 
 { #category : #model }
 MolComponentToRoassal class >> associationsAllUsedServicesAndTargetsFor: aMolComponent [
 
-	^ aMolComponent componentConnector servicesProviders associations
-		  collect: [ :asso |
-			  MolRSContractModelTarget new
-				  eventClass: asso key;
-				  name: asso value;
-				  component: aMolComponent;
-				  color: self serviceColor;
-				  rsLogo: self serviceLogoIn;
-				  yourself ]
+	^ aMolComponent componentConnector
+		  ifNotNil: [ :e |
+			  e servicesProviders associations collect: [ :asso |
+				  MolRSContractModelTarget new
+					  eventClass: asso key;
+					  name: asso value;
+					  component: aMolComponent;
+					  color: self serviceColor;
+					  rsLogo: self serviceLogoIn;
+					  yourself ] ]
+		  ifNil: [ OrderedCollection new ]
 ]
 
 { #category : #'instance creation' }
@@ -325,7 +331,7 @@ MolComponentToRoassal class >> eventColor [
 	^ Color blue muchLighter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #resources }
 MolComponentToRoassal class >> eventLogo [
 
 	| rsLogoIn rsLogoOut |
@@ -347,7 +353,7 @@ MolComponentToRoassal class >> eventLogo [
 			  rsLogoOut }
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #resources }
 MolComponentToRoassal class >> eventLogoIn [
 
 	| rsLogo |
@@ -356,7 +362,7 @@ MolComponentToRoassal class >> eventLogoIn [
 	^ rsLogo 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #resources }
 MolComponentToRoassal class >> eventLogoOut [
 
 	| rsLogo |
@@ -371,7 +377,7 @@ MolComponentToRoassal class >> parameterColor [
 	^ Color red muchLighter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #resources }
 MolComponentToRoassal class >> parameterLogo [
 
 	| rsLogoIn rsLogoOut |
@@ -398,7 +404,7 @@ MolComponentToRoassal class >> parameterLogo [
 			  rsLogoOut }
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #resources }
 MolComponentToRoassal class >> parameterLogoIn [
 
 	| rsLogo |
@@ -409,7 +415,7 @@ MolComponentToRoassal class >> parameterLogoIn [
 	^ rsLogo
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #resources }
 MolComponentToRoassal class >> parameterLogoOut [
 
 	| rsLogo |
@@ -426,7 +432,7 @@ MolComponentToRoassal class >> serviceColor [
 	^ Color green muchLighter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #resources }
 MolComponentToRoassal class >> serviceLogo [
 
 	| rsLogoIn rsLogoOut |
@@ -455,7 +461,7 @@ MolComponentToRoassal class >> serviceLogo [
 			  rsLogoOut }
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #resources }
 MolComponentToRoassal class >> serviceLogoIn [
 
 	| rsLogo |
@@ -466,7 +472,7 @@ MolComponentToRoassal class >> serviceLogoIn [
 	^ rsLogo
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #resources }
 MolComponentToRoassal class >> serviceLogoOut [
 
 	| rsLogo |
