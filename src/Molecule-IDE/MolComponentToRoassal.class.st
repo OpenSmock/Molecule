@@ -22,24 +22,39 @@ MolComponentToRoassal class >> addBreakpointOnceOnInstance: anInstance withSelec
 
 	| bp ast |
 	bp := Breakpoint new.
-	ast := (anInstance class >> aSelector) ast.
+	ast := (anInstance class methodNamed: aSelector) ast.
 
 	bp node: ast.
 	bp scopeTo: anInstance.
-	bp install.
+	bp once: true.
+	bp install
+]
 
+{ #category : #adding }
+MolComponentToRoassal class >> addBreakpointOnceOnInstanceWithSelector: anArray [
+
+	self addBreakpointOnceOnInstance: anArray first withSelector: anArray second
+]
+
+{ #category : #adding }
+MolComponentToRoassal class >> addBreakpointOnceOnModelWithSelector: anArray [
+
+	self
+		addBreakpointOnceOnModel: anArray first
+		withSelector: anArray second
 ]
 
 { #category : #model }
 MolComponentToRoassal class >> associationsAllConsumedEventsAndTargetsFor: aMolComponent [
 
-	^ aMolComponent componentConnector eventsSubscribers associations
+	^ aMolComponent componentConnector ifNotNil: [ :connector | connector eventsSubscribers associations
 		  collect: [ :asso |
 			  MolRSContractModelTarget new
 				  eventClass: asso key;
 				  name: asso value;
 				  component: aMolComponent;
-				  yourself ]
+				  yourself ] ].
+		^ {  }
 ]
 
 { #category : #model }
@@ -336,24 +351,6 @@ MolComponentToRoassal class >> eventLogo [
 			  rsLogoOut }
 ]
 
-{ #category : #resources }
-MolComponentToRoassal class >> eventLogoIn [
-
-	| rsLogo |
-	rsLogo := self eventLogo.
-	rsLogo nodes second color: Color transparent; border: nil.
-	^ rsLogo 
-]
-
-{ #category : #resources }
-MolComponentToRoassal class >> eventLogoOut [
-
-	| rsLogo |
-	rsLogo := self eventLogo.
-	rsLogo nodes first color: Color transparent; border: nil.
-	^ rsLogo 
-]
-
 { #category : #'as yet unclassified' }
 MolComponentToRoassal class >> makeContractShapeFor: aMolRSContractModel [
 
@@ -418,14 +415,13 @@ MolComponentToRoassal class >> makeContractShapeFor: aMolRSContractModel [
 			 target: aMolRSContractModel
 			 selector: #inspect
 			 argument: #(  ).
-		aMolRSContractModel eventClass selectors do: [ :selector |
-			aMenuMorph
-			 add: 'Break on #' , selector
-			 target: aMolRSContractModel
-			 selector: #inspect
-			 argument: #(  ).
-			 ]
-			 ]).
+		 aMolRSContractModel eventClass selectors do: [ :selector |
+			 (aMolRSContractModel canBreakOn: selector) ifTrue: [
+				 aMenuMorph
+					 add: 'Break on #' , selector
+					 target: aMolRSContractModel
+					 selector: #breakOnceOnSelector:
+					 argument: selector ] ] ]).
 	^ composite
 ]
 
@@ -462,28 +458,6 @@ MolComponentToRoassal class >> parameterLogo [
 			  rsLogoOut }
 ]
 
-{ #category : #resources }
-MolComponentToRoassal class >> parameterLogoIn [
-
-	| rsLogo |
-	rsLogo := self parameterLogo.
-	rsLogo nodes second
-		color: Color transparent;
-		border: nil.
-	^ rsLogo
-]
-
-{ #category : #resources }
-MolComponentToRoassal class >> parameterLogoOut [
-
-	| rsLogo |
-	rsLogo := self parameterLogo.
-	rsLogo nodes first
-		color: Color transparent;
-		border: nil.
-	^ rsLogo
-]
-
 { #category : #color }
 MolComponentToRoassal class >> serviceColor [
 
@@ -517,28 +491,6 @@ MolComponentToRoassal class >> serviceLogo [
 	^ RSComposite new shapes: {
 			  rsLogoIn.
 			  rsLogoOut }
-]
-
-{ #category : #resources }
-MolComponentToRoassal class >> serviceLogoIn [
-
-	| rsLogo |
-	rsLogo := self serviceLogo.
-	rsLogo nodes second
-		color: Color transparent;
-		border: nil.
-	^ rsLogo
-]
-
-{ #category : #resources }
-MolComponentToRoassal class >> serviceLogoOut [
-
-	| rsLogo |
-	rsLogo := self serviceLogo.
-	rsLogo nodes first
-		color: Color transparent;
-		border: nil.
-	^ rsLogo
 ]
 
 { #category : #'see class side' }

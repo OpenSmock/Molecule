@@ -7,6 +7,12 @@ Class {
 	#category : #'Molecule-IDE-Inspectors'
 }
 
+{ #category : #testing }
+MolRSContractModelTarget >> canBreakOn: aString [ 
+	^ self eventClass includesTrait: MolComponentEvents
+	
+]
+
 { #category : #'as yet unclassified' }
 MolRSContractModelTarget >> rsCornerRadius [
 	^ RSCornerRadius new right: 10

@@ -15,9 +15,7 @@ Class {
 	#instVars : [
 		'component',
 		'name',
-		'eventClass',
-		'color',
-		'rsLogo'
+		'eventClass'
 	],
 	#category : #'Molecule-IDE-Inspectors'
 }
@@ -26,6 +24,18 @@ Class {
 MolRSContractModel >> <= aMolRSContractModel [
 
 	^ self eventClass name < aMolRSContractModel eventClass name
+]
+
+{ #category : #'as yet unclassified' }
+MolRSContractModel >> breakOnceOnSelector: aSelector [ 
+	| bp ast |
+	bp := Breakpoint new.
+	ast := (self component class methodNamed: aSelector) ast.
+
+	bp node: ast.
+	bp scopeTo: self component.
+	bp once: true.
+	bp install
 ]
 
 { #category : #accessing }
