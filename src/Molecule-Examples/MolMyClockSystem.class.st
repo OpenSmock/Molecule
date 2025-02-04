@@ -29,16 +29,16 @@ MolMyClockSystem class >> start [
 	| cm |
 	cm := MolComponentManager default.
 	self deploy.
-	
-	cm homeServices instanciateComponent: MolMyServerTimeComponentImpl.
-	cm homeServices instanciateComponent: MolMyClockComponentImpl.
-	cm homeServices instanciateComponent: MolMyUserFacadeComponentImpl.
-	cm homeServices instanciateComponent: MolMyAlarmComponentImpl.
-	
+
+	cm homeServices instantiateComponent: MolMyServerTimeComponentImpl.
+	cm homeServices instantiateComponent: MolMyClockComponentImpl.
+	cm homeServices instantiateComponent: MolMyUserFacadeComponentImpl.
+	cm homeServices instantiateComponent: MolMyAlarmComponentImpl.
+
 	cm homeServices activateComponent: MolMyServerTimeComponentImpl.
 	cm homeServices activateComponent: MolMyClockComponentImpl.
 	cm homeServices activateComponent: MolMyUserFacadeComponentImpl.
-	cm homeServices activateComponent: MolMyAlarmComponentImpl.
+	cm homeServices activateComponent: MolMyAlarmComponentImpl
 ]
 
 { #category : #launcher }

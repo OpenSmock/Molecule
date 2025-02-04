@@ -15,12 +15,16 @@ Class {
 	#instVars : [
 		'component',
 		'name',
-		'eventClass',
-		'color',
-		'rsLogo'
+		'eventClass'
 	],
 	#category : #'Molecule-IDE-Inspectors'
 }
+
+{ #category : #testing }
+MolRSContractModel class >> isAbstract [
+
+	^ self == MolRSContractModel
+]
 
 { #category : #comparing }
 MolRSContractModel >> <= aMolRSContractModel [
@@ -28,16 +32,17 @@ MolRSContractModel >> <= aMolRSContractModel [
 	^ self eventClass name < aMolRSContractModel eventClass name
 ]
 
-{ #category : #accessing }
-MolRSContractModel >> color [
+{ #category : #debug }
+MolRSContractModel >> breakOnceOnSelector: aSelector [ 
 
-	^ color
+	(self component breakOnceOnCallTo: aSelector)
+
 ]
 
-{ #category : #accessing }
-MolRSContractModel >> color: anObject [
+{ #category : #debug }
+MolRSContractModel >> canBreakOn: aString [
 
-	color := anObject
+	^ self explicitRequirement
 ]
 
 { #category : #accessing }
@@ -67,7 +72,7 @@ MolRSContractModel >> eventClass: anObject [
 { #category : #testing }
 MolRSContractModel >> isContractSource [
 
-	^ false
+	^ self explicitRequirement
 ]
 
 { #category : #accessing }
@@ -80,27 +85,4 @@ MolRSContractModel >> name [
 MolRSContractModel >> name: anObject [
 
 	name := anObject
-]
-
-{ #category : #'as yet unclassified' }
-MolRSContractModel >> rsCornerRadius [
-
-	^ self shouldBeImplemented
-]
-
-{ #category : #'as yet unclassified' }
-MolRSContractModel >> rsLogo [
-
-	^ rsLogo
-]
-
-{ #category : #accessing }
-MolRSContractModel >> rsLogo: aRSComposite [ 
-	rsLogo := aRSComposite
-]
-
-{ #category : #'as yet unclassified' }
-MolRSContractModel >> rsLogoActivate [
-
-	self rsLogo nodes do: [ :each | each color: (self color alpha: 1; adjustSaturation: 0.3 brightness: 0.09); withBorder ]
 ]

@@ -8,13 +8,14 @@ Class {
 }
 
 { #category : #testing }
+MolRSContractModelSource >> canBreakOn: aString [ 
+
+	^ (self eventClass includesTrait: MolComponentServices) or: [ self eventClass includesTrait: MolComponentParameters ]
+
+]
+
+{ #category : #testing }
 MolRSContractModelSource >> isContractSource [
 
 	^ true
-]
-
-{ #category : #'as yet unclassified' }
-MolRSContractModelSource >> rsCornerRadius [
-
-	^ RSCornerRadius new left: 10
 ]

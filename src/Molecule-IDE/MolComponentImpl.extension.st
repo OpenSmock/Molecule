@@ -16,7 +16,7 @@ MolComponentImpl >> asRSMoleculeShape [
 		                      fontSize: 18;
 		                      yourself.
 
-	contracts := MolComponentToRoassal contractFromMolComponentImpl: self.
+	contracts := MolComponentToRoassal makeContractShapesFor: self.
 
 	RSVerticalLineLayout new
 		alignCenter;
@@ -39,11 +39,17 @@ MolComponentImpl >> asRSMoleculeShape [
 	composite adjustToChildren.
 	composite extent: composite extent + (0 @ 20).
 	composite @ (RSMenuActivable new menuDo: [ :aMenuMorph :anRSBox |
-		 aMenuMorph
-			 add: 'Inspect'
-			 target: self
-			 selector: #inspect
-			 argument: #(  ) ]).
+		 (aMenuMorph
+			  add: 'Inspect component'
+			  target: self
+			  selector: #inspect
+			  argument: #(  )) icon:
+			 (Smalltalk ui icons iconNamed: #smallInspectIt).
+		 (aMenuMorph
+			  add: 'Browse component'
+			  target: self
+			  selector: #browse
+			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #nautilus) ]).
 
 	^ composite
 ]
