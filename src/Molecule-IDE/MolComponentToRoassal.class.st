@@ -11,50 +11,24 @@ Class {
 	#category : #'Molecule-IDE-Inspectors'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #resources }
 MolComponentToRoassal class >> activateLogoOf: aRSBox [
 
 	(aRSBox propertyAt: #activateLogo) value
 ]
 
-{ #category : #adding }
-MolComponentToRoassal class >> addBreakpointOnceOnInstance: anInstance withSelector: aSelector [
-
-	| bp ast |
-	bp := Breakpoint new.
-	ast := (anInstance class methodNamed: aSelector) ast.
-
-	bp node: ast.
-	bp scopeTo: anInstance.
-	bp once: true.
-	bp install
-]
-
-{ #category : #adding }
-MolComponentToRoassal class >> addBreakpointOnceOnInstanceWithSelector: anArray [
-
-	self addBreakpointOnceOnInstance: anArray first withSelector: anArray second
-]
-
-{ #category : #adding }
-MolComponentToRoassal class >> addBreakpointOnceOnModelWithSelector: anArray [
-
-	self
-		addBreakpointOnceOnModel: anArray first
-		withSelector: anArray second
-]
-
 { #category : #model }
 MolComponentToRoassal class >> associationsAllConsumedEventsAndTargetsFor: aMolComponent [
 
-	^ aMolComponent componentConnector ifNotNil: [ :connector | connector eventsSubscribers associations
-		  collect: [ :asso |
-			  MolRSContractModelTarget new
-				  eventClass: asso key;
-				  name: asso value;
-				  component: aMolComponent;
-				  yourself ] ].
-		^ {  }
+	^ aMolComponent componentConnector
+		  ifNotNil: [ :connector |
+			  connector eventsSubscribers associations collect: [ :asso |
+				  MolRSContractModelTarget new
+					  eventClass: asso key;
+					  name: asso value;
+					  component: aMolComponent;
+					  yourself ] ]
+		  ifNil: [ {  } ]
 ]
 
 { #category : #model }
@@ -93,25 +67,29 @@ MolComponentToRoassal class >> associationsAllProvidedServicesAndTargetsFor: aMo
 { #category : #model }
 MolComponentToRoassal class >> associationsAllUsedParametersAndTargetsFor: aMolComponent [
 
-	^ aMolComponent componentConnector parametersProviders associations
-		  collect: [ :asso |
-			  MolRSContractModelTarget new
-				  eventClass: asso key;
-				  name: asso value;
-				  component: aMolComponent;
-				  yourself ]
+	^ aMolComponent componentConnector
+		  ifNotNil: [ :connector |
+			  connector parametersProviders associations collect: [ :asso |
+				  MolRSContractModelTarget new
+					  eventClass: asso key;
+					  name: asso value;
+					  component: aMolComponent;
+					  yourself ] ]
+		  ifNil: [ {  } ]
 ]
 
 { #category : #model }
 MolComponentToRoassal class >> associationsAllUsedServicesAndTargetsFor: aMolComponent [
 
-	^ aMolComponent componentConnector servicesProviders associations
-		  collect: [ :asso |
-			  MolRSContractModelTarget new
-				  eventClass: asso key;
-				  name: asso value;
-				  component: aMolComponent;
-				  yourself ]
+	^ aMolComponent componentConnector
+		  ifNotNil: [ :connector |
+			  connector servicesProviders associations collect: [ :asso |
+				  MolRSContractModelTarget new
+					  eventClass: asso key;
+					  name: asso value;
+					  component: aMolComponent;
+					  yourself ] ]
+		  ifNil: [ {  } ]
 ]
 
 { #category : #'instance creation' }
@@ -205,7 +183,7 @@ MolComponentToRoassal class >> canvasFromSingleComponent: aMolComponent [
 	^ canvas
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #color }
 MolComponentToRoassal class >> contractColorFor: aMolRSContractModel [
 
 	(aMolRSContractModel eventClass includesTrait: MolComponentEvents)
@@ -215,12 +193,105 @@ MolComponentToRoassal class >> contractColorFor: aMolRSContractModel [
 	^ self parameterColor
 ]
 
+{ #category : #resources }
+MolComponentToRoassal class >> contractLogoFor: aMolRSContractModel [
+
+	(aMolRSContractModel eventClass includesTrait: MolComponentEvents)
+		ifTrue: [ ^ self eventLogo ].
+	(aMolRSContractModel eventClass includesTrait: MolComponentServices)
+		ifTrue: [ ^ self serviceLogo ].
+	^ self parameterLogo
+]
+
+{ #category : #color }
+MolComponentToRoassal class >> eventColor [
+
+	^ Color blue muchLighter
+]
+
+{ #category : #resources }
+MolComponentToRoassal class >> eventLogo [
+
+	| rsLogoIn rsLogoOut |
+	rsLogoIn := RSPieSlice new
+		            withBorder;
+		            externalRadius: 12;
+		            innerRadius: 9;
+		            alphaAngle: -90;
+		            betaAngle: 90;
+		            color: self eventColor;
+		            yourself.
+	rsLogoOut := RSCircle new
+		             withBorder;
+		             color: self eventColor;
+		             size: 10 asPoint;
+		             yourself.
+	^ RSComposite new shapes: {
+			  rsLogoIn.
+			  rsLogoOut }
+]
+
 { #category : #'instance creation' }
-MolComponentToRoassal class >> contractFromMolComponentImpl: aMolComponent [
+MolComponentToRoassal class >> makeContractConsumerShapesFor: aMolComponent [
+
+	| connectors services events parameters |
+	services := (self associationsAllUsedServicesAndTargetsFor:
+		             aMolComponent) sorted collect: [ :each |
+		            self makeSingleContractShapeFor: each ].
+	events := (self associationsAllConsumedEventsAndTargetsFor:
+		           aMolComponent) sorted collect: [ :each |
+		          self makeSingleContractShapeFor: each ].
+	parameters := (self associationsAllUsedParametersAndTargetsFor:
+		               aMolComponent) sorted collect: [ :each |
+		              self makeSingleContractShapeFor: each ].
+
+	connectors := RSComposite new
+		              shapes: events , services , parameters;
+		              yourself.
+	connectors model: (connectors shapes collect: #model).
+
+	RSVerticalLineLayout new
+		alignLeft;
+		on: connectors shapes.
+
+	connectors adjustToChildren.
+	^ connectors
+]
+
+{ #category : #'instance creation' }
+MolComponentToRoassal class >> makeContractProviderShapesFor: aMolComponent [
+
+	| connectors events services parameters |
+	
+	services := (self associationsAllProvidedServicesAndTargetsFor:
+		             aMolComponent) sorted collect: [ :each |
+		            self makeSingleContractShapeFor: each ].
+	events := (self associationsAllProducedEventsAndTargetsFor:
+		           aMolComponent) sorted collect: [ :each |
+		          self makeSingleContractShapeFor: each ].
+	parameters := (self associationsAllProvidedParametersAndTargetsFor:
+		               aMolComponent) sorted collect: [ :each |
+		              self makeSingleContractShapeFor: each ].
+
+	connectors := RSComposite new
+		              shapes: events , services , parameters;
+		              yourself.
+	connectors model: (connectors shapes collect: #model).
+
+	RSVerticalLineLayout new
+		alignRight;
+		on: connectors shapes.
+
+	connectors adjustToChildren.
+	^ connectors
+]
+
+{ #category : #'instance creation' }
+MolComponentToRoassal class >> makeContractShapesFor: aMolComponent [
 
 	| contractsAll contractsIn contractsOut model |
-	contractsIn := self contractsInFor: aMolComponent.
-	contractsOut := self contractsOutFor: aMolComponent.
+	contractsIn := self makeContractConsumerShapesFor: aMolComponent.
+	contractsOut := self makeContractProviderShapesFor: aMolComponent.
 
 	model := contractsIn model asOrderedCollection
 	         , contractsOut model asOrderedCollection.
@@ -258,101 +329,8 @@ MolComponentToRoassal class >> contractFromMolComponentImpl: aMolComponent [
 	^ contractsAll
 ]
 
-{ #category : #'as yet unclassified' }
-MolComponentToRoassal class >> contractLogoFor: aMolRSContractModel [
-
-	(aMolRSContractModel eventClass includesTrait: MolComponentEvents)
-		ifTrue: [ ^ self eventLogo ].
-	(aMolRSContractModel eventClass includesTrait: MolComponentServices)
-		ifTrue: [ ^ self serviceLogo ].
-	^ self parameterLogo
-]
-
 { #category : #'instance creation' }
-MolComponentToRoassal class >> contractsInFor: aMolComponent [
-
-	| connectors services events parameters |
-	services := (self associationsAllUsedServicesAndTargetsFor:
-		             aMolComponent) sorted collect: [ :each |
-		            self makeContractShapeFor: each ].
-	events := (self associationsAllConsumedEventsAndTargetsFor:
-		           aMolComponent) sorted collect: [ :each |
-		          self makeContractShapeFor: each ].
-	parameters := (self associationsAllUsedParametersAndTargetsFor:
-		               aMolComponent) sorted collect: [ :each |
-		              self makeContractShapeFor: each ].
-
-	connectors := RSComposite new
-		              shapes: events , services , parameters;
-		              yourself.
-	connectors model: (connectors shapes collect: #model).
-
-	RSVerticalLineLayout new
-		alignLeft;
-		on: connectors shapes.
-
-	connectors adjustToChildren.
-	^ connectors
-]
-
-{ #category : #'instance creation' }
-MolComponentToRoassal class >> contractsOutFor: aMolComponent [
-
-	| connectors events services parameters |
-	
-	services := (self associationsAllProvidedServicesAndTargetsFor:
-		             aMolComponent) sorted collect: [ :each |
-		            self makeContractShapeFor: each ].
-	events := (self associationsAllProducedEventsAndTargetsFor:
-		           aMolComponent) sorted collect: [ :each |
-		          self makeContractShapeFor: each ].
-	parameters := (self associationsAllProvidedParametersAndTargetsFor:
-		               aMolComponent) sorted collect: [ :each |
-		              self makeContractShapeFor: each ].
-
-	connectors := RSComposite new
-		              shapes: events , services , parameters;
-		              yourself.
-	connectors model: (connectors shapes collect: #model).
-
-	RSVerticalLineLayout new
-		alignRight;
-		on: connectors shapes.
-
-	connectors adjustToChildren.
-	^ connectors
-]
-
-{ #category : #color }
-MolComponentToRoassal class >> eventColor [
-
-	^ Color blue muchLighter
-]
-
-{ #category : #resources }
-MolComponentToRoassal class >> eventLogo [
-
-	| rsLogoIn rsLogoOut |
-	rsLogoIn := RSPieSlice new
-		            withBorder;
-		            externalRadius: 12;
-		            innerRadius: 9;
-		            alphaAngle: -90;
-		            betaAngle: 90;
-		            color: self eventColor;
-		            yourself.
-	rsLogoOut := RSCircle new
-		             withBorder;
-		             color: self eventColor;
-		             size: 10 asPoint;
-		             yourself.
-	^ RSComposite new shapes: {
-			  rsLogoIn.
-			  rsLogoOut }
-]
-
-{ #category : #'as yet unclassified' }
-MolComponentToRoassal class >> makeContractShapeFor: aMolRSContractModel [
+MolComponentToRoassal class >> makeSingleContractShapeFor: aMolRSContractModel [
 
 	| linkBox eventBox eventName logo composite color |
 	eventName := RSLabel new
@@ -365,7 +343,6 @@ MolComponentToRoassal class >> makeContractShapeFor: aMolRSContractModel [
 		            withBorder;
 		            color: color;
 		            extent: eventName extent + 10;
-		            cornerRadius: aMolRSContractModel rsCornerRadius;
 		            yourself.
 
 	logo := self contractLogoFor: aMolRSContractModel.
@@ -384,20 +361,18 @@ MolComponentToRoassal class >> makeContractShapeFor: aMolRSContractModel [
 
 	aMolRSContractModel isContractSource
 		ifTrue: [
+			eventBox cornerRadius: (RSCornerRadius new left: 10).
+			linkBox position: eventBox extent x / 2 @ 0.
 			logo nodes first
 				color: Color transparent;
-				border: nil ]
-		ifFalse: [
-			logo nodes second
-				color: Color transparent;
-				border: nil ].
-
-	aMolRSContractModel isContractSource
-		ifTrue: [
-			linkBox position: eventBox extent x / 2 @ 0.
+				border: nil.
 			logo position: eventBox extent x / -2 - 16 @ 0 ]
 		ifFalse: [
+			eventBox cornerRadius: (RSCornerRadius new right: 10).
 			linkBox position: eventBox extent x / -2 @ 0.
+			logo nodes second
+				color: Color transparent;
+				border: nil.
 			logo position: eventBox extent x / 2 + 16 @ 0 ].
 
 	composite := RSComposite new
@@ -410,18 +385,23 @@ MolComponentToRoassal class >> makeContractShapeFor: aMolRSContractModel [
 		             model: aMolRSContractModel eventClass;
 		             yourself.
 	composite @ (RSMenuActivable new menuDo: [ :aMenuMorph :anRSBox |
-		 aMenuMorph
-			 add: 'Inspect Contract'
-			 target: aMolRSContractModel
-			 selector: #inspect
-			 argument: #(  ).
+		 | separator |
+		 separator := false.
+		 (aMenuMorph
+			  add: 'Browse Trait'
+			  target: aMolRSContractModel eventClass
+			  selector: #browse
+			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #nautilus).
 		 aMolRSContractModel eventClass selectors do: [ :selector |
 			 (aMolRSContractModel canBreakOn: selector) ifTrue: [
-				 aMenuMorph
-					 add: 'Break on #' , selector
-					 target: aMolRSContractModel
-					 selector: #breakOnceOnSelector:
-					 argument: selector ] ] ]).
+				 separator ifFalse: [
+					 separator := true.
+					 aMenuMorph addSeparator ].
+				 (aMenuMorph
+					  add: 'Halt once on #' , selector
+					  target: aMolRSContractModel
+					  selector: #breakOnceOnSelector:
+					  argument: selector) icon: (Smalltalk ui icons iconNamed: #halt) ] ] ]).
 	^ composite
 ]
 

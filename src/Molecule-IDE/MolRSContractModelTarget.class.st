@@ -13,7 +13,8 @@ MolRSContractModelTarget >> canBreakOn: aString [
 	
 ]
 
-{ #category : #'as yet unclassified' }
-MolRSContractModelTarget >> rsCornerRadius [
-	^ RSCornerRadius new right: 10
+{ #category : #testing }
+MolRSContractModelTarget >> isContractSource [
+
+	^ false
 ]

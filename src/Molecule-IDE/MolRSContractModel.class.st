@@ -20,22 +20,29 @@ Class {
 	#category : #'Molecule-IDE-Inspectors'
 }
 
+{ #category : #testing }
+MolRSContractModel class >> isAbstract [
+
+	^ self == MolRSContractModel
+]
+
 { #category : #comparing }
 MolRSContractModel >> <= aMolRSContractModel [
 
 	^ self eventClass name < aMolRSContractModel eventClass name
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #debug }
 MolRSContractModel >> breakOnceOnSelector: aSelector [ 
-	| bp ast |
-	bp := Breakpoint new.
-	ast := (self component class methodNamed: aSelector) ast.
 
-	bp node: ast.
-	bp scopeTo: self component.
-	bp once: true.
-	bp install
+	(self component breakOnceOnCallTo: aSelector)
+
+]
+
+{ #category : #debug }
+MolRSContractModel >> canBreakOn: aString [
+
+	^ self explicitRequirement
 ]
 
 { #category : #accessing }
@@ -65,7 +72,7 @@ MolRSContractModel >> eventClass: anObject [
 { #category : #testing }
 MolRSContractModel >> isContractSource [
 
-	^ false
+	^ self explicitRequirement
 ]
 
 { #category : #accessing }
@@ -78,10 +85,4 @@ MolRSContractModel >> name [
 MolRSContractModel >> name: anObject [
 
 	name := anObject
-]
-
-{ #category : #'as yet unclassified' }
-MolRSContractModel >> rsCornerRadius [
-
-	^ self shouldBeImplemented
 ]

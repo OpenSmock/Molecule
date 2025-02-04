@@ -19,9 +19,3 @@ MolRSContractModelSource >> isContractSource [
 
 	^ true
 ]
-
-{ #category : #'as yet unclassified' }
-MolRSContractModelSource >> rsCornerRadius [
-
-	^ RSCornerRadius new left: 10
-]
