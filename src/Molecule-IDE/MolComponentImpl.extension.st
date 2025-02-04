@@ -1,6 +1,55 @@
 Extension { #name : #MolComponentImpl }
 
 { #category : #'*Molecule-IDE' }
+MolComponentImpl >> allComponentClients [
+
+	| clients allComponents |
+	clients := Set new.
+	allComponents := MolComponentManager default homeServices
+		                 deployedComponents flatCollect: #values.
+	^ allComponents select: [ :each |
+		  each allComponentProviders includes: self ]
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> allComponentProviders [
+
+	| providers locatorServices |
+	providers := Set new.
+	locatorServices := MolComponentManager default locatorServices.
+	self servicesProviders keysAndValuesDo: [ :key :value |
+		providers add:
+			(locatorServices searchServicesProviderFor: key named: value) ].
+	self parametersProviders keysAndValuesDo: [ :key :value |
+		providers add:
+			(locatorServices searchParametersProviderFor: key named: value) ].
+	self eventsSubscribers keysAndValuesDo: [ :key :value |
+		providers addAll:
+			(locatorServices searchEventsSubscriberFor: key named: value)
+				originators ].
+	^ providers asArray
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> allComponentProvidersRecursive [
+
+	| accumulator |
+	accumulator := Set new.
+	self allComponentProvidersRecursiveWithAccumulator: accumulator.
+	^ (accumulator reject: [ :each | each = self ]) asArray
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> allComponentProvidersRecursiveWithAccumulator: anAccumulator [
+
+	| providers |
+	anAccumulator add: self.
+	providers := self allComponentProviders.
+	(providers difference: anAccumulator) do: [ :each |
+		each allComponentProvidersRecursiveWithAccumulator: anAccumulator ]
+]
+
+{ #category : #'*Molecule-IDE' }
 MolComponentImpl >> asRSMoleculeShape [
 
 	| classNameLabel componentNameLabel contracts composite |

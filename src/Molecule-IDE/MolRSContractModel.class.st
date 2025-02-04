@@ -29,18 +29,6 @@ MolRSContractModel >> <= aMolRSContractModel [
 ]
 
 { #category : #accessing }
-MolRSContractModel >> color [
-
-	^ color
-]
-
-{ #category : #accessing }
-MolRSContractModel >> color: anObject [
-
-	color := anObject
-]
-
-{ #category : #accessing }
 MolRSContractModel >> component [
 
 	^ component
@@ -86,21 +74,4 @@ MolRSContractModel >> name: anObject [
 MolRSContractModel >> rsCornerRadius [
 
 	^ self shouldBeImplemented
-]
-
-{ #category : #'as yet unclassified' }
-MolRSContractModel >> rsLogo [
-
-	^ rsLogo
-]
-
-{ #category : #accessing }
-MolRSContractModel >> rsLogo: aRSComposite [ 
-	rsLogo := aRSComposite
-]
-
-{ #category : #'as yet unclassified' }
-MolRSContractModel >> rsLogoActivate [
-
-	self rsLogo nodes do: [ :each | each color: (self color alpha: 1; adjustSaturation: 0.3 brightness: 0.09); withBorder ]
 ]
