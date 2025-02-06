@@ -49,9 +49,72 @@ MolComponentImpl >> asRSMoleculeShape [
 			  add: 'Browse component'
 			  target: self
 			  selector: #browse
-			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #nautilus) ]).
+			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #nautilus).
+		 aMenuMorph addSeparator.
+		(aMenuMorph
+			  add: 'Halt Once when new component #initialize'
+			  target: self
+			  selector: #haltOnComponentInitialize) icon:
+			 (Smalltalk ui icons iconNamed: #halt).
+			(aMenuMorph
+			  add: 'Halt Once when new component #activate'
+			  target: self
+			  selector: #haltOnComponentActivate) icon:
+			 (Smalltalk ui icons iconNamed: #halt).
+		 (aMenuMorph
+			  add: 'Halt when #passivate'
+			  target: self
+			  selector: #haltOnComponentPassivate) icon:
+			 (Smalltalk ui icons iconNamed: #halt).
+		 (aMenuMorph
+			  add: 'Halt when #remove'
+			  target: self
+			  selector: #haltOnComponentRemove) icon:
+			 (Smalltalk ui icons iconNamed: #halt) ]).
 
 	^ composite
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl classSide >> haltOnComponentActivate [
+
+	^ DebugPointManager
+		  installNew: BreakDebugPoint
+		  on: (self compiledMethodAt: #componentActivate) ast
+		  withBehaviors: { OnceBehavior }
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> haltOnComponentActivate [
+
+	^ self class haltOnComponentActivate
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl classSide >> haltOnComponentInitialize [
+
+	^ DebugPointManager
+		  installNew: BreakDebugPoint
+		  on: (self class compiledMethodAt: #componentInitialize) ast
+		  withBehaviors: { OnceBehavior }
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> haltOnComponentInitialize [
+
+	^ self class haltOnComponentInitialize
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> haltOnComponentPassivate [
+
+	^ self haltOnceOnCallTo: #componentPassivate
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> haltOnComponentRemove [
+
+	^ self haltOnceOnCallTo: #componentRemove
 ]
 
 { #category : #'*Molecule-IDE' }

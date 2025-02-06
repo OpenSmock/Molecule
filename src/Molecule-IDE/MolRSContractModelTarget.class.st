@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #testing }
-MolRSContractModelTarget >> canBreakOn: aString [ 
-	^ self eventClass includesTrait: MolComponentEvents
-	
-]
-
-{ #category : #testing }
 MolRSContractModelTarget >> isContractSource [
 
 	^ false
+]
+
+{ #category : #testing }
+MolRSContractModelTarget >> shouldBreakOnCall [
+
+	^ self eventClass includesTrait: MolComponentEvents
 ]

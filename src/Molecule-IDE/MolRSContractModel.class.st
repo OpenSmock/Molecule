@@ -32,17 +32,41 @@ MolRSContractModel >> <= aMolRSContractModel [
 	^ self eventClass name < aMolRSContractModel eventClass name
 ]
 
-{ #category : #debug }
-MolRSContractModel >> breakOnceOnSelector: aSelector [ 
+{ #category : #adding }
+MolRSContractModel >> addBreakpointFor: aSelector [
 
-	(self component breakOnceOnCallTo: aSelector)
-
+	self shouldBreakOnCall
+		ifTrue: [ self breakOnceOn: aSelector ]
+		ifFalse: [ self breakOnceOnBeforeSend: aSelector ]
 ]
 
 { #category : #debug }
-MolRSContractModel >> canBreakOn: aString [
+MolRSContractModel >> breakOnceOn: aSelector [
 
-	^ self explicitRequirement
+	self component breakOnceOnCallTo: aSelector
+]
+
+{ #category : #'as yet unclassified' }
+MolRSContractModel >> breakOnceOnBeforeSend: aSelector [
+
+	| allSenders allASTSenderNodes |
+	allSenders := aSelector senders select: [ :method |
+		              method methodClass isComponentClass ].
+	allASTSenderNodes := allSenders flatCollect: [ :method |
+		                     method ast sendNodes select: [ :node |
+			                     node selector = aSelector ] ].
+	allASTSenderNodes do: [ :node |
+		DebugPointManager
+			installNew: BreakDebugPoint
+			on: node
+			withBehaviors: { OnceBehavior } ]
+]
+
+{ #category : #'as yet unclassified' }
+MolRSContractModel >> breakpointLabelFor: aSelector [
+
+	self shouldBreakOnCall ifTrue: [ ^ 'Halt once on #' , aSelector ]
+	ifFalse: [ ^ 'Halt once before send #' , aSelector ]
 ]
 
 { #category : #accessing }
@@ -85,4 +109,10 @@ MolRSContractModel >> name [
 MolRSContractModel >> name: anObject [
 
 	name := anObject
+]
+
+{ #category : #asserting }
+MolRSContractModel >> shouldBreakOnCall [
+
+	^ self explicitRequirement
 ]

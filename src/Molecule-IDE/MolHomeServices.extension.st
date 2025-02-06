@@ -5,6 +5,7 @@ MolHomeServices >> inspectionDeployedComponentsGraph [
 
 	<inspectorPresentationOrder: 0 title: 'Deployed Components Graph'>
 	| canvas components |
+	self deployedComponents ifNil: [ ^ SpNullPresenter new ].
 	components := self deployedComponents flatCollect: #values.
 	canvas := MolComponentToRoassal canvasFromMultipleComponents:
 		          components.

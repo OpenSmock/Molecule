@@ -393,15 +393,14 @@ MolComponentToRoassal class >> makeSingleContractShapeFor: aMolRSContractModel [
 			  selector: #browse
 			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #nautilus).
 		 aMolRSContractModel eventClass selectors do: [ :selector |
-			 (aMolRSContractModel canBreakOn: selector) ifTrue: [
-				 separator ifFalse: [
-					 separator := true.
-					 aMenuMorph addSeparator ].
-				 (aMenuMorph
-					  add: 'Halt once on #' , selector
-					  target: aMolRSContractModel
-					  selector: #breakOnceOnSelector:
-					  argument: selector) icon: (Smalltalk ui icons iconNamed: #halt) ] ] ]).
+			 separator ifFalse: [
+				 separator := true.
+				 aMenuMorph addSeparator ].
+			 (aMenuMorph
+				  add: (aMolRSContractModel breakpointLabelFor: selector)
+				  target: aMolRSContractModel
+				  selector: #addBreakpointFor:
+				  argument: selector) icon: (Smalltalk ui icons iconNamed: #halt) ] ]).
 	^ composite
 ]
 
