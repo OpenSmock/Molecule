@@ -4,7 +4,7 @@ Class for the menu => right click on a component
 Class {
 	#name : #MolCmdMenuGroup,
 	#superclass : #CmdMenuGroup,
-	#category : #'Molecule-IDE-Menus'
+	#category : #'Molecule-IDE-Commands'
 }
 
 { #category : #accessing }

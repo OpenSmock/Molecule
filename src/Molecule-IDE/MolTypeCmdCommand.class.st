@@ -1,10 +1,10 @@
 Class {
 	#name : #MolTypeCmdCommand,
-	#superclass : #MolCmdCommand,
+	#superclass : #CmdCommand,
 	#instVars : [
-		'typeName'
+		'selectedTypeClass'
 	],
-	#category : #'Molecule-IDE-Tools'
+	#category : #'Molecule-IDE-Commands'
 }
 
 { #category : #testing }
@@ -25,15 +25,18 @@ MolTypeCmdCommand class >> canBeExecutedInContext: aToolContext [
 	^ list includes: (self class environment at: selected asSymbol)
 ]
 
-{ #category : #'as yet unclassified' }
-MolTypeCmdCommand >> selectedClass [
+{ #category : #execution }
+MolTypeCmdCommand >> prepareFullExecutionInContext: aToolContext [
 
-	^ selectedItems collect: [ :p | p browserItem actualObject ]
+	super prepareFullExecutionInContext: aToolContext.
+	selectedTypeClass := aToolContext selectedItems
+		                 collect: [ :item | item browserItem actualObject ]
+		                 thenSelect: [ :each | each isTrait and: [ each isComponentType ]]
 ]
 
 { #category : #'as yet unclassified' }
 MolTypeCmdCommand >> selectedTypeClass [
 	"this method returns the class selected in the System Browser that is a Type"
 
-	^ self selectedClass select: [ :c | c isComponentType ]
+	^ selectedTypeClass
 ]

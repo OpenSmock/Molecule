@@ -1,13 +1,17 @@
 Class {
 	#name : #MolDefineComponentCmdCommand,
 	#superclass : #MolClassesCmdCommand,
-	#category : #'Molecule-IDE-Menus'
+	#category : #'Molecule-IDE-Commands'
 }
 
 { #category : #activation }
 MolDefineComponentCmdCommand class >> browserMenuActivation [
+
 	<classAnnotation>
-	^CmdContextMenuActivation byItemOf: MolCmdMenuGroup for: ClyFullBrowserClassContext.
+	^ CmdContextMenuActivation
+		  byItemOf: MolCmdMenuGroup
+		  order: 10
+		  for: ClyFullBrowserClassContext
 ]
 
 { #category : #accessing }
@@ -30,17 +34,21 @@ MolDefineComponentCmdCommand >> description [
 
 { #category : #execution }
 MolDefineComponentCmdCommand >> execute [
+
 	| componentsToDefine nbOfDefinedComponents text |
-	
 	componentsToDefine := self selectedComponentClasses.
-	componentsToDefine do:[ :c | MolComponentFactory defineComponent: c ].
-	
+	componentsToDefine do: [ :c | MolComponentFactory defineComponent: c ].
+
 	nbOfDefinedComponents := componentsToDefine size.
-	self executionResult: nbOfDefinedComponents.
-	
-	text := nbOfDefinedComponents = 1 
-		ifTrue:[ 'Define component: ', componentsToDefine first printString ] 
-		ifFalse:[ nbOfDefinedComponents asString, ' component', (nbOfDefinedComponents > 1 ifTrue:['s'] ifFalse:['']) ,' defined' ].
-	
-	MolUtils showInformation: text.
+
+	text := nbOfDefinedComponents = 1
+		        ifTrue: [
+		        'Define component: ' , componentsToDefine first printString ]
+		        ifFalse: [
+			        nbOfDefinedComponents asString , ' component'
+			        , (nbOfDefinedComponents > 1
+					         ifTrue: [ 's' ]
+					         ifFalse: [ '' ]) , ' defined' ].
+
+	MolUtils showInformation: text
 ]

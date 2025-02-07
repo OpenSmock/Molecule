@@ -95,7 +95,7 @@ MolComponentImpl classSide >> haltOnComponentInitialize [
 
 	^ DebugPointManager
 		  installNew: BreakDebugPoint
-		  on: (self class compiledMethodAt: #componentInitialize) ast
+		  on: (self compiledMethodAt: #componentInitialize) ast
 		  withBehaviors: { OnceBehavior }
 ]
 
@@ -106,9 +106,30 @@ MolComponentImpl >> haltOnComponentInitialize [
 ]
 
 { #category : #'*Molecule-IDE' }
+MolComponentImpl classSide >> haltOnComponentPassivate [
+
+	^ DebugPointManager
+		  installNew: BreakDebugPoint
+		  on: (self compiledMethodAt: #componentPassivate) ast
+		  withBehaviors: { OnceBehavior }
+]
+
+{ #category : #'*Molecule-IDE' }
 MolComponentImpl >> haltOnComponentPassivate [
 
 	^ self haltOnceOnCallTo: #componentPassivate
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl classSide >> haltOnComponentRemove [
+
+	self compiledMethodAt: #componentRemove ifPresent: [ :m |
+		^ DebugPointManager
+			  installNew: BreakDebugPoint
+			  on: m ast
+			  withBehaviors: { OnceBehavior . ConditionBehavior new condition: 'self=MolMyAlarmComponentImpl' } ].
+	self halt.
+	self superclass isComponentClass ifTrue: [ self superclass haltOnComponentRemove ].
 ]
 
 { #category : #'*Molecule-IDE' }

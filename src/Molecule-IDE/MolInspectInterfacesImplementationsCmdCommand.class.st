@@ -1,7 +1,7 @@
 Class {
 	#name : #MolInspectInterfacesImplementationsCmdCommand,
 	#superclass : #MolInterfaceCmdCommand,
-	#category : #'Molecule-IDE-Tools'
+	#category : #'Molecule-IDE-Commands'
 }
 
 { #category : #activation }
@@ -13,7 +13,7 @@ MolInspectInterfacesImplementationsCmdCommand class >> browserMenuActivation [
 { #category : #accessing }
 MolInspectInterfacesImplementationsCmdCommand >> defaultMenuIconName [
 
-	^ 'glamorousInspect'
+	^ #inspect
 ]
 
 { #category : #accessing }
@@ -31,17 +31,7 @@ MolInspectInterfacesImplementationsCmdCommand >> description [
 { #category : #accessing }
 MolInspectInterfacesImplementationsCmdCommand >> execute [
 
-	| selectedInterface emptyArray interface |
-	selectedInterface := self selectedInterfaceClass.
-
-	interface := MolInterfacesPresenter new.
-	emptyArray := Array new: 0.
-
-	"condition and ifTrue: are executed only if multiple Traits were/are selected in the System Browser, since this option only supports one Type selected at a time"
-	selectedInterface = emptyArray
-		ifFalse: [ selectedInterface := selectedInterface at: 1 ]
-		ifTrue: [
-		selectedInterface := (selectedItems at: 1) browserItem actualObject ].
-	interface interface: selectedInterface.
-	interface open
+	MolInterfacesPresenter new
+		interface: self selectedInterfaceClasses first;
+		open
 ]

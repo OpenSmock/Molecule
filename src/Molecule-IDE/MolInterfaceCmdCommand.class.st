@@ -1,7 +1,10 @@
 Class {
 	#name : #MolInterfaceCmdCommand,
-	#superclass : #MolCmdCommand,
-	#category : #'Molecule-IDE-Tools'
+	#superclass : #CmdCommand,
+	#instVars : [
+		'selectedInterfaceClasses'
+	],
+	#category : #'Molecule-IDE-Commands'
 }
 
 { #category : #testing }
@@ -24,17 +27,21 @@ MolInterfaceCmdCommand class >> canBeExecutedInContext: aToolContext [
 	^ list includes: (self class environment at: selected asSymbol)
 ]
 
-{ #category : #'api - accessing' }
-MolInterfaceCmdCommand >> selectedClass [
+{ #category : #execution }
+MolInterfaceCmdCommand >> prepareFullExecutionInContext: aToolContext [
 
-	^ (selectedItems collect: [ :p | p browserItem actualObject ])
+	super prepareFullExecutionInContext: aToolContext.
+	selectedInterfaceClasses := aToolContext selectedItems
+		                            collect: [ :p |
+		                            p browserItem actualObject ]
+		                            thenSelect: [ :c |
+			c isTrait and: [ 
+			                            c isComponentEvents or: [
+				                            c isComponentParameters or: [
+					                            c isComponentServices ] ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
-MolInterfaceCmdCommand >> selectedInterfaceClass [
-	"this method returns the class in the System Browser that is an interface (Events/Parameters/Services)"
-
-	^ self selectedClass select: [ :c |
-		  c isComponentEvents or:
-			  (c isComponentParameters or: c isComponentServices) ]
+MolInterfaceCmdCommand >> selectedInterfaceClasses [
+	^ selectedInterfaceClasses
 ]
