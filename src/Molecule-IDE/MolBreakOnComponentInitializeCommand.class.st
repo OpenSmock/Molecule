@@ -23,17 +23,17 @@ MolBreakOnComponentInitializeCommand >> defaultMenuIconName [
 { #category : #accessing }
 MolBreakOnComponentInitializeCommand >> defaultMenuItemName [
 
-	^ 'Break once on #componentInitialize'
+	^ 'Break once when state switch to #initialize'
 ]
 
 { #category : #accessing }
 MolBreakOnComponentInitializeCommand >> description [
 
-	^ 'Add a breakpoint that trigger once when #componentInitialize is call for this specific class.'
+	^ 'Add a breakpoint that trigger once when #componentInitialize is call for any instances of this specific class.'
 ]
 
 { #category : #accessing }
 MolBreakOnComponentInitializeCommand >> execute [
 
-	self selectedComponentClasses do: #haltOnComponentInitialize
+	self selectedComponentClasses do: #breakOnceOnComponentInitialize
 ]

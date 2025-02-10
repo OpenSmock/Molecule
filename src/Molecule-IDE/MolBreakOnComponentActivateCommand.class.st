@@ -23,7 +23,7 @@ MolBreakOnComponentActivateCommand >> defaultMenuIconName [
 { #category : #accessing }
 MolBreakOnComponentActivateCommand >> defaultMenuItemName [
 
-	^ 'Break once on #componentActivate'
+	^ 'Break once when state switch to #activate'
 ]
 
 { #category : #accessing }
@@ -35,5 +35,5 @@ MolBreakOnComponentActivateCommand >> description [
 { #category : #accessing }
 MolBreakOnComponentActivateCommand >> execute [
 
-	self selectedComponentClasses do: #haltOnComponentActivate
+	self selectedComponentClasses do: #breakOnceOnComponentActivate
 ]

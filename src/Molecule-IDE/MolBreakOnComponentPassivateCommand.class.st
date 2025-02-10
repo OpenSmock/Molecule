@@ -23,17 +23,17 @@ MolBreakOnComponentPassivateCommand >> defaultMenuIconName [
 { #category : #accessing }
 MolBreakOnComponentPassivateCommand >> defaultMenuItemName [
 
-	^ 'Break once on #componentPassivate'
+	^ 'Break once when state switch to #passivate'
 ]
 
 { #category : #accessing }
 MolBreakOnComponentPassivateCommand >> description [
 
-	^ 'Add a breakpoint that trigger once when #componentPassivate is call for this specific class.'
+	^ 'Add a breakpoint that trigger once when #componentPassivate is call for any instances of this specific class.'
 ]
 
 { #category : #accessing }
 MolBreakOnComponentPassivateCommand >> execute [
 
-	self selectedComponentClasses do: #haltOnComponentPassivate
+	self selectedComponentClasses do: #breakOnceOnComponentPassivate
 ]

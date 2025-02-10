@@ -76,9 +76,46 @@ MolComponentImpl >> asRSMoleculeShape [
 ]
 
 { #category : #'*Molecule-IDE' }
-MolComponentImpl classSide >> haltOnComponentActivate [
+MolComponentImpl classSide >> breakOnceOnComponentActivate [
 
-	^ self haltOnComponentLifeCycle: #componentActivate
+	^ self breakOnceOnComponentLifeCycle: #componentActivate
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl classSide >> breakOnceOnComponentInitialize [
+
+	^ self breakOnceOnComponentLifeCycle: #componentInitialize
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl classSide >> breakOnceOnComponentLifeCycle: aSymbol [
+
+	| debugPoint condition |
+	"We need to use the lookup to access the method if it is present in the super class or the trait."
+	debugPoint := DebugPointManager
+		              installNew: BreakDebugPoint
+		              on: (self lookupSelector: aSymbol) ast
+		              withBehaviors: { OnceBehavior }.
+	
+	"We need to add a condition that check the class since the lookup will trigger for any class that have the targeted method, including all the trait users that may implement MolComponentImpl trait."
+	condition := ConditionBehavior new
+		             condition:
+			             ('self class = <1s>' expandMacrosWith: self name);
+		             yourself.
+	debugPoint addBehavior: condition.
+	^ debugPoint
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl classSide >> breakOnceOnComponentPassivate [
+
+	^ self breakOnceOnComponentLifeCycle: #componentPassivate
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl classSide >> breakOnceOnComponentRemove [
+
+	^ self breakOnceOnComponentLifeCycle: #componentRemove
 ]
 
 { #category : #'*Molecule-IDE' }
@@ -88,51 +125,15 @@ MolComponentImpl >> haltOnComponentActivate [
 ]
 
 { #category : #'*Molecule-IDE' }
-MolComponentImpl classSide >> haltOnComponentInitialize [
-
-	^ self haltOnComponentLifeCycle: #componentInitialize
-
-]
-
-{ #category : #'*Molecule-IDE' }
 MolComponentImpl >> haltOnComponentInitialize [
 
 	^ self class haltOnComponentInitialize
 ]
 
 { #category : #'*Molecule-IDE' }
-MolComponentImpl classSide >> haltOnComponentLifeCycle: aSymbol [
-
-	| debugPoint condition |
-	"We need to use the lookup to access the method if it is present in the super class or the trait."
-	debugPoint := DebugPointManager
-		              installNew: BreakDebugPoint
-		              on: (self lookupSelector: aSymbol) ast
-		              withBehaviors: { OnceBehavior }.
-	"We need to add a condition that check the class since the lookup will trigger for any class that have the targeted method, including all the trait users that may implement MolComponentImpl trait."
-	condition := ConditionBehavior new
-		             condition:
-			             ('self class = <1s>' expandMacrosWith: self name);
-		             yourself.
-	debugPoint addBehavior: condition
-]
-
-{ #category : #'*Molecule-IDE' }
-MolComponentImpl classSide >> haltOnComponentPassivate [
-
-	^ self haltOnComponentLifeCycle: #componentPassivate
-]
-
-{ #category : #'*Molecule-IDE' }
 MolComponentImpl >> haltOnComponentPassivate [
 
 	^ self haltOnceOnCallTo: #componentPassivate
-]
-
-{ #category : #'*Molecule-IDE' }
-MolComponentImpl classSide >> haltOnComponentRemove [
-
-	^  self haltOnComponentLifeCycle: #componentRemove
 ]
 
 { #category : #'*Molecule-IDE' }

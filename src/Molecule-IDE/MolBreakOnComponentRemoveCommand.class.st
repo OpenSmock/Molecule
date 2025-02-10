@@ -23,17 +23,17 @@ MolBreakOnComponentRemoveCommand >> defaultMenuIconName [
 { #category : #accessing }
 MolBreakOnComponentRemoveCommand >> defaultMenuItemName [
 
-	^ 'Break once on #componentRemove'
+	^ 'Break once when state switch to #remove'
 ]
 
 { #category : #accessing }
 MolBreakOnComponentRemoveCommand >> description [
 
-	^ 'Add a breakpoint that trigger once when #componentRemove is call for this specific class.'
+	^ 'Add a breakpoint that trigger once when #componentRemove is call for any instances of this specific class.'
 ]
 
 { #category : #accessing }
 MolBreakOnComponentRemoveCommand >> execute [
 
-	self selectedComponentClasses do: #haltOnComponentRemove
+	self selectedComponentClasses do: #breakOnceOnComponentRemove
 ]
