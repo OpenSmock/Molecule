@@ -88,22 +88,39 @@ MolWorld class >> menu00MoleculeOn: aBuilder [
 
 { #category : #menu }
 MolWorld class >> menu10SystemStatusOn: aBuilder [
+
 	<worldMenu>
-	
 	(aBuilder item: #InspectComponents)
 		parent: #MoleculeStatus;
 		order: 1.0;
 		action: [
-			MolComponentManager isRunningComponents ifTrue:[
-				"Inspect home services"
-				MolComponentManager default homeServices inspect 
-			] ifFalse:[
-				"No component are running"
-				self inform: 'No components are running'
-			]. 
-		];
+			MolComponentManager isRunningComponents
+				ifTrue: [ "Inspect home services"
+					MolComponentManager default homeServices openRoassalView ]
+				ifFalse: [ "No component are running"
+					self inform: 'No components are running' ] ];
 		icon: MolIcon moleculeComponentIcon;
-		help: 'Component System Status, click to inspect running components. If no components are running there is an popup on the bottom left of the main Pharo windows.';
+		help:
+			'Click to open a graph of the deployed components. If no components are deployed there is an popup on the bottom left of the main Pharo windows.';
+		label: 'Graph of deployed Components'
+]
+
+{ #category : #menu }
+MolWorld class >> menu11SystemStatusOn: aBuilder [
+
+	<worldMenu>
+	(aBuilder item: #InspectComponents)
+		parent: #MoleculeStatus;
+		order: 1.1;
+		action: [
+			MolComponentManager isRunningComponents
+				ifTrue: [ "Inspect home services"
+					MolComponentManager default homeServices inspect ]
+				ifFalse: [ "No component are running"
+					self inform: 'No components are running' ] ];
+		icon: (self iconNamed: #inspect);
+		help:
+			'Component System Status, click to inspect running components. If no components are running there is an popup on the bottom left of the main Pharo windows.';
 		label: 'Inspect running Components'
 ]
 
