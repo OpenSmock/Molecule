@@ -1,6 +1,9 @@
 Class {
 	#name : #MolDefineComponentCmdCommand,
 	#superclass : #MolClassesCmdCommand,
+	#instVars : [
+		'executionResult'
+	],
 	#category : #'Molecule-IDE-Commands'
 }
 
@@ -40,6 +43,7 @@ MolDefineComponentCmdCommand >> execute [
 	componentsToDefine do: [ :c | MolComponentFactory defineComponent: c ].
 
 	nbOfDefinedComponents := componentsToDefine size.
+	self executionResult: nbOfDefinedComponents.
 
 	text := nbOfDefinedComponents = 1
 		        ifTrue: [
@@ -51,4 +55,16 @@ MolDefineComponentCmdCommand >> execute [
 					         ifFalse: [ '' ]) , ' defined' ].
 
 	MolUtils showInformation: text
+]
+
+{ #category : #accessing }
+MolDefineComponentCmdCommand >> executionResult [
+
+	^ executionResult
+]
+
+{ #category : #accessing }
+MolDefineComponentCmdCommand >> executionResult: anObject [
+
+	executionResult := anObject
 ]

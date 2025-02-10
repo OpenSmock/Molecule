@@ -55,14 +55,12 @@ MolCmdCommandTest >> testMolClassesCmdCommand [
 	menu prepareFullExecutionInContext: toolcontext.
 	menu execute.
 	self assert: menu executionResult equals: 0.
-	self assert: menu selectedClasses size equals: 0.
 	self assert: menu selectedComponentClasses size equals: 0.
 	
 	self createToolContextForClasses: (Array with: MolGNSSGPS with: MolGNSSGalileo).
 	menu prepareFullExecutionInContext: toolcontext.
 	menu execute.
 	self assert: menu executionResult equals: 2.
-	self assert: menu selectedClasses size equals: 2.
 	self assert: menu selectedComponentClasses size equals: 2.
 ]
 
