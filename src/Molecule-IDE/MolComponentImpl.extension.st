@@ -78,10 +78,7 @@ MolComponentImpl >> asRSMoleculeShape [
 { #category : #'*Molecule-IDE' }
 MolComponentImpl classSide >> haltOnComponentActivate [
 
-	^ DebugPointManager
-		  installNew: BreakDebugPoint
-		  on: (self compiledMethodAt: #componentActivate) ast
-		  withBehaviors: { OnceBehavior }
+	^ self haltOnComponentLifeCycle: #componentActivate
 ]
 
 { #category : #'*Molecule-IDE' }
@@ -93,10 +90,8 @@ MolComponentImpl >> haltOnComponentActivate [
 { #category : #'*Molecule-IDE' }
 MolComponentImpl classSide >> haltOnComponentInitialize [
 
-	^ DebugPointManager
-		  installNew: BreakDebugPoint
-		  on: (self compiledMethodAt: #componentInitialize) ast
-		  withBehaviors: { OnceBehavior }
+	^ self haltOnComponentLifeCycle: #componentInitialize
+
 ]
 
 { #category : #'*Molecule-IDE' }
@@ -106,12 +101,26 @@ MolComponentImpl >> haltOnComponentInitialize [
 ]
 
 { #category : #'*Molecule-IDE' }
+MolComponentImpl classSide >> haltOnComponentLifeCycle: aSymbol [
+
+	| debugPoint condition |
+	"We need to use the lookup to access the method if it is present in the super class or the trait."
+	debugPoint := DebugPointManager
+		              installNew: BreakDebugPoint
+		              on: (self lookupSelector: aSymbol) ast
+		              withBehaviors: { OnceBehavior }.
+	"We need to add a condition that check the class since the lookup will trigger for any class that have the targeted method, including all the trait users that may implement MolComponentImpl trait."
+	condition := ConditionBehavior new
+		             condition:
+			             ('self class = <1s>' expandMacrosWith: self name);
+		             yourself.
+	debugPoint addBehavior: condition
+]
+
+{ #category : #'*Molecule-IDE' }
 MolComponentImpl classSide >> haltOnComponentPassivate [
 
-	^ DebugPointManager
-		  installNew: BreakDebugPoint
-		  on: (self compiledMethodAt: #componentPassivate) ast
-		  withBehaviors: { OnceBehavior }
+	^ self haltOnComponentLifeCycle: #componentPassivate
 ]
 
 { #category : #'*Molecule-IDE' }
@@ -123,13 +132,7 @@ MolComponentImpl >> haltOnComponentPassivate [
 { #category : #'*Molecule-IDE' }
 MolComponentImpl classSide >> haltOnComponentRemove [
 
-	self compiledMethodAt: #componentRemove ifPresent: [ :m |
-		^ DebugPointManager
-			  installNew: BreakDebugPoint
-			  on: m ast
-			  withBehaviors: { OnceBehavior . ConditionBehavior new condition: 'self=MolMyAlarmComponentImpl' } ].
-	self halt.
-	self superclass isComponentClass ifTrue: [ self superclass haltOnComponentRemove ].
+	^  self haltOnComponentLifeCycle: #componentRemove
 ]
 
 { #category : #'*Molecule-IDE' }
