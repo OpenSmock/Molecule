@@ -28,20 +28,21 @@ MolInterfaceCmdCommand class >> canBeExecutedInContext: aToolContext [
 ]
 
 { #category : #execution }
-MolInterfaceCmdCommand >> prepareFullExecutionInContext: aToolContext [
+MolInterfaceCmdCommand >> readParametersFromContext: aToolContext [
 
 	super prepareFullExecutionInContext: aToolContext.
 	selectedInterfaceClasses := aToolContext selectedItems
 		                            collect: [ :p |
 		                            p browserItem actualObject ]
 		                            thenSelect: [ :c |
-			c isTrait and: [ 
-			                            c isComponentEvents or: [
-				                            c isComponentParameters or: [
-					                            c isComponentServices ] ] ] ]
+			                            c isTrait and: [
+				                            c isComponentEvents or: [
+					                            c isComponentParameters or: [
+						                            c isComponentServices ] ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MolInterfaceCmdCommand >> selectedInterfaceClasses [
+
 	^ selectedInterfaceClasses
 ]

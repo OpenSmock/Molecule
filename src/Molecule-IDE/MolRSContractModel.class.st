@@ -116,3 +116,11 @@ MolRSContractModel >> shouldBreakOnCall [
 
 	^ self explicitRequirement
 ]
+
+{ #category : #'as yet unclassified' }
+MolRSContractModel >> showContractUsers [
+
+	MolInterfacesPresenter new
+		interface: self eventClass;
+		open
+]

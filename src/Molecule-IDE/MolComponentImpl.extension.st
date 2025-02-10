@@ -51,28 +51,76 @@ MolComponentImpl >> asRSMoleculeShape [
 			  selector: #browse
 			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #nautilus).
 		 aMenuMorph addSeparator.
+		 (aMenuMorph
+			  add: 'Break once when state switch to #initialize'
+			  target: self class
+			  selector: #breakOnceOnComponentInitialize) icon:
+			 (Smalltalk ui icons iconNamed: #halt).
+		 (aMenuMorph
+			  add: 'Break once when state switch to #activate'
+			  target: self class
+			  selector: #breakOnceOnComponentActivate) icon:
+			 (Smalltalk ui icons iconNamed: #halt).
+		 (aMenuMorph
+			  add: 'Break once when state switch to #passivate'
+			  target: self class
+			  selector: #breakOnceOnComponentPassivate) icon:
+			 (Smalltalk ui icons iconNamed: #halt).
+		 (aMenuMorph
+			  add: 'Break once when state switch to #remove'
+			  target: self class
+			  selector: #breakOnceOnComponentRemove) icon:
+			 (Smalltalk ui icons iconNamed: #halt).
 		(aMenuMorph
-			  add: 'Halt Once when new component #initialize'
+			  add: 'Break once when this component state switch to #activate'
 			  target: self
-			  selector: #haltOnComponentInitialize) icon:
-			 (Smalltalk ui icons iconNamed: #halt).
-			(aMenuMorph
-			  add: 'Halt Once when new component #activate'
+			  selector: #breakObjectOrientedOnceOnComponentActivate) icon:
+			 (Smalltalk ui icons iconNamed: #bug).
+		(aMenuMorph
+			  add: 'Break once when state this component switch to #passivate'
 			  target: self
-			  selector: #haltOnComponentActivate) icon:
-			 (Smalltalk ui icons iconNamed: #halt).
-		 (aMenuMorph
-			  add: 'Halt when #passivate'
+			  selector: #breakObjectOrientedOnceOnComponentPassivate) icon:
+			 (Smalltalk ui icons iconNamed: #bug).
+		(aMenuMorph
+			  add: 'Break once when state this component switch to #remove'
 			  target: self
-			  selector: #haltOnComponentPassivate) icon:
-			 (Smalltalk ui icons iconNamed: #halt).
-		 (aMenuMorph
-			  add: 'Halt when #remove'
-			  target: self
-			  selector: #haltOnComponentRemove) icon:
-			 (Smalltalk ui icons iconNamed: #halt) ]).
+			  selector: #breakObjectOrientedOnceOnComponentRemove) icon:
+			 (Smalltalk ui icons iconNamed: #bug)
+		
+		 ]).
+		
 
 	^ composite
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> breakObjectOrientedOnceOnComponentActivate [
+
+	^ self breakObjectOrientedOnceOnComponentLifeCycle: #componentActivate
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> breakObjectOrientedOnceOnComponentLifeCycle: aSymbol [
+
+	"We need to use the lookup to access the method if it is present in the super class or the trait."
+	^ DebugPointManager
+		              installNew: BreakDebugPoint
+		              on: (self class lookupSelector: aSymbol) ast
+		              forObject: self
+		              withBehaviors: { OnceBehavior }.
+
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> breakObjectOrientedOnceOnComponentPassivate [
+
+	^ self breakObjectOrientedOnceOnComponentLifeCycle: #componentPassivate
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> breakObjectOrientedOnceOnComponentRemove [
+
+	^ self breakObjectOrientedOnceOnComponentLifeCycle: #componentRemove
 ]
 
 { #category : #'*Molecule-IDE' }
@@ -116,30 +164,6 @@ MolComponentImpl classSide >> breakOnceOnComponentPassivate [
 MolComponentImpl classSide >> breakOnceOnComponentRemove [
 
 	^ self breakOnceOnComponentLifeCycle: #componentRemove
-]
-
-{ #category : #'*Molecule-IDE' }
-MolComponentImpl >> haltOnComponentActivate [
-
-	^ self class haltOnComponentActivate
-]
-
-{ #category : #'*Molecule-IDE' }
-MolComponentImpl >> haltOnComponentInitialize [
-
-	^ self class haltOnComponentInitialize
-]
-
-{ #category : #'*Molecule-IDE' }
-MolComponentImpl >> haltOnComponentPassivate [
-
-	^ self haltOnceOnCallTo: #componentPassivate
-]
-
-{ #category : #'*Molecule-IDE' }
-MolComponentImpl >> haltOnComponentRemove [
-
-	^ self haltOnceOnCallTo: #componentRemove
 ]
 
 { #category : #'*Molecule-IDE' }

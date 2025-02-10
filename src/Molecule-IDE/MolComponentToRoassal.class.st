@@ -92,6 +92,16 @@ MolComponentToRoassal class >> associationsAllUsedServicesAndTargetsFor: aMolCom
 		  ifNil: [ {  } ]
 ]
 
+{ #category : #color }
+MolComponentToRoassal class >> browseLabelFor: aMolRSContractModel [
+
+	(aMolRSContractModel eventClass includesTrait: MolComponentEvents)
+		ifTrue: [ ^ 'Browse Events Trait' ].
+	(aMolRSContractModel eventClass includesTrait: MolComponentServices)
+		ifTrue: [ ^ 'Browse Services Trait' ].
+	^ 'Browse Parameters Trait'
+]
+
 { #category : #'instance creation' }
 MolComponentToRoassal class >> canvasFromMultipleComponents: aCollectionOfComponents [
 
@@ -388,10 +398,15 @@ MolComponentToRoassal class >> makeSingleContractShapeFor: aMolRSContractModel [
 		 | separator |
 		 separator := false.
 		 (aMenuMorph
-			  add: 'Browse Trait'
+			  add: (self browseLabelFor: aMolRSContractModel)
 			  target: aMolRSContractModel eventClass
 			  selector: #browse
 			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #nautilus).
+		 (aMenuMorph
+			  add: (self usersLabelFor: aMolRSContractModel)
+			  target: aMolRSContractModel
+			  selector: #showContractUsers
+			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #references).
 		 aMolRSContractModel eventClass selectors do: [ :selector |
 			 separator ifFalse: [
 				 separator := true.
@@ -470,6 +485,16 @@ MolComponentToRoassal class >> serviceLogo [
 	^ RSComposite new shapes: {
 			  rsLogoIn.
 			  rsLogoOut }
+]
+
+{ #category : #color }
+MolComponentToRoassal class >> usersLabelFor: aMolRSContractModel [
+
+	(aMolRSContractModel eventClass includesTrait: MolComponentEvents)
+		ifTrue: [ ^ 'See Component Types that uses this Events' ].
+	(aMolRSContractModel eventClass includesTrait: MolComponentServices)
+		ifTrue: [ ^ 'See Component Types that uses this Services' ].
+	^ 'See Component Types that uses this Parameters'
 ]
 
 { #category : #'see class side' }

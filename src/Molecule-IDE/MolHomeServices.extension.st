@@ -23,5 +23,5 @@ MolHomeServices >> openRoassalView [
 	canvas := MolComponentToRoassal canvasFromMultipleComponents:
 		          components.
 
-	^ canvas openWithTitle: 'MolHomeService'
+	^ canvas openWithTitle: 'All deployed components'
 ]

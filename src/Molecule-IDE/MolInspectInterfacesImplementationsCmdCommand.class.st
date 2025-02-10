@@ -13,13 +13,24 @@ MolInspectInterfacesImplementationsCmdCommand class >> browserMenuActivation [
 { #category : #accessing }
 MolInspectInterfacesImplementationsCmdCommand >> defaultMenuIconName [
 
-	^ #inspect
+	^ #references
 ]
 
 { #category : #accessing }
 MolInspectInterfacesImplementationsCmdCommand >> defaultMenuItemName [
 
-	^ 'See Component users'
+	| contractType |
+	self selectedInterfaceClasses ifNil: [ ^ 'nothing' ].
+	self selectedInterfaceClasses ifEmpty: [ ^ 'nothing' ].
+	contractType := 'Unknow contract'.
+	(self selectedInterfaceClasses first usesTrait: MolComponentEvents)
+		ifTrue: [ contractType := 'Events' ].
+	(self selectedInterfaceClasses first usesTrait: MolComponentServices)
+		ifTrue: [ contractType := 'Services' ].
+	(self selectedInterfaceClasses first usesTrait: MolComponentParameters)
+		ifTrue: [ contractType := 'Parameters' ].
+	^ 'See Component Types that uses this <1s>' expandMacrosWith:
+		  contractType
 ]
 
 { #category : #accessing }
