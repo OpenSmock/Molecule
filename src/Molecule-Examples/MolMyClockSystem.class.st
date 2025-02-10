@@ -87,7 +87,7 @@ MolMyClockSystem class >> startAlarmExample [
 
 	"Stop the system in 10 seconds"
 	[
-	(Duration seconds: 10000) wait.
+	(Duration seconds: 10) wait.
 	self stop.
 	"Clean up the Component Manager in case of next example running"
 	MolComponentManager cleanUp.
@@ -109,4 +109,10 @@ MolMyClockSystem class >> undeploy [
 	MolComponentManager default deploymentServices undeployComponentImplementation: MolMyClockComponentImpl.
 	MolComponentManager default deploymentServices undeployComponentImplementation: MolMyAlarmComponentImpl.
 	MolComponentManager default deploymentServices undeployComponentImplementation: MolMyUserFacadeComponentImpl.
+]
+
+{ #category : #'see class side' }
+MolMyClockSystem >> seeClassSide [
+
+	
 ]

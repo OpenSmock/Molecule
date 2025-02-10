@@ -406,7 +406,8 @@ MolComponentToRoassal class >> makeSingleContractShapeFor: aMolRSContractModel [
 			  add: (self usersLabelFor: aMolRSContractModel)
 			  target: aMolRSContractModel
 			  selector: #showContractUsers
-			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #references).
+			  argument: #(  )) icon:
+			 (Smalltalk ui icons iconNamed: #references).
 		 aMolRSContractModel eventClass selectors do: [ :selector |
 			 separator ifFalse: [
 				 separator := true.
@@ -415,7 +416,7 @@ MolComponentToRoassal class >> makeSingleContractShapeFor: aMolRSContractModel [
 				  add: (aMolRSContractModel breakpointLabelFor: selector)
 				  target: aMolRSContractModel
 				  selector: #addBreakpointFor:
-				  argument: selector) icon: (Smalltalk ui icons iconNamed: #halt) ] ]).
+				  argument: selector) icon: (Smalltalk ui icons iconNamed: #bug) ] ]).
 	^ composite
 ]
 

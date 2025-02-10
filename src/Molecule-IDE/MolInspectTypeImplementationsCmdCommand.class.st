@@ -13,7 +13,7 @@ MolInspectTypeImplementationsCmdCommand class >> browserMenuActivation [
 { #category : #accessing }
 MolInspectTypeImplementationsCmdCommand >> defaultMenuIconName [
 
-	^ #inspect
+	^ #dropDown
 ]
 
 { #category : #accessing }

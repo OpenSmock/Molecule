@@ -98,3 +98,7 @@ MolGeoPosExampleLauncher class >> swapWiFi [
 	self stopCurrentGeoPosEquipment.
 	MolWiFi start
 ]
+
+{ #category : #'see class side' }
+MolGeoPosExampleLauncher >> seeClassSide [
+]

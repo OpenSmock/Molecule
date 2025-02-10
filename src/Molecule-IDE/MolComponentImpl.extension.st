@@ -50,6 +50,11 @@ MolComponentImpl >> asRSMoleculeShape [
 			  target: self
 			  selector: #browse
 			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #nautilus).
+		 (aMenuMorph
+			  add: 'Inspect component type implementors'
+			  target: self
+			  selector: #showComponentTypeImplementor
+			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #dropDown).
 		 aMenuMorph addSeparator.
 		 (aMenuMorph
 			  add: 'Break once when state switch to #initialize'
@@ -71,24 +76,22 @@ MolComponentImpl >> asRSMoleculeShape [
 			  target: self class
 			  selector: #breakOnceOnComponentRemove) icon:
 			 (Smalltalk ui icons iconNamed: #halt).
-		(aMenuMorph
+		 (aMenuMorph
 			  add: 'Break once when this component state switch to #activate'
 			  target: self
 			  selector: #breakObjectOrientedOnceOnComponentActivate) icon:
 			 (Smalltalk ui icons iconNamed: #bug).
-		(aMenuMorph
+		 (aMenuMorph
 			  add: 'Break once when state this component switch to #passivate'
 			  target: self
 			  selector: #breakObjectOrientedOnceOnComponentPassivate) icon:
 			 (Smalltalk ui icons iconNamed: #bug).
-		(aMenuMorph
+		 (aMenuMorph
 			  add: 'Break once when state this component switch to #remove'
 			  target: self
 			  selector: #breakObjectOrientedOnceOnComponentRemove) icon:
-			 (Smalltalk ui icons iconNamed: #bug)
-		
-		 ]).
-		
+			 (Smalltalk ui icons iconNamed: #bug) ]).
+
 
 	^ composite
 ]
@@ -101,14 +104,13 @@ MolComponentImpl >> breakObjectOrientedOnceOnComponentActivate [
 
 { #category : #'*Molecule-IDE' }
 MolComponentImpl >> breakObjectOrientedOnceOnComponentLifeCycle: aSymbol [
-
 	"We need to use the lookup to access the method if it is present in the super class or the trait."
-	^ DebugPointManager
-		              installNew: BreakDebugPoint
-		              on: (self class lookupSelector: aSymbol) ast
-		              forObject: self
-		              withBehaviors: { OnceBehavior }.
 
+	^ DebugPointManager
+		  installNew: BreakDebugPoint
+		  on: (self class lookupSelector: aSymbol) ast
+		  forObject: self
+		  withBehaviors: { OnceBehavior }
 ]
 
 { #category : #'*Molecule-IDE' }
@@ -174,4 +176,12 @@ MolComponentImpl >> inspectionComponent [
 	^ SpRoassalInspectorPresenter new
 		  canvas: (MolComponentToRoassal canvasFromSingleComponent: self);
 		  yourself
+]
+
+{ #category : #'*Molecule-IDE' }
+MolComponentImpl >> showComponentTypeImplementor [
+
+	^ MolImplementationsPresenter new
+		  type: self class componentType;
+		  open
 ]

@@ -43,7 +43,16 @@ MolRSContractModel >> addBreakpointFor: aSelector [
 { #category : #debug }
 MolRSContractModel >> breakOnceOn: aSelector [
 
-	self component breakOnceOnCallTo: aSelector
+	| method breakpoint |
+	method := self component class lookupSelector: aSelector.
+	breakpoint := BreakDebugPoint new.
+	breakpoint node: method ast.
+	breakpoint targetInstance: self component.
+
+	DebugPointManager
+		installDebugPoint: breakpoint
+		withBehaviors: { OnceBehavior }.
+	^ breakpoint
 ]
 
 { #category : #'as yet unclassified' }
@@ -56,10 +65,15 @@ MolRSContractModel >> breakOnceOnBeforeSend: aSelector [
 		                     method ast sendNodes select: [ :node |
 			                     node selector = aSelector ] ].
 	allASTSenderNodes do: [ :node |
-		DebugPointManager
-			installNew: BreakDebugPoint
-			on: node
-			withBehaviors: { OnceBehavior } ]
+		| breakpoint |
+		node methodNode methodClass = self component class ifTrue: [
+			breakpoint := BreakDebugPoint new.
+			breakpoint node: node.
+			breakpoint targetInstance: self component.
+
+			DebugPointManager
+				installDebugPoint: breakpoint
+				withBehaviors: { OnceBehavior } ] ]
 ]
 
 { #category : #'as yet unclassified' }
