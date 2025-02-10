@@ -3,7 +3,7 @@ Extension { #name : #MolHomeServices }
 { #category : #'*Molecule-IDE' }
 MolHomeServices >> inspectionDeployedComponentsGraph [
 
-	<inspectorPresentationOrder: 0 title: 'Deployed Components Graph'>
+	<inspectorPresentationOrder: 1000 title: 'Deployed Components Graph'>
 	| canvas components |
 	self deployedComponents ifNil: [ ^ SpNullPresenter new ].
 	components := self deployedComponents flatCollect: #values.
