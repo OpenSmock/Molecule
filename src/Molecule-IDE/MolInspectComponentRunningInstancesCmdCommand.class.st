@@ -1,13 +1,17 @@
 Class {
 	#name : #MolInspectComponentRunningInstancesCmdCommand,
 	#superclass : #MolClassesCmdCommand,
-	#category : #'Molecule-IDE-Menus'
+	#category : #'Molecule-IDE-Commands'
 }
 
 { #category : #activation }
 MolInspectComponentRunningInstancesCmdCommand class >> browserMenuActivation [
+
 	<classAnnotation>
-	^CmdContextMenuActivation byItemOf: MolCmdMenuGroup for: ClyFullBrowserClassContext.
+	^ CmdContextMenuActivation
+		  byItemOf: MolCmdMenuGroup
+		  order: 20
+		  for: ClyFullBrowserClassContext
 ]
 
 { #category : #accessing }
@@ -30,16 +34,16 @@ MolInspectComponentRunningInstancesCmdCommand >> description [
 
 { #category : #accessing }
 MolInspectComponentRunningInstancesCmdCommand >> execute [
-	| selectedComponents instanceList |
 
-	selectedComponents := self selectedComponentClasses. 
+	| selectedComponents instanceList |
+	selectedComponents := self selectedComponentClasses.
 	instanceList := Set new.
 
-	selectedComponents do:[ :c | | running |
-		running := (MolComponentManager default homeServices deployedComponents at: c ifAbsent:[ Dictionary new ]) copy.
-		running isEmpty ifFalse:[ instanceList add: running ].			
-	].
-	
-	self executionResult: instanceList.
-	^ self executionResult inspect
+	selectedComponents do: [ :c |
+		| running |
+		running := (MolComponentManager default homeServices
+			            deployedComponents at: c ifAbsent: [ Dictionary new ])
+			           copy.
+		running isEmpty ifFalse: [ instanceList add: running ] ].
+	^ instanceList inspect
 ]

@@ -1,7 +1,10 @@
 Class {
 	#name : #MolPackagesCmdCommand,
-	#superclass : #MolCmdCommand,
-	#category : #'Molecule-IDE-Menus'
+	#superclass : #CmdCommand,
+	#instVars : [
+		'selectedPackages'
+	],
+	#category : #'Molecule-IDE-Commands'
 }
 
 { #category : #activation }
@@ -36,16 +39,15 @@ MolPackagesCmdCommand class >> isAbstract [
 ]
 
 { #category : #execution }
-MolPackagesCmdCommand >> selectedPackages [
+MolPackagesCmdCommand >> prepareFullExecutionInContext: aToolContext [
 
-	^ selectedItems collect: [ :p | p browserItem actualObject ]
+	super prepareFullExecutionInContext: aToolContext.
+	selectedPackages := aToolContext selectedItems collect: [ :p |
+		                   p browserItem actualObject ]
 ]
 
 { #category : #execution }
-MolPackagesCmdCommand >> selectedPackagesClasses [
+MolPackagesCmdCommand >> selectedPackages [
 
-	| classes |
-	classes := Set new.
-	self selectedPackages do: [ :p | classes addAll: p classes ].
-	^ classes
+	^ selectedPackages
 ]

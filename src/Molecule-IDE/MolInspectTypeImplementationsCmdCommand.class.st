@@ -1,7 +1,7 @@
 Class {
 	#name : #MolInspectTypeImplementationsCmdCommand,
 	#superclass : #MolTypeCmdCommand,
-	#category : #'Molecule-IDE-Tools'
+	#category : #'Molecule-IDE-Commands'
 }
 
 { #category : #activation }
@@ -13,7 +13,7 @@ MolInspectTypeImplementationsCmdCommand class >> browserMenuActivation [
 { #category : #accessing }
 MolInspectTypeImplementationsCmdCommand >> defaultMenuIconName [
 
-	^ 'glamorousInspect'
+	^ #dropDown
 ]
 
 { #category : #accessing }
@@ -31,17 +31,7 @@ MolInspectTypeImplementationsCmdCommand >> description [
 { #category : #accessing }
 MolInspectTypeImplementationsCmdCommand >> execute [
 
-	| selectedType implem emptyArray |
-	selectedType := self selectedTypeClass.
-
-	implem := MolImplementationsPresenter new.
-	emptyArray := Array new: 0.
-
-	"condition and ifTrue: are executed only if multiple Traits were/are selected in the System Browser, since this option only supports one Type selected at a time"
-	selectedType = emptyArray
-		ifFalse: [ selectedType := selectedType at: 1 ]
-		ifTrue: [
-		selectedType := (selectedItems at: 1) browserItem actualObject ].
-	implem type: selectedType.
-	implem open
+	MolImplementationsPresenter new
+		type: self selectedTypeClass first;
+		open
 ]

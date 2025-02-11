@@ -32,17 +32,55 @@ MolRSContractModel >> <= aMolRSContractModel [
 	^ self eventClass name < aMolRSContractModel eventClass name
 ]
 
-{ #category : #debug }
-MolRSContractModel >> breakOnceOnSelector: aSelector [ 
+{ #category : #adding }
+MolRSContractModel >> addBreakpointFor: aSelector [
 
-	(self component breakOnceOnCallTo: aSelector)
-
+	self shouldBreakOnCall
+		ifTrue: [ self breakOnceOn: aSelector ]
+		ifFalse: [ self breakOnceOnBeforeSend: aSelector ]
 ]
 
 { #category : #debug }
-MolRSContractModel >> canBreakOn: aString [
+MolRSContractModel >> breakOnceOn: aSelector [
 
-	^ self explicitRequirement
+	| method breakpoint |
+	method := self component class lookupSelector: aSelector.
+	breakpoint := BreakDebugPoint new.
+	breakpoint node: method ast.
+	breakpoint targetInstance: self component.
+
+	DebugPointManager
+		installDebugPoint: breakpoint
+		withBehaviors: { OnceBehavior }.
+	^ breakpoint
+]
+
+{ #category : #'as yet unclassified' }
+MolRSContractModel >> breakOnceOnBeforeSend: aSelector [
+
+	| allSenders allASTSenderNodes |
+	allSenders := aSelector senders select: [ :method |
+		              method methodClass isComponentClass ].
+	allASTSenderNodes := allSenders flatCollect: [ :method |
+		                     method ast sendNodes select: [ :node |
+			                     node selector = aSelector ] ].
+	allASTSenderNodes do: [ :node |
+		| breakpoint |
+		node methodNode methodClass = self component class ifTrue: [
+			breakpoint := BreakDebugPoint new.
+			breakpoint node: node.
+			breakpoint targetInstance: self component.
+
+			DebugPointManager
+				installDebugPoint: breakpoint
+				withBehaviors: { OnceBehavior } ] ]
+]
+
+{ #category : #'as yet unclassified' }
+MolRSContractModel >> breakpointLabelFor: aSelector [
+
+	self shouldBreakOnCall ifTrue: [ ^ 'Halt once on #' , aSelector ]
+	ifFalse: [ ^ 'Halt once before send #' , aSelector ]
 ]
 
 { #category : #accessing }
@@ -85,4 +123,18 @@ MolRSContractModel >> name [
 MolRSContractModel >> name: anObject [
 
 	name := anObject
+]
+
+{ #category : #asserting }
+MolRSContractModel >> shouldBreakOnCall [
+
+	^ self explicitRequirement
+]
+
+{ #category : #'as yet unclassified' }
+MolRSContractModel >> showContractUsers [
+
+	MolInterfacesPresenter new
+		interface: self eventClass;
+		open
 ]
