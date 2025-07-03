@@ -185,106 +185,102 @@ MolComponentFactory class >> componentContractPragmaSymbol [
 { #category : #'component - creation' }
 MolComponentFactory class >> createComponentEvents: aSymbol in: aPackageName [
 	"Create a ComponentEvents interface named aSymbol in a package"
-	
-	aSymbol ifNil:[^self].
-	aPackageName ifNil:[^self].
-	self class environment at: aSymbol ifPresent: [
-		^ self error:'[Molecule] Do not create an existing ComponentEvents, remove it before.'.
-	].
 
-	OpalCompiler new evaluate:
-			'Trait named: ' , aSymbol printString ,
-	' 
-	uses: MolComponentEvents
-	package: ''' , aPackageName , ''''.
-	
+	aSymbol ifNil: [ ^ self ].
+	aPackageName ifNil: [ ^ self ].
+	self class environment at: aSymbol ifPresent: [
+			^ self error:
+				  '[Molecule] Do not create an existing component events interface, remove it before.' ].
+
+	"create the new Trait"
+	(Trait << aSymbol)
+		traits: MolComponentEvents;
+		package: aPackageName;
+		install
 ]
 
 { #category : #'component - creation' }
 MolComponentFactory class >> createComponentForType: aComponentType named: aSymbol in: aPackageName [
 
-	aComponentType ifNotNil: [ 
-		(aComponentType isTrait and:[aComponentType isComponentType]) ifFalse:[ ^ NotAComponentTypeError signal: 'Cannot create Component for a no ComponentType object.' ].
-	].
-	aSymbol ifNil:[^ self error:'[Molecule] Cannot create a component without a name.'].
-	aPackageName ifNil:[^ self error:'[Molecule] Cannot create a component without a package name.'].
-		
-	self class environment at: aSymbol ifPresent: [
-		^ self error:'[Molecule] Do not redefine an existing Component, remove it before.' 
-	].
+	| builder |
+	aComponentType ifNotNil: [
+			(aComponentType isTrait and: [ aComponentType isComponentType ])
+				ifFalse: [
+						^ NotAComponentTypeError signal:
+							  'Cannot create Component for a no ComponentType object.' ] ].
+	aSymbol ifNil: [
+		^ self error: '[Molecule] Cannot create a component without a name.' ].
+	aPackageName ifNil: [
+			^ self error:
+				  '[Molecule] Cannot create a component without a package name.' ].
 
-	OpalCompiler new evaluate:
-			'MolAbstractComponentImpl subclass: ' , aSymbol printString
-				,
-	(aComponentType notNil ifTrue:[	(' 
-	uses: ' , aComponentType printString)
-	] ifFalse:[''])			,
-					'
-	instanceVariableNames: ''''
-	classVariableNames: ''''
-	package: ''' , aPackageName , ''''.
+	self class environment at: aSymbol ifPresent: [
+			^ self error:
+				  '[Molecule] Do not redefine an existing Component, remove it before.' ].
+
+	"create new component implementation class"
+	builder := MolAbstractComponentImpl << aSymbol package: aPackageName.
+	aComponentType ifNotNil: [ builder traits: aComponentType ].
+	builder install
 ]
 
 { #category : #'component - creation' }
 MolComponentFactory class >> createComponentNamed: aSymbol in: aPackageName [
 
-	aSymbol ifNil:[^self].
-	aPackageName ifNil:[^self].
+	aSymbol ifNil: [ ^ self ].
+	aPackageName ifNil: [ ^ self ].
 	self createComponentForType: nil named: aSymbol in: aPackageName
 ]
 
 { #category : #'component - creation' }
 MolComponentFactory class >> createComponentParameters: aSymbol in: aPackageName [
 	"Create a ComponentParameters interface named aSymbol in a package"
-	
-	aSymbol ifNil:[^self].
-	aPackageName ifNil:[^self].
-	self class environment at: aSymbol ifPresent: [
-		^ self error:'[Molecule] Do not create an existing ComponentParameters, remove it before.'.
-	].
 
-	OpalCompiler new evaluate:
-			'Trait named: ' , aSymbol printString ,
-	' 
-	uses: MolComponentParameters
-	package: ''' , aPackageName , ''''.
-	
+	aSymbol ifNil: [ ^ self ].
+	aPackageName ifNil: [ ^ self ].
+	self class environment at: aSymbol ifPresent: [
+			^ self error:
+				  '[Molecule] Do not create an existing component parameters interface, remove it before.' ].
+
+	"create the new Trait"
+	(Trait << aSymbol)
+		traits: MolComponentParameters;
+		package: aPackageName;
+		install
 ]
 
 { #category : #'component - creation' }
 MolComponentFactory class >> createComponentServices: aSymbol in: aPackageName [
 	"Create a ComponentServices interface named aSymbol in a package"
-	
-	aSymbol ifNil:[^self].
-	aPackageName ifNil:[^self].
-	self class environment at: aSymbol ifPresent: [
-		^ self error:'[Molecule] Do not create an existing ComponentServices, remove it before.'.
-	].
 
-	OpalCompiler new evaluate:
-			'Trait named: ' , aSymbol printString ,
-	' 
-	uses: MolComponentServices
-	package: ''' , aPackageName , ''''.
-	
+	aSymbol ifNil: [ ^ self ].
+	aPackageName ifNil: [ ^ self ].
+	self class environment at: aSymbol ifPresent: [
+			^ self error:
+				  '[Molecule] Do not create an existing component services interface, remove it before.' ].
+
+	"create the new Trait"
+	(Trait << aSymbol)
+		traits: MolComponentServices;
+		package: aPackageName;
+		install
 ]
 
 { #category : #'component - creation' }
 MolComponentFactory class >> createComponentType: aSymbol in: aPackageName [
 	"Create a ComponentType named aSymbol in a package"
-	
-	aSymbol ifNil:[^self].
-	aPackageName ifNil:[^self].
-	self class environment at: aSymbol ifPresent: [
-		^ self error:'[Molecule] Do not create an existing ComponentType, remove it before.'.
-	].
 
-	OpalCompiler new evaluate:
-			'Trait named: ' , aSymbol printString ,
-	' 
-	uses: MolComponentType
-	package: ''' , aPackageName , ''''.
-	
+	aSymbol ifNil: [ ^ self ].
+	aPackageName ifNil: [ ^ self ].
+	self class environment at: aSymbol ifPresent: [
+			^ self error:
+				  '[Molecule] Do not create an existing component type, remove it before.' ].
+
+	"create the new Trait"
+	(Trait << aSymbol)
+		traits: MolComponentType;
+		package: aPackageName;
+		install
 ]
 
 { #category : #'component - contract management' }
@@ -356,6 +352,32 @@ MolComponentFactory class >> isInitialized [
 
 	<script: 'self isInitialized inspect'>
 	^ Default notNil
+]
+
+{ #category : #'component - creation' }
+MolComponentFactory class >> p12createComponentForType: aComponentType named: aSymbol in: aPackageName [
+
+	self deprecated:''.
+	aComponentType ifNotNil: [ 
+		(aComponentType isTrait and:[aComponentType isComponentType]) ifFalse:[ ^ NotAComponentTypeError signal: 'Cannot create Component for a no ComponentType object.' ].
+	].
+	aSymbol ifNil:[^ self error:'[Molecule] Cannot create a component without a name.'].
+	aPackageName ifNil:[^ self error:'[Molecule] Cannot create a component without a package name.'].
+		
+	self class environment at: aSymbol ifPresent: [
+		^ self error:'[Molecule] Do not redefine an existing Component, remove it before.' 
+	].
+
+	OpalCompiler new evaluate:
+			'MolAbstractComponentImpl subclass: ' , aSymbol printString
+				,
+	(aComponentType notNil ifTrue:[	(' 
+	uses: ' , aComponentType printString)
+	] ifFalse:[''])			,
+					'
+	instanceVariableNames: ''''
+	classVariableNames: ''''
+	package: ''' , aPackageName , ''''.
 ]
 
 { #category : #protocol }

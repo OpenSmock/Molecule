@@ -26,7 +26,7 @@ MolComponentAnnouncementTest >> testAnnounceActivated [
 
 	| announcement component component2 |
 	announcement := nil.
-	SystemAnnouncer uniqueInstance when: MolComponentActivated do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentActivated do:[ :a | announcement := a ] for: self.
 
 	"test by standard instanciation"
 	MolMyUserComponentImpl deploy.
@@ -52,7 +52,7 @@ MolComponentAnnouncementTest >> testAnnounceInstanciated [
 
 	| announcement component component2 |
 	announcement := nil.
-	SystemAnnouncer uniqueInstance when: MolComponentInstantiated do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentInstantiated do:[ :a | announcement := a ] for: self.
 
 	"test by standard instanciation"
 	MolMyUserComponentImpl deploy.
@@ -74,7 +74,7 @@ MolComponentAnnouncementTest >> testAnnouncePassivated [
 
 	| announcement component component2 |
 	announcement := nil.
-	SystemAnnouncer uniqueInstance when: MolComponentPassivated do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentPassivated do:[ :a | announcement := a ] for: self.
 
 	"test by standard instanciation"
 	MolMyUserComponentImpl deploy.
@@ -102,7 +102,7 @@ MolComponentAnnouncementTest >> testAnnounceRemoved [
 
 	| announcement component component2 |
 	announcement := nil.
-	SystemAnnouncer uniqueInstance when: MolComponentRemoved do:[ :a | announcement := a ].
+	SystemAnnouncer uniqueInstance when: MolComponentRemoved do:[ :a | announcement := a ] for: self.
 
 	"test by standard instanciation"
 	MolMyUserComponentImpl deploy.

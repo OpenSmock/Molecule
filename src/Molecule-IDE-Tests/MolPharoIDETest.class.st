@@ -24,17 +24,23 @@ MolPharoIDETest >> tearDown [
 { #category : #running }
 MolPharoIDETest >> testInspectComponent [
 
-	| component inspector |
+	| component inspector window |
 	component := MolBasicComponentImpl start.
-	self flag:'pla: this test is manual, need to test if there is an error automatically'.
-	inspector := (Smalltalk tools inspector inspect: component).
+	inspector := (Smalltalk tools toolNamed: #inspector).
+	window := inspector inspect: self.
+	self assert: window isOpen.
+	
+	window close.
 ]
 
 { #category : #running }
 MolPharoIDETest >> testInspectComponentWithNew [
 
-	| component inspector |
+	| component inspector window |
 	component := MolBasicComponentImpl new.
-	self flag:'pla: this test is manual, need to test if there is an error automatically'.
-	inspector := (Smalltalk tools inspector inspect: component).
+	inspector := (Smalltalk tools toolNamed: #inspector).
+	window := inspector inspect: self.
+	self assert: window isOpen.
+	
+	window close.
 ]
