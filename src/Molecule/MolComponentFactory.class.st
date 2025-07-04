@@ -570,6 +570,7 @@ MolComponentFactory >> defineComponent: aComponentClass [
 			toUseTraitList := Set withAll: aComponentClass consumedComponentEvents.
 			toUseTraitList addAll: aComponentClass providedComponentServices.
 			toUseTraitList addAll: aComponentClass providedComponentParameters.
+			toUseTraitList := toUseTraitList select:[ :e | e notNil ].
 			self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
 		].
 	].

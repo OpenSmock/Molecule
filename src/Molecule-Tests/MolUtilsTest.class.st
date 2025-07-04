@@ -58,7 +58,7 @@ MolUtilsTest >> testActivateComponents [
 { #category : #tests }
 MolUtilsTest >> testAllComponentImplementationClassesOfType [
 
-	self assert: (MolUtils allComponentImplementationClassesOfType: MolCompleteComponent) size equals: 5.
+	self assert: (MolUtils allComponentImplementationClassesOfType: MolCompleteComponent) size equals: 6.
 ]
 
 { #category : #tests }
