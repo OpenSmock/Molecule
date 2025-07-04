@@ -427,13 +427,22 @@ MolComponentFactory >> activateDynamicContractUpdate: isInform [
 { #category : #'private - code checking' }
 MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass: aComponentClass [
 	"Check if a Component Class uses a list of Trait Class and do uses"
-	| traitList missingTraits |
+	| traitList toAddTraits toRemoveTraits |
 	
 	aTraitList isEmpty ifTrue:[ ^ self ].
-	
 	traitList := self collectComponentConnectionTraits: aComponentClass.
-	missingTraits := aTraitList reject: [ :e | (traitList includes: e) and:[ e isObsolete ] ].
-	missingTraits ifNotEmpty: [self rebuildComponent: aComponentClass traitsAdding: missingTraits].
+	
+	"added traits"
+	toAddTraits := aTraitList reject: [ :e | (traitList includes: e) or:[ e isObsolete ] ].
+	toAddTraits ifNotEmpty:[
+		self rebuildComponent: aComponentClass traitsAdding: toAddTraits.
+	].
+	
+	"removed traits"
+	toRemoveTraits := traitList reject: [ :e | aTraitList includes: e ].
+	toRemoveTraits ifNotEmpty:[
+		self rebuildComponent: aComponentClass traitsRemoving: toRemoveTraits.
+	].
 ]
 
 { #category : #'dirty components' }
@@ -470,7 +479,7 @@ MolComponentFactory >> componentChanged: aChangedClass [
 	aChangedClass isComponentClass ifFalse:[^self].
 	
 	self isDynamicContractUpdateActivated ifTrue: [ 
-		aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]
+		self defineComponent: aChangedClass
 	] ifFalse: [ 
 		dirtyComponents add: aChangedClass
 	].
@@ -900,6 +909,27 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsAdding: aTraitsLi
 				aComponentClass traitComposition isEmpty 
 					ifTrue:[aComponentClass setTraitComposition: toBeAddedTrait] 
 					ifFalse:[	aComponentClass addToComposition: toBeAddedTrait].
+			].
+		].
+	].
+]
+
+{ #category : #'private - code generation' }
+MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraitsList [
+	| classes |
+	"Get class hierarchy of the component class and clean classes not concerned by Component Contract Traits"
+	classes := aComponentClass allSuperclasses reverse.
+	classes remove: Object; remove: ProtoObject; remove: MolAbstractComponentImpl ifAbsent:[nil].
+	classes add: aComponentClass.
+
+	aTraitsList do: [:trait | | toBeRemoveTrait |
+		(trait notNil and:[trait isTrait and:[trait isObsolete not]]) ifTrue:[ 
+			toBeRemoveTrait := trait.
+			"Cannot remove the traits if absent"
+			classes do: [ :c | toBeRemoveTrait ifNotNil:[ (c allTraits includes: trait) ifFalse:[toBeRemoveTrait := nil] ]].
+			toBeRemoveTrait ifNotNil:[
+				aComponentClass traitComposition isEmpty 
+					ifFalse:[	aComponentClass removeFromComposition: toBeRemoveTrait].
 			].
 		].
 	].

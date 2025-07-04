@@ -13,7 +13,9 @@ Class {
 MolCompleteComponentOverloadImpl class >> consumedComponentEvents [
 
 	<componentContract>
-	^ { MolUsedEvents. MolUsedEvents2 }
+	^ {
+		  MolUsedEvents.
+		  MolUsedEvents2 }
 ]
 
 { #category : #'accessing - events' }
@@ -29,7 +31,9 @@ MolCompleteComponentOverloadImpl class >> producedComponentEvents [
 MolCompleteComponentOverloadImpl class >> providedComponentParameters [
 
 	<componentContract>
-	^ { MolUsedParameters. MolUsedParameters2. }
+	^ {
+		  MolUsedParameters.
+		  MolUsedParameters2 }
 ]
 
 { #category : #'accessing - services' }
@@ -45,14 +49,18 @@ MolCompleteComponentOverloadImpl class >> providedComponentServices [
 MolCompleteComponentOverloadImpl class >> usedComponentParameters [
 
 	<componentContract>
-	^ { MolUsedParameters. MolUsedParameters2 }
+	^ {
+		  MolUsedParameters.
+		  MolUsedParameters2 }
 ]
 
 { #category : #'accessing - services' }
 MolCompleteComponentOverloadImpl class >> usedComponentServices [
-	
+
 	<componentContract>
-	^ { MolUsedServices. MolUsedServices2 }
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2 }
 ]
 
 { #category : #events }
