@@ -9,8 +9,6 @@ Class {
 
 { #category : #'setUp-tearDown' }
 MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
-	"Smalltalk fixObsoleteReferences."
-	
 	<script: 'self new cleanGeneratedClassesAndTraits'>
 
 	| edited |
@@ -112,11 +110,22 @@ MolComponentFactoryTest >> generationTag [
 ]
 
 { #category : #'setUp-tearDown' }
+MolComponentFactoryTest >> restoreRemovedThings [
+	"Restore things removed in tests"
+	<script: 'self new restoreRemovedThings'>
+	
+	self createInstanceMethod: 'usedComponentServices' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - services' withCode: '
+	<componentContract>
+	^ { MolUsedServices. MolUsedServices2 }'.
+]
+
+{ #category : #running }
 MolComponentFactoryTest >> setUp [
 
 	self timeLimit: 30 seconds.
 	MolComponentManager cleanUp.
 	self cleanGeneratedClassesAndTraits.
+	self restoreRemovedThings.
 ]
 
 { #category : #'setUp-tearDown' }
@@ -164,11 +173,12 @@ MolComponentFactoryTest >> setUpComponentAndType [
 	edited ifTrue:[(Delay forMilliseconds: 100) wait].
 ]
 
-{ #category : #'setUp-tearDown' }
+{ #category : #running }
 MolComponentFactoryTest >> tearDown [
 
 	(Delay forMilliseconds: 10) wait.
 	self cleanGeneratedClassesAndTraits.
+	self restoreRemovedThings.
 	MolComponentManager cleanUp.
 ]
 
@@ -264,7 +274,7 @@ MolComponentFactoryTest >> testComponentContractChanged [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'test - overload' }
 MolComponentFactoryTest >> testComponentContractImplGeneration [
 
 	| toFind |
@@ -1233,4 +1243,19 @@ MolComponentFactoryTest >> testProtocolForComponentParameters [
 MolComponentFactoryTest >> testProtocolForComponentServices [
 
 	self assert: MolComponentFactory protocolForComponentServices equals: 'accessing - services'.
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveInterfaceInImplementationWhichOverloadAType [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #usedComponentServices ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil.
 ]

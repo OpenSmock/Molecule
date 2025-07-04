@@ -50,7 +50,7 @@ MolCompleteComponentOverloadImpl class >> usedComponentParameters [
 
 { #category : #'accessing - services' }
 MolCompleteComponentOverloadImpl class >> usedComponentServices [
-
+	
 	<componentContract>
 	^ { MolUsedServices. MolUsedServices2 }
 ]
