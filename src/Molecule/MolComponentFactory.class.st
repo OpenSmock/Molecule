@@ -152,7 +152,7 @@ MolComponentFactory class >> cleanUp [
 { #category : #'component - contract management' }
 MolComponentFactory class >> compileContractSelector: aSelector protocol: aProtocol interfaces: interfaceList type: aComponentType [
 	"Compile Component Type contract description method into a class selector, this method return an array of Molecule interfaces (Traits as Services or Events)"
-	| sourceCode selector previousMethodOrNil newMethod |
+	| sourceCode selector previousMethodOrNil newMethod oldProtocol |
 
 	"Get the previous method or nil"
 	previousMethodOrNil := aComponentType class compiledMethodAt:( aSelector asSymbol) ifAbsent: [ nil ].
@@ -167,12 +167,13 @@ MolComponentFactory class >> compileContractSelector: aSelector protocol: aProto
 	
 	"Notify pragma change after Trait compilation to be sure that the compiled method is applied to Trait users"
 	newMethod := aComponentType class compiledMethodAt: selector.
+	oldProtocol := aComponentType class protocolNamed: aProtocol.
 	
 	SystemAnnouncer uniqueInstance announce: (
 		MethodModified 
 			methodChangedFrom: previousMethodOrNil
 			to: newMethod 
-			oldProtocol: aProtocol
+			oldProtocol: oldProtocol
 	)
 ]
 
