@@ -7,7 +7,7 @@ Class {
 	#category : #'Molecule-Tests-Cases'
 }
 
-{ #category : #'setUp-tearDown' }
+{ #category : #running }
 MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 	<script: 'self new cleanGeneratedClassesAndTraits'>
 
@@ -27,6 +27,14 @@ MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 	].
 	
 	edited ifTrue:[(Delay forMilliseconds: 100) wait].
+]
+
+{ #category : #running }
+MolComponentFactoryTest >> cleanGeneratedMethods [
+	"Restore methods added by tests"
+	<script: 'self new cleanGeneratedMethods'>
+	
+	MolCompleteSubComponentOverloadImpl class removeSelector: #usedComponentServices
 ]
 
 { #category : #utils }
@@ -109,7 +117,7 @@ MolComponentFactoryTest >> generationTag [
 	^'Molecule-Tests-Resources - Generated'
 ]
 
-{ #category : #'setUp-tearDown' }
+{ #category : #running }
 MolComponentFactoryTest >> restoreRemovedThings [
 	"Restore things removed in tests"
 	<script: 'self new restoreRemovedThings'>
@@ -166,9 +174,10 @@ MolComponentFactoryTest >> setUp [
 	MolComponentManager cleanUp.
 	self cleanGeneratedClassesAndTraits.
 	self restoreRemovedThings.
+	self cleanGeneratedMethods.
 ]
 
-{ #category : #'setUp-tearDown' }
+{ #category : #running }
 MolComponentFactoryTest >> setUpComponentAndType [
 	<script: 'self new setUpComponentAndType'>
 	| edited |
@@ -219,6 +228,7 @@ MolComponentFactoryTest >> tearDown [
 	(Delay forMilliseconds: 10) wait.
 	self cleanGeneratedClassesAndTraits.
 	self restoreRemovedThings.
+	self cleanGeneratedMethods.
 	MolComponentManager cleanUp.
 ]
 
@@ -1367,4 +1377,29 @@ MolComponentFactoryTest >> testRemoveOverloadedUsedServices [
 		do: [ :e | exception := e ].
 		
 	self assert: exception isNil
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testSubOverriddeOfAContract [
+	"Related to issue #209, can overridde an overridden contract"
+	
+	| usedServices |
+	
+		"Simulate overridden of an overridden contract"
+	self createInstanceMethod: 'usedComponentServices' in: (MolCompleteSubComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Generated method in MolComponentFactoryTest>>testSubOverriddeOfAContract"
+
+	<componentContract>
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2.
+		  MolUsedServices3 }'.
+	
+	
+	"Test overridding the method"
+	usedServices := MolCompleteSubComponentOverloadImpl usedComponentServices.
+	self assert: usedServices size equals: 3.
+	self assert: (usedServices includes: MolUsedServices3).
+	
+	"Test traits installation"
+	self assert: (MolCompleteSubComponentOverloadImpl traitComposition includes: MolUsedServices3). 
 ]
