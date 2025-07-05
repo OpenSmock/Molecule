@@ -86,23 +86,28 @@ MolUtils class >> componentType: aComponentOrComponentClass [
 
 { #category : #'component contract' }
 MolUtils class >> consumedComponentEvents: anObject [
-	"Get consumed events of an object, return nil if no events was found"
+	"Get consumed events of an object, return nil if no services was found. Considere also overidden contract in a Component implementation."
+	| componentType list isType |
+	(self isComponentObject: anObject) ifFalse: [ ^ OrderedCollection new ].
 
-	| componentType set |
-	anObject isTrait ifFalse: [
-		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
-	componentType := (anObject isTrait and: [ anObject isComponentType ])
+	list := Set new.
+	isType := anObject isTrait and: [ anObject isComponentType ].
+	componentType := isType
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
-	^ componentType
-		  ifNotNil: [ :e |
-			  set := Set new.
-			set addAll: e consumedComponentEvents.
-			  (anObject class respondsTo: #consumedComponentEvents)
-				  ifTrue: [ set addAll: anObject class consumedComponentEvents ]
-				  ifFalse: [ set addAll: anObject consumedComponentEvents ].
-			  ^ set asArray ]
-		  ifNil: [ ^ {  } ]
+
+	"add component type services"
+	componentType ifNotNil: [ :e |
+		list addAll: e consumedComponentEvents ].
+
+	"add component implementation overridden services"
+	isType ifFalse: [
+		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
+		(anObject class respondsTo: #consumedComponentEvents) ifTrue: [ list addAll: anObject class consumedComponentEvents ].
+		(anObject respondsTo: #consumedComponentEvents) ifTrue: [ list addAll: anObject consumedComponentEvents ] 
+	].
+
+	^ list asOrderedCollection
 ]
 
 { #category : #'quick creation' }
@@ -324,52 +329,59 @@ MolUtils class >> passivateComponents: aComponentClassList [
 
 { #category : #'component contract' }
 MolUtils class >> producedComponentEvents: anObject [
-	"Get produced events of an object, return nil if no events was found"
+	"Get produced events of an object, return nil if no services was found. Considere also overidden contract in a Component implementation."
+	| componentType list isType |
+	(self isComponentObject: anObject) ifFalse: [ ^ OrderedCollection new ].
 
-	| componentType set |
-	anObject isTrait ifFalse: [
-		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
-	componentType := (anObject isTrait and: [ anObject isComponentType ])
+	list := Set new.
+	isType := anObject isTrait and: [ anObject isComponentType ].
+	componentType := isType
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
-	^ componentType
-		  ifNotNil: [ :e |
-			  set := Set new.
-			set addAll: e producedComponentEvents.
-			  (anObject class respondsTo: #producedComponentEvents)
-				  ifTrue: [ set addAll: anObject class producedComponentEvents ]
-				  ifFalse: [ set addAll: anObject producedComponentEvents ].
-			  
-			  ^ set asArray ]
-		  ifNil: [ ^ {  } ]
+
+	"add component type services"
+	componentType ifNotNil: [ :e |
+		list addAll: e producedComponentEvents ].
+
+	"add component implementation overridden services"
+	isType ifFalse: [
+		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
+		(anObject class respondsTo: #producedComponentEvents) ifTrue: [ list addAll: anObject class producedComponentEvents ].
+		(anObject respondsTo: #producedComponentEvents) ifTrue: [ list addAll: anObject producedComponentEvents ] 
+	].
+
+	^ list asOrderedCollection
 ]
 
 { #category : #'component contract' }
 MolUtils class >> providedComponentParameters: anObject [
-	"Get provided parameters of an object, return nil if no parameters was found"
+	"Get provided parameters of an object, return nil if no services was found. Considere also overidden contract in a Component implementation."
+	| componentType list isType |
+	(self isComponentObject: anObject) ifFalse: [ ^ OrderedCollection new ].
 
-	| componentType set |
-	anObject isTrait ifFalse: [
-		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
-	componentType := (anObject isTrait and: [ anObject isComponentType ])
+	list := Set new.
+	isType := anObject isTrait and: [ anObject isComponentType ].
+	componentType := isType
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
-	^ componentType
-		  ifNotNil: [ :e |
-			  set := Set new.
-			set addAll: e providedComponentParameters.
-			  (anObject class respondsTo: #providedComponentParameters)
-				  ifTrue: [
-				  set addAll: anObject class providedComponentParameters ]
-				  ifFalse: [ set addAll: anObject providedComponentParameters ].
-			  
-			  ^ set asArray ]
-		  ifNil: [ ^ {  } ]
+
+	"add component type services"
+	componentType ifNotNil: [ :e |
+		list addAll: e providedComponentParameters ].
+
+	"add component implementation overridden services"
+	isType ifFalse: [
+		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
+		(anObject class respondsTo: #providedComponentParameters) ifTrue: [ list addAll: anObject class providedComponentParameters ].
+		(anObject respondsTo: #providedComponentParameters) ifTrue: [ list addAll: anObject providedComponentParameters ] 
+	].
+
+	^ list asOrderedCollection
 ]
 
 { #category : #'component contract' }
 MolUtils class >> providedComponentServices: anObject [
-	"Get provided services of an object, return nil if no services was found"
+	"Get provided services of an object, return nil if no services was found. Considere also overidden contract in a Component implementation."
 	| componentType list isType |
 	(self isComponentObject: anObject) ifFalse: [ ^ OrderedCollection new ].
 
@@ -525,23 +537,29 @@ MolUtils class >> toggleLog [
 
 { #category : #'component contract' }
 MolUtils class >> usedComponentParameters: anObject [
-	"Get used parameters of an object, return nil if no parameters was found"
+	"Get used parameters of an object, return nil if no services was found. Considere also overidden contract in a Component implementation."
 
-	| componentType set |
-	anObject isTrait ifFalse: [
-		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
-	componentType := (anObject isTrait and: [ anObject isComponentType ])
+	| componentType list isType |
+	(self isComponentObject: anObject) ifFalse: [ ^ OrderedCollection new ].
+
+	list := Set new.
+	isType := anObject isTrait and: [ anObject isComponentType ].
+	componentType := isType
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
-	^ componentType
-		  ifNotNil: [ :e |
-			  set := Set new.
-			  set addAll: e usedComponentParameters.
-			  (anObject class respondsTo: #usedComponentParameters)
-				  ifTrue: [ set addAll: anObject class usedComponentParameters ]
-				  ifFalse: [ set addAll: anObject usedComponentParameters ].
-			  ^ set asArray ]
-		  ifNil: [ ^ {  } ]
+
+	"add component type services"
+	componentType ifNotNil: [ :e |
+		list addAll: e usedComponentParameters ].
+
+	"add component implementation overridden services"
+	isType ifFalse: [
+		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
+		(anObject class respondsTo: #usedComponentParameters) ifTrue: [ list addAll: anObject class usedComponentParameters ].
+		(anObject respondsTo: #usedComponentParameters) ifTrue: [ list addAll: anObject usedComponentParameters ] 
+	].
+
+	^ list asOrderedCollection
 ]
 
 { #category : #'component contract' }

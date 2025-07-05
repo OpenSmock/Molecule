@@ -566,10 +566,9 @@ MolComponentFactory >> defineComponent: aComponentClass [
 	] ifTrue:[
 		aComponentClass haveOwnComponentType ifTrue:[
 			"Check missing traits"
-			toUseTraitList := Set withAll: aComponentClass consumedComponentEvents.
+			toUseTraitList := Set withAll: (MolUtils consumedComponentEvents: aComponentClass).
 			toUseTraitList addAll: (MolUtils providedComponentServices: aComponentClass).
-			toUseTraitList addAll: aComponentClass providedComponentParameters.
-			toUseTraitList := toUseTraitList select:[ :e | e notNil ].
+			toUseTraitList addAll: (MolUtils providedComponentParameters: aComponentClass).
 			self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
 		].
 	].
@@ -926,8 +925,13 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraits
 			"Cannot remove the traits if absent"
 			classes do: [ :c | toBeRemoveTrait ifNotNil:[ (c allTraits includes: trait) ifFalse:[toBeRemoveTrait := nil] ]].
 			toBeRemoveTrait ifNotNil:[
-				aComponentClass traitComposition isEmpty 
-					ifFalse:[	aComponentClass removeFromComposition: toBeRemoveTrait].
+				aComponentClass traitComposition isEmpty ifFalse:[
+					[ aComponentClass removeFromComposition: toBeRemoveTrait ] on: KeyNotFound do: [ :e |
+						"When an originaly method injected by a Trait is remove, there is a KeyNotFound exception - catch it because finally we need to remove"
+						"Do nothing"
+						self flag:'laborde: write a Pharo issue? Usecase: remove an overridden method of a Traits then remove the trait from composition'.
+					] 
+				].
 			].
 		].
 	].

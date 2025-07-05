@@ -114,6 +114,8 @@ MolComponentFactoryTest >> restoreRemovedThings [
 	"Restore things removed in tests"
 	<script: 'self new restoreRemovedThings'>
 	
+	"Simulate an overridden contract by the user VV"
+	
 	self createInstanceMethod: 'usedComponentServices' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
 
 	<componentContract>
@@ -127,6 +129,34 @@ MolComponentFactoryTest >> restoreRemovedThings [
 	^ {
 		  MolUsedServices.
 		  MolUsedServices2 }'.
+		
+	self createInstanceMethod: 'usedComponentParameters' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - parameters' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedParameters.
+		  MolUsedParameters2 }'.
+		
+	self createInstanceMethod: 'providedComponentParameters' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - parameters' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedParameters.
+		  MolUsedParameters2 }'.
+		
+	self createInstanceMethod: 'consumedComponentEvents' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - events' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedEvents.
+		  MolUsedEvents2 }'.
+		
+	self createInstanceMethod: 'producedComponentEvents' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - events' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedEvents.
+		  MolUsedEvents2 }'.
 ]
 
 { #category : #running }
@@ -1256,12 +1286,25 @@ MolComponentFactoryTest >> testProtocolForComponentServices [
 ]
 
 { #category : #'test - overload' }
-MolComponentFactoryTest >> testRemoveOverloadedEvents [
+MolComponentFactoryTest >> testRemoveOverloadedConsumedEvents [
 	"Testing issue #210 fix"
 
 	| exception |
 	exception := nil.
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #consumedComponentEvents ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil.
+]
 
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedProducedEvents [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
 	"Remove the method which overload the services contract: no error should appears"
 	[ MolCompleteComponentOverloadImpl class removeSelector: #producedComponentEvents ]
 		on: Exception
@@ -1271,12 +1314,11 @@ MolComponentFactoryTest >> testRemoveOverloadedEvents [
 ]
 
 { #category : #'test - overload' }
-MolComponentFactoryTest >> testRemoveOverloadedParameters [
+MolComponentFactoryTest >> testRemoveOverloadedProvidedParameters [
 	"Testing issue #210 fix"
 
 	| exception |
 	exception := nil.
-
 	"Remove the method which overload the services contract: no error should appears"
 	[ MolCompleteComponentOverloadImpl class removeSelector: #providedComponentParameters ]
 		on: Exception
@@ -1293,6 +1335,20 @@ MolComponentFactoryTest >> testRemoveOverloadedProvidedServices [
 	exception := nil.
 	"Remove the method which overload the services contract: no error should appears"
 	[ MolCompleteComponentOverloadImpl class removeSelector: #providedComponentServices ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil.
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedUsedParameters [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #usedComponentParameters ]
 		on: Exception
 		do: [ :e | exception := e ].
 		
