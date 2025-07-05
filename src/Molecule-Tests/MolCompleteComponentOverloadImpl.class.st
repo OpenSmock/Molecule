@@ -4,8 +4,8 @@ I am a component impl overloading my contract for impl purpose
 Class {
 	#name : #MolCompleteComponentOverloadImpl,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolCompleteComponent + MolUsedServices + MolUsedEvents + MolUsedParameters + MolUsedParameters2 + MolUsedServices2 + MolUsedEvents2',
-	#classTraits : 'MolCompleteComponent classTrait + MolUsedServices classTrait + MolUsedEvents classTrait + MolUsedParameters classTrait + MolUsedParameters2 classTrait + MolUsedServices2 classTrait + MolUsedEvents2 classTrait',
+	#traits : 'MolCompleteComponent + MolUsedServices + MolUsedEvents + MolUsedParameters + MolUsedParameters2 + MolUsedEvents2 + MolUsedServices2',
+	#classTraits : 'MolCompleteComponent classTrait + MolUsedServices classTrait + MolUsedEvents classTrait + MolUsedParameters classTrait + MolUsedParameters2 classTrait + MolUsedEvents2 classTrait + MolUsedServices2 classTrait',
 	#category : #'Molecule-Tests-Resources - Components'
 }
 
@@ -38,9 +38,10 @@ MolCompleteComponentOverloadImpl class >> providedComponentParameters [
 
 { #category : #'accessing - services' }
 MolCompleteComponentOverloadImpl class >> providedComponentServices [
+	"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
 
 	<componentContract>
-	^ { 
+	^ {
 		  MolUsedServices.
 		  MolUsedServices2 }
 ]
@@ -56,9 +57,12 @@ MolCompleteComponentOverloadImpl class >> usedComponentParameters [
 
 { #category : #'accessing - services' }
 MolCompleteComponentOverloadImpl class >> usedComponentServices [
-	
+	"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
 	<componentContract>
-	^ { MolUsedServices. MolUsedServices2 }
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2 }
 ]
 
 { #category : #events }

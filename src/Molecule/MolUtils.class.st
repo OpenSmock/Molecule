@@ -207,6 +207,20 @@ MolUtils class >> instanceOf: aClass named: aName [
 ]
 
 { #category : #testing }
+MolUtils class >> isComponentObject: anObject [
+	"Return if an object is related to Component object (Component, ComponentType, Services, etc.), not considering technical classes as a positive result (MolComponentType, MolComponentImplementation, MolComponentServices, etc.)"
+
+	(self isComponentOrComponentClass: anObject) ifTrue: [ ^ true ].
+	anObject isTrait ifTrue:[
+		anObject isComponentType ifTrue:[ ^ true ].
+		anObject isComponentServices ifTrue:[ ^ true ].
+		anObject isComponentEvents ifTrue:[ ^ true ].
+		anObject isComponentParameters ifTrue:[ ^ true ].
+	].
+	^ false
+]
+
+{ #category : #testing }
 MolUtils class >> isComponentOrComponentClass: anObject [
 
 	anObject ifNil: [  ^ false ].
@@ -356,24 +370,27 @@ MolUtils class >> providedComponentParameters: anObject [
 { #category : #'component contract' }
 MolUtils class >> providedComponentServices: anObject [
 	"Get provided services of an object, return nil if no services was found"
+	| componentType list isType |
+	(self isComponentObject: anObject) ifFalse: [ ^ OrderedCollection new ].
 
-	| componentType set |
-	anObject isTrait ifFalse: [
-		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
-	componentType := (anObject isTrait and: [ anObject isComponentType ])
+	list := Set new.
+	isType := anObject isTrait and: [ anObject isComponentType ].
+	componentType := isType
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
 
-	^ componentType
-		  ifNotNil: [ :e |
-			  set := Set new.
-			set addAll: e providedComponentServices.
-			  (anObject class respondsTo: #providedComponentServices)
-				  ifTrue: [ set addAll: anObject class providedComponentServices ]
-				  ifFalse: [ set addAll: anObject providedComponentServices ].
-			  
-			  ^ set asArray ]
-		  ifNil: [ ^ {  } ]
+	"add component type services"
+	componentType ifNotNil: [ :e |
+		list addAll: e providedComponentServices ].
+
+	"add component implementation overridden services"
+	isType ifFalse: [
+		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
+		(anObject class respondsTo: #providedComponentServices) ifTrue: [ list addAll: anObject class providedComponentServices ].
+		(anObject respondsTo: #providedComponentServices) ifTrue: [ list addAll: anObject providedComponentServices ] 
+	].
+
+	^ list asOrderedCollection
 ]
 
 { #category : #'quick lifecycle' }
@@ -529,21 +546,27 @@ MolUtils class >> usedComponentParameters: anObject [
 
 { #category : #'component contract' }
 MolUtils class >> usedComponentServices: anObject [
-	"Get used services of an object, return nil if no services was found"
+	"Get used services of an object, return nil if no services was found. Considere also overidden contract in a Component implementation."
 
-	| componentType set | 
-	anObject isTrait ifFalse: [
-		(self isComponentOrComponentClass: anObject) ifFalse: [ ^ {  } ] ].
-	componentType := (anObject isTrait and: [ anObject isComponentType ])
+	| componentType list isType |
+	(self isComponentObject: anObject) ifFalse: [ ^ OrderedCollection new ].
+
+	list := Set new.
+	isType := anObject isTrait and: [ anObject isComponentType ].
+	componentType := isType
 		                 ifTrue: [ anObject ]
 		                 ifFalse: [ self componentType: anObject ].
-	^ componentType
-		  ifNotNil: [ :e |
-			  set := Set new.
-			  set addAll: e usedComponentServices.
-			  (anObject class respondsTo: #usedComponentServices)
-				  ifTrue: [ set addAll: anObject class usedComponentServices ]
-				  ifFalse: [ set addAll: anObject usedComponentServices ].
-			  ^ set asArray ]
-		  ifNil: [ ^ {  } ]
+
+	"add component type services"
+	componentType ifNotNil: [ :e |
+		list addAll: e usedComponentServices ].
+
+	"add component implementation overridden services"
+	isType ifFalse: [
+		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
+		(anObject class respondsTo: #usedComponentServices) ifTrue: [ list addAll: anObject class usedComponentServices ].
+		(anObject respondsTo: #usedComponentServices) ifTrue: [ list addAll: anObject usedComponentServices ] 
+	].
+
+	^ list asOrderedCollection
 ]

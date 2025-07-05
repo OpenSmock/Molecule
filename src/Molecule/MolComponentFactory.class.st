@@ -563,12 +563,11 @@ MolComponentFactory >> defineComponent: aComponentClass [
 		"Remove persistant contract traits"
 		traitList := self collectComponentConnectionTraits: aComponentClass.
 		traitList do:[ :trait | aComponentClass removeFromComposition: trait ].
-		^ self
 	] ifTrue:[
 		aComponentClass haveOwnComponentType ifTrue:[
 			"Check missing traits"
 			toUseTraitList := Set withAll: aComponentClass consumedComponentEvents.
-			toUseTraitList addAll: aComponentClass providedComponentServices.
+			toUseTraitList addAll: (MolUtils providedComponentServices: aComponentClass).
 			toUseTraitList addAll: aComponentClass providedComponentParameters.
 			toUseTraitList := toUseTraitList select:[ :e | e notNil ].
 			self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
@@ -688,8 +687,7 @@ MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aCom
 MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aComponent [
 
 	| toDefine |
-	self removeOldUsedParametersAndServicesComponentAccessorsFor:
-		aComponent.
+	self removeOldUsedParametersAndServicesComponentAccessorsFor:	aComponent.
 
 	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
 		ifFalse: [ ^ self ].
@@ -707,8 +705,7 @@ MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aCom
 MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aComponent [
 
 	| toDefine |
-	self removeOldUsedParametersAndServicesComponentAccessorsFor:
-		aComponent.
+	self removeOldUsedParametersAndServicesComponentAccessorsFor:	aComponent.
 
 	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
 		ifFalse: [ ^ self ].
@@ -976,8 +973,7 @@ MolComponentFactory >> removeOldConsumedEventsComponentAccessorsFor: aComponent 
 	"check if the selectors are already in the current consumed events, in case don't remove them"
 	aComponent haveComponentType ifTrue: [
 		toPreserve := Set new.
-		toPreserve addAll: aComponent componentType consumedComponentEvents.
-		toPreserve addAll: aComponent consumedComponentEvents.
+		toPreserve addAll: (MolUtils consumedComponentEvents: aComponent).
 		
 		toPreserve do: [ :e |
 			toBeRemoveConsumedSelectors copy do: [ :sel |
@@ -999,8 +995,7 @@ MolComponentFactory >> removeOldProducedEventsComponentAccessorsFor: aComponent 
 	"check if the selectors are already in the current produced events, in case don't remove them"
 	aComponent haveComponentType ifTrue: [
 		toPreserve := Set new.
-		toPreserve addAll: aComponent componentType producedComponentEvents.
-		toPreserve addAll: aComponent producedComponentEvents.
+		toPreserve addAll: (MolUtils producedComponentEvents: aComponent).
 		
 		toPreserve do: [ :e |
 			toBeRemoveProducedSelectors copy do: [ :sel |
@@ -1022,15 +1017,14 @@ MolComponentFactory >> removeOldUsedParametersAndServicesComponentAccessorsFor: 
 	"check if the selectors are already in the current used parameters or used services, in case don't remove them"
 	aComponent haveComponentType ifTrue: [
 		toPreserve := Set new.
-		toPreserve addAll: aComponent componentType usedComponentParameters.
-		toPreserve addAll: aComponent usedComponentParameters.
-		toPreserve addAll: aComponent componentType usedComponentServices.
-		toPreserve addAll: aComponent usedComponentServices.
+		toPreserve addAll: (MolUtils usedComponentParameters: aComponent).
+		toPreserve addAll: (MolUtils usedComponentServices: aComponent).
 
 		toPreserve do: [ :e |
 			toBeRemoveProviderSelectors copy do: [ :sel |
 				'get' , e printString , 'Provider' = sel ifTrue: [
-					toBeRemoveProviderSelectors remove: sel ] ] ]].
+					toBeRemoveProviderSelectors remove: sel ] ] ]
+	].
 
 	toBeRemoveProviderSelectors do: [ :s | aComponent removeSelector: s ]
 ]

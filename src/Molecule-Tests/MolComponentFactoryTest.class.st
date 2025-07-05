@@ -114,9 +114,19 @@ MolComponentFactoryTest >> restoreRemovedThings [
 	"Restore things removed in tests"
 	<script: 'self new restoreRemovedThings'>
 	
-	self createInstanceMethod: 'usedComponentServices' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - services' withCode: '
+	self createInstanceMethod: 'usedComponentServices' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
 	<componentContract>
-	^ { MolUsedServices. MolUsedServices2 }'.
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2 }'.
+		
+	self createInstanceMethod: 'providedComponentServices' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2 }'.
 ]
 
 { #category : #running }
@@ -1246,16 +1256,59 @@ MolComponentFactoryTest >> testProtocolForComponentServices [
 ]
 
 { #category : #'test - overload' }
-MolComponentFactoryTest >> testRemoveInterfaceInImplementationWhichOverloadAType [
+MolComponentFactoryTest >> testRemoveOverloadedEvents [
 	"Testing issue #210 fix"
 
 	| exception |
 	exception := nil.
 
 	"Remove the method which overload the services contract: no error should appears"
-	[ MolCompleteComponentOverloadImpl class removeSelector: #usedComponentServices ]
+	[ MolCompleteComponentOverloadImpl class removeSelector: #producedComponentEvents ]
 		on: Exception
 		do: [ :e | exception := e ].
 		
 	self assert: exception isNil.
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedParameters [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #providedComponentParameters ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil.
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedProvidedServices [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #providedComponentServices ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil.
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedUsedServices [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #usedComponentServices ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil
 ]
