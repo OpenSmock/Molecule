@@ -167,8 +167,6 @@ MolComponentFactory class >> compileContractSelector: aSelector protocol: aProto
 	
 	"Notify pragma change after Trait compilation to be sure that the compiled method is applied to Trait users"
 	newMethod := aComponentType class compiledMethodAt: selector.
-	
-	self flag:'labordep: probleme cest un message P13, estil portable sur P11-P12?'.
 	oldProtocol := aComponentType class protocolNamed: aProtocol.
 	
 	SystemAnnouncer uniqueInstance announce: (
