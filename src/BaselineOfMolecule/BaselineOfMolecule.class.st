@@ -31,7 +31,7 @@ BaselineOfMolecule >> baseline: spec [
 				do:[
 					    spec
     						baseline: 'PharoBackwardCompatibility'
-    						with: [ spec repository: 'github://jecisc/PharoBackwardCompatibility:v1.10.0/src' ]
+    						with: [ spec repository: 'github://labordep/PharoBackwardCompatibility:main/src' ]
 				].
 		 ]
 ]
