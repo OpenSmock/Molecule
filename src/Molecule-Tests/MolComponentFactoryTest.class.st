@@ -1400,6 +1400,9 @@ MolComponentFactoryTest >> testSubOverriddeOfAContract [
 	self assert: usedServices size equals: 3.
 	self assert: (usedServices includes: MolUsedServices3).
 	
+	"Test method generation"
+	self assert: (MolCompleteSubComponentOverloadImpl respondsTo: #getMolUsedServices3Provider).
+	
 	"Test traits installation"
 	self assert: (MolCompleteSubComponentOverloadImpl traitComposition includes: MolUsedServices3). 
 ]

@@ -570,6 +570,9 @@ MolComponentFactory >> defineComponent: aComponentClass [
 			toUseTraitList addAll: (MolUtils providedComponentServices: aComponentClass).
 			toUseTraitList addAll: (MolUtils providedComponentParameters: aComponentClass).
 			self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
+		] ifFalse:[
+		
+			self flag:'labordep: #209 need to link traits for overridden contract'.
 		].
 	].
 ]
@@ -655,6 +658,8 @@ MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aCom
 	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
 		ifFalse: [ ^ self ].
 
+	self flag:'labordep: #209 need to generate methods for overridden contract'.
+
 	toDefine := MolUtils consumedComponentEvents: aComponent.
 
 	self
@@ -672,6 +677,8 @@ MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aCom
 
 	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
 		ifFalse: [ ^ self ].
+
+	self flag:'labordep: #209 need to generate methods for overridden contract'.
 
 	toDefine := MolUtils producedComponentEvents: aComponent.
 
@@ -691,6 +698,8 @@ MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aCom
 	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
 		ifFalse: [ ^ self ].
 
+	self flag:'labordep: #209 need to generate methods for overridden contract'.
+
 	toDefine := MolUtils usedComponentParameters: aComponent.
 
 	self
@@ -708,6 +717,8 @@ MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aCompo
 
 	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
 		ifFalse: [ ^ self ].
+		
+	self flag:'labordep: #209 need to generate methods for overridden contract'.
 
 	toDefine := MolUtils usedComponentServices: aComponent.
 
