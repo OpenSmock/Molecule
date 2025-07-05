@@ -77,7 +77,9 @@ Find below some Molecule branches for old Pharo versions.
 
 Molecule Core has no dependencies.
 
-Package 'Molecule-Benchmarks' requires SMark (https://github.com/smarr/SMark), this package contains benchmarks for working on performances.
+**Optional:** The package `Molecule-Benchmarks` requires [SMark](https://github.com/smarr/SMark). This package contains benchmarks for performance-related work.
+
+**Pharo 11 compatibility:** On Pharo 11, [PharoBackwardCompatibility](https://github.com/jecisc/PharoBackwardCompatibility) is automatically loaded via the baseline to ensure compatibility.
 
 ## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Molecule developer menus
 
