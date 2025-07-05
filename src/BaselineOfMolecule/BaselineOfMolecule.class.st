@@ -24,6 +24,15 @@ BaselineOfMolecule >> baseline: spec [
 				package: 'Molecule-Examples' with: [ spec requires: #('Molecule') ];
 				package: 'Molecule-Tests' with: [ spec requires: #('Molecule') ];
 				package: 'Molecule-IDE-Tests' with: [ spec requires: #('Molecule-IDE') ].
+				
+			"Pharo backward compatibility: to preserve running from Pharo 11"
+			spec 
+				for: #'pharo11.x'
+				do:[
+					    spec
+    						baseline: 'PharoBackwardCompatibility'
+    						with: [ spec repository: 'github://jecisc/PharoBackwardCompatibility:v1.10.0/src' ]
+				].
 		 ]
 ]
 
@@ -32,9 +41,12 @@ BaselineOfMolecule >> postload: loader package: packageSpec [
 	"Reload new Molecule tools"
 
 	(Smalltalk globals includesKey: #MolComponentManager) ifFalse:[ ^self ].
+
 	(Smalltalk globals classNamed: #MolComponentManager) cleanUp.
+	
 	"Rebuild all components"
 	MolComponentFactory defineAllComponents.
+	
 	"Reactive dynamic contract update if necessary"
 	(previousDynamicContractUpdateActivated ifNil:[false]) ifFalse:[
 		MolComponentFactory default activateDynamicContractUpdate.	
@@ -46,7 +58,9 @@ BaselineOfMolecule >> preload: loader package: packageSpec [
 	"If a Molecule component system is running, confirm loading and cleanUp before installation of the new version"
 	
 	(Smalltalk globals includesKey: #MolComponentManager) ifFalse:[ ^self ].
+	
 	previousDynamicContractUpdateActivated := false.
+	
 	(Smalltalk globals classNamed: #MolComponentManager) isRunningComponents ifTrue:[ 
 		(Smalltalk ui theme
 		proceedIn: Morph new 
