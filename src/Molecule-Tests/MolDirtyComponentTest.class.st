@@ -45,8 +45,8 @@ MolDirtyComponentTest >> tearDown [
 
 { #category : #tests }
 MolDirtyComponentTest >> testDirtyTypeWithInstanceVariableInsteadOfComponentTraits [
+	"Create a component using a dirty Type: a type which is not correct (potentiels bugs)"
 
-	"Create a component using a dirty Type"
 	| component |
 	MolComponentFactory createComponentForType: MolDirtyType named: self generatedDirtyTypeImplementationSymbol in: self generationTag.
 	component := self class environment at: self generatedDirtyTypeImplementationSymbol.

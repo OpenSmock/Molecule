@@ -98,13 +98,13 @@ MolUtils class >> consumedComponentEvents: anObject [
 
 	"add component type services"
 	componentType ifNotNil: [ :e |
-		list addAll: e consumedComponentEvents ].
+		list addAll: (e consumedComponentEvents select:[ :t | t isTrait and:[ t isComponentEvents ] ]) ].
 
 	"add component implementation overridden services"
 	isType ifFalse: [
 		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
-		(anObject class respondsTo: #consumedComponentEvents) ifTrue: [ list addAll: anObject class consumedComponentEvents ].
-		(anObject respondsTo: #consumedComponentEvents) ifTrue: [ list addAll: anObject consumedComponentEvents ] 
+		(anObject class respondsTo: #consumedComponentEvents) ifTrue: [ list addAll: (anObject class consumedComponentEvents select:[ :t | t isTrait and:[ t isComponentEvents ] ]) ].
+		(anObject respondsTo: #consumedComponentEvents) ifTrue: [ list addAll: (anObject consumedComponentEvents select:[ :t | t isTrait and:[ t isComponentEvents ] ]) ] 
 	].
 
 	^ list asOrderedCollection
@@ -341,13 +341,13 @@ MolUtils class >> producedComponentEvents: anObject [
 
 	"add component type services"
 	componentType ifNotNil: [ :e |
-		list addAll: e producedComponentEvents ].
+		list addAll: (e producedComponentEvents select:[ :t | t isTrait and:[ t isComponentEvents ] ]) ].
 
 	"add component implementation overridden services"
 	isType ifFalse: [
 		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
-		(anObject class respondsTo: #producedComponentEvents) ifTrue: [ list addAll: anObject class producedComponentEvents ].
-		(anObject respondsTo: #producedComponentEvents) ifTrue: [ list addAll: anObject producedComponentEvents ] 
+		(anObject class respondsTo: #producedComponentEvents) ifTrue: [ list addAll: (anObject class producedComponentEvents select:[ :t | t isTrait and:[ t isComponentEvents ] ]) ].
+		(anObject respondsTo: #producedComponentEvents) ifTrue: [ list addAll: (anObject producedComponentEvents select:[ :t | t isTrait and:[ t isComponentEvents ] ]) ] 
 	].
 
 	^ list asOrderedCollection
@@ -367,13 +367,13 @@ MolUtils class >> providedComponentParameters: anObject [
 
 	"add component type services"
 	componentType ifNotNil: [ :e |
-		list addAll: e providedComponentParameters ].
+		list addAll: (e providedComponentParameters select:[ :t | t isTrait and:[ t isComponentParameters ] ]) ].
 
 	"add component implementation overridden services"
 	isType ifFalse: [
 		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
-		(anObject class respondsTo: #providedComponentParameters) ifTrue: [ list addAll: anObject class providedComponentParameters ].
-		(anObject respondsTo: #providedComponentParameters) ifTrue: [ list addAll: anObject providedComponentParameters ] 
+		(anObject class respondsTo: #providedComponentParameters) ifTrue: [ list addAll: (anObject class providedComponentParameters select:[ :t | t isTrait and:[ t isComponentParameters ] ]) ].
+		(anObject respondsTo: #providedComponentParameters) ifTrue: [ list addAll: (anObject providedComponentParameters select:[ :t | t isTrait and:[ t isComponentParameters ] ]) ] 
 	].
 
 	^ list asOrderedCollection
@@ -393,13 +393,13 @@ MolUtils class >> providedComponentServices: anObject [
 
 	"add component type services"
 	componentType ifNotNil: [ :e |
-		list addAll: e providedComponentServices ].
+		list addAll: (e providedComponentServices select:[ :t | t isTrait and:[ t isComponentServices ] ]) ].
 
 	"add component implementation overridden services"
 	isType ifFalse: [
 		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
-		(anObject class respondsTo: #providedComponentServices) ifTrue: [ list addAll: anObject class providedComponentServices ].
-		(anObject respondsTo: #providedComponentServices) ifTrue: [ list addAll: anObject providedComponentServices ] 
+		(anObject class respondsTo: #providedComponentServices) ifTrue: [ list addAll: (anObject class providedComponentServices select:[ :t | t isTrait and:[ t isComponentServices ] ]) ].
+		(anObject respondsTo: #providedComponentServices) ifTrue: [ list addAll: (anObject providedComponentServices select:[ :t | t isTrait and:[ t isComponentServices ] ]) ] 
 	].
 
 	^ list asOrderedCollection
@@ -550,13 +550,13 @@ MolUtils class >> usedComponentParameters: anObject [
 
 	"add component type services"
 	componentType ifNotNil: [ :e |
-		list addAll: e usedComponentParameters ].
+		list addAll: (e usedComponentParameters select:[ :t | t isTrait and:[ t isComponentParameters ] ]) ].
 
 	"add component implementation overridden services"
 	isType ifFalse: [
 		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
-		(anObject class respondsTo: #usedComponentParameters) ifTrue: [ list addAll: anObject class usedComponentParameters ].
-		(anObject respondsTo: #usedComponentParameters) ifTrue: [ list addAll: anObject usedComponentParameters ] 
+		(anObject class respondsTo: #usedComponentParameters) ifTrue: [ list addAll: (anObject class usedComponentParameters select:[ :t | t isTrait and:[ t isComponentParameters ] ]) ].
+		(anObject respondsTo: #usedComponentParameters) ifTrue: [ list addAll: (anObject usedComponentParameters select:[ :t | t isTrait and:[ t isComponentParameters ] ]) ] 
 	].
 
 	^ list asOrderedCollection
@@ -577,13 +577,13 @@ MolUtils class >> usedComponentServices: anObject [
 
 	"add component type services"
 	componentType ifNotNil: [ :e |
-		list addAll: e usedComponentServices ].
+		list addAll: (e usedComponentServices select:[ :t | t isTrait and:[ t isComponentServices ] ]) ].
 
 	"add component implementation overridden services"
 	isType ifFalse: [
 		"sometimes, when an overridden contract is removed, the componentype trait is not yet applied, need to check if the object respondsTo:"
-		(anObject class respondsTo: #usedComponentServices) ifTrue: [ list addAll: anObject class usedComponentServices ].
-		(anObject respondsTo: #usedComponentServices) ifTrue: [ list addAll: anObject usedComponentServices ] 
+		(anObject class respondsTo: #usedComponentServices) ifTrue: [ list addAll: (anObject class usedComponentServices select:[ :t | t isTrait and:[ t isComponentServices ] ]) ].
+		(anObject respondsTo: #usedComponentServices) ifTrue: [ list addAll: (anObject usedComponentServices select:[ :t | t isTrait and:[ t isComponentServices ] ]) ] 
 	].
 
 	^ list asOrderedCollection
