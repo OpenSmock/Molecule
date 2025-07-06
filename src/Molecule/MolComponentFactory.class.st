@@ -943,9 +943,9 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraits
 						10 milliSeconds wait. 
 						[ (aComponentClass isComposedBy: trait) ifTrue:[ aComponentClass removeFromComposition: trait ] ] 
 							on: KeyNotFound 
-							do:[ :ex | "do nothing - fork terminated" ex return ]. 
+							do:[ :ex | "do nothing - fork terminated" ex pass ]. 
 					] fork.
-					e return.
+					e pass.
 				]. 
 			].			
 		].
