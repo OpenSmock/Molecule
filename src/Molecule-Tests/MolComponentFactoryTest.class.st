@@ -173,9 +173,13 @@ MolComponentFactoryTest >> setUp [
 
 	self timeLimit: 30 seconds.
 	MolComponentManager cleanUp.
+	
+	MolComponentFactory default deactivateDynamicContractUpdate.
 	self cleanGeneratedClassesAndTraits.
 	self restoreRemovedThings.
 	self cleanGeneratedMethods.
+	MolComponentFactory default activateDynamicContractUpdate.
+	
 ]
 
 { #category : #running }
@@ -227,9 +231,13 @@ MolComponentFactoryTest >> setUpComponentAndType [
 MolComponentFactoryTest >> tearDown [
 
 	(Delay forMilliseconds: 10) wait.
+
+	MolComponentFactory default deactivateDynamicContractUpdate.
 	self cleanGeneratedClassesAndTraits.
 	self restoreRemovedThings.
 	self cleanGeneratedMethods.
+	MolComponentFactory default activateDynamicContractUpdate.
+	
 	MolComponentManager cleanUp.
 ]
 
