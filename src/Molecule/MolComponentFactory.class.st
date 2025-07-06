@@ -152,7 +152,7 @@ MolComponentFactory class >> cleanUp [
 { #category : #'component - contract management' }
 MolComponentFactory class >> compileContractSelector: aSelector protocol: aProtocol interfaces: interfaceList type: aComponentType [
 	"Compile Component Type contract description method into a class selector, this method return an array of Molecule interfaces (Traits as Services or Events)"
-	| sourceCode selector previousMethodOrNil newMethod |
+	| sourceCode selector previousMethodOrNil newMethod oldProtocol |
 
 	"Get the previous method or nil"
 	previousMethodOrNil := aComponentType class compiledMethodAt:( aSelector asSymbol) ifAbsent: [ nil ].
@@ -167,12 +167,13 @@ MolComponentFactory class >> compileContractSelector: aSelector protocol: aProto
 	
 	"Notify pragma change after Trait compilation to be sure that the compiled method is applied to Trait users"
 	newMethod := aComponentType class compiledMethodAt: selector.
+	oldProtocol := aComponentType class protocolNamed: aProtocol.
 	
 	SystemAnnouncer uniqueInstance announce: (
 		MethodModified 
 			methodChangedFrom: previousMethodOrNil
 			to: newMethod 
-			oldProtocol: aProtocol
+			oldProtocol: oldProtocol
 	)
 ]
 
@@ -424,13 +425,21 @@ MolComponentFactory >> activateDynamicContractUpdate: isInform [
 { #category : #'private - code checking' }
 MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass: aComponentClass [
 	"Check if a Component Class uses a list of Trait Class and do uses"
-	| traitList missingTraits |
-	
-	aTraitList isEmpty ifTrue:[ ^ self ].
+	| traitList toAddTraits toRemoveTraits |
 	
 	traitList := self collectComponentConnectionTraits: aComponentClass.
-	missingTraits := aTraitList reject: [ :e | (traitList includes: e) and:[ e isObsolete ] ].
-	missingTraits ifNotEmpty: [self rebuildComponent: aComponentClass traitsAdding: missingTraits].
+	
+	"added traits"
+	toAddTraits := aTraitList reject: [ :e | (traitList includes: e) or:[ e isObsolete ] ].
+	toAddTraits ifNotEmpty:[
+		self rebuildComponent: aComponentClass traitsAdding: toAddTraits.
+	].
+	
+	"removed traits"
+	toRemoveTraits := traitList reject: [ :e | aTraitList includes: e ].
+	toRemoveTraits ifNotEmpty:[
+		self rebuildComponent: aComponentClass traitsRemoving: toRemoveTraits.
+	].
 ]
 
 { #category : #'dirty components' }
@@ -467,7 +476,7 @@ MolComponentFactory >> componentChanged: aChangedClass [
 	aChangedClass isComponentClass ifFalse:[^self].
 	
 	self isDynamicContractUpdateActivated ifTrue: [ 
-		aChangedClass isObsolete ifFalse:[self defineComponent: aChangedClass]
+		self defineComponent: aChangedClass
 	] ifFalse: [ 
 		dirtyComponents add: aChangedClass
 	].
@@ -540,26 +549,39 @@ MolComponentFactory >> defineComponent: aComponentClass [
 	 | toUseTraitList |
 	(aComponentClass isNil or:[aComponentClass isClass not or:[aComponentClass isComponentClass not]]) ifTrue:[^self].
 	
-	"Generate or remove accessors"
-	self generateOrRemoveConsumedEventsComponentAccessorsFor: aComponentClass.
-	self generateOrRemoveProducedEventsComponentAccessorsFor: aComponentClass.
-	self generateOrRemoveUsedServicesComponentAccessorsFor: aComponentClass.
-	self generateOrRemoveUsedParametersComponentAccessorsFor: aComponentClass.
+	self rebuildComponentAccessorsFor: aComponentClass.
 
 	"Check if the object have a component type, if not remove injected component contract traits"
 	aComponentClass haveComponentType ifFalse:[ | traitList |
 		"Remove persistant contract traits"
 		traitList := self collectComponentConnectionTraits: aComponentClass.
 		traitList do:[ :trait | aComponentClass removeFromComposition: trait ].
-		^ self
 	] ifTrue:[
+		
+		"check if the component have own componen type"
 		aComponentClass haveOwnComponentType ifTrue:[
+			
 			"Check missing traits"
-			toUseTraitList := Set withAll: aComponentClass consumedComponentEvents.
-			toUseTraitList addAll: aComponentClass providedComponentServices.
-			toUseTraitList addAll: aComponentClass providedComponentParameters.
-			self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
+			toUseTraitList := Set withAll: (MolUtils consumedComponentEvents: aComponentClass).
+			toUseTraitList addAll: (MolUtils providedComponentServices: aComponentClass).
+			toUseTraitList addAll: (MolUtils providedComponentParameters: aComponentClass).	
+					
+		] ifFalse:[ | superclassTraitList overridenTraitList |
+		
+			"Get traits on the superclass and make a diff with the component class to find which traits are missing"
+			superclassTraitList := Set withAll: (MolUtils consumedComponentEvents: aComponentClass superclass).
+			superclassTraitList addAll: (MolUtils providedComponentServices: aComponentClass superclass).
+			superclassTraitList addAll: (MolUtils providedComponentParameters: aComponentClass superclass).
+			
+			"Check missing traits"
+			overridenTraitList := Set withAll: (aComponentClass consumedComponentEvents).
+			overridenTraitList addAll: (aComponentClass providedComponentServices).
+			overridenTraitList addAll: (aComponentClass providedComponentParameters).
+			toUseTraitList := overridenTraitList reject:[ :e | superclassTraitList includes: e ].
+			
 		].
+	
+		self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
 	].
 ]
 
@@ -630,82 +652,83 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 					]. 
 				]. 
 			]. 
-		
 		].
 	]
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateConsumedEventsComponentAccessorsFor: aComponentClass [
 
 	| toDefine |
-	self removeOldConsumedEventsComponentAccessorsFor: aComponent.
-
-	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
-		ifFalse: [ ^ self ].
-
-	toDefine := MolUtils consumedComponentEvents: aComponent.
+	aComponentClass haveComponentType ifFalse: [ ^ self ].
+	toDefine := aComponentClass haveOwnComponentType
+		            ifTrue: [ MolUtils consumedComponentEvents: aComponentClass ]
+		            ifFalse: [ "case of an overridden contract by a component implementation which is a subclass of a component with a type"
+				            (aComponentClass respondsTo: #consumedComponentEvents)
+					            ifTrue: [ aComponentClass consumedComponentEvents reject:[ :e | (MolUtils consumedComponentEvents: aComponentClass superclass) includes: e  ] ]
+					            ifFalse: [ #(  ) ] ].
 
 	self
 		generateComponentAccessorsFor: #consumedEvents
 		withList: toDefine
-		in: aComponent
+		in: aComponentClass
 		suffix: 'Subscriber'
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateProducedEventsComponentAccessorsFor: aComponentClass [
 
 	| toDefine |
-	self removeOldProducedEventsComponentAccessorsFor: aComponent.
-
-	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
-		ifFalse: [ ^ self ].
-
-	toDefine := MolUtils producedComponentEvents: aComponent.
+	aComponentClass haveComponentType ifFalse: [ ^ self ].
+	toDefine := aComponentClass haveOwnComponentType
+		            ifTrue: [ MolUtils producedComponentEvents: aComponentClass ]
+		            ifFalse: [ "case of an overridden contract by a component implementation which is a subclass of a component with a type"
+				            (aComponentClass respondsTo: #producedComponentEvents)
+					            ifTrue: [ aComponentClass producedComponentEvents reject:[ :e | (MolUtils producedComponentEvents: aComponentClass superclass) includes: e  ] ]
+					            ifFalse: [ #(  ) ] ].
 
 	self
 		generateComponentAccessorsFor: #producedEvents
 		withList: toDefine
-		in: aComponent
+		in: aComponentClass
 		suffix: 'Notifier'
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateUsedParametersComponentAccessorsFor: aComponentClass [
 
 	| toDefine |
-	self removeOldUsedParametersAndServicesComponentAccessorsFor:
-		aComponent.
-
-	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
-		ifFalse: [ ^ self ].
-
-	toDefine := MolUtils usedComponentParameters: aComponent.
+	aComponentClass haveComponentType ifFalse: [ ^ self ].
+	toDefine := aComponentClass haveOwnComponentType
+		            ifTrue: [ MolUtils usedComponentParameters: aComponentClass ]
+		            ifFalse: [ "case of an overridden contract by a component implementation which is a subclass of a component with a type"
+				            (aComponentClass respondsTo: #usedComponentParameters)
+					            ifTrue: [ aComponentClass usedComponentParameters reject:[ :e | (MolUtils usedComponentParameters: aComponentClass superclass) includes: e  ] ]
+					            ifFalse: [ #(  ) ] ].
 
 	self
 		generateComponentAccessorsFor: #usedParameters
 		withList: toDefine
-		in: aComponent
+		in: aComponentClass
 		suffix: 'Provider'
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateUsedServicesComponentAccessorsFor: aComponentClass [
 
 	| toDefine |
-	self removeOldUsedParametersAndServicesComponentAccessorsFor:
-		aComponent.
-
-	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
-		ifFalse: [ ^ self ].
-
-	toDefine := MolUtils usedComponentServices: aComponent.
+	aComponentClass haveComponentType ifFalse: [ ^ self ].
+	toDefine := aComponentClass haveOwnComponentType
+		            ifTrue: [ MolUtils usedComponentServices: aComponentClass ]
+		            ifFalse: [ "case of an overridden contract by a component implementation which is a subclass of a component with a type"
+				            (aComponentClass respondsTo: #usedComponentServices)
+					            ifTrue: [ aComponentClass usedComponentServices reject:[ :e | (MolUtils usedComponentServices: aComponentClass superclass) includes: e  ] ]
+					            ifFalse: [ #(  ) ] ].
 
 	self
 		generateComponentAccessorsFor: #usedServices
 		withList: toDefine
-		in: aComponent
+		in: aComponentClass
 		suffix: 'Provider'
 ]
 
@@ -902,6 +925,48 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsAdding: aTraitsLi
 	].
 ]
 
+{ #category : #'private - code generation' }
+MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraitsList [
+	
+	aTraitsList do: [ :trait |
+		
+		( trait notNil and:[ trait isTrait and:[ trait isObsolete not ] ] ) ifTrue:[ 
+			
+			"Check if the trait is present on class hierarchy"
+			( aComponentClass isComposedBy: trait ) ifTrue:[ 
+				[ aComponentClass removeFromComposition: trait ] on: KeyNotFound do:[ :e | 
+					"When an originaly method injected by a Trait is remove, there is a KeyNotFound exception - catch it because finally we need to remove"
+					"Need to do another try in a fork with a delay to considere system installation"
+					self flag:'laborde: write a Pharo issue? Usecase: remove an overridden method of a Traits then remove the trait from composition'.
+					MolUtils log: e printString.	
+					[ 
+						10 milliSeconds wait. 
+						[ (aComponentClass isComposedBy: trait) ifTrue:[ aComponentClass removeFromComposition: trait ] ] 
+							on: KeyNotFound 
+							do:[ :ex | "do nothing - fork terminated" ex return ]. 
+					] fork.
+					e return.
+				]. 
+			].			
+		].
+	].
+]
+
+{ #category : #'code generation' }
+MolComponentFactory >> rebuildComponentAccessorsFor: aComponentClass [
+
+	"Remove old accessors"
+	self removeOldUsedParametersAndServicesComponentAccessorsFor:	aComponentClass.
+	self removeOldProducedEventsComponentAccessorsFor: aComponentClass.
+	self removeOldConsumedEventsComponentAccessorsFor: aComponentClass.
+
+	"Generate new accessors"
+	self generateConsumedEventsComponentAccessorsFor: aComponentClass.
+	self generateProducedEventsComponentAccessorsFor: aComponentClass.
+	self generateUsedServicesComponentAccessorsFor: aComponentClass.
+	self generateUsedParametersComponentAccessorsFor: aComponentClass.
+]
+
 { #category : #'initialize - release' }
 MolComponentFactory >> release [
 
@@ -942,8 +1007,7 @@ MolComponentFactory >> removeOldConsumedEventsComponentAccessorsFor: aComponent 
 	"check if the selectors are already in the current consumed events, in case don't remove them"
 	aComponent haveComponentType ifTrue: [
 		toPreserve := Set new.
-		toPreserve addAll: aComponent componentType consumedComponentEvents.
-		toPreserve addAll: aComponent consumedComponentEvents.
+		toPreserve addAll: (MolUtils consumedComponentEvents: aComponent).
 		
 		toPreserve do: [ :e |
 			toBeRemoveConsumedSelectors copy do: [ :sel |
@@ -965,8 +1029,7 @@ MolComponentFactory >> removeOldProducedEventsComponentAccessorsFor: aComponent 
 	"check if the selectors are already in the current produced events, in case don't remove them"
 	aComponent haveComponentType ifTrue: [
 		toPreserve := Set new.
-		toPreserve addAll: aComponent componentType producedComponentEvents.
-		toPreserve addAll: aComponent producedComponentEvents.
+		toPreserve addAll: (MolUtils producedComponentEvents: aComponent).
 		
 		toPreserve do: [ :e |
 			toBeRemoveProducedSelectors copy do: [ :sel |
@@ -988,15 +1051,14 @@ MolComponentFactory >> removeOldUsedParametersAndServicesComponentAccessorsFor: 
 	"check if the selectors are already in the current used parameters or used services, in case don't remove them"
 	aComponent haveComponentType ifTrue: [
 		toPreserve := Set new.
-		toPreserve addAll: aComponent componentType usedComponentParameters.
-		toPreserve addAll: aComponent usedComponentParameters.
-		toPreserve addAll: aComponent componentType usedComponentServices.
-		toPreserve addAll: aComponent usedComponentServices.
+		toPreserve addAll: (MolUtils usedComponentParameters: aComponent).
+		toPreserve addAll: (MolUtils usedComponentServices: aComponent).
 
 		toPreserve do: [ :e |
 			toBeRemoveProviderSelectors copy do: [ :sel |
 				'get' , e printString , 'Provider' = sel ifTrue: [
-					toBeRemoveProviderSelectors remove: sel ] ] ]].
+					toBeRemoveProviderSelectors remove: sel ] ] ]
+	].
 
 	toBeRemoveProviderSelectors do: [ :s | aComponent removeSelector: s ]
 ]

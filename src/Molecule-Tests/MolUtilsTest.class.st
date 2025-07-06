@@ -58,7 +58,7 @@ MolUtilsTest >> testActivateComponents [
 { #category : #tests }
 MolUtilsTest >> testAllComponentImplementationClassesOfType [
 
-	self assert: (MolUtils allComponentImplementationClassesOfType: MolCompleteComponent) size equals: 5.
+	self assert: (MolUtils allComponentImplementationClassesOfType: MolCompleteComponent) size equals: 6.
 ]
 
 { #category : #tests }
@@ -112,9 +112,13 @@ MolUtilsTest >> testComponentType [
 { #category : #tests }
 MolUtilsTest >> testConsumedComponentEvents [
 
+	"potential bugs"
 	self assert: (MolUtils consumedComponentEvents: nil) isEmpty.
 	self assert: (MolUtils consumedComponentEvents: 45) isEmpty.
 	self assert: (MolUtils consumedComponentEvents: Integer) isEmpty.
+	self assert: (MolUtils consumedComponentEvents: MolDirtyType) isEmpty.
+	
+	"concrete cases"
 	self assert:
 		(MolUtils consumedComponentEvents: MolComponentImpl) isEmpty.
 	self assert:
@@ -359,9 +363,13 @@ MolUtilsTest >> testPassivateComponents [
 { #category : #tests }
 MolUtilsTest >> testProducedComponentEvents [
 
+	"potential bugs"
 	self assert: (MolUtils producedComponentEvents: nil) isEmpty.
 	self assert: (MolUtils producedComponentEvents: 45) isEmpty.
 	self assert: (MolUtils producedComponentEvents: Integer) isEmpty.
+	self assert: (MolUtils producedComponentEvents: MolDirtyType) isEmpty.
+	
+	"concrete cases"
 	self assert:
 		(MolUtils producedComponentEvents: MolComponentImpl) isEmpty.
 	self assert:
@@ -401,9 +409,13 @@ MolUtilsTest >> testProducedComponentEvents [
 { #category : #tests }
 MolUtilsTest >> testProvidedComponentParameters [
 
+	"potential bugs"
 	self assert: (MolUtils providedComponentParameters: nil) isEmpty.
 	self assert: (MolUtils providedComponentParameters: 45) isEmpty.
 	self assert: (MolUtils providedComponentParameters: Integer) isEmpty.
+	self assert: (MolUtils providedComponentParameters: MolDirtyType) isEmpty.
+	
+	"concrete cases"
 	self assert:
 		(MolUtils providedComponentParameters: MolComponentImpl) isEmpty.
 	self assert:
@@ -447,9 +459,13 @@ MolUtilsTest >> testProvidedComponentParameters [
 { #category : #tests }
 MolUtilsTest >> testProvidedComponentServices [
 
+	"potential bugs"
 	self assert: (MolUtils providedComponentServices: nil) isEmpty.
 	self assert: (MolUtils providedComponentServices: 45) isEmpty.
 	self assert: (MolUtils providedComponentServices: Integer) isEmpty.
+	self assert: (MolUtils providedComponentServices: MolDirtyType) isEmpty.
+	
+	"concrete cases"
 	self assert:
 		(MolUtils providedComponentServices: MolComponentImpl) isEmpty.
 	self assert:
@@ -752,9 +768,13 @@ MolUtilsTest >> testStopComponents [
 { #category : #tests }
 MolUtilsTest >> testUsedComponentParameters [
 
+	"potential bugs"
 	self assert: (MolUtils usedComponentParameters: nil) isEmpty.
 	self assert: (MolUtils usedComponentParameters: 45) isEmpty.
 	self assert: (MolUtils usedComponentParameters: Integer) isEmpty.
+	self assert: (MolUtils usedComponentParameters: MolDirtyType) isEmpty.
+	
+	"concrete cases"
 	self assert:
 		(MolUtils usedComponentParameters: MolComponentImpl) isEmpty.
 	self assert:
@@ -794,11 +814,14 @@ MolUtilsTest >> testUsedComponentParameters [
 { #category : #tests }
 MolUtilsTest >> testUsedComponentServices [
 
+	"potential bugs"
 	self assert: (MolUtils usedComponentServices: nil) isEmpty.
 	self assert: (MolUtils usedComponentServices: 45) isEmpty.
 	self assert: (MolUtils usedComponentServices: Integer) isEmpty.
-	self assert:
-		(MolUtils usedComponentServices: MolComponentImpl) isEmpty.
+	self assert: (MolUtils usedComponentServices: MolDirtyType) isEmpty.
+	
+	"concrete cases"
+	self assert: (MolUtils usedComponentServices: MolComponentImpl) isEmpty.
 	self assert:
 		(MolUtils usedComponentServices: MolCompleteComponentImpl) notEmpty.
 	self

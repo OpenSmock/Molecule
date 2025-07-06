@@ -11,15 +11,19 @@ Class {
 
 { #category : #'accessing - events' }
 MolCompleteComponentOverloadImpl class >> consumedComponentEvents [
+	"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
 
 	<componentContract>
-	^ { MolUsedEvents. MolUsedEvents2 }
+	^ {
+		  MolUsedEvents.
+		  MolUsedEvents2 }
 ]
 
 { #category : #'accessing - events' }
 MolCompleteComponentOverloadImpl class >> producedComponentEvents [
+	"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
 
-	<componentContract> 
+	<componentContract>
 	^ {
 		  MolUsedEvents.
 		  MolUsedEvents2 }
@@ -27,32 +31,42 @@ MolCompleteComponentOverloadImpl class >> producedComponentEvents [
 
 { #category : #'accessing - parameters' }
 MolCompleteComponentOverloadImpl class >> providedComponentParameters [
+	"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
 
 	<componentContract>
-	^ { MolUsedParameters. MolUsedParameters2. }
+	^ {
+		  MolUsedParameters.
+		  MolUsedParameters2 }
 ]
 
 { #category : #'accessing - services' }
 MolCompleteComponentOverloadImpl class >> providedComponentServices [
+	"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
 
 	<componentContract>
-	^ { 
+	^ {
 		  MolUsedServices.
 		  MolUsedServices2 }
 ]
 
 { #category : #'accessing - parameters' }
 MolCompleteComponentOverloadImpl class >> usedComponentParameters [
+	"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
 
 	<componentContract>
-	^ { MolUsedParameters. MolUsedParameters2 }
+	^ {
+		  MolUsedParameters.
+		  MolUsedParameters2 }
 ]
 
 { #category : #'accessing - services' }
 MolCompleteComponentOverloadImpl class >> usedComponentServices [
+	"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
 
 	<componentContract>
-	^ { MolUsedServices. MolUsedServices2 }
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2 }
 ]
 
 { #category : #events }

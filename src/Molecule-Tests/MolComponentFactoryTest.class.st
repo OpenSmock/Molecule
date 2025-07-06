@@ -7,10 +7,8 @@ Class {
 	#category : #'Molecule-Tests-Cases'
 }
 
-{ #category : #'setUp-tearDown' }
+{ #category : #running }
 MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
-	"Smalltalk fixObsoleteReferences."
-	
 	<script: 'self new cleanGeneratedClassesAndTraits'>
 
 	| edited |
@@ -29,6 +27,15 @@ MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 	].
 	
 	edited ifTrue:[(Delay forMilliseconds: 100) wait].
+]
+
+{ #category : #running }
+MolComponentFactoryTest >> cleanGeneratedMethods [
+	"Restore methods added by tests"
+	<script: 'self new cleanGeneratedMethods'>
+	
+	MolCompleteSubComponentOverloadImpl class removeSelector: #usedComponentServices.
+	MolCompleteSubComponentOverloadImpl class removeSelector: #providedComponentServices
 ]
 
 { #category : #utils }
@@ -111,15 +118,67 @@ MolComponentFactoryTest >> generationTag [
 	^'Molecule-Tests-Resources - Generated'
 ]
 
-{ #category : #'setUp-tearDown' }
+{ #category : #running }
+MolComponentFactoryTest >> restoreRemovedThings [
+	"Restore things removed in tests"
+	<script: 'self new restoreRemovedThings'>
+	
+	"Simulate an overridden contract by the user VV"
+	
+	self createInstanceMethod: 'usedComponentServices' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2 }'.
+		
+	self createInstanceMethod: 'providedComponentServices' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2 }'.
+		
+	self createInstanceMethod: 'usedComponentParameters' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - parameters' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedParameters.
+		  MolUsedParameters2 }'.
+		
+	self createInstanceMethod: 'providedComponentParameters' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - parameters' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedParameters.
+		  MolUsedParameters2 }'.
+		
+	self createInstanceMethod: 'consumedComponentEvents' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - events' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedEvents.
+		  MolUsedEvents2 }'.
+		
+	self createInstanceMethod: 'producedComponentEvents' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - events' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
+
+	<componentContract>
+	^ {
+		  MolUsedEvents.
+		  MolUsedEvents2 }'.
+]
+
+{ #category : #running }
 MolComponentFactoryTest >> setUp [
 
 	self timeLimit: 30 seconds.
 	MolComponentManager cleanUp.
 	self cleanGeneratedClassesAndTraits.
+	self restoreRemovedThings.
+	self cleanGeneratedMethods.
 ]
 
-{ #category : #'setUp-tearDown' }
+{ #category : #running }
 MolComponentFactoryTest >> setUpComponentAndType [
 	<script: 'self new setUpComponentAndType'>
 	| edited |
@@ -164,11 +223,13 @@ MolComponentFactoryTest >> setUpComponentAndType [
 	edited ifTrue:[(Delay forMilliseconds: 100) wait].
 ]
 
-{ #category : #'setUp-tearDown' }
+{ #category : #running }
 MolComponentFactoryTest >> tearDown [
 
 	(Delay forMilliseconds: 10) wait.
 	self cleanGeneratedClassesAndTraits.
+	self restoreRemovedThings.
+	self cleanGeneratedMethods.
 	MolComponentManager cleanUp.
 ]
 
@@ -264,7 +325,7 @@ MolComponentFactoryTest >> testComponentContractChanged [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'test - overload' }
 MolComponentFactoryTest >> testComponentContractImplGeneration [
 
 	| toFind |
@@ -850,31 +911,47 @@ MolComponentFactoryTest >> testDynamicContractUpdateActivation2 [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - code generation' }
 MolComponentFactoryTest >> testGenerateConsumedEventComponentAccessorsFor [
+
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsSubscriber.
-	MolComponentFactory default generateOrRemoveConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+	
+	MolComponentFactory default removeOldConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+	MolComponentFactory default generateConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsSubscriber).
 ]
 
-{ #category : #tests }
+{ #category : #'tests - code generation' }
 MolComponentFactoryTest >> testGenerateProducedEventComponentAccessorsFor [
+
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsNotifier.
-	MolComponentFactory default generateOrRemoveProducedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+	
+	MolComponentFactory default removeOldProducedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+	MolComponentFactory default generateProducedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsNotifier).
 ]
 
-{ #category : #tests }
+{ #category : #'tests - code generation' }
 MolComponentFactoryTest >> testGenerateUsedParametersComponentAccessorsFor [
+
 	MolCompleteComponentImpl removeSelector: #getMolUsedParametersProvider.
-	MolComponentFactory default generateOrRemoveUsedParametersComponentAccessorsFor: MolCompleteComponentImpl.
+	
+	MolComponentFactory default removeOldUsedParametersAndServicesComponentAccessorsFor: MolCompleteComponentImpl.
+	MolComponentFactory default generateUsedParametersComponentAccessorsFor: MolCompleteComponentImpl.
+
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedParametersProvider).
 ]
 
-{ #category : #tests }
+{ #category : #'tests - code generation' }
 MolComponentFactoryTest >> testGenerateUsedServicesComponentAccessorsFor [
+	
 	MolCompleteComponentImpl removeSelector: #getMolUsedServicesProvider.
-	MolComponentFactory default generateOrRemoveUsedServicesComponentAccessorsFor: MolCompleteComponentImpl.
+	
+	MolComponentFactory default removeOldUsedParametersAndServicesComponentAccessorsFor: MolCompleteComponentImpl.
+	MolComponentFactory default generateUsedServicesComponentAccessorsFor: MolCompleteComponentImpl.
+	
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedServicesProvider).
 ]
 
@@ -1233,4 +1310,204 @@ MolComponentFactoryTest >> testProtocolForComponentParameters [
 MolComponentFactoryTest >> testProtocolForComponentServices [
 
 	self assert: MolComponentFactory protocolForComponentServices equals: 'accessing - services'.
+]
+
+{ #category : #'tests - code generation' }
+MolComponentFactoryTest >> testRebuildComponentAccessorsFor [
+	
+	MolCompleteComponentImpl removeSelector: #getMolUsedServicesProvider.
+	MolCompleteComponentImpl removeSelector: #getMolUsedParametersProvider.
+	MolCompleteComponentImpl removeSelector: #getMolUsedEventsNotifier.
+	MolCompleteComponentImpl removeSelector: #getMolUsedEventsSubscriber.
+	
+	MolComponentFactory default rebuildComponentAccessorsFor: MolCompleteComponentImpl.
+	
+	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedServicesProvider).
+	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedParametersProvider).
+	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsNotifier).
+	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsSubscriber).
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedConsumedEvents [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #consumedComponentEvents ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil.
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedProducedEvents [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #producedComponentEvents ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil.
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedProvidedParameters [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #providedComponentParameters ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil.
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedProvidedServices [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #providedComponentServices ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil.
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedUsedParameters [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #usedComponentParameters ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil.
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testRemoveOverloadedUsedServices [
+	"Testing issue #210 fix"
+
+	| exception |
+	exception := nil.
+	"Remove the method which overload the services contract: no error should appears"
+	[ MolCompleteComponentOverloadImpl class removeSelector: #usedComponentServices ]
+		on: Exception
+		do: [ :e | exception := e ].
+		
+	self assert: exception isNil
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testSubOverrideOfContractAddingProvidedServices [
+	"Related to issue #209, can override an overriden contract"
+	
+	| usedServices |
+	
+	"initial state"
+	usedServices := MolCompleteSubComponentOverloadImpl providedComponentServices.
+	self assert: usedServices size equals: 2.
+	self deny: (usedServices includes: MolUsedServices3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
+	
+	"Simulate overridden of an overridden contract"
+	self createInstanceMethod: 'providedComponentServices' in: (MolCompleteSubComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Generated method in MolComponentFactoryTest>>testSubOverriddeOfAContract"
+
+	<componentContract>
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2.
+		  MolUsedServices3 }'.
+	
+	
+	"Test overridding the method"
+	usedServices := MolCompleteSubComponentOverloadImpl providedComponentServices.
+	self assert: usedServices size equals: 3.
+	self assert: (usedServices includes: MolUsedServices3).
+	
+	"Test method generation: this cannot be generated"
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self assert: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	
+	"Test traits installation: nothing has changed because a used services cannot add a trait in the composition"
+	self assert: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
+	
+	"Clean generated method"
+	MolCompleteSubComponentOverloadImpl class removeSelector: #providedComponentServices.
+	"test initial state again"
+
+	self flag:'Need to rewrite dynamic contract system to wait all system modifications before define components'.
+	100 milliSeconds wait.
+
+	usedServices := MolCompleteSubComponentOverloadImpl providedComponentServices.
+	self assert: usedServices size equals: 2.
+	self deny: (usedServices includes: MolUsedServices3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
+	
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testSubOverrideOfContractAddingUsedServices [
+	"Related to issue #209, can override an overriden contract"
+	
+	| usedServices |
+
+	"initial state"
+	usedServices := MolCompleteSubComponentOverloadImpl usedComponentServices.
+	self assert: usedServices size equals: 2.
+	self deny: (usedServices includes: MolUsedServices3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
+	
+	"Simulate overridden of an overridden contract"
+	self createInstanceMethod: 'usedComponentServices' in: (MolCompleteSubComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Generated method in MolComponentFactoryTest>>testSubOverriddeOfAContract"
+
+	<componentContract>
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2.
+		  MolUsedServices3 }'.
+	
+	
+	"Test overridding the method"
+	usedServices := MolCompleteSubComponentOverloadImpl usedComponentServices.
+	self assert: usedServices size equals: 3.
+	self assert: (usedServices includes: MolUsedServices3).
+	
+	"Test method generation: generate get... but not service3"
+	self assert: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	
+	"Test traits installation: nothing has changed because a used services cannot add a trait in the composition"
+	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
+	
+	"Clean generated method"
+	MolCompleteSubComponentOverloadImpl class removeSelector: #usedComponentServices.
+	
+	"initial state"
+	usedServices := MolCompleteSubComponentOverloadImpl usedComponentServices.
+	self assert: usedServices size equals: 2.
+	self deny: (usedServices includes: MolUsedServices3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
 ]
