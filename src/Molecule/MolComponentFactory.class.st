@@ -940,7 +940,10 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraits
 					"Need to do another try in a fork with a delay to considere system installation"
 					self flag:'laborde: write a Pharo issue? Usecase: remove an overridden method of a Traits then remove the trait from composition'.
 					MolUtils log: e printString.	
-					[ 10 milliSeconds wait. (aComponentClass isComposedBy: trait) ifTrue:[ aComponentClass removeFromComposition: trait ] ] fork.
+					[ 
+						10 milliSeconds wait. 
+						[ (aComponentClass isComposedBy: trait) ifTrue:[ aComponentClass removeFromComposition: trait ] ] on: KeyNotFound do:[ :e | "do nothing" ^ self ]. 
+					] fork.
 				]. 
 			].			
 		].
