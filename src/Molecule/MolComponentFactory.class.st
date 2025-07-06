@@ -652,7 +652,6 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 					]. 
 				]. 
 			]. 
-		
 		].
 	]
 ]
@@ -942,8 +941,11 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraits
 					MolUtils log: e printString.	
 					[ 
 						10 milliSeconds wait. 
-						[ (aComponentClass isComposedBy: trait) ifTrue:[ aComponentClass removeFromComposition: trait ] ] on: KeyNotFound do:[ :e | "do nothing" ^ self ]. 
+						[ (aComponentClass isComposedBy: trait) ifTrue:[ aComponentClass removeFromComposition: trait ] ] 
+							on: KeyNotFound 
+							do:[ :ex | "do nothing - fork terminated" ex return ]. 
 					] fork.
+					e return.
 				]. 
 			].			
 		].
