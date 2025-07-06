@@ -931,7 +931,7 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraits
 	aTraitsList do: [ :trait |
 		
 		( trait notNil and:[ trait isTrait and:[ trait isObsolete not ] ] ) ifTrue:[ 
-			
+			 
 			"Check if the trait is present on class hierarchy"
 			( aComponentClass isComposedBy: trait ) ifTrue:[ 
 				[ aComponentClass removeFromComposition: trait ] on: KeyNotFound do:[ :e | 
