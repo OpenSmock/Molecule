@@ -934,13 +934,12 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraits
 		(trait notNil and:[trait isTrait and:[trait isObsolete not]]) ifTrue:[ 
 			
 			"Check if the trait is present on class hierarchy"
-			(aComponentClass isComposedBy: trait) ifTrue:[
-				[ aComponentClass removeFromComposition: trait ] on: KeyNotFound do: [ :e |
+			[ aComponentClass isComposedBy: trait ] whileTrue:[
+				[ aComponentClass removeFromComposition: trait ] on: KeyNotFound do:[ :e | 
 					"When an originaly method injected by a Trait is remove, there is a KeyNotFound exception - catch it because finally we need to remove"
 					"Need to do another try in a fork with a delay to considere system installation"
-					[ 10 milliSeconds wait. (aComponentClass isComposedBy: trait) ifTrue:[ aComponentClass removeFromComposition: trait ] ] fork.
 					self flag:'laborde: write a Pharo issue? Usecase: remove an overridden method of a Traits then remove the trait from composition'.
-				] 
+				].
 			].
 		].
 	].

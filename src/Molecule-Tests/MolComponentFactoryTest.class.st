@@ -1451,9 +1451,7 @@ MolComponentFactoryTest >> testSubOverrideOfContractAddingProvidedServices [
 	"Clean generated method"
 	MolCompleteSubComponentOverloadImpl class removeSelector: #providedComponentServices.
 	"test initial state again"
-	
-	self flag:'According to MolComponentFactory>>rebuildComponent:traitsRemoving: need to wait'.
-	50 milliSeconds wait.
+
 	usedServices := MolCompleteSubComponentOverloadImpl providedComponentServices.
 	self assert: usedServices size equals: 2.
 	self deny: (usedServices includes: MolUsedServices3).
