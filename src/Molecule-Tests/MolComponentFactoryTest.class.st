@@ -1345,6 +1345,7 @@ MolComponentFactoryTest >> testRemoveOverloadedConsumedEvents [
 		on: Exception
 		do: [ :e | exception := e ].
 		
+	exception ifNotNil: [ exception signal ].
 	self assert: exception isNil.
 ]
 
@@ -1359,6 +1360,7 @@ MolComponentFactoryTest >> testRemoveOverloadedProducedEvents [
 		on: Exception
 		do: [ :e | exception := e ].
 		
+	exception ifNotNil: [ exception signal ].
 	self assert: exception isNil.
 ]
 
@@ -1372,7 +1374,8 @@ MolComponentFactoryTest >> testRemoveOverloadedProvidedParameters [
 	[ MolCompleteComponentOverloadImpl class removeSelector: #providedComponentParameters ]
 		on: Exception
 		do: [ :e | exception := e ].
-		
+
+	exception ifNotNil: [ exception signal ].
 	self assert: exception isNil.
 ]
 
@@ -1386,7 +1389,8 @@ MolComponentFactoryTest >> testRemoveOverloadedProvidedServices [
 	[ MolCompleteComponentOverloadImpl class removeSelector: #providedComponentServices ]
 		on: Exception
 		do: [ :e | exception := e ].
-		
+
+	exception ifNotNil: [ exception signal ].
 	self assert: exception isNil.
 ]
 
@@ -1400,7 +1404,8 @@ MolComponentFactoryTest >> testRemoveOverloadedUsedParameters [
 	[ MolCompleteComponentOverloadImpl class removeSelector: #usedComponentParameters ]
 		on: Exception
 		do: [ :e | exception := e ].
-		
+
+	exception ifNotNil: [ exception signal ].
 	self assert: exception isNil.
 ]
 
@@ -1415,6 +1420,7 @@ MolComponentFactoryTest >> testRemoveOverloadedUsedServices [
 		on: Exception
 		do: [ :e | exception := e ].
 		
+	exception ifNotNil: [ exception signal ].
 	self assert: exception isNil
 ]
 
