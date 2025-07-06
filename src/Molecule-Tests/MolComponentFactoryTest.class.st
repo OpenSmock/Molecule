@@ -34,7 +34,8 @@ MolComponentFactoryTest >> cleanGeneratedMethods [
 	"Restore methods added by tests"
 	<script: 'self new cleanGeneratedMethods'>
 	
-	MolCompleteSubComponentOverloadImpl class removeSelector: #usedComponentServices
+	MolCompleteSubComponentOverloadImpl class removeSelector: #usedComponentServices.
+	MolCompleteSubComponentOverloadImpl class removeSelector: #providedComponentServices
 ]
 
 { #category : #utils }
@@ -1412,12 +1413,71 @@ MolComponentFactoryTest >> testRemoveOverloadedUsedServices [
 ]
 
 { #category : #'test - overload' }
-MolComponentFactoryTest >> testSubOverrideOfContractAddingUsedServices [
+MolComponentFactoryTest >> testSubOverrideOfContractAddingProvidedServices [
 	"Related to issue #209, can override an overriden contract"
 	
 	| usedServices |
 	
-		"Simulate overridden of an overridden contract"
+	"initial state"
+	usedServices := MolCompleteSubComponentOverloadImpl providedComponentServices.
+	self assert: usedServices size equals: 2.
+	self deny: (usedServices includes: MolUsedServices3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
+	
+	"Simulate overridden of an overridden contract"
+	self createInstanceMethod: 'providedComponentServices' in: (MolCompleteSubComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Generated method in MolComponentFactoryTest>>testSubOverriddeOfAContract"
+
+	<componentContract>
+	^ {
+		  MolUsedServices.
+		  MolUsedServices2.
+		  MolUsedServices3 }'.
+	
+	
+	"Test overridding the method"
+	usedServices := MolCompleteSubComponentOverloadImpl providedComponentServices.
+	self assert: usedServices size equals: 3.
+	self assert: (usedServices includes: MolUsedServices3).
+	
+	"Test method generation: this cannot be generated"
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self assert: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	
+	"Test traits installation: nothing has changed because a used services cannot add a trait in the composition"
+	self assert: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
+	
+	"Clean generated method"
+	MolCompleteSubComponentOverloadImpl class removeSelector: #providedComponentServices.
+	"test initial state again"
+	
+	self flag:'According to MolComponentFactory>>rebuildComponent:traitsRemoving: need to wait'.
+	50 milliSeconds wait.
+	usedServices := MolCompleteSubComponentOverloadImpl providedComponentServices.
+	self assert: usedServices size equals: 2.
+	self deny: (usedServices includes: MolUsedServices3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
+	
+]
+
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testSubOverrideOfContractAddingUsedServices [
+	"Related to issue #209, can override an overriden contract"
+	
+	| usedServices |
+
+	"initial state"
+	usedServices := MolCompleteSubComponentOverloadImpl usedComponentServices.
+	self assert: usedServices size equals: 2.
+	self deny: (usedServices includes: MolUsedServices3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
+	
+	"Simulate overridden of an overridden contract"
 	self createInstanceMethod: 'usedComponentServices' in: (MolCompleteSubComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Generated method in MolComponentFactoryTest>>testSubOverriddeOfAContract"
 
 	<componentContract>
@@ -1432,9 +1492,21 @@ MolComponentFactoryTest >> testSubOverrideOfContractAddingUsedServices [
 	self assert: usedServices size equals: 3.
 	self assert: (usedServices includes: MolUsedServices3).
 	
-	"Test method generation"
+	"Test method generation: generate get... but not service3"
 	self assert: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
 	
 	"Test traits installation: nothing has changed because a used services cannot add a trait in the composition"
+	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
+	
+	"Clean generated method"
+	MolCompleteSubComponentOverloadImpl class removeSelector: #usedComponentServices.
+	
+	"initial state"
+	usedServices := MolCompleteSubComponentOverloadImpl usedComponentServices.
+	self assert: usedServices size equals: 2.
+	self deny: (usedServices includes: MolUsedServices3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #service3).
+	self deny: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
 	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
 ]

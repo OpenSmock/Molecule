@@ -427,7 +427,6 @@ MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass
 	"Check if a Component Class uses a list of Trait Class and do uses"
 	| traitList toAddTraits toRemoveTraits |
 	
-	aTraitList isEmpty ifTrue:[ ^ self ].
 	traitList := self collectComponentConnectionTraits: aComponentClass.
 	
 	"added traits"
@@ -559,17 +558,27 @@ MolComponentFactory >> defineComponent: aComponentClass [
 		traitList do:[ :trait | aComponentClass removeFromComposition: trait ].
 	] ifTrue:[
 		
-		"Check missing traits"
-		toUseTraitList := Set withAll: (MolUtils consumedComponentEvents: aComponentClass).
-		toUseTraitList addAll: (MolUtils providedComponentServices: aComponentClass).
-		toUseTraitList addAll: (MolUtils providedComponentParameters: aComponentClass).
-		
-		aComponentClass haveOwnComponentType ifFalse:[ | toPreserveTraitList |
+		"check if the component have own componen type"
+		aComponentClass haveOwnComponentType ifTrue:[
+			
 			"Check missing traits"
-			toPreserveTraitList := Set withAll: (aComponentClass consumedComponentEvents).
-			toPreserveTraitList addAll: (aComponentClass providedComponentServices).
-			toPreserveTraitList addAll: (aComponentClass providedComponentParameters).
-			toUseTraitList := toPreserveTraitList reject:[ :e | toUseTraitList includes: e ].
+			toUseTraitList := Set withAll: (MolUtils consumedComponentEvents: aComponentClass).
+			toUseTraitList addAll: (MolUtils providedComponentServices: aComponentClass).
+			toUseTraitList addAll: (MolUtils providedComponentParameters: aComponentClass).	
+					
+		] ifFalse:[ | superclassTraitList overridenTraitList |
+		
+			"Get traits on the superclass and make a diff with the component class to find which traits are missing"
+			superclassTraitList := Set withAll: (MolUtils consumedComponentEvents: aComponentClass superclass).
+			superclassTraitList addAll: (MolUtils providedComponentServices: aComponentClass superclass).
+			superclassTraitList addAll: (MolUtils providedComponentParameters: aComponentClass superclass).
+			
+			"Check missing traits"
+			overridenTraitList := Set withAll: (aComponentClass consumedComponentEvents).
+			overridenTraitList addAll: (aComponentClass providedComponentServices).
+			overridenTraitList addAll: (aComponentClass providedComponentParameters).
+			toUseTraitList := overridenTraitList reject:[ :e | superclassTraitList includes: e ].
+			
 		].
 	
 		self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
@@ -919,25 +928,19 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsAdding: aTraitsLi
 
 { #category : #'private - code generation' }
 MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraitsList [
-	| classes |
-	"Get class hierarchy of the component class and clean classes not concerned by Component Contract Traits"
-	classes := aComponentClass allSuperclasses reverse.
-	classes remove: Object; remove: ProtoObject; remove: MolAbstractComponentImpl ifAbsent:[nil].
-	classes add: aComponentClass.
-
-	aTraitsList do: [:trait | | toBeRemoveTrait |
+	
+	aTraitsList do: [ :trait |
+		
 		(trait notNil and:[trait isTrait and:[trait isObsolete not]]) ifTrue:[ 
-			toBeRemoveTrait := trait.
-			"Cannot remove the traits if absent"
-			classes do: [ :c | toBeRemoveTrait ifNotNil:[ (c allTraits includes: trait) ifFalse:[toBeRemoveTrait := nil] ]].
-			toBeRemoveTrait ifNotNil:[
-				aComponentClass traitComposition isEmpty ifFalse:[
-					[ aComponentClass removeFromComposition: toBeRemoveTrait ] on: KeyNotFound do: [ :e |
-						"When an originaly method injected by a Trait is remove, there is a KeyNotFound exception - catch it because finally we need to remove"
-						"Do nothing"
-						self flag:'laborde: write a Pharo issue? Usecase: remove an overridden method of a Traits then remove the trait from composition'.
-					] 
-				].
+			
+			"Check if the trait is present on class hierarchy"
+			(aComponentClass isComposedBy: trait) ifTrue:[
+				[ aComponentClass removeFromComposition: trait ] on: KeyNotFound do: [ :e |
+					"When an originaly method injected by a Trait is remove, there is a KeyNotFound exception - catch it because finally we need to remove"
+					"Need to do another try in a fork with a delay to considere system installation"
+					[ 10 milliSeconds wait. (aComponentClass isComposedBy: trait) ifTrue:[ aComponentClass removeFromComposition: trait ] ] fork.
+					self flag:'laborde: write a Pharo issue? Usecase: remove an overridden method of a Traits then remove the trait from composition'.
+				] 
 			].
 		].
 	].
