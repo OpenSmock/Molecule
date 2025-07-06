@@ -917,9 +917,12 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsAdding: aTraitsLi
 			"Cannot add the traits if already present in superclasses"
 			classes do: [ :c | toBeAddedTrait ifNotNil:[ (c allTraits includes: trait) ifTrue:[toBeAddedTrait := nil] ]].
 			toBeAddedTrait ifNotNil:[
-				aComponentClass traitComposition isEmpty 
-					ifTrue:[aComponentClass setTraitComposition: toBeAddedTrait] 
-					ifFalse:[	aComponentClass addToComposition: toBeAddedTrait].
+				
+				[ "see issue #210"
+					aComponentClass traitComposition isEmpty 
+						ifTrue:[aComponentClass setTraitComposition: toBeAddedTrait] 
+						ifFalse:[	aComponentClass addToComposition: toBeAddedTrait]
+				] on: KeyNotFound do:[ :ex | MolUtils log: ex printString ].
 			].
 		].
 	].
@@ -936,16 +939,15 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraits
 			( aComponentClass isComposedBy: trait ) ifTrue:[ 
 				[ aComponentClass removeFromComposition: trait ] on: KeyNotFound do:[ :e | 
 					"When an originaly method injected by a Trait is remove, there is a KeyNotFound exception - catch it because finally we need to remove"
-					"Need to do another try in a fork with a delay to considere system installation"
+					"Need to do another try in a fork with a delay to considere system installation - see issue #210"
 					self flag:'laborde: write a Pharo issue? Usecase: remove an overridden method of a Traits then remove the trait from composition'.
 					MolUtils log: e printString.	
 					[ 
 						10 milliSeconds wait. 
 						[ (aComponentClass isComposedBy: trait) ifTrue:[ aComponentClass removeFromComposition: trait ] ] 
 							on: KeyNotFound 
-							do:[ :ex | "do nothing - fork terminated" ex return: nil ]. 
+							do:[ :ex | MolUtils log: ex printString ]. 
 					] fork.
-					e return: nil.
 				]. 
 			].			
 		].
