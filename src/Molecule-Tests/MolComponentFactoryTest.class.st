@@ -1452,6 +1452,9 @@ MolComponentFactoryTest >> testSubOverrideOfContractAddingProvidedServices [
 	MolCompleteSubComponentOverloadImpl class removeSelector: #providedComponentServices.
 	"test initial state again"
 
+	self flag:'Need to rewrite dynamic contract system to wait all system modifications before define components'.
+	10 milliSeconds wait.
+
 	usedServices := MolCompleteSubComponentOverloadImpl providedComponentServices.
 	self assert: usedServices size equals: 2.
 	self deny: (usedServices includes: MolUsedServices3).
