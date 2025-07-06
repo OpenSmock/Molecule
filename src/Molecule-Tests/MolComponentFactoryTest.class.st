@@ -910,31 +910,47 @@ MolComponentFactoryTest >> testDynamicContractUpdateActivation2 [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests - code generation' }
 MolComponentFactoryTest >> testGenerateConsumedEventComponentAccessorsFor [
+
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsSubscriber.
-	MolComponentFactory default generateOrRemoveConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+	
+	MolComponentFactory default removeOldConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+	MolComponentFactory default generateConsumedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsSubscriber).
 ]
 
-{ #category : #tests }
+{ #category : #'tests - code generation' }
 MolComponentFactoryTest >> testGenerateProducedEventComponentAccessorsFor [
+
 	MolCompleteComponentImpl removeSelector: #getMolUsedEventsNotifier.
-	MolComponentFactory default generateOrRemoveProducedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+	
+	MolComponentFactory default removeOldProducedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+	MolComponentFactory default generateProducedEventsComponentAccessorsFor: MolCompleteComponentImpl.
+
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsNotifier).
 ]
 
-{ #category : #tests }
+{ #category : #'tests - code generation' }
 MolComponentFactoryTest >> testGenerateUsedParametersComponentAccessorsFor [
+
 	MolCompleteComponentImpl removeSelector: #getMolUsedParametersProvider.
-	MolComponentFactory default generateOrRemoveUsedParametersComponentAccessorsFor: MolCompleteComponentImpl.
+	
+	MolComponentFactory default removeOldUsedParametersAndServicesComponentAccessorsFor: MolCompleteComponentImpl.
+	MolComponentFactory default generateUsedParametersComponentAccessorsFor: MolCompleteComponentImpl.
+
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedParametersProvider).
 ]
 
-{ #category : #tests }
+{ #category : #'tests - code generation' }
 MolComponentFactoryTest >> testGenerateUsedServicesComponentAccessorsFor [
+	
 	MolCompleteComponentImpl removeSelector: #getMolUsedServicesProvider.
-	MolComponentFactory default generateOrRemoveUsedServicesComponentAccessorsFor: MolCompleteComponentImpl.
+	
+	MolComponentFactory default removeOldUsedParametersAndServicesComponentAccessorsFor: MolCompleteComponentImpl.
+	MolComponentFactory default generateUsedServicesComponentAccessorsFor: MolCompleteComponentImpl.
+	
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedServicesProvider).
 ]
 
@@ -1295,6 +1311,22 @@ MolComponentFactoryTest >> testProtocolForComponentServices [
 	self assert: MolComponentFactory protocolForComponentServices equals: 'accessing - services'.
 ]
 
+{ #category : #'tests - code generation' }
+MolComponentFactoryTest >> testRebuildComponentAccessorsFor [
+	
+	MolCompleteComponentImpl removeSelector: #getMolUsedServicesProvider.
+	MolCompleteComponentImpl removeSelector: #getMolUsedParametersProvider.
+	MolCompleteComponentImpl removeSelector: #getMolUsedEventsNotifier.
+	MolCompleteComponentImpl removeSelector: #getMolUsedEventsSubscriber.
+	
+	MolComponentFactory default rebuildComponentAccessorsFor: MolCompleteComponentImpl.
+	
+	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedServicesProvider).
+	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedParametersProvider).
+	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsNotifier).
+	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsSubscriber).
+]
+
 { #category : #'test - overload' }
 MolComponentFactoryTest >> testRemoveOverloadedConsumedEvents [
 	"Testing issue #210 fix"
@@ -1380,8 +1412,8 @@ MolComponentFactoryTest >> testRemoveOverloadedUsedServices [
 ]
 
 { #category : #'test - overload' }
-MolComponentFactoryTest >> testSubOverriddeOfAContract [
-	"Related to issue #209, can overridde an overridden contract"
+MolComponentFactoryTest >> testSubOverrideOfContractAddingUsedServices [
+	"Related to issue #209, can override an overriden contract"
 	
 	| usedServices |
 	
@@ -1401,8 +1433,8 @@ MolComponentFactoryTest >> testSubOverriddeOfAContract [
 	self assert: (usedServices includes: MolUsedServices3).
 	
 	"Test method generation"
-	self assert: (MolCompleteSubComponentOverloadImpl respondsTo: #getMolUsedServices3Provider).
+	self assert: (MolCompleteSubComponentOverloadImpl new respondsTo: #getMolUsedServices3Provider).
 	
-	"Test traits installation"
-	self assert: (MolCompleteSubComponentOverloadImpl traitComposition includes: MolUsedServices3). 
+	"Test traits installation: nothing has changed because a used services cannot add a trait in the composition"
+	self deny: (MolCompleteSubComponentOverloadImpl isComposedBy: MolUsedServices3). 
 ]

@@ -550,11 +550,7 @@ MolComponentFactory >> defineComponent: aComponentClass [
 	 | toUseTraitList |
 	(aComponentClass isNil or:[aComponentClass isClass not or:[aComponentClass isComponentClass not]]) ifTrue:[^self].
 	
-	"Generate or remove accessors"
-	self generateOrRemoveConsumedEventsComponentAccessorsFor: aComponentClass.
-	self generateOrRemoveProducedEventsComponentAccessorsFor: aComponentClass.
-	self generateOrRemoveUsedServicesComponentAccessorsFor: aComponentClass.
-	self generateOrRemoveUsedParametersComponentAccessorsFor: aComponentClass.
+	self rebuildComponentAccessorsFor: aComponentClass.
 
 	"Check if the object have a component type, if not remove injected component contract traits"
 	aComponentClass haveComponentType ifFalse:[ | traitList |
@@ -562,16 +558,21 @@ MolComponentFactory >> defineComponent: aComponentClass [
 		traitList := self collectComponentConnectionTraits: aComponentClass.
 		traitList do:[ :trait | aComponentClass removeFromComposition: trait ].
 	] ifTrue:[
-		aComponentClass haveOwnComponentType ifTrue:[
-			"Check missing traits"
-			toUseTraitList := Set withAll: (MolUtils consumedComponentEvents: aComponentClass).
-			toUseTraitList addAll: (MolUtils providedComponentServices: aComponentClass).
-			toUseTraitList addAll: (MolUtils providedComponentParameters: aComponentClass).
-			self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
-		] ifFalse:[
 		
-			self flag:'labordep: #209 need to link traits for overridden contract'.
+		"Check missing traits"
+		toUseTraitList := Set withAll: (MolUtils consumedComponentEvents: aComponentClass).
+		toUseTraitList addAll: (MolUtils providedComponentServices: aComponentClass).
+		toUseTraitList addAll: (MolUtils providedComponentParameters: aComponentClass).
+		
+		aComponentClass haveOwnComponentType ifFalse:[ | toPreserveTraitList |
+			"Check missing traits"
+			toPreserveTraitList := Set withAll: (aComponentClass consumedComponentEvents).
+			toPreserveTraitList addAll: (aComponentClass providedComponentServices).
+			toPreserveTraitList addAll: (aComponentClass providedComponentParameters).
+			toUseTraitList := toPreserveTraitList reject:[ :e | toUseTraitList includes: e ].
 		].
+	
+		self checkAndRebuildUsedTraitList: toUseTraitList inComponentClass: aComponentClass.
 	].
 ]
 
@@ -648,82 +649,78 @@ MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollect
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateOrRemoveConsumedEventsComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateConsumedEventsComponentAccessorsFor: aComponentClass [
 
 	| toDefine |
-	self removeOldConsumedEventsComponentAccessorsFor: aComponent.
-
-	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
-		ifFalse: [ ^ self ].
-
-	self flag:'labordep: #209 need to generate methods for overridden contract'.
-
-	toDefine := MolUtils consumedComponentEvents: aComponent.
+	aComponentClass haveComponentType ifFalse: [ ^ self ].
+	toDefine := aComponentClass haveOwnComponentType
+		            ifTrue: [ MolUtils consumedComponentEvents: aComponentClass ]
+		            ifFalse: [ "case of an overridden contract by a component implementation which is a subclass of a component with a type"
+				            (aComponentClass respondsTo: #consumedComponentEvents)
+					            ifTrue: [ aComponentClass consumedComponentEvents reject:[ :e | (MolUtils consumedComponentEvents: aComponentClass superclass) includes: e  ] ]
+					            ifFalse: [ #(  ) ] ].
 
 	self
 		generateComponentAccessorsFor: #consumedEvents
 		withList: toDefine
-		in: aComponent
+		in: aComponentClass
 		suffix: 'Subscriber'
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateOrRemoveProducedEventsComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateProducedEventsComponentAccessorsFor: aComponentClass [
 
 	| toDefine |
-	self removeOldProducedEventsComponentAccessorsFor: aComponent.
-
-	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
-		ifFalse: [ ^ self ].
-
-	self flag:'labordep: #209 need to generate methods for overridden contract'.
-
-	toDefine := MolUtils producedComponentEvents: aComponent.
+	aComponentClass haveComponentType ifFalse: [ ^ self ].
+	toDefine := aComponentClass haveOwnComponentType
+		            ifTrue: [ MolUtils producedComponentEvents: aComponentClass ]
+		            ifFalse: [ "case of an overridden contract by a component implementation which is a subclass of a component with a type"
+				            (aComponentClass respondsTo: #producedComponentEvents)
+					            ifTrue: [ aComponentClass producedComponentEvents reject:[ :e | (MolUtils producedComponentEvents: aComponentClass superclass) includes: e  ] ]
+					            ifFalse: [ #(  ) ] ].
 
 	self
 		generateComponentAccessorsFor: #producedEvents
 		withList: toDefine
-		in: aComponent
+		in: aComponentClass
 		suffix: 'Notifier'
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateOrRemoveUsedParametersComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateUsedParametersComponentAccessorsFor: aComponentClass [
 
 	| toDefine |
-	self removeOldUsedParametersAndServicesComponentAccessorsFor:	aComponent.
-
-	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
-		ifFalse: [ ^ self ].
-
-	self flag:'labordep: #209 need to generate methods for overridden contract'.
-
-	toDefine := MolUtils usedComponentParameters: aComponent.
+	aComponentClass haveComponentType ifFalse: [ ^ self ].
+	toDefine := aComponentClass haveOwnComponentType
+		            ifTrue: [ MolUtils usedComponentParameters: aComponentClass ]
+		            ifFalse: [ "case of an overridden contract by a component implementation which is a subclass of a component with a type"
+				            (aComponentClass respondsTo: #usedComponentParameters)
+					            ifTrue: [ aComponentClass usedComponentParameters reject:[ :e | (MolUtils usedComponentParameters: aComponentClass superclass) includes: e  ] ]
+					            ifFalse: [ #(  ) ] ].
 
 	self
 		generateComponentAccessorsFor: #usedParameters
 		withList: toDefine
-		in: aComponent
+		in: aComponentClass
 		suffix: 'Provider'
 ]
 
 { #category : #'code generation' }
-MolComponentFactory >> generateOrRemoveUsedServicesComponentAccessorsFor: aComponent [
+MolComponentFactory >> generateUsedServicesComponentAccessorsFor: aComponentClass [
 
 	| toDefine |
-	self removeOldUsedParametersAndServicesComponentAccessorsFor:	aComponent.
-
-	(aComponent haveComponentType and: [ aComponent haveOwnComponentType ])
-		ifFalse: [ ^ self ].
-		
-	self flag:'labordep: #209 need to generate methods for overridden contract'.
-
-	toDefine := MolUtils usedComponentServices: aComponent.
+	aComponentClass haveComponentType ifFalse: [ ^ self ].
+	toDefine := aComponentClass haveOwnComponentType
+		            ifTrue: [ MolUtils usedComponentServices: aComponentClass ]
+		            ifFalse: [ "case of an overridden contract by a component implementation which is a subclass of a component with a type"
+				            (aComponentClass respondsTo: #usedComponentServices)
+					            ifTrue: [ aComponentClass usedComponentServices reject:[ :e | (MolUtils usedComponentServices: aComponentClass superclass) includes: e  ] ]
+					            ifFalse: [ #(  ) ] ].
 
 	self
 		generateComponentAccessorsFor: #usedServices
 		withList: toDefine
-		in: aComponent
+		in: aComponentClass
 		suffix: 'Provider'
 ]
 
@@ -944,6 +941,21 @@ MolComponentFactory >> rebuildComponent: aComponentClass traitsRemoving: aTraits
 			].
 		].
 	].
+]
+
+{ #category : #'code generation' }
+MolComponentFactory >> rebuildComponentAccessorsFor: aComponentClass [
+
+	"Remove old accessors"
+	self removeOldUsedParametersAndServicesComponentAccessorsFor:	aComponentClass.
+	self removeOldProducedEventsComponentAccessorsFor: aComponentClass.
+	self removeOldConsumedEventsComponentAccessorsFor: aComponentClass.
+
+	"Generate new accessors"
+	self generateConsumedEventsComponentAccessorsFor: aComponentClass.
+	self generateProducedEventsComponentAccessorsFor: aComponentClass.
+	self generateUsedServicesComponentAccessorsFor: aComponentClass.
+	self generateUsedParametersComponentAccessorsFor: aComponentClass.
 ]
 
 { #category : #'initialize - release' }
