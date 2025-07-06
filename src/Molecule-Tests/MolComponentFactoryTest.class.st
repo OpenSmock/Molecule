@@ -1016,7 +1016,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 	componentClass addToComposition: MolTestNoComponentTraitA.
 	
 	self assert: (componentClass canPerform: #methodOfNoComponentTrait).
-	self assert: (componentClass traitComposition members size) equals: 5.
+	self assert: (componentClass traitComposition traits size) equals: 5.
 	self assert: (componentClass traitComposition includesTrait: MolTestNoComponentTraitA).
 	self assert: (componentClass traitComposition includesTrait: MolComponentType).
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentServicesTrait).
@@ -1059,7 +1059,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlt
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
  
 	self assert: (componentClass canPerform: #methodOfNoComponentTrait).
-	self assert: (componentClass traitComposition members size) equals: 5.
+	self assert: (componentClass traitComposition traits size) equals: 5.
 	self assert: (componentClass traitComposition includesTrait: MolTestNoComponentTraitA).
 	self assert: (componentClass traitComposition includesTrait: MolComponentType).
 	self assert: (componentClass traitComposition includesTrait: self generatedComponentServicesTrait).
@@ -1244,7 +1244,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 	MolComponentFactory addConsumedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 	MolComponentFactory addProducedEvents:  self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
 
-	self assert: componentClass traitComposition members size equals: 4.
+	self assert: componentClass traitComposition traits size equals: 4.
 	
 	componentClass removeFromComposition: self generatedComponentTypeTrait.
 
