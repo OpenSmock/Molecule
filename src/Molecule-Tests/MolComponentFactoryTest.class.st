@@ -230,8 +230,6 @@ MolComponentFactoryTest >> setUpComponentAndType [
 { #category : #running }
 MolComponentFactoryTest >> tearDown [
 
-	(Delay forMilliseconds: 10) wait.
-
 	MolComponentFactory default deactivateDynamicContractUpdate: false.
 	self cleanGeneratedClassesAndTraits.
 	self restoreRemovedThings.
