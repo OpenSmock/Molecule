@@ -4,8 +4,8 @@ I am a component impl overloading my contract for impl purpose
 Class {
 	#name : #MolCompleteComponentOverloadImpl,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolCompleteComponent + MolUsedServices + MolUsedEvents + MolUsedParameters + MolUsedEvents2 + MolUsedParameters2 + MolUsedServices2',
-	#classTraits : 'MolCompleteComponent classTrait + MolUsedServices classTrait + MolUsedEvents classTrait + MolUsedParameters classTrait + MolUsedEvents2 classTrait + MolUsedParameters2 classTrait + MolUsedServices2 classTrait',
+	#traits : 'MolCompleteComponent + MolUsedServices + MolUsedEvents + MolUsedParameters + MolUsedParameters2 + MolUsedServices2 + MolUsedEvents2',
+	#classTraits : 'MolCompleteComponent classTrait + MolUsedServices classTrait + MolUsedEvents classTrait + MolUsedParameters classTrait + MolUsedParameters2 classTrait + MolUsedServices2 classTrait + MolUsedEvents2 classTrait',
 	#category : #'Molecule-Tests-Resources - Components'
 }
 
