@@ -1350,60 +1350,52 @@ MolComponentFactoryTest >> testRebuildComponentAccessorsFor [
 MolComponentFactoryTest >> testRemoveOverloadedConsumedEvents [
 	"Testing issue #210 fix"
 
-	| exception |
-	exception := nil.
 	"Remove the method which overload the services contract: no error should appears"
-	[ MolCompleteComponentOverloadImpl class removeSelector: #consumedComponentEvents ]
+
+	[
+	MolCompleteComponentOverloadImpl class removeSelector:
+		#consumedComponentEvents ]
 		on: Exception
-		do: [ :e | exception := e ].
-		
-	exception ifNotNil: [ exception signal ].
-	self assert: exception isNil.
+		do: [ :e | e signal ]
 ]
 
 { #category : #'test - overload' }
 MolComponentFactoryTest >> testRemoveOverloadedProducedEvents [
 	"Testing issue #210 fix"
 
-	| exception |
-	exception := nil.
 	"Remove the method which overload the services contract: no error should appears"
-	[ MolCompleteComponentOverloadImpl class removeSelector: #producedComponentEvents ]
+
+	[
+	MolCompleteComponentOverloadImpl class removeSelector:
+		#producedComponentEvents ]
 		on: Exception
-		do: [ :e | exception := e ].
-		
-	exception ifNotNil: [ exception signal ].
-	self assert: exception isNil.
+		do: [ :e | e signal ]
 ]
 
 { #category : #'test - overload' }
 MolComponentFactoryTest >> testRemoveOverloadedProvidedParameters [
 	"Testing issue #210 fix"
 
-	| exception |
-	exception := nil.
 	"Remove the method which overload the services contract: no error should appears"
-	[ MolCompleteComponentOverloadImpl class removeSelector: #providedComponentParameters ]
-		on: Exception
-		do: [ :e | exception := e ].
 
-	exception ifNotNil: [ exception signal ].
-	self assert: exception isNil.
+	[
+	MolCompleteComponentOverloadImpl class removeSelector:
+		#providedComponentParameters ]
+		on: Exception
+		do: [ :e | e signal ]
 ]
 
 { #category : #'test - overload' }
 MolComponentFactoryTest >> testRemoveOverloadedProvidedServices [
 	"Testing issue #210 fix"
 
-	| exception |
-	exception := nil.
 	"Remove the method which overload the services contract: no error should appears"
-	[ MolCompleteComponentOverloadImpl class removeSelector: #providedComponentServices ]
-		on: Exception
-		do: [ :e | exception := e ].
 
-	exception ifNotNil: [ exception signal ].
-	self assert: exception isNil.
+	[
+	MolCompleteComponentOverloadImpl class removeSelector:
+		#providedComponentServices ]
+		on: Exception
+		do: [ :e | e signal ]
 ]
 
 { #category : #'test - overload' }
@@ -1423,15 +1415,13 @@ MolComponentFactoryTest >> testRemoveOverloadedUsedParameters [
 MolComponentFactoryTest >> testRemoveOverloadedUsedServices [
 	"Testing issue #210 fix"
 
-	| exception |
-	exception := nil.
 	"Remove the method which overload the services contract: no error should appears"
-	[ MolCompleteComponentOverloadImpl class removeSelector: #usedComponentServices ]
+
+	[
+	MolCompleteComponentOverloadImpl class removeSelector:
+		#usedComponentServices ]
 		on: Exception
-		do: [ :e | exception := e ].
-		
-	exception ifNotNil: [ exception signal ].
-	self assert: exception isNil
+		do: [ :e | e signal ]
 ]
 
 { #category : #'test - overload' }
