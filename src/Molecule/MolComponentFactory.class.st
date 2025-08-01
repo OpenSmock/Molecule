@@ -426,17 +426,17 @@ MolComponentFactory >> activateDynamicContractUpdate: isInform [
 MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass: aComponentClass [
 	"Check if a Component Class uses a list of Trait Class and do uses"
 	| traitList toAddTraits toRemoveTraits |
-	
+
 	traitList := self collectComponentConnectionTraits: aComponentClass.
 	
 	"added traits"
-	toAddTraits := aTraitList reject: [ :e | (traitList includes: e) or:[ e isObsolete ] ].
+	toAddTraits := self sortTraits: (aTraitList reject: [ :e | (traitList includes: e) or:[ e isObsolete ] ]).
 	toAddTraits ifNotEmpty:[
 		self rebuildComponent: aComponentClass traitsAdding: toAddTraits.
 	].
 	
 	"removed traits"
-	toRemoveTraits := traitList reject: [ :e | aTraitList includes: e ].
+	toRemoveTraits := self sortTraits: (traitList reject: [ :e | aTraitList includes: e ]).
 	toRemoveTraits ifNotEmpty:[
 		self rebuildComponent: aComponentClass traitsRemoving: toRemoveTraits.
 	].
@@ -446,13 +446,12 @@ MolComponentFactory >> checkAndRebuildUsedTraitList: aTraitList inComponentClass
 MolComponentFactory >> collectComponentConnectionTraits: aComponentOrAComponentClass [
 	"Collect a Component Traits : Services, Events and Parameters"
 	| componentClass |
-	aComponentOrAComponentClass ifNil:[^OrderedCollection new].
-	componentClass := aComponentOrAComponentClass isClass ifTrue:[aComponentOrAComponentClass] ifFalse:[aComponentOrAComponentClass class].
-	componentClass isComponentClass ifFalse:[^OrderedCollection new].
+	aComponentOrAComponentClass ifNil:[ ^ OrderedCollection new ].
 	
-	^ componentClass traitComposition allTraits select: [ :e |
-		e isComponentServices or:[e isComponentEvents or:[e isComponentParameters]]	
-	]
+	componentClass := aComponentOrAComponentClass isClass ifTrue:[aComponentOrAComponentClass] ifFalse:[aComponentOrAComponentClass class].
+	componentClass isComponentClass ifFalse:[ ^ OrderedCollection new ].
+	
+	^ self sortTraits: (componentClass traitComposition allTraits)
 ]
 
 { #category : #announcements }
@@ -1063,4 +1062,15 @@ MolComponentFactory >> removeOldUsedParametersAndServicesComponentAccessorsFor: 
 	].
 
 	toBeRemoveProviderSelectors do: [ :s | aComponent removeSelector: s ]
+]
+
+{ #category : #private }
+MolComponentFactory >> sortTraits: aTraitsList [
+
+	| events services parameters |
+	events := aTraitsList select: [ :e | e isComponentEvents ].
+	services := aTraitsList select: [ :e | e isComponentServices ].
+	parameters := aTraitsList select: [ :e | e isComponentParameters ].
+	
+	^ (OrderedCollection withAll: events) addAll: services; addAll: parameters; removeDuplicates; yourself
 ]

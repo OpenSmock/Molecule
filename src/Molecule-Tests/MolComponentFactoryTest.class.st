@@ -265,6 +265,18 @@ MolComponentFactoryTest >> testCollectComponentConnectionTraits [
 ]
 
 { #category : #tests }
+MolComponentFactoryTest >> testCollectComponentConnectionTraitsOrder [
+	"This test check the order of the traits collect: events, services and parameters. This is necessary to control the order to not change generated code in existing components"
+	
+	| traits |
+	traits := MolComponentFactory default collectComponentConnectionTraits: MolCompleteComponentImpl.
+	self assert: traits size equals: 3.
+	self assert: (traits at: 1) equals: MolUsedEvents.
+	self assert: (traits at: 2) equals: MolUsedServices.
+	self assert: (traits at: 3) equals: MolUsedParameters
+]
+
+{ #category : #tests }
 MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	"Create a class, edit this class from different ways and check if the factory define the component or not"
 	| isDynamicContractUpdateActivated |
