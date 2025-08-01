@@ -1306,12 +1306,6 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative5 [
 	self assert: (componentClass canPerform: #getMolTestGeneratedComponentEventsNotifier).
 ]
 
-{ #category : #'test - overload' }
-MolComponentFactoryTest >> testP11 [
-	
-	MolCompleteComponentOverloadImpl class removeSelector: #usedComponentParameters
-]
-
 { #category : #'tests - protocol' }
 MolComponentFactoryTest >> testProtocolForComponentAccess [
 
@@ -1416,15 +1410,13 @@ MolComponentFactoryTest >> testRemoveOverloadedProvidedServices [
 MolComponentFactoryTest >> testRemoveOverloadedUsedParameters [
 	"Testing issue #210 fix"
 
-	| exception |
-	exception := nil.
 	"Remove the method which overload the services contract: no error should appears"
-	[ MolCompleteComponentOverloadImpl class removeSelector: #usedComponentParameters ]
-		on: Exception
-		do: [ :e | exception := e ].
 
-	exception ifNotNil: [ exception signal ].
-	self assert: exception isNil.
+	[
+	MolCompleteComponentOverloadImpl class removeSelector:
+		#usedComponentParameters ]
+		on: Exception
+		do: [ :e | e signal ]
 ]
 
 { #category : #'test - overload' }
