@@ -1306,6 +1306,12 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative5 [
 	self assert: (componentClass canPerform: #getMolTestGeneratedComponentEventsNotifier).
 ]
 
+{ #category : #'test - overload' }
+MolComponentFactoryTest >> testP11 [
+	
+	MolCompleteComponentOverloadImpl class removeSelector: #usedComponentParameters
+]
+
 { #category : #'tests - protocol' }
 MolComponentFactoryTest >> testProtocolForComponentAccess [
 
