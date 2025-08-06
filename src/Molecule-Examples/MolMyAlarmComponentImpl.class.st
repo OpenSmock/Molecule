@@ -6,8 +6,8 @@ Because I am a component implementation, you can force my automatic definition. 
 Class {
 	#name : #MolMyAlarmComponentImpl,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolMyAlarmComponent + MolMyLocalTimeEvents + MolMyAlarmParameters + MolMyAlarmActivationServices',
-	#classTraits : 'MolMyAlarmComponent classTrait + MolMyLocalTimeEvents classTrait + MolMyAlarmParameters classTrait + MolMyAlarmActivationServices classTrait',
+	#traits : 'MolMyAlarmComponent + MolMyLocalTimeEvents + MolMyAlarmActivationServices + MolMyAlarmParameters',
+	#classTraits : 'MolMyAlarmComponent classTrait + MolMyLocalTimeEvents classTrait + MolMyAlarmActivationServices classTrait + MolMyAlarmParameters classTrait',
 	#instVars : [
 		'name',
 		'time',

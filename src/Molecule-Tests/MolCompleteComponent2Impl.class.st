@@ -1,8 +1,8 @@
 Class {
 	#name : #MolCompleteComponent2Impl,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolCompleteComponent2 + MolUsedEvents + MolUsedParameters + MolUsedServices',
-	#classTraits : 'MolCompleteComponent2 classTrait + MolUsedEvents classTrait + MolUsedParameters classTrait + MolUsedServices classTrait',
+	#traits : 'MolCompleteComponent2 + MolUsedEvents + MolUsedServices + MolUsedParameters',
+	#classTraits : 'MolCompleteComponent2 classTrait + MolUsedEvents classTrait + MolUsedServices classTrait + MolUsedParameters classTrait',
 	#category : #'Molecule-Tests-Resources - Components'
 }
 
