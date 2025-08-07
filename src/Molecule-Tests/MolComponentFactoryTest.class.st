@@ -271,9 +271,18 @@ MolComponentFactoryTest >> testCollectComponentConnectionTraitsOrder [
 	| traits |
 	traits := MolComponentFactory default collectComponentConnectionTraits: MolCompleteComponentImpl.
 	self assert: traits size equals: 3.
-	self assert: (traits at: 1) equals: MolUsedEvents.
+	self assert: (traits first) equals: MolUsedEvents.
 	self assert: (traits at: 2) equals: MolUsedServices.
-	self assert: (traits at: 3) equals: MolUsedParameters
+	self assert: (traits at: 3) equals: MolUsedParameters.
+	
+	traits := MolComponentFactory default collectComponentConnectionTraits: MolCompleteComponentOverloadImpl.
+	self assert: traits size equals: 6.
+	self assert: (traits first) equals: MolUsedEvents.
+	self assert: (traits at: 2) equals: MolUsedEvents2.
+	self assert: (traits at: 3) equals: MolUsedServices.
+	self assert: (traits at: 4) equals: MolUsedServices2.
+	self assert: (traits at: 5) equals: MolUsedParameters.
+	self assert: (traits at: 6) equals: MolUsedParameters2.
 ]
 
 { #category : #tests }
