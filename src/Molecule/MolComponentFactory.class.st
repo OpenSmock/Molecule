@@ -1067,10 +1067,17 @@ MolComponentFactory >> removeOldUsedParametersAndServicesComponentAccessorsFor: 
 { #category : #private }
 MolComponentFactory >> sortTraits: aTraitsList [
 
-	| events services parameters |
-	events := aTraitsList select: [ :e | e isComponentEvents ].
-	services := aTraitsList select: [ :e | e isComponentServices ].
-	parameters := aTraitsList select: [ :e | e isComponentParameters ].
+	| events services parameters sortedBlock |
+	
+	aTraitsList ifEmpty:[ ^ #( ) ].
+	
+	"Sort traits by name"
+	sortedBlock := [ :a :b | a name < b name ].
+	
+	"Collect events, then services, then parameters"
+	events := (aTraitsList select: [ :e | e isComponentEvents ]) asSortedCollection: sortedBlock.
+	services := (aTraitsList select: [ :e | e isComponentServices ]) asSortedCollection: sortedBlock.
+	parameters := (aTraitsList select: [ :e | e isComponentParameters ]) asSortedCollection: sortedBlock.
 	
 	^ (OrderedCollection withAll: events) addAll: services; addAll: parameters; removeDuplicates; yourself
 ]
