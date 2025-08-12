@@ -34,7 +34,7 @@ MolCodeMetricsCmdCommand >> description [
 	^'Display metrics about Molecule entities from selected packages'
 ]
 
-{ #category : #accessing }
+{ #category : #execution }
 MolCodeMetricsCmdCommand >> execute [
 
 	| presenter stream metrics |
