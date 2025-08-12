@@ -64,16 +64,16 @@ MolWorld class >> doComponentManagerCleanUpCatchingErrors [
 	 ].
 ]
 
-{ #category : #menu }
+{ #category : #'menu - root' }
 MolWorld class >> menu00MoleculeOn: aBuilder [
 
 	<worldMenu>
-	(aBuilder item: #Molecule)
-		parent: #Tools;
+	(aBuilder item: self menuKey)
+		parent: self parent;
 		label: 'Molecule';
 		icon: MolIcon moleculeIcon;
 		help: 'A component framework';
-		order: 777;
+		order: self order;
 		with:[
 			(aBuilder group: #MoleculeStatus)
 				order: 1;
@@ -213,6 +213,12 @@ MolWorld class >> menu60ReportBugOn: aBuilder [
 		action: [WebBrowser openOn: 'https://github.com/OpenSmock/Molecule/issues/new']
 ]
 
+{ #category : #'private - menu' }
+MolWorld class >> menuKey [
+
+	^ #Molecule
+]
+
 { #category : #private }
 MolWorld class >> openDefineComponentDialog [
 	| dialogWindow list |
@@ -224,6 +230,20 @@ MolWorld class >> openDefineComponentDialog [
 	dialogWindow := self classSearchIn: list.
 	dialogWindow title: 'Select the Molecule Component to define'.
 	^ dialogWindow 
+]
+
+{ #category : #'private - menu' }
+MolWorld class >> order [
+	"Define the order of this World Menu, override me to change"
+
+	^ 777
+]
+
+{ #category : #'private - menu' }
+MolWorld class >> parent [
+	"Define the root parent of this World Menu, override me to change the location"
+
+	^ #Tools
 ]
 
 { #category : #'menu - tools' }
@@ -398,4 +418,8 @@ MolWorld class >> toolsMenu90DefineDirtyComponentsOn: aBuilder [
 		action: [ MolComponentFactory defineDirtyComponents ];
 		icon: (self iconNamed: #smallUpdate);
 		label: 'Define dirty Components'
+]
+
+{ #category : #'see class side' }
+MolWorld >> seeClassSide [ 
 ]
