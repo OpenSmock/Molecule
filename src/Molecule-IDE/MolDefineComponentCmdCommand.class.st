@@ -32,7 +32,7 @@ MolDefineComponentCmdCommand >> defaultMenuItemName [
 { #category : #accessing }
 MolDefineComponentCmdCommand >> description [
 
-	^'Define this component: force to generate methods from contract definition'
+	^'Define this component: force to generate from contract definition'
 ]
 
 { #category : #execution }
