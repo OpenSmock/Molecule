@@ -6,8 +6,8 @@ Because I am a component implementation, you can force my automatic definition. 
 Class {
 	#name : #MolMyUserFacadeComponentImpl,
 	#superclass : #MolAbstractComponentImpl,
-	#traits : 'MolMyUserFacadeComponent + MolMyLocalTimeEvents + MolMyAlarmSoundsEvents',
-	#classTraits : 'MolMyUserFacadeComponent classTrait + MolMyLocalTimeEvents classTrait + MolMyAlarmSoundsEvents classTrait',
+	#traits : 'MolMyUserFacadeComponent + MolMyAlarmSoundsEvents + MolMyLocalTimeEvents',
+	#classTraits : 'MolMyUserFacadeComponent classTrait + MolMyAlarmSoundsEvents classTrait + MolMyLocalTimeEvents classTrait',
 	#category : #'Molecule-Examples-Clock System Example'
 }
 
