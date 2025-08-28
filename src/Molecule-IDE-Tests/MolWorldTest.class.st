@@ -4,12 +4,36 @@ Class {
 	#category : #'Molecule-IDE-Tests-Cases'
 }
 
+{ #category : #running }
+MolWorldTest >> testMenuDefinition [
+
+	self assert: (MolWorld menuDefinition: nil) isNil
+]
+
+{ #category : #running }
+MolWorldTest >> testMenuKey [
+
+	self assert: MolWorld menuKey equals: #Molecule
+]
+
 { #category : #tests }
 MolWorldTest >> testOpenDefineComponentDialog [
 
 	| dialog |
 	dialog := MolWorld openDefineComponentDialog.
 	self assert: dialog notNil.
+]
+
+{ #category : #running }
+MolWorldTest >> testOrder [
+
+	self assert: MolWorld order equals: 999
+]
+
+{ #category : #running }
+MolWorldTest >> testParent [
+
+	self assert: MolWorld parent equals: #Tools
 ]
 
 { #category : #tests }
