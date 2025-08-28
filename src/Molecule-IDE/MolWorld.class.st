@@ -214,6 +214,23 @@ MolWorld class >> menu60ReportBugOn: aBuilder [
 ]
 
 { #category : #'private - menu' }
+MolWorld class >> menuDefinition: aPragmaString [
+	"Get a menu definition related to a pragme, if not found return nil"
+
+	| list |
+	aPragmaString ifNil: [ ^ nil ].
+
+	list := Pragma allNamed: aPragmaString.
+
+	^ list ifEmpty: [ nil ] ifNotEmpty: [ :e |
+			  | pragma class |
+			  pragma := e first.
+			  class := pragma methodClass.
+			  (class instanceSide respondsTo: pragma methodSelector) ifTrue: [
+				  class instanceSide perform: pragma methodSelector ] ]
+]
+
+{ #category : #'private - menu' }
 MolWorld class >> menuKey [
 
 	^ #Molecule
@@ -232,18 +249,22 @@ MolWorld class >> openDefineComponentDialog [
 	^ dialogWindow 
 ]
 
-{ #category : #'private - menu' }
+{ #category : #'menu - definitions' }
 MolWorld class >> order [
-	"Define the order of this World Menu, override me to change"
+	"Define the order of the root of this World Menu, override me to change the it"
 
-	^ 777
+	"Use this pragma to overidde me in a new method => <MoleculeOrderWorldMenuDefinition>"
+
+	^ (self menuDefinition: 'MoleculeOrderWorldMenuDefinition') ifNil: [ 999 ]
 ]
 
-{ #category : #'private - menu' }
+{ #category : #'menu - definitions' }
 MolWorld class >> parent [
 	"Define the root parent of this World Menu, override me to change the location"
 
-	^ #Tools
+	"Use this pragma to overidde me in a new method => <MoleculeParentWorldMenuDefinition>"
+
+	^ (self menuDefinition: 'MoleculeParentWorldMenuDefinition') ifNil: [ #Tools ]
 ]
 
 { #category : #'menu - tools' }
