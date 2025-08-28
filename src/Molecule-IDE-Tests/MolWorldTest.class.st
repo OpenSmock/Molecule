@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #running }
-MolWorldTest >> testMenuDefinition [
-
-	self assert: (MolWorld menuDefinition: nil) isNil
-]
-
-{ #category : #running }
 MolWorldTest >> testMenuKey [
 
 	self assert: MolWorld menuKey equals: #Molecule
@@ -24,51 +18,18 @@ MolWorldTest >> testOpenDefineComponentDialog [
 	self assert: dialog notNil.
 ]
 
-{ #category : #running }
-MolWorldTest >> testOrder [
-
-	self assert: MolWorld order equals: 999
-]
-
-{ #category : #running }
-MolWorldTest >> testParent [
-
-	self assert: MolWorld parent equals: #Tools
-]
-
-{ #category : #tests }
-MolWorldTest >> testWorldMenu [
-	| menuElements moleculeMenuEntry libraryMenu |
-	
-	menuElements := self currentWorld worldState menuBuilder menuSpec items.
-	libraryMenu := menuElements detect:[ :e | e name = #Tools ].
-	
-	"Find Molecule entry"
-	moleculeMenuEntry := libraryMenu subMenu items detect:[ :e | e name = #Molecule].
-	self assert: moleculeMenuEntry notNil.
-]
-
 { #category : #tests }
 MolWorldTest >> testWorldMenuBuilding [
-	| menuBuilder |
-	menuBuilder := WorldState new menuBuilder.
 
+	| menuBuilder menuMethods |
+	menuBuilder := PragmaMenuAndShortcutRegistration new.
 	MolWorld menu00MoleculeOn: menuBuilder.
 	
-	MolWorld menu10SystemStatusOn: menuBuilder.
-	MolWorld menu20DebugOn: menuBuilder.
-	MolWorld menu21BrowseClassesOn: menuBuilder.
-	MolWorld menu30ComponentManagerCleanUpOn: menuBuilder.
-	MolWorld menu40ExamplesOn: menuBuilder.
-	MolWorld menu50GithubOn: menuBuilder.
-	MolWorld menu60ReportBugOn: menuBuilder.
+	menuMethods := MolWorld class pragmas select:[ :p | p selector = #worldMenu ] thenCollect:[ :p | p methodSelector ].
+	self assert: menuMethods notEmpty.
 	
-	MolWorld toolsMenu110DeepCleanUp: menuBuilder.
-	MolWorld toolsMenu10DefineComponentOn: menuBuilder.
-	MolWorld toolsMenu90DefineDirtyComponentsOn: menuBuilder.
-	MolWorld toolsMenu40InspectAllComponentInstances: menuBuilder.
-	MolWorld toolsMenu80InspectDirtyComponentTypes: menuBuilder.
-	MolWorld toolsMenu70InspectDirtyComponents: menuBuilder.
-	MolWorld toolsMenu30ToggleDynamicContractUpdate: menuBuilder.
-	MolWorld toolsMenu20ToggleLogsOn: menuBuilder.
+	menuMethods do:[ :p |
+		MolWorld perform: p with: menuBuilder.
+	].
+
 ]

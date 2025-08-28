@@ -69,11 +69,11 @@ MolWorld class >> menu00MoleculeOn: aBuilder [
 
 	<worldMenu>
 	(aBuilder item: self menuKey)
-		parent: self parent;
+		parent: #Tools;
 		label: 'Molecule';
 		icon: MolIcon moleculeIcon;
 		help: 'A component framework';
-		order: self order;
+		order: 999;
 		with:[
 			(aBuilder group: #MoleculeStatus)
 				order: 1;
@@ -83,7 +83,9 @@ MolWorld class >> menu00MoleculeOn: aBuilder [
 				withSeparatorAfter.	
 			(aBuilder group: #MoleculeLinks)
 				order: 3.
-		]
+		].
+	
+	self worldMenuPostBuildSetup: aBuilder
 ]
 
 { #category : #menu }
@@ -214,23 +216,6 @@ MolWorld class >> menu60ReportBugOn: aBuilder [
 ]
 
 { #category : #'private - menu' }
-MolWorld class >> menuDefinition: aPragmaString [
-	"Get a menu definition related to a pragme, if not found return nil"
-
-	| list |
-	aPragmaString ifNil: [ ^ nil ].
-
-	list := Pragma allNamed: aPragmaString.
-
-	^ list ifEmpty: [ nil ] ifNotEmpty: [ :e |
-			  | pragma class |
-			  pragma := e first.
-			  class := pragma methodClass.
-			  (class instanceSide respondsTo: pragma methodSelector) ifTrue: [
-				  class instanceSide perform: pragma methodSelector ] ]
-]
-
-{ #category : #'private - menu' }
 MolWorld class >> menuKey [
 
 	^ #Molecule
@@ -247,24 +232,6 @@ MolWorld class >> openDefineComponentDialog [
 	dialogWindow := self classSearchIn: list.
 	dialogWindow title: 'Select the Molecule Component to define'.
 	^ dialogWindow 
-]
-
-{ #category : #'menu - definitions' }
-MolWorld class >> order [
-	"Define the order of the root of this World Menu, override me to change the it"
-
-	"Use this pragma to overidde me in a new method => <MoleculeOrderWorldMenuDefinition>"
-
-	^ (self menuDefinition: 'MoleculeOrderWorldMenuDefinition') ifNil: [ 999 ]
-]
-
-{ #category : #'menu - definitions' }
-MolWorld class >> parent [
-	"Define the root parent of this World Menu, override me to change the location"
-
-	"Use this pragma to overidde me in a new method => <MoleculeParentWorldMenuDefinition>"
-
-	^ (self menuDefinition: 'MoleculeParentWorldMenuDefinition') ifNil: [ #Tools ]
 ]
 
 { #category : #'menu - tools' }
@@ -439,6 +406,24 @@ MolWorld class >> toolsMenu90DefineDirtyComponentsOn: aBuilder [
 		action: [ MolComponentFactory defineDirtyComponents ];
 		icon: (self iconNamed: #smallUpdate);
 		label: 'Define dirty Components'
+]
+
+{ #category : #'private - menu' }
+MolWorld class >> worldMenuPostBuildSetup: aBuilder [
+	"Setup a menu item after his build"
+
+	| list item |
+	aBuilder ifNil:[ ^ self ].
+	list := (Pragma allNamed: 'worldMenuItem:') select: [ :e |
+		        e hasArguments and: [ e arguments first = self menuKey ] ].
+	
+	item := aBuilder items detect:[ :e | e item = self menuKey ] ifNone:[ ^ self ].
+	
+	list do: [ :pragma |
+			| class |
+			class := pragma methodClass.
+			(class instanceSide respondsTo: pragma methodSelector) ifTrue: [
+				class instanceSide perform: pragma methodSelector with: item ] ]
 ]
 
 { #category : #'see class side' }
