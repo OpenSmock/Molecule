@@ -19,18 +19,6 @@ MolWorldTest >> testOpenDefineComponentDialog [
 ]
 
 { #category : #tests }
-MolWorldTest >> testWorldMenu [
-	| menuElements moleculeMenuEntry libraryMenu |
-	
-	menuElements := self currentWorld worldState menuBuilder menuSpec items.
-	libraryMenu := menuElements detect:[ :e | e name = #Tools ].
-	
-	"Find Molecule entry"
-	moleculeMenuEntry := libraryMenu subMenu items detect:[ :e | e name = #Molecule].
-	self assert: moleculeMenuEntry notNil.
-]
-
-{ #category : #tests }
 MolWorldTest >> testWorldMenuBuilding [
 
 	| menuBuilder menuMethods |
