@@ -269,12 +269,23 @@ MolComponentFactoryTest >> testCollectComponentConnectionTraitsOrder [
 	"This test check the order of the traits collect: events, services and parameters. This is necessary to control the order to not change generated code in existing components"
 	
 	| traits |
+	"Test with an abstract component subclass"
 	traits := MolComponentFactory default collectComponentConnectionTraits: MolCompleteComponentImpl.
 	self assert: traits size equals: 3.
 	self assert: (traits first) equals: MolUsedEvents.
 	self assert: (traits at: 2) equals: MolUsedServices.
 	self assert: (traits at: 3) equals: MolUsedParameters.
 	
+	"Test with an augmented class as a component"
+	traits := MolComponentFactory default collectComponentConnectionTraits: MolAugmentedClassToAComponent. 
+	self assert: traits size equals: 3.
+	self assert: (traits first) equals: MolUsedEvents.
+	self assert: (traits at: 2) equals: MolUsedServices.
+	self assert: (traits at: 3) equals: MolUsedParameters.
+	
+	100 milliSeconds wait. "See issue #230, try to wait for removing previous test things"
+	
+	"Test with an overloaded component class"
 	traits := MolComponentFactory default collectComponentConnectionTraits: MolCompleteComponentOverloadImpl.
 	self assert: traits size equals: 6.
 	self assert: (traits first) equals: MolUsedEvents.

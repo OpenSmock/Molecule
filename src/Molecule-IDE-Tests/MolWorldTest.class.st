@@ -1,8 +1,44 @@
 Class {
 	#name : #MolWorldTest,
 	#superclass : #TestCase,
+	#classInstVars : [
+		'worldMenuItemCheck'
+	],
 	#category : #'Molecule-IDE-Tests-Cases'
 }
+
+{ #category : #accessing }
+MolWorldTest class >> worldMenuItemCheck [
+
+	^ worldMenuItemCheck
+]
+
+{ #category : #accessing }
+MolWorldTest class >> worldMenuItemCheck: anObject [
+
+	worldMenuItemCheck := anObject
+]
+
+{ #category : #'tests - menu' }
+MolWorldTest class >> worldMenuItemTestMethod: anItem [
+	"This method check if the pragma mecanism to setup a menu item is working"
+	"Be aware to not inject behavior here because this is just a test method ant it is called when the menu is build!"
+
+	<worldMenuItem: #Molecule>
+	worldMenuItemCheck := true.
+	
+	anItem ifNil:[ Exception signal: 'Menu item should be not nil' ].
+	anItem item = (MolWorld menuKey) ifFalse:[ Exception signal: 'Menu item should be equals to ', MolWorld menuKey printString ].
+]
+
+{ #category : #running }
+MolWorldTest >> setUp [
+
+	super setUp.
+
+	self class worldMenuItemCheck: false.
+	self deny: self class worldMenuItemCheck
+]
 
 { #category : #running }
 MolWorldTest >> testMenuKey [
@@ -32,4 +68,5 @@ MolWorldTest >> testWorldMenuBuilding [
 		MolWorld perform: p with: menuBuilder.
 	].
 
+	self assert: self class worldMenuItemCheck.
 ]
