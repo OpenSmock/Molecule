@@ -9,31 +9,32 @@ Class {
 
 { #category : #baselines }
 BaselineOfMolecule >> baseline: spec [
+
+	<baseline>
+	spec for: #common do: [ self baselineForCommon: spec ]
+]
+
+{ #category : #baselines }
+BaselineOfMolecule >> baselineForCommon: spec [
 	<baseline> 
-	spec
-		for: #common
-		do: [			
-			"Pre and post load scripts"
-			spec preLoadDoIt: #'preload:package:'.
-			spec postLoadDoIt: #'postload:package:'.
+		
+	"Pre and post load scripts"
+	spec preLoadDoIt: #'preload:package:'.
+	spec postLoadDoIt: #'postload:package:'.
 						
-			"Packages"
-			spec
-				package: 'Molecule';
-				package: 'Molecule-IDE' with: [ spec requires: #('Molecule') ];
-				package: 'Molecule-Examples' with: [ spec requires: #('Molecule') ];
-				package: 'Molecule-Tests' with: [ spec requires: #('Molecule') ];
-				package: 'Molecule-IDE-Tests' with: [ spec requires: #('Molecule-IDE') ].
+	"Packages"
+	spec
+		package: 'Molecule';
+		package: 'Molecule-IDE' with: [ spec requires: #('Molecule') ];
+		package: 'Molecule-Examples' with: [ spec requires: #('Molecule') ];
+		package: 'Molecule-Tests' with: [ spec requires: #('Molecule') ];
+		package: 'Molecule-IDE-Tests' with: [ spec requires: #('Molecule-IDE') ].
 				
-			"Pharo backward compatibility: to preserve running from Pharo 11"
-			spec 
-				for: #'pharo11.x'
-				do:[
-					    spec
-    						baseline: 'PharoBackwardCompatibility'
-    						with: [ spec repository: 'github://jecisc/PharoBackwardCompatibility:v1.11.0/src' ]
-				].
-		 ]
+	"Pharo backward compatibility: to preserve running from previous versions of Pharo"
+	spec
+    	baseline: 'PharoBackwardCompatibility'
+    	with: [ spec repository: 'github://jecisc/PharoBackwardCompatibility:master' ].
+		 
 ]
 
 { #category : #'load scripts' }
