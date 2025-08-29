@@ -34,14 +34,14 @@ To install the **latest version of Molecule** in Pharo, you just need to execute
 ```smalltalk
 Metacello new
    baseline: 'Molecule';
-   repository: 'github://OpenSmock/Molecule:main/src';
+   repository: 'github://OpenSmock/Molecule:main';
    load.
 ```
 
 To add in your project **BaselineOf**:
 
 ```smalltalk
-spec baseline: 'Molecule' with: [ spec repository: 'github://OpenSmock/Molecule:main/src' ].
+spec baseline: 'Molecule' with: [ spec repository: 'github://OpenSmock/Molecule:main' ].
 ```
 
 ### Specific release
@@ -72,14 +72,6 @@ Find below some Molecule branches for old Pharo versions.
 [Pharo 8 - last release is 1.2.7](https://github.com/OpenSmock/Molecule/tree/Pharo8).
 
 [Pharo 6 and 7 - last release is 1.1.1](https://github.com/OpenSmock/Molecule/tree/Pharo6-7).
-
-### Prerequisites
-
-Molecule Core has no dependencies.
-
-**Optional:** The package `Molecule-Benchmarks` requires [SMark](https://github.com/smarr/SMark). This package contains benchmarks for performance-related work.
-
-**Pharo 11 compatibility:** On Pharo 11, [PharoBackwardCompatibility](https://github.com/jecisc/PharoBackwardCompatibility) is automatically loaded via the baseline to ensure compatibility.
 
 ## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Molecule developer menus
 
@@ -246,13 +238,9 @@ Publications related to Molecule:
 
 [Reuse in component-based prototyping: an industrial experience report from 15 years of reuse](https://link.springer.com/article/10.1007/s11334-022-00456-4)
 
-## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> Credits
+## Dependencies
 
-* **Pierre Laborde** - *Initial work* - [labordep](https://github.com/labordep)
-* **Eric Le Pors** - *Initial work* - [ELePors](https://github.com/ELePors)
-* **Nolwenn Fournier** - *Initial work* - [nolwennfournier](https://github.com/nolwennfournier)
-* **Alain Plantec** - *Initial work* - [plantec](https://github.com/plantec)
-* **Lisa Doyen** - *UI Components Tools* - [lisadoyen](https://github.com/lisadoyen)
+- [PharoBackwardCompatibility](https://github.com/jecisc/PharoBackwardCompatibility) - Backport some really useful methods to older versions of Pharo.
 
 ## <img src="/resources/puce.svg" width="32" height="32" align="bottom"> License
 
