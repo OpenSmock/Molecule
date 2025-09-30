@@ -169,11 +169,11 @@ MolComponentImpl classSide >> breakOnceOnComponentRemove [
 ]
 
 { #category : #'*Molecule-IDE' }
-MolComponentImpl >> inspectionComponent [
+MolComponentImpl >> inspectionComponent: aBuilder [
 
 	<inspectorPresentationOrder: 830 title: 'Component'>
 
-	^ SpRoassalInspectorPresenter new
+	^ (aBuilder instantiate: SpRoassalInspectorPresenter)
 		  canvas: (MolComponentToRoassal canvasFromSingleComponent: self);
 		  yourself
 ]

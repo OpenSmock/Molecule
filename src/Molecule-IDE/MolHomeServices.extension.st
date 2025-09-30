@@ -1,7 +1,7 @@
 Extension { #name : #MolHomeServices }
 
 { #category : #'*Molecule-IDE' }
-MolHomeServices >> inspectionDeployedComponentsGraph [
+MolHomeServices >> inspectionDeployedComponentsGraph: aBuilder [
 
 	<inspectorPresentationOrder: 1000 title: 'Deployed Components Graph'>
 	| canvas components |
@@ -10,7 +10,7 @@ MolHomeServices >> inspectionDeployedComponentsGraph [
 	canvas := MolComponentToRoassal canvasFromMultipleComponents:
 		          components.
 
-	^ SpRoassalInspectorPresenter new
+	^ (aBuilder instantiate: SpRoassalInspectorPresenter)
 		  canvas: canvas;
 		  yourself
 ]
