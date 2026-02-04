@@ -60,12 +60,16 @@ MolEventSubscriber >> connectAllOriginatorsTo: aComponent [
 MolEventSubscriber >> connectOriginator: componentName to: aComponent [
 	"Connect a component to event pipeline"
 
-	self events allSelectors do: [ :event | | originator |
-		
-		originator := self originatorsLinks at: componentName.
-		originator ifNil: [ ^ self error: 'Component originator is nil' ].
-		originator when: event send: event to: aComponent.
-	].
+	| key connect |
+	key := aComponent eventsSubscribers at: self events ifAbsent: [ nil ].
+	connect := key isSymbol ifTrue:[  componentName = key ] ifFalse:[ key includes: componentName ].
+
+	connect ifTrue: [
+			self events allSelectors do: [ :event |
+					| originator |
+					originator := self originatorsLinks at: componentName.
+					originator ifNil: [ ^ self error: 'Component originator is nil' ].
+					originator when: event send: event to: aComponent ] ]
 ]
 
 { #category : #private }

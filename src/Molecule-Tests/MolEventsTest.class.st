@@ -33,7 +33,7 @@ MolEventsTest >> testOneListenerWithSeveralWarnersWithoutSameSubscribers [
 	"Instanciation"
 	warner1 := MolMyWarnerComponentImpl instantiate: #warner1.
 	warner2 := MolMyWarnerComponentImpl instantiate: #warner2.
-	listener := MolMyListenerComponentImpl instantiate: #listener.
+	listener := MolMyListenerComponentImpl instantiate: #listener1.
 	listener2 := MolMyListenerComponentImpl instantiate: #listener2.
 
 	"Subscriptions"
@@ -53,7 +53,8 @@ MolEventsTest >> testOneListenerWithSeveralWarnersWithoutSameSubscribers [
 	
 	"Activation" 
 	MolMyWarnerComponentImpl activate: #warner1.
-	MolMyListenerComponentImpl activate: #listener.
+	MolMyWarnerComponentImpl activate: #warner2.
+	MolMyListenerComponentImpl activate: #listener1.
 	MolMyListenerComponentImpl activate: #listener2.
 
 	"Tests"
@@ -63,6 +64,58 @@ MolEventsTest >> testOneListenerWithSeveralWarnersWithoutSameSubscribers [
 	warner2 failureEvent. "warner 2 is not active, so he can't send an event"
 	self assert: listener currentState equals: #operational.
 	self assert: listener2 currentState equals: #failure
+]
+
+{ #category : #tests }
+MolEventsTest >> testOneListenerWithSeveralWarnersWithoutSameSubscribers2 [
+
+	| warner1 warner2 listener subscriptions subscribers listener2 subscribers2 subscriptions2 |
+	"Deployment"
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
+
+	"Instanciation"
+	warner1 := MolMyWarnerComponentImpl instantiate: #warner1.
+	warner2 := MolMyWarnerComponentImpl instantiate: #warner2.
+	listener := MolMyListenerComponentImpl instantiate: #listener1.
+	listener2 := MolMyListenerComponentImpl instantiate: #listener2.
+
+	"Subscriptions"
+	subscriptions := #warner1.
+	listener forEvents: MolMyStateChangeEvents useProducer: subscriptions.
+
+	subscriptions2 := #warner2.
+	listener2
+		forEvents: MolMyStateChangeEvents
+		useProducer: subscriptions2.
+
+	subscribers := listener eventsSubscribers.
+	self assert: subscribers size equals: 1.
+	self
+		assert: (subscribers at: MolMyStateChangeEvents)
+		equals: #warner1.
+
+	subscribers2 := listener2 eventsSubscribers.
+	self assert: subscribers2 size equals: 1.
+	self
+		assert: (subscribers2 at: MolMyStateChangeEvents)
+		equals: #warner2.
+
+	"Activation"
+
+	MolMyWarnerComponentImpl activate: #warner1.
+
+	MolMyListenerComponentImpl activate: #listener1.
+	MolMyListenerComponentImpl activate: #listener2.
+
+	"Tests"
+
+	warner1 operationalEvent.
+	self assert: listener currentState equals: #operational.
+	self assert: listener2 currentState isNil.
+	warner2 failureEvent. "warner 2 is not active, so he can't send an event"
+	self assert: listener currentState equals: #operational.
+	self assert: listener2 currentState isNil.
 ]
 
 { #category : #tests }
