@@ -23,6 +23,49 @@ MolEventsTest >> tearDown [
 ]
 
 { #category : #tests }
+MolEventsTest >> testOneListenerWithSeveralWarnersWithoutSameSubscribers [
+
+	| warner1 warner2 listener subscriptions subscribers listener2 subscribers2 subscriptions2 |
+	"Deployment"
+	MolMyWarnerComponentImpl deploy.
+	MolMyListenerComponentImpl deploy.
+
+	"Instanciation"
+	warner1 := MolMyWarnerComponentImpl instantiate: #warner1.
+	warner2 := MolMyWarnerComponentImpl instantiate: #warner2.
+	listener := MolMyListenerComponentImpl instantiate: #listener.
+	listener2 := MolMyListenerComponentImpl instantiate: #listener2.
+
+	"Subscriptions"
+	subscriptions := Array with: #warner1.
+	listener forEvents: MolMyStateChangeEvents useAllProducers: subscriptions.
+
+	subscriptions2 := Array with: #warner2.
+	listener2 forEvents: MolMyStateChangeEvents useAllProducers: subscriptions2.
+
+	subscribers := listener eventsSubscribers.
+	self assert: subscribers size equals: 1.
+	self assert: (subscribers at: MolMyStateChangeEvents) equals: #warner1.
+	
+	subscribers2 := listener2 eventsSubscribers.
+	self assert: subscribers2 size equals: 1.
+	self assert: (subscribers2 at: MolMyStateChangeEvents) equals: #warner2.
+	
+	"Activation" 
+	MolMyWarnerComponentImpl activate: #warner1.
+	MolMyListenerComponentImpl activate: #listener.
+	MolMyListenerComponentImpl activate: #listener2.
+
+	"Tests"
+	warner1 operationalEvent.
+	self assert: listener currentState equals: #operational.
+	self assert: listener2 currentState isNil.
+	warner2 failureEvent. "warner 2 is not active, so he can't send an event"
+	self assert: listener currentState equals: #operational.
+	self assert: listener2 currentState equals: #failure
+]
+
+{ #category : #tests }
 MolEventsTest >> testSeveralListeners [
 
 	| warner listener1 listener2 |
