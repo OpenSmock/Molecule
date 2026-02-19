@@ -8,15 +8,19 @@ Class {
 }
 
 { #category : #running }
-MolEventNotifierTest >> setUp [ 
-	
-	MolComponentManager cleanUp.
+MolEventNotifierTest >> setUp [
+
+	super setUp.
+
+	MolComponentManager cleanUp
 ]
 
 { #category : #running }
-MolEventNotifierTest >> tearDown [  
-	
+MolEventNotifierTest >> tearDown [
+
 	MolComponentManager cleanUp.
+
+	super tearDown
 ]
 
 { #category : #tests }
