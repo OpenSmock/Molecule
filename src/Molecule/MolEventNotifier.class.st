@@ -121,8 +121,7 @@ MolEventNotifier >> produceEvent: aMessage [
 MolEventNotifier >> release [
 
 	self deactivate.
-	"interface := nil."
 	originator := nil.
-	
+
 	super release
 ]
