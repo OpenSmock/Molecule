@@ -7,19 +7,19 @@ Class {
 	#category : #'Molecule-Tests-Cases'
 }
 
-{ #category : #test }
+{ #category : #running }
 MolEventNotifierTest >> setUp [ 
 	
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #test }
+{ #category : #running }
 MolEventNotifierTest >> tearDown [  
 	
 	MolComponentManager cleanUp.
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolEventNotifierTest >> testActivate [
 	| notifier |
 	notifier := MolEventNotifier new.
@@ -27,7 +27,7 @@ MolEventNotifierTest >> testActivate [
 	self assert: notifier isActive.
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolEventNotifierTest >> testDeactivate [
 	| notifier |
 	notifier := MolEventNotifier new.
@@ -36,7 +36,7 @@ MolEventNotifierTest >> testDeactivate [
 	self assert: notifier isActive not.
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolEventNotifierTest >> testDoesNotUnderstand [
 	| originator notifier error |
 	originator := MolCompleteComponentImpl new.
@@ -50,7 +50,7 @@ MolEventNotifierTest >> testDoesNotUnderstand [
 	self assert: (error isKindOf: MessageNotUnderstood).
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolEventNotifierTest >> testDoesNotUnderstandWithoutCorrectDefinition [
 	| notifier error |
 	notifier := MolEventNotifier new.
@@ -62,41 +62,55 @@ MolEventNotifierTest >> testDoesNotUnderstandWithoutCorrectDefinition [
 	notifier event. "Make a log but not raised an error"
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolEventNotifierTest >> testInitialize [
+
 	| notifier |
 	notifier := MolEventNotifier new.
 	self assert: notifier interface isNil.
 	self assert: notifier originator isNil.
-	self assert: notifier isActive equals: false.
+	self deny: notifier isActive
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolEventNotifierTest >> testInterfaceOriginator [
+
 	| notifier originator |
 	originator := MolCompleteComponentImpl new.
-	notifier := MolEventNotifier interface: MolUsedEvents originator: originator.
+	notifier := MolEventNotifier
+		            interface: MolUsedEvents
+		            originator: originator.
 	self assert: notifier interface identicalTo: MolUsedEvents.
 	self assert: notifier originator identicalTo: originator.
-	self assert: notifier isActive equals: false.
+	self deny: notifier isActive
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolEventNotifierTest >> testIsNotFoundEventsNotifier [
 	| notifier |
 	notifier := MolEventNotifier new.
 	self assert: notifier isNotFoundEventsNotifier not.
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolEventNotifierTest >> testRelease [
-	| notifier originator |
+
+	| notifier originator error |
 	originator := MolCompleteComponentImpl new.
-	notifier := MolEventNotifier interface: MolUsedEvents originator: originator.
+	notifier := MolEventNotifier
+		            interface: MolUsedEvents
+		            originator: originator.
 	notifier activate.
-	
+
 	notifier release.
-	self assert: notifier interface isNil.
 	self assert: notifier originator isNil.
-	self assert: notifier isActive equals: false.
+	self deny: notifier isActive.
+	
+	"try to send an event when release: do nothing"
+	notifier event.
+	
+	"MolUsedEvent>>subEvent not exists: continue to raise not understood message to identify call problems"
+	error := nil.
+	[notifier subEvent] on: Error do:[ :e | error := e ].
+	self assert: (error isKindOf: MessageNotUnderstood).
 ]
