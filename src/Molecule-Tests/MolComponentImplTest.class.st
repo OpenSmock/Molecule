@@ -582,6 +582,21 @@ MolComponentImplTest >> testParametersProviders [
 	self assert: component parametersProviders isEmpty.
 ]
 
+{ #category : #'tests - connecting - events producers' }
+MolComponentImplTest >> testSendEventInAForkDuringCleanUp [
+
+	| component |
+	component := MolCompleteComponentForkedImpl start.
+	self assert: component thread isRunning.
+	
+	10 milliSecond wait.
+	MolComponentManager cleanUp.
+	
+	"waiting for thread loop"
+	5 second wait. "here no error"
+	self deny: component thread isRunning
+]
+
 { #category : #tests }
 MolComponentImplTest >> testServicesDoIfNone [
 
