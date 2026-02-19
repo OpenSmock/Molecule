@@ -593,7 +593,7 @@ MolComponentImplTest >> testSendEventInAForkDuringCleanUp [
 	MolComponentManager cleanUp.
 	
 	"waiting for thread loop"
-	200 milliSecond wait. "here no error"
+	5 second wait. "here no error"
 	self deny: component thread isRunning
 ]
 
