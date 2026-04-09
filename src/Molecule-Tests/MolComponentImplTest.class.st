@@ -234,6 +234,8 @@ MolComponentImplTest >> testForEventsRemoveProducer [
 
 	| component |
 	component := MolCompleteComponentImpl start: #myComponentA.
+	"initial state"
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName.
 	
 	component forEvents: MolUsedEvents useAllProducers: #(#producerA #producerB #producerC).	
 		
@@ -247,7 +249,8 @@ MolComponentImplTest >> testForEventsRemoveProducer [
 	
 	component forEvents: MolUsedEvents removeProducer: #producerC.
 	self assert: component eventsSubscribers size equals: 1.
-	self assert: (component eventsSubscribers at: MolUsedEvents) equals: nil.
+	"back to initial state"
+	self assert: (component eventsSubscribers at: MolUsedEvents) equals: MolUtils defaultComponentName.
 ]
 
 { #category : #'tests - connecting - events producers' }
