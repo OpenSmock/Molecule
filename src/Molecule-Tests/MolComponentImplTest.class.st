@@ -673,6 +673,37 @@ MolComponentImplTest >> testStart2 [
 	self assert: component componentName equals: #compA.
 ]
 
+{ #category : #'tests - connecting - events producers' }
+MolComponentImplTest >> testStartAndStopComponentWithRemoveProducerSeveralTimes [
+	"This test reproduce issue #246: Exception after several starts and stops of same component"
+
+	| compA compB |
+	"start first implemention of a component contract"
+	compA := MolCompleteComponentImpl start: #compA.
+	compB := MolCompleteComponentImpl start: #compB.
+	
+	"link compB to compA"
+	compB forServices: MolUsedServices useProvider: #compA. 
+	compB forEvents: MolUsedEvents useProducer: #compA. 
+	compB getMolUsedEventsSubscriber subscribe: compB.
+	
+	"call the service of the first component, it answer #service"
+	self assert: compB getMolUsedServicesProvider service equals: #service.
+	
+	"stop and start component several times"
+	1 to: 10 do:[ :i |
+		compB forEvents: MolUsedEvents removeProducer: #compA.
+		compB class stop: #compB.
+		compB := MolCompleteComponentImpl start: #compB.
+		compB forServices: MolUsedServices useProvider: #compA. 
+		compB forEvents: MolUsedEvents useProducer: #compA. 
+		compB getMolUsedEventsSubscriber subscribe: compB.
+		self assert: compB getMolUsedServicesProvider service equals: #service.
+	].
+
+	
+]
+
 { #category : #'tests - component creation' }
 MolComponentImplTest >> testStartWithGeneratedName [
 
