@@ -348,7 +348,10 @@ MolComponentImpl >> forEvents: anEventsTrait removeProducer: aComponentName [
 		
 		producers := self eventsSubscribers at: anEventsTrait.
 		producers ifNil:[ ^self ].
-		producers = aComponentName ifTrue:[ self eventsSubscribers at: anEventsTrait put: nil. ^ self ].
+		producers = aComponentName ifTrue:[ 
+			"Molecule issue #242: store the default component name when a producer is removed to going back to the initial state"
+			self eventsSubscribers at: anEventsTrait put: MolUtils defaultComponentName. ^ self 
+		].
 		(producers isArray and:[producers includes: aComponentName]) ifTrue: [ | newProducers |
 			newProducers := producers asOrderedCollection copy.
 			newProducers remove: aComponentName.
