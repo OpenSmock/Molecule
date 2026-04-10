@@ -687,7 +687,8 @@ MolComponentFactory >> generateMethod: aSourceCode selector: aSelector protocol:
 				(aComponent selectors includes: aSelector) ifFalse: [ ^ self ].
 				"if the method exist inspect this source code for search any difference between the existing required services and the requested required services""the selector must not be a parent"
 				method := aComponent >> aSelector.
-				methodProtocol := method protocol ifNil: [ nil ] ifNotNil: [ :p | "Pharo 11 reflective API support: protocol is directly a string" p isByteString ifTrue:[ p ] ifFalse:[ p name ] ].
+				methodProtocol := method protocol ifNil: [ nil ] ifNotNil: [ :p | 
+					"Pharo 11 reflective API support: protocol is directly a ByteString" p class = Protocol ifTrue:[ p name ] ifFalse:[ p ]  ].
 				sourceMethod := method sourceCode.
 				sourceMethod ifNotNil: [ "if the source code of the method is different than the existing one, recreate it. Same thing for the procotol."
 						(sourceMethod ~= aSourceCode contents or: [
