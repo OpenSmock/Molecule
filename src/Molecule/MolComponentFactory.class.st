@@ -623,36 +623,38 @@ MolComponentFactory >> dirtyComponents [
 ]
 
 { #category : #'private - code generation' }
-MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aCollection in: aComponent suffix: suffix [
-	| selector sourceCode sourceMethod method |
-	
-	aCollection copy do: [ :e | | trait |
-		
-		"e can be another thing that a Trait, need to check nature of e before generate"
-		( e notNil and:[ e isTrait and:[( e isComponentServices or:[ e isComponentParameters or:[ e isComponentEvents ]])]]) ifTrue:[
-			
-			trait := e.
-		
-			selector := ('get' , trait printString , suffix) asSymbol.
-			sourceCode := self getSourceCodeFor: aSymbol trait: trait selector: selector.
-			(aComponent allSelectors includes: selector) ifFalse: [ 
-				aComponent compile: sourceCode contents classified: self class protocolForComponentAccess
-			] ifTrue: [ 
-				"if the method exist inspect this source code for search any difference between the existing required services and the requested required services"
-				"the selector must not be a parent"
-				(aComponent selectors includes: selector) ifTrue: [ 
-					method := aComponent >> selector.
-					sourceMethod := method sourceCode.
-					sourceMethod ifNotNil: [ 
-						sourceMethod ~= sourceCode contents ifTrue: [ 
-						"rewrite the method"
-							aComponent compile: sourceCode contents classified: self class protocolForComponentAccess 
-						]. 
-					]. 
-				]. 
-			]. 
-		].
-	]
+MolComponentFactory >> generateComponentAccessorsFor: aSymbol traits: aTraits in: aComponent suffix: suffix [
+	| selector sourceCode protocol |
+
+	(aTraits notNil and: [
+			 aTraits isTrait and: [
+					 aTraits isComponentServices or: [
+						 aTraits isComponentParameters or: [ aTraits isComponentEvents ] ] ] ])
+		ifFalse: [ ^ self ].
+
+	selector := ('get' , aTraits printString , suffix) asSymbol.
+	protocol := self class protocolForComponentAccess.
+	sourceCode := self
+		              getSourceCodeFor: aSymbol
+		              trait: aTraits
+		              selector: selector.
+
+	self
+		generateMethod: sourceCode
+		selector: selector
+		protocol: protocol
+		inComponent: aComponent
+]
+
+{ #category : #'private - code generation' }
+MolComponentFactory >> generateComponentAccessorsFor: aSymbol withList: aListOfTraits in: aComponent suffix: suffix [
+
+	aListOfTraits copy do: [ :traits |
+			self
+				generateComponentAccessorsFor: aSymbol
+				traits: traits
+				in: aComponent
+				suffix: suffix ]
 ]
 
 { #category : #'code generation' }
@@ -672,6 +674,26 @@ MolComponentFactory >> generateConsumedEventsComponentAccessorsFor: aComponentCl
 		withList: toDefine
 		in: aComponentClass
 		suffix: 'Subscriber'
+]
+
+{ #category : #'private - code generation' }
+MolComponentFactory >> generateMethod: aSourceCode selector: aSelector protocol: aProtocol inComponent: aComponent [
+
+	| method sourceMethod methodProtocol |
+	(aComponent allSelectors includes: aSelector)
+		ifFalse: [
+		aComponent compile: aSourceCode contents classified: aProtocol ]
+		ifTrue: [
+				(aComponent selectors includes: aSelector) ifFalse: [ ^ self ].
+				"if the method exist inspect this source code for search any difference between the existing required services and the requested required services""the selector must not be a parent"
+				method := aComponent >> aSelector.
+				methodProtocol := method protocol ifNil: [ nil ] ifNotNil: [ :p | 
+					"Pharo 11 reflective API support: protocol is directly a ByteString" p class = Protocol ifTrue:[ p name ] ifFalse:[ p ]  ].
+				sourceMethod := method sourceCode.
+				sourceMethod ifNotNil: [ "if the source code of the method is different than the existing one, recreate it. Same thing for the procotol."
+						(sourceMethod ~= aSourceCode contents or: [
+							 methodProtocol ~= aProtocol ]) ifTrue: [ "rewrite the method"
+							aComponent compile: aSourceCode contents classified: aProtocol ] ] ]
 ]
 
 { #category : #'code generation' }

@@ -69,17 +69,6 @@ MolCompleteComponentOverloadImpl class >> usedComponentServices [
 		  MolUsedServices2 }
 ]
 
-{ #category : #events }
-MolCompleteComponentOverloadImpl >> event [
-	^ #event
-]
-
-{ #category : #events }
-MolCompleteComponentOverloadImpl >> event2 [
- 
-	^ #event2
-]
-
 { #category : #'component accessing' }
 MolCompleteComponentOverloadImpl >> getMolUsedEvents2Notifier [
 	^self eventsNotifiers at: MolUsedEvents2 ifAbsent: [^MolNotFoundEventsNotifier new interface: MolUsedEvents2 name: nil].
@@ -160,27 +149,4 @@ MolCompleteComponentOverloadImpl >> getMolUsedServicesProvider [
 
 	servicesProvider := MolComponentManager default locatorServices searchServicesProviderFor: MolUsedServices named: servicesSymbol.
 	^servicesProvider
-]
-
-{ #category : #parameters }
-MolCompleteComponentOverloadImpl >> parameter [
-	^ #parameter
-]
-
-{ #category : #'parameters 2' }
-MolCompleteComponentOverloadImpl >> parameter2 [
-
-	^ #parameter2 
-]
-
-{ #category : #service }
-MolCompleteComponentOverloadImpl >> service [
-"test"
-	^ #service
-]
-
-{ #category : #'service 2' }
-MolCompleteComponentOverloadImpl >> service2 [
-"test2"
-	^ #service2
 ]

@@ -9,9 +9,8 @@ Class {
 
 { #category : #running }
 MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
-	<script: 'self new cleanGeneratedClassesAndTraits'>
-
 	| edited |
+
 	edited := false.
 
 	self class environment at: self generatedComponentClassSymbolName ifPresent: [ :c | c removeFromSystem. edited := true].
@@ -32,13 +31,12 @@ MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 { #category : #running }
 MolComponentFactoryTest >> cleanGeneratedMethods [
 	"Restore methods added by tests"
-	<script: 'self new cleanGeneratedMethods'>
 	
 	MolCompleteSubComponentOverloadImpl class removeSelector: #usedComponentServices.
 	MolCompleteSubComponentOverloadImpl class removeSelector: #providedComponentServices
 ]
 
-{ #category : #utils }
+{ #category : #utilities }
 MolComponentFactoryTest >> createInstanceMethod: aSelector in: aClassOrTrait protocol: aProtocolString withCode: aSourceCodeString [
 	"Create an instance method in a Class or Trait with source code implementation"
 	| sourceCode |
@@ -118,11 +116,25 @@ MolComponentFactoryTest >> generationTag [
 	^'Molecule-Tests-Resources - Generated'
 ]
 
+{ #category : #utilities }
+MolComponentFactoryTest >> resetSourceCode [
+	<script:'self new resetSourceCode'>
+
+	MolComponentFactory default deactivateDynamicContractUpdate: false. 
+	
+	self cleanGeneratedClassesAndTraits.
+	self restoreRemovedThings.
+	self cleanGeneratedMethods.
+	
+	MolComponentFactory default activateDynamicContractUpdate: false.
+	
+	"Issue #230: Define the component manually after source code modification without dynamic update"
+	MolCompleteComponentOverloadImpl defineComponent.
+]
+
 { #category : #running }
 MolComponentFactoryTest >> restoreRemovedThings [
 	"Restore things removed in tests"
-	<script: 'self new restoreRemovedThings'>
-	
 	"Simulate an overridden contract by the user VV"
 	
 	self createInstanceMethod: 'usedComponentServices' in: (MolCompleteComponentOverloadImpl class) protocol: 'accessing - services' withCode: '"Warning: dont edit this method, it is generated in MolComponentFactoryTest>>restoreRemovedThings"
@@ -171,72 +183,23 @@ MolComponentFactoryTest >> restoreRemovedThings [
 { #category : #running }
 MolComponentFactoryTest >> setUp [
 
+	super setUp.
+
 	self timeLimit: 30 seconds.
 	MolComponentManager cleanUp.
 	
-	MolComponentFactory default deactivateDynamicContractUpdate: false.
-	self cleanGeneratedClassesAndTraits.
-	self restoreRemovedThings.
-	self cleanGeneratedMethods.
-	MolComponentFactory default activateDynamicContractUpdate: false.
+	self resetSourceCode 
 	
-]
-
-{ #category : #running }
-MolComponentFactoryTest >> setUpComponentAndType [
-	<script: 'self new setUpComponentAndType'>
-	| edited |
-	edited := false.
-	
-	"Prepare or reset required test classes"
-	self class environment at: self generatedComponentTypeSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
-		edited := true.
-	].
- 
-	self class environment at: self generatedComponentServicesSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: self generationTag.
-		edited := true.
-	].
-
-	self class environment at: self generatedComponentParametersSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: self generationTag.
-		edited := true.
-	].
-
-	self class environment at: self generatedComponentEventsSymbolName ifAbsent: [ 
-		MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: self generationTag.
-		edited := true.
-	].
-
-	self class environment at: self generatedComponentClassSymbolName ifAbsent: [
-		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationTag.
-		edited := true.
-	].
-
-	self class environment at: self generatedComponentClass2SymbolName ifAbsent: [
-		MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClass2SymbolName in: self generationTag.
-		edited := true.
-	].
-
-	(MolCompleteComponent usedComponentServices includes: MolUsedServices) ifFalse:[
-		MolComponentFactory addUsedServices: MolUsedServices in: MolCompleteComponent.
-		edited := true.
-	].
-	
-	edited ifTrue:[(Delay forMilliseconds: 100) wait].
 ]
 
 { #category : #running }
 MolComponentFactoryTest >> tearDown [
 
-	MolComponentFactory default deactivateDynamicContractUpdate: false.
-	self cleanGeneratedClassesAndTraits.
-	self restoreRemovedThings.
-	self cleanGeneratedMethods.
-	MolComponentFactory default activateDynamicContractUpdate: false.
+	self resetSourceCode.
 	
 	MolComponentManager cleanUp.
+	
+	super tearDown.
 ]
 
 { #category : #tests }
@@ -1450,9 +1413,6 @@ MolComponentFactoryTest >> testSubOverrideOfContractAddingProvidedServices [
 	
 	| usedServices |
 	
-	self flag:'Pharo doesnt support this use cases (see #210)'.
-	true ifTrue:[ ^ self ].
-	
 	"initial state"
 	usedServices := MolCompleteSubComponentOverloadImpl providedComponentServices.
 	self assert: usedServices size equals: 2.
@@ -1485,11 +1445,11 @@ MolComponentFactoryTest >> testSubOverrideOfContractAddingProvidedServices [
 	
 	"Clean generated method"
 	MolCompleteSubComponentOverloadImpl class removeSelector: #providedComponentServices.
+
+ 	"Waiting for system modifications notifications for defining components (as IDE usage)"
+	0.5 seconds wait.
+
 	"test initial state again"
-
-	self flag:'Need to rewrite dynamic contract system to wait all system modifications before define components'.
-	100 milliSeconds wait.
-
 	usedServices := MolCompleteSubComponentOverloadImpl providedComponentServices.
 	self assert: usedServices size equals: 2.
 	self deny: (usedServices includes: MolUsedServices3).
@@ -1537,6 +1497,9 @@ MolComponentFactoryTest >> testSubOverrideOfContractAddingUsedServices [
 	
 	"Clean generated method"
 	MolCompleteSubComponentOverloadImpl class removeSelector: #usedComponentServices.
+	
+	"Waiting for system modifications notifications for defining components (as IDE usage)"
+	0.5 seconds wait.
 	
 	"initial state"
 	usedServices := MolCompleteSubComponentOverloadImpl usedComponentServices.
