@@ -7,16 +7,20 @@ Class {
 	#category : #'Molecule-Tests-Cases'
 }
 
-{ #category : #tests }
+{ #category : #running }
 MolUtilsTest >> setUp [
+
+	super setUp.
 
 	MolComponentManager cleanUp
 ]
 
-{ #category : #tests }
+{ #category : #running }
 MolUtilsTest >> tearDown [
 
-	MolComponentManager cleanUp
+	MolComponentManager cleanUp.
+	
+	super tearDown 
 ]
 
 { #category : #tests }
@@ -58,7 +62,17 @@ MolUtilsTest >> testActivateComponents [
 { #category : #tests }
 MolUtilsTest >> testAllComponentImplementationClassesOfType [
 
-	self assert: (MolUtils allComponentImplementationClassesOfType: MolCompleteComponent) size equals: 7.
+	| nb |
+	nb := 0.
+	MolCompleteComponent users do:[ :e | 
+		e isComponentClass ifTrue:[
+			nb := nb + 1.
+			e allSubclassesDo: [ :f | f isComponentClass ifTrue:[ nb := nb + 1 ] ]
+		]. 
+	]. 
+
+	self assert: nb > 0.
+	self assert: (MolUtils allComponentImplementationClassesOfType: MolCompleteComponent) size equals: nb.
 ]
 
 { #category : #tests }

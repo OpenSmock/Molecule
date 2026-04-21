@@ -25,7 +25,7 @@ MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 		edited := true.
 	].
 	
-	edited ifTrue:[(Delay forMilliseconds: 100) wait].
+	edited ifTrue:[ 100 milliSeconds wait ].
 ]
 
 { #category : #running }
@@ -326,7 +326,7 @@ MolComponentFactoryTest >> testComponentContractChanged [
 	
 ]
 
-{ #category : #'test - overload' }
+{ #category : #'tests - overload' }
 MolComponentFactoryTest >> testComponentContractImplGeneration [
 
 	| toFind |
@@ -353,7 +353,7 @@ MolComponentFactoryTest >> testComponentFactoryDefaultClass [
 	MolComponentFactory cleanUp.
 ]
 
-{ #category : #'test - component subclasses' }
+{ #category : #'tests - component subclasses' }
 MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	"Test if the traits declaration are correctly injected into a component class hierarchy
 	We have 3 components : A, B and C which inherits one another.
@@ -414,7 +414,7 @@ MolComponentFactoryTest >> testComponentSubclassesTraitsUses [
 	MolTestComponentImplC setTraitComposition: #().
 ]
 
-{ #category : #'test - component subclasses' }
+{ #category : #'tests - component subclasses' }
 MolComponentFactoryTest >> testComponentSubclassesTraitsUses2 [
 
 	| type |
@@ -1329,7 +1329,7 @@ MolComponentFactoryTest >> testRebuildComponentAccessorsFor [
 	self assert: (MolCompleteComponentImpl selectors includes: #getMolUsedEventsSubscriber).
 ]
 
-{ #category : #'test - overload' }
+{ #category : #'tests - overload' }
 MolComponentFactoryTest >> testRemoveOverloadedConsumedEvents [
 	"Testing issue #210 fix"
 
@@ -1342,7 +1342,7 @@ MolComponentFactoryTest >> testRemoveOverloadedConsumedEvents [
 		do: [ :e | e signal ]
 ]
 
-{ #category : #'test - overload' }
+{ #category : #'tests - overload' }
 MolComponentFactoryTest >> testRemoveOverloadedProducedEvents [
 	"Testing issue #210 fix"
 
@@ -1355,7 +1355,7 @@ MolComponentFactoryTest >> testRemoveOverloadedProducedEvents [
 		do: [ :e | e signal ]
 ]
 
-{ #category : #'test - overload' }
+{ #category : #'tests - overload' }
 MolComponentFactoryTest >> testRemoveOverloadedProvidedParameters [
 	"Testing issue #210 fix"
 
@@ -1368,7 +1368,7 @@ MolComponentFactoryTest >> testRemoveOverloadedProvidedParameters [
 		do: [ :e | e signal ]
 ]
 
-{ #category : #'test - overload' }
+{ #category : #'tests - overload' }
 MolComponentFactoryTest >> testRemoveOverloadedProvidedServices [
 	"Testing issue #210 fix"
 
@@ -1381,7 +1381,7 @@ MolComponentFactoryTest >> testRemoveOverloadedProvidedServices [
 		do: [ :e | e signal ]
 ]
 
-{ #category : #'test - overload' }
+{ #category : #'tests - overload' }
 MolComponentFactoryTest >> testRemoveOverloadedUsedParameters [
 	"Testing issue #210 fix"
 
@@ -1394,7 +1394,7 @@ MolComponentFactoryTest >> testRemoveOverloadedUsedParameters [
 		do: [ :e | e signal ]
 ]
 
-{ #category : #'test - overload' }
+{ #category : #'tests - overload' }
 MolComponentFactoryTest >> testRemoveOverloadedUsedServices [
 	"Testing issue #210 fix"
 
@@ -1407,7 +1407,7 @@ MolComponentFactoryTest >> testRemoveOverloadedUsedServices [
 		do: [ :e | e signal ]
 ]
 
-{ #category : #'test - overload' }
+{ #category : #'tests - overload' }
 MolComponentFactoryTest >> testSubOverrideOfContractAddingProvidedServices [
 	"Related to issue #209, can override an overriden contract"
 	
@@ -1459,7 +1459,7 @@ MolComponentFactoryTest >> testSubOverrideOfContractAddingProvidedServices [
 	
 ]
 
-{ #category : #'test - overload' }
+{ #category : #'tests - overload' }
 MolComponentFactoryTest >> testSubOverrideOfContractAddingUsedServices [
 	"Related to issue #209, can override an overriden contract"
 	
