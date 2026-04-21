@@ -191,13 +191,18 @@ MolUtils class >> instanceKindOf: aClass [
 
 { #category : #accessing }
 MolUtils class >> instanceKindOf: aClass named: aName [
+
 	| instance |
-	
-	(self instanceOf: aClass named: aName) ifNil:[
-		aClass allSubclasses do: 
-			[:c |
+	"Search instance in class instances"
+	instance := self instanceOf: aClass named: aName.
+	instance ifNotNil: [ :e | ^ e ].
+
+	"Search instance in subclasses instances"
+	aClass allSubclasses do: [ :c |
 			instance := self instanceOf: c named: aName.
-			instance ifNotNil: [^instance]]].
+			instance ifNotNil: [ ^ instance ] ].
+
+	^ nil
 ]
 
 { #category : #accessing }
