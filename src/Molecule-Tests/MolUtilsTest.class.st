@@ -63,6 +63,10 @@ MolUtilsTest >> testActivateComponents [
 MolUtilsTest >> testAllComponentImplementationClassesOfType [
 
 	| nb |
+	
+	"Fix #250 by waiting for code-source changes notification from previous tests"
+	2 second wait.
+	
 	nb := 0.
 	MolCompleteComponent users do:[ :e | 
 		e isComponentClass ifTrue:[
