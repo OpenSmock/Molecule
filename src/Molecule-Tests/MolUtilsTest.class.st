@@ -7,16 +7,20 @@ Class {
 	#category : #'Molecule-Tests-Cases'
 }
 
-{ #category : #tests }
+{ #category : #running }
 MolUtilsTest >> setUp [
+
+	super setUp.
 
 	MolComponentManager cleanUp
 ]
 
-{ #category : #tests }
+{ #category : #running }
 MolUtilsTest >> tearDown [
 
-	MolComponentManager cleanUp
+	MolComponentManager cleanUp.
+	
+	super tearDown 
 ]
 
 { #category : #tests }
@@ -58,7 +62,21 @@ MolUtilsTest >> testActivateComponents [
 { #category : #tests }
 MolUtilsTest >> testAllComponentImplementationClassesOfType [
 
-	self assert: (MolUtils allComponentImplementationClassesOfType: MolCompleteComponent) size equals: 7.
+	| nb |
+	
+	"Fix #250 by waiting for code-source changes notification from previous tests"
+	2 second wait.
+	
+	nb := 0.
+	MolCompleteComponent users do:[ :e | 
+		e isComponentClass ifTrue:[
+			nb := nb + 1.
+			e allSubclassesDo: [ :f | f isComponentClass ifTrue:[ nb := nb + 1 ] ]
+		]. 
+	]. 
+
+	self assert: nb > 0.
+	self assert: (MolUtils allComponentImplementationClassesOfType: MolCompleteComponent) size equals: nb.
 ]
 
 { #category : #tests }
@@ -235,20 +253,36 @@ MolUtilsTest >> testInstanceKindOf [
 	"Test method instanceKindOf: of Utils"
 
 	| homeServices |
-	MolComponentManager default deploymentServices
-		deployComponentImplementation: MolBasicSubComponentImpl.
+	self assert: (MolUtils instanceKindOf: MolBasicComponentImpl) isNil.
+	
+	MolComponentManager default deploymentServices deployComponentImplementation: MolBasicSubComponentImpl.
 	homeServices := MolComponentManager default homeServices.
 	homeServices instantiateComponent: MolBasicSubComponentImpl.
 	self assert: (MolUtils instanceKindOf: MolBasicComponentImpl) notNil
 ]
 
 { #category : #tests }
+MolUtilsTest >> testInstanceKindOfNamed [
+	"Test method instanceKindOf:Named: of Utils"
+
+	self assert: (MolUtils instanceKindOf: MolBasicComponentImpl) isNil.
+	self assert: (MolUtils instanceKindOf: MolBasicComponentImpl named: #myComponent) isNil.
+	self assert: (MolUtils instanceKindOf: MolBasicComponentImpl named: #otherComponent) isNil.
+	
+	
+	MolBasicSubComponentImpl start: #myComponent.
+	self assert: (MolUtils instanceKindOf: MolBasicComponentImpl) isNil.
+	self assert: (MolUtils instanceKindOf: MolBasicComponentImpl named: #myComponent) notNil.
+	self assert: (MolUtils instanceKindOf: MolBasicComponentImpl named: #otherComponent) isNil.
+]
+
+{ #category : #tests }
 MolUtilsTest >> testInstanceOf [
 
-	| instance |
+	self assert: (MolUtils instanceOf: MolBasicComponentImpl) isNil.
+	
 	MolUtils startComponent: MolBasicComponentImpl.
-	instance := MolUtils instanceOf: MolBasicComponentImpl.
-	self assert: instance class equals: MolBasicComponentImpl.
+	self assert: (MolUtils instanceOf: MolBasicComponentImpl) class equals: MolBasicComponentImpl.
 	
 ]
 

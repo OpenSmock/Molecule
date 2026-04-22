@@ -73,7 +73,7 @@ MolLocatorServicesTest >> testNotReadySearchEventSubscriberFor [
 	self assert: (eventSubscriber observersConnection isEmpty).
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolLocatorServicesTest >> testSearchComponentTypeImplementorFor [
 
 	| manager component myComponent |
@@ -93,7 +93,7 @@ MolLocatorServicesTest >> testSearchComponentTypeImplementorFor [
 	self assert: component identicalTo: myComponent
 ]
 
-{ #category : #test }
+{ #category : #tests }
 MolLocatorServicesTest >> testSearchComponentTypeImplementorForNamed [
 
 	| manager component myComponent |

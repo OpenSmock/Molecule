@@ -31,6 +31,8 @@ MolDirtyComponentTest >> generationTag [
 { #category : #running }
 MolDirtyComponentTest >> setUp [
 
+	super setUp.
+
 	MolComponentManager cleanUp.
 	self cleanGeneratedClassesAndTraits.
 ]
@@ -38,9 +40,10 @@ MolDirtyComponentTest >> setUp [
 { #category : #running }
 MolDirtyComponentTest >> tearDown [
 
-	(Delay forMilliseconds: 10) wait.
 	self cleanGeneratedClassesAndTraits.
 	MolComponentManager cleanUp.
+	
+	super tearDown 
 ]
 
 { #category : #tests }
