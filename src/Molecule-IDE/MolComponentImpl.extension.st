@@ -3,26 +3,41 @@ Extension { #name : #MolComponentImpl }
 { #category : #'*Molecule-IDE' }
 MolComponentImpl >> asRSMoleculeShape [
 
-	| classNameLabel componentNameLabel contracts composite |
-	classNameLabel := RSLabel new
-		                  text: self className;
+	| implementationLabel componentNameLabel contracts composite componentTypeLabel componentNameText |
+	
+	componentTypeLabel := RSLabel new
+		                  text: (self class componentType asString);
+		                  color: Color black;
+								bold;		              
+		                  fontSize: 18;
+		                  yourself.
+		
+	"don't display the default name to have better visual identification of named components"
+	componentNameText := self componentName = (MolUtils defaultComponentName) 
+		ifTrue:[ '' ] 
+		ifFalse:[ '#', self componentName ].
+		
+	componentNameLabel := RSLabel new
+		                      text: componentNameText;
+		                      color: Color black lighter;
+		                      fontSize: 16;
+		                      yourself.
+
+	implementationLabel := RSLabel new
+		                  text: (self className);
 		                  color: Color black lighter lighter;
 		                  italic;
-		                  fontSize: 14;
+		                  fontSize: 12;
 		                  yourself.
-	componentNameLabel := RSLabel new
-		                      text: self componentName;
-		                      color: Color black;
-		                      fontSize: 18;
-		                      yourself.
 
 	contracts := MolComponentToRoassal makeContractShapesFor: self.
 
 	RSVerticalLineLayout new
 		alignCenter;
 		on: {
+				componentTypeLabel.
+				implementationLabel.
 				componentNameLabel.
-				classNameLabel.
 				contracts }.
 
 	composite := RSComposite new
@@ -32,8 +47,9 @@ MolComponentImpl >> asRSMoleculeShape [
 		             withBorder;
 		             color: Color gray muchLighter;
 		             shapes: {
-				             componentNameLabel.
-				             classNameLabel.
+				             componentTypeLabel.
+				             implementationLabel.
+								componentNameLabel.
 				             contracts };
 		             yourself.
 	composite adjustToChildren.
