@@ -15,11 +15,13 @@ Trait {
 { #category : #parameters }
 MolMyClockParameters >> setManualTime: aTime [
 
+	<MoleculeChangeStateWithInstanceOf: #Time>
 	self explicitRequirement
 ]
 
 { #category : #parameters }
 MolMyClockParameters >> setTimeZone: aTimeZone [
 
+	<MoleculeChangeStateWithInstanceOf: #TimeZone>
 	self explicitRequirement
 ]

@@ -15,5 +15,6 @@ Trait {
 { #category : #events }
 MolMyAlarmSoundsEvents >> notifyAlarmRing: anAlarm [
 
+	<MoleculeNotifyStateWithInstanceOf: #MolMyAlarmComponent>
 	self explicitRequirement
 ]

@@ -15,5 +15,6 @@ Trait {
 { #category : #services }
 MolMyClockServices >> useManualTime: aBoolean [
 
+	<MoleculeChangeStateWithInstanceOf: #Boolean>
 	self explicitRequirement
 ]

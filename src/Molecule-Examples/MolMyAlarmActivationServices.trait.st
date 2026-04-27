@@ -15,11 +15,13 @@ Trait {
 { #category : #services }
 MolMyAlarmActivationServices >> activate [
 
+	<MoleculeChangeState>
 	self explicitRequirement
 ]
 
 { #category : #services }
 MolMyAlarmActivationServices >> deactivate [
 
+	<MoleculeChangeState>
 	self explicitRequirement
 ]

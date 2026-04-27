@@ -108,6 +108,78 @@ MolComponentType classSide >> consumedComponentEvents [
 	^ {}
 ]
 
+{ #category : #'as yet unclassified' }
+MolComponentType classSide >> inspectContracts: aBuilder [
+
+	<inspectorPresentationOrder: 30 title: 'Contracts - Type'>
+	| simpleInspector items |
+	simpleInspector := (aBuilder instantiate: SpTablePresenter)
+		                   beResizable;
+		                   addColumn: (SpStringTableColumn new
+				                    title: 'Type';
+				                    width: 80;
+				                    evaluated: [ :each | each at: 1 ]);
+		                   addColumn: (SpStringTableColumn new
+				                    title: 'Contract Name';
+				                    evaluated: [ :each | each at: 2 ]);
+		                   addColumn: (SpStringTableColumn new
+				                    title: 'Method';
+				                    evaluated: [ :each | each at: 3 ]);
+		                   addColumn: (SpStringTableColumn new
+				                    title: 'Pragma';
+				                    evaluated: [ :each | each at: 4 ]);
+		                   addColumn: (SpStringTableColumn new
+				                    title: 'Pragma - Arguments';
+				                    evaluated: [ :each | each at: 5 ]);
+		                   addColumn: (SpStringTableColumn new
+				                    title: 'Implements or Used';
+				                    evaluated: [ :each | each at: 6 ]);
+		                   yourself.
+	items := OrderedCollection new.
+	self consumedComponentEvents do: [ :traits |
+			items addAll: (traits methods collect: [ :m |
+						 {
+							 #Event.
+							 traits.
+							 m.
+							 (m pragmas ifNotEmpty: [ :p | p first ] ifEmpty: [ '' ]).
+							 (m pragmas
+								  ifNotEmpty: [ :p | p first arguments ]
+								  ifEmpty: [ '' ]).
+							 ((self includesSelector: m selector)
+								  ifTrue: [ self methodNamed: m selector ]
+								  ifFalse: [ #(  ) ]) } ]) ].
+	self usedComponentServices do: [ :traits |
+			items addAll: (traits methods collect: [ :m |
+						 {
+							 #Service.
+							 traits.
+							 m.
+							 (m pragmas ifNotEmpty: [ :p | p first ] ifEmpty: [ '' ]).
+							 (m pragmas
+								  ifNotEmpty: [ :p | p first arguments ]
+								  ifEmpty: [ '' ]).
+							 (SystemNavigation default
+								  allReferencesTo: m selector
+								  in: self withAllSuperclasses) } ]) ].
+	self usedComponentParameters do: [ :traits |
+			items addAll: (traits methods collect: [ :m |
+						 {
+							 #Parameter.
+							 traits.
+							 m.
+							 (m pragmas ifNotEmpty: [ :p | p first ] ifEmpty: [ '' ]).
+							 (m pragmas
+								  ifNotEmpty: [ :p | p first arguments ]
+								  ifEmpty: [ '' ]).
+							 (SystemNavigation default
+								  allReferencesTo: m selector
+								  in: self withAllSuperclasses) } ]) ].
+	^ simpleInspector
+		  items: items;
+		  yourself
+]
+
 { #category : #actions }
 MolComponentType classSide >> isConsumeEvents: anEventsTrait [
 	anEventsTrait ifNil:[ ^ false ].
@@ -184,4 +256,11 @@ MolComponentType classSide >> usedComponentParameters [
 MolComponentType classSide >> usedComponentServices [
 	<componentContract>
 	^ {}
+]
+
+{ #category : #'as yet unclassified' }
+MolComponentType >> inspectContracts: aBuilder [
+
+	<inspectorPresentationOrder: 30 title: 'Contracts'>
+	^ self class inspectContracts: aBuilder
 ]

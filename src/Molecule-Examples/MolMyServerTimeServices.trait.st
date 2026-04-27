@@ -15,5 +15,6 @@ Trait {
 { #category : #services }
 MolMyServerTimeServices >> getServerTime [
 
+	<MoleculeReturnInstanceOf: #Time>
 	^ self explicitRequirement
 ]

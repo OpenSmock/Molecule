@@ -15,17 +15,20 @@ Trait {
 { #category : #parameters }
 MolMyAlarmParameters >> setBell: aBell [
 
+	<MoleculeChangeStateWithInstanceOf: #String>
 	self explicitRequirement
 ]
 
 { #category : #parameters }
 MolMyAlarmParameters >> setName: aName [
 
+	<MoleculeChangeStateWithInstanceOf: #String>
 	self explicitRequirement
 ]
 
 { #category : #parameters }
 MolMyAlarmParameters >> setTime: aTime [
 
+	<MoleculeChangeStateWithInstanceOf: #Time>
 	self explicitRequirement
 ]

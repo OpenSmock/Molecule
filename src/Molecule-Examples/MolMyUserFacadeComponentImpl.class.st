@@ -105,5 +105,5 @@ MolMyUserFacadeComponentImpl >> notifyAlarmRing: anAlarm [
 { #category : #events }
 MolMyUserFacadeComponentImpl >> notifyLocalTime: aLocalTime [
 
-	MolUtils log: self printString, ' hour is ', aLocalTime printString.
+	MolUtils log: self printString , ' hour is ' , aLocalTime printString
 ]

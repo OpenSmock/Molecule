@@ -15,5 +15,6 @@ Trait {
 { #category : #events }
 MolMyLocalTimeEvents >> notifyLocalTime: aLocalTime [
 
+	<MoleculeNotifyStateWithInstanceOf: #Time>
 	self explicitRequirement
 ]
