@@ -3,17 +3,31 @@ Extension { #name : #MolComponentImpl }
 { #category : #'*Molecule-IDE' }
 MolComponentImpl >> asRSMoleculeShape [
 
-	| classNameLabel componentNameLabel contracts composite |
-	classNameLabel := RSLabel new
-		                  text: self className;
-		                  color: Color black lighter lighter;
-		                  italic;
-		                  fontSize: 14;
-		                  yourself.
-	componentNameLabel := RSLabel new
-		                      text: self componentName;
+	| implementationLabel componentNameLabel contracts composite componentTypeLabel componentNameText |
+	componentTypeLabel := RSLabel new
+		                      text: self class componentType asString;
 		                      color: Color black;
+		                      bold;
 		                      fontSize: 18;
+		                      yourself.
+
+	implementationLabel := RSLabel new
+		                       text: self className;
+		                       color: Color black lighter lighter;
+		                       italic;
+		                       fontSize: 12;
+		                       yourself.
+
+	"don't display the default name to have better visual identification of named components"
+	componentNameText := self componentName
+	                     = MolUtils defaultComponentName
+		                     ifTrue: [ '' ]
+		                     ifFalse: [ '#' , self componentName ].
+
+	componentNameLabel := RSLabel new
+		                      text: componentNameText;
+		                      color: Color black lighter;
+		                      fontSize: 16;
 		                      yourself.
 
 	contracts := MolComponentToRoassal makeContractShapesFor: self.
@@ -21,76 +35,82 @@ MolComponentImpl >> asRSMoleculeShape [
 	RSVerticalLineLayout new
 		alignCenter;
 		on: {
+				componentTypeLabel.
+				implementationLabel.
 				componentNameLabel.
-				classNameLabel.
 				contracts }.
 
 	composite := RSComposite new
 		             draggable;
-		             popupText: [ :comp | comp componentName ];
+		             popupText: [ :comp |
+							             'Type: <1s><r>Impl: <2s><r>Name: <3s>'
+								             expandMacrosWith: comp class componentType asString
+								             with: comp className asString
+								             with: comp componentName asString ];
 		             model: self;
 		             withBorder;
 		             color: Color gray muchLighter;
 		             shapes: {
+				             componentTypeLabel.
+				             implementationLabel.
 				             componentNameLabel.
-				             classNameLabel.
 				             contracts };
 		             yourself.
 	composite adjustToChildren.
 	composite extent: composite extent + (0 @ 20).
 	composite @ (RSMenuActivable new menuDo: [ :aMenuMorph :anRSBox |
-		 (aMenuMorph
-			  add: 'Inspect component'
-			  target: self
-			  selector: #inspect
-			  argument: #(  )) icon:
-			 (Smalltalk ui icons iconNamed: #smallInspectIt).
-		 (aMenuMorph
-			  add: 'Browse component'
-			  target: self
-			  selector: #browse
-			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #nautilus).
-		 (aMenuMorph
-			  add: 'Inspect component type implementors'
-			  target: self
-			  selector: #showComponentTypeImplementor
-			  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #dropDown).
-		 aMenuMorph addSeparator.
-		 (aMenuMorph
-			  add: 'Break once when state switch to #initialize'
-			  target: self class
-			  selector: #breakOnceOnComponentInitialize) icon:
-			 (Smalltalk ui icons iconNamed: #halt).
-		 (aMenuMorph
-			  add: 'Break once when state switch to #activate'
-			  target: self class
-			  selector: #breakOnceOnComponentActivate) icon:
-			 (Smalltalk ui icons iconNamed: #halt).
-		 (aMenuMorph
-			  add: 'Break once when state switch to #passivate'
-			  target: self class
-			  selector: #breakOnceOnComponentPassivate) icon:
-			 (Smalltalk ui icons iconNamed: #halt).
-		 (aMenuMorph
-			  add: 'Break once when state switch to #remove'
-			  target: self class
-			  selector: #breakOnceOnComponentRemove) icon:
-			 (Smalltalk ui icons iconNamed: #halt).
-		 (aMenuMorph
-			  add: 'Break once when this component state switch to #activate'
-			  target: self
-			  selector: #breakObjectOrientedOnceOnComponentActivate) icon:
-			 (Smalltalk ui icons iconNamed: #bug).
-		 (aMenuMorph
-			  add: 'Break once when state this component switch to #passivate'
-			  target: self
-			  selector: #breakObjectOrientedOnceOnComponentPassivate) icon:
-			 (Smalltalk ui icons iconNamed: #bug).
-		 (aMenuMorph
-			  add: 'Break once when state this component switch to #remove'
-			  target: self
-			  selector: #breakObjectOrientedOnceOnComponentRemove) icon:
-			 (Smalltalk ui icons iconNamed: #bug) ]).
+			 (aMenuMorph
+				  add: 'Inspect component'
+				  target: self
+				  selector: #inspect
+				  argument: #(  )) icon:
+				 (Smalltalk ui icons iconNamed: #smallInspectIt).
+			 (aMenuMorph
+				  add: 'Browse component'
+				  target: self
+				  selector: #browse
+				  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #nautilus).
+			 (aMenuMorph
+				  add: 'Inspect component type implementors'
+				  target: self
+				  selector: #showComponentTypeImplementor
+				  argument: #(  )) icon: (Smalltalk ui icons iconNamed: #dropDown).
+			 aMenuMorph addSeparator.
+			 (aMenuMorph
+				  add: 'Break once when state switch to #initialize'
+				  target: self class
+				  selector: #breakOnceOnComponentInitialize) icon:
+				 (Smalltalk ui icons iconNamed: #halt).
+			 (aMenuMorph
+				  add: 'Break once when state switch to #activate'
+				  target: self class
+				  selector: #breakOnceOnComponentActivate) icon:
+				 (Smalltalk ui icons iconNamed: #halt).
+			 (aMenuMorph
+				  add: 'Break once when state switch to #passivate'
+				  target: self class
+				  selector: #breakOnceOnComponentPassivate) icon:
+				 (Smalltalk ui icons iconNamed: #halt).
+			 (aMenuMorph
+				  add: 'Break once when state switch to #remove'
+				  target: self class
+				  selector: #breakOnceOnComponentRemove) icon:
+				 (Smalltalk ui icons iconNamed: #halt).
+			 (aMenuMorph
+				  add: 'Break once when this component state switch to #activate'
+				  target: self
+				  selector: #breakObjectOrientedOnceOnComponentActivate) icon:
+				 (Smalltalk ui icons iconNamed: #bug).
+			 (aMenuMorph
+				  add: 'Break once when state this component switch to #passivate'
+				  target: self
+				  selector: #breakObjectOrientedOnceOnComponentPassivate) icon:
+				 (Smalltalk ui icons iconNamed: #bug).
+			 (aMenuMorph
+				  add: 'Break once when state this component switch to #remove'
+				  target: self
+				  selector: #breakObjectOrientedOnceOnComponentRemove) icon:
+				 (Smalltalk ui icons iconNamed: #bug) ]).
 
 
 	^ composite
