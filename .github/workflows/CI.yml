@@ -18,7 +18,6 @@ jobs:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
         smalltalk: [ Pharo64-11, Pharo64-12, Pharo64-13, Pharo64-14 ]
         ston: [ .smalltalkci.default.ston ]
-        experimental: [ false ]
         #Specific case for Pharo14 (experimental): ignore failures
         include:
           - smalltalk: Pharo64-14
