@@ -32,8 +32,12 @@ MolComponentFactoryTest >> cleanGeneratedClassesAndTraits [
 MolComponentFactoryTest >> cleanGeneratedMethods [
 	"Restore methods added by tests"
 	
-	MolCompleteSubComponentOverloadImpl class removeSelector: #usedComponentServices.
-	MolCompleteSubComponentOverloadImpl class removeSelector: #providedComponentServices
+	(MolCompleteSubComponentOverloadImpl class includesLocalSelector: #usedComponentServices) ifTrue:[
+		MolCompleteSubComponentOverloadImpl class removeSelector: #usedComponentServices.
+	].
+	(MolCompleteSubComponentOverloadImpl class includesLocalSelector: #providedComponentServices) ifTrue:[
+		MolCompleteSubComponentOverloadImpl class removeSelector: #providedComponentServices
+	].
 ]
 
 { #category : #utilities }
