@@ -201,7 +201,31 @@ MolComponentFactory class >> createComponentEvents: aSymbol in: aPackageName [
 ]
 
 { #category : #'component - creation' }
+MolComponentFactory class >> createComponentEvents: aSymbol in: aPackageName tag: aTagName [
+	"Create a ComponentEvents interface named aSymbol in a package"
+
+	aSymbol ifNil: [ ^ self ].
+	aPackageName ifNil: [ ^ self ].
+	self class environment at: aSymbol ifPresent: [
+			^ self error:
+				  '[Molecule] Do not create an existing component events interface, remove it before.' ].
+
+	"create the new Trait"
+	(Trait << aSymbol)
+		traits: MolComponentEvents;
+		package: aPackageName;
+		tag: aTagName;
+		install
+]
+
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentForType: aComponentType named: aSymbol in: aPackageName [
+
+	^self createComponentForType: aComponentType named: aSymbol in: aPackageName tag: nil
+]
+
+{ #category : #'component - creation' }
+MolComponentFactory class >> createComponentForType: aComponentType named: aSymbol in: aPackageName tag: aTagName [
 
 	| builder |
 	aComponentType ifNotNil: [
@@ -220,7 +244,11 @@ MolComponentFactory class >> createComponentForType: aComponentType named: aSymb
 				  '[Molecule] Do not redefine an existing Component, remove it before.' ].
 
 	"create new component implementation class"
-	builder := MolAbstractComponentImpl << aSymbol package: aPackageName.
+	builder := (aTagName isEmptyOrNil) ifTrue:[
+		MolAbstractComponentImpl << aSymbol package: aPackageName
+	] ifFalse:[
+		MolAbstractComponentImpl << aSymbol package: aPackageName; tag: aTagName
+	].
 	aComponentType ifNotNil: [ builder traits: aComponentType ].
 	builder install
 ]
@@ -231,6 +259,14 @@ MolComponentFactory class >> createComponentNamed: aSymbol in: aPackageName [
 	aSymbol ifNil: [ ^ self ].
 	aPackageName ifNil: [ ^ self ].
 	self createComponentForType: nil named: aSymbol in: aPackageName
+]
+
+{ #category : #'component - creation' }
+MolComponentFactory class >> createComponentNamed: aSymbol in: aPackageName tag: aTagName [
+
+	aSymbol ifNil: [ ^ self ].
+	aPackageName ifNil: [ ^ self ].
+	self createComponentForType: nil named: aSymbol in: aPackageName tag: aTagName
 ]
 
 { #category : #'component - creation' }
@@ -268,6 +304,24 @@ MolComponentFactory class >> createComponentServices: aSymbol in: aPackageName [
 ]
 
 { #category : #'component - creation' }
+MolComponentFactory class >> createComponentServices: aSymbol in: aPackageName tag: aTagName [
+	"Create a ComponentServices interface named aSymbol in a package"
+
+	aSymbol ifNil: [ ^ self ].
+	aPackageName ifNil: [ ^ self ].
+	self class environment at: aSymbol ifPresent: [
+			^ self error:
+				  '[Molecule] Do not create an existing component services interface, remove it before.' ].
+
+	"create the new Trait"
+	(Trait << aSymbol)
+		traits: MolComponentServices;
+		package: aPackageName;
+		tag: aTagName;
+		install
+]
+
+{ #category : #'component - creation' }
 MolComponentFactory class >> createComponentType: aSymbol in: aPackageName [
 	"Create a ComponentType named aSymbol in a package"
 
@@ -281,6 +335,24 @@ MolComponentFactory class >> createComponentType: aSymbol in: aPackageName [
 	(Trait << aSymbol)
 		traits: MolComponentType;
 		package: aPackageName;
+		install
+]
+
+{ #category : #'component - creation' }
+MolComponentFactory class >> createComponentType: aSymbol in: aPackageName tag: aTagName [
+	"Create a ComponentType named aSymbol in a package"
+
+	aSymbol ifNil: [ ^ self ].
+	aPackageName ifNil: [ ^ self ].
+	self class environment at: aSymbol ifPresent: [
+			^ self error:
+				  '[Molecule] Do not create an existing component type, remove it before.' ].
+
+	"create the new Trait"
+	(Trait << aSymbol)
+		traits: MolComponentType;
+		package: aPackageName;
+		tag: aTagName;
 		install
 ]
 

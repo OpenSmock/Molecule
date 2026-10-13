@@ -40,6 +40,15 @@ MolComponentFactoryTest >> cleanGeneratedMethods [
 	].
 ]
 
+{ #category : #running }
+MolComponentFactoryTest >> cleanGeneratedPackage [
+	
+	| packageGenerated |
+	packageGenerated := PackageOrganizer packageOrganizer packages detect:[:p | p name = self generationPackage ] ifNone:[nil].
+	packageGenerated ifNil:[^self].
+	packageGenerated removeFromSystem 
+]
+
 { #category : #utilities }
 MolComponentFactoryTest >> createInstanceMethod: aSelector in: aClassOrTrait protocol: aProtocolString withCode: aSourceCodeString [
 	"Create an instance method in a Class or Trait with source code implementation"
@@ -116,8 +125,13 @@ MolComponentFactoryTest >> generatedComponentTypeTrait [
 ]
 
 { #category : #accessing }
+MolComponentFactoryTest >> generationPackage [
+	^'Molecule-Tests-Resources'
+]
+
+{ #category : #accessing }
 MolComponentFactoryTest >> generationTag [
-	^'Molecule-Tests-Resources - Generated'
+	^'Generated'
 ]
 
 { #category : #utilities }
@@ -129,6 +143,7 @@ MolComponentFactoryTest >> resetSourceCode [
 	self cleanGeneratedClassesAndTraits.
 	self restoreRemovedThings.
 	self cleanGeneratedMethods.
+	self cleanGeneratedPackage.
 	
 	MolComponentFactory default activateDynamicContractUpdate: false.
 	
@@ -274,7 +289,7 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	MolComponentFactory default deactivateDynamicContractUpdate: false.
 	
 	"remove the testing class, and create a new component without Type, when the type is added check if the component in on the dirty components list"
-	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: self generationTag.
+	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: self generationPackage.
 	
 	"Waiting for event callback"
 	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedComponentClass)).
@@ -288,7 +303,7 @@ MolComponentFactoryTest >> testComponentChangedOnComponentCreationWithoutType [
 	
 	"remove the testing class, and create a new component with Type, check if the component in on the dirty components list"
  	(self class environment at: self generatedComponentClassSymbolName) removeFromSystem.
-	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationTag.
+	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationPackage.
 	
 	"Waiting for event callback"
 	self assert: (MolComponentFactory default dirtyComponents includes: (self generatedComponentClass)).
@@ -448,7 +463,7 @@ MolComponentFactoryTest >> testCreateComponentClassWithType [
 		(self class environment at: self generatedComponentClassSymbolName) removeFromSystem 
 	].
 
-	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationTag.
+	MolComponentFactory createComponentForType: MolCompleteComponent named: self generatedComponentClassSymbolName in: self generationPackage.
 
 	class := self class environment at: self generatedComponentClassSymbolName.
 	self assert: class notNil.
@@ -467,7 +482,7 @@ MolComponentFactoryTest >> testCreateComponentClassWithoutType [
 		(self class environment at: self generatedComponentClassSymbolName) removeFromSystem.
 	].
 
-	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: self generationTag.
+	MolComponentFactory createComponentNamed: self generatedComponentClassSymbolName in: self generationPackage.
 
 	class := self class environment at: self generatedComponentClassSymbolName.
 	self assert: class notNil.
@@ -654,6 +669,19 @@ MolComponentFactoryTest >> testCreateComponentForTypeNamedIn [
 	self assert: error equals: true.
 ]
 
+{ #category : #'tests - component creation' }
+MolComponentFactoryTest >> testCreateComponentForTypeNamedInTag [
+	"Test errors cases"
+	| error |
+	error := false.
+	[MolComponentFactory createComponentForType: nil named: nil in: nil tag: nil] on: Error do:[ error := true ].
+	self assert: error.
+	
+	error := false.
+	[MolComponentFactory createComponentForType: String named: #ClassName in: #packageName tag: #tagName ] on: NotAComponentTypeError do:[ error := true ].
+	self assert: error.
+]
+
 { #category : #'tests - contract creation' }
 MolComponentFactoryTest >> testCreateComponentParameters [
 	"Create a Component Parameters from scratch"
@@ -684,7 +712,7 @@ MolComponentFactoryTest >> testCreateComponentType [
 		(self class environment at: self generatedComponentTypeSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationPackage.
 
 	trait := self class environment at: self generatedComponentTypeSymbolName.
 	self assert: trait notNil.
@@ -708,7 +736,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentEvents [
 		(self class environment at: self generatedComponentEventsSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: self generationTag.
+	MolComponentFactory createComponentEvents: self generatedComponentEventsSymbolName in: self generationPackage.
 
 	trait := self class environment at: self generatedComponentEventsSymbolName.
 	self assert: trait notNil.
@@ -732,7 +760,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentParameters [
 		(self class environment at: self generatedComponentParametersSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: self generationTag.
+	MolComponentFactory createComponentParameters: self generatedComponentParametersSymbolName in: self generationPackage.
 
 	trait := self class environment at: self generatedComponentParametersSymbolName.
 	self assert: trait notNil.
@@ -756,7 +784,7 @@ MolComponentFactoryTest >> testCreateEmptyComponentServices [
 		(self class environment at: self generatedComponentServicesSymbolName) removeFromSystem. 
 	].
 
-	MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: self generationTag.
+	MolComponentFactory createComponentServices: self generatedComponentServicesSymbolName in: self generationPackage.
 
 	trait := self class environment at: self generatedComponentServicesSymbolName.
 	self assert: trait notNil.
@@ -972,7 +1000,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 
-	class := MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
+	class := MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationPackage.
 	class := self class environment at: componentClassNameSymbol.
 	class comment: 'I am added and removed by test: ', self printString.
 	
@@ -981,7 +1009,7 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATrait [
 	self assert: (class canPerform: #methodOfNoComponentTrait).
 	
 	"Set the component type and check if the existing Trait is already functionnal"
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationPackage.
 	class addToComposition: self generatedComponentTypeTrait.
 	
 	self assert: (class canPerform: #methodOfNoComponentTrait).
@@ -1000,10 +1028,10 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContract [
 
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationPackage.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationPackage.
 	componentClass setTraitComposition: self generatedComponentTypeTrait.
 	
 	self testCreateEmptyComponentServices.
@@ -1043,13 +1071,13 @@ MolComponentFactoryTest >> testMakeAComponentAndAddATraitWithCompleteContractAlt
 
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationPackage.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	"Add a trait"
 	componentClass setTraitComposition: MolTestNoComponentTraitA.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationPackage.
 	componentClass addToComposition: self generatedComponentTypeTrait.
 	
 	self testCreateEmptyComponentServices.
@@ -1086,10 +1114,10 @@ MolComponentFactoryTest >> testMakeAComponentFromScratch [
 
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationTag.
+	MolComponentFactory createComponentNamed: componentClassNameSymbol in: self generationPackage.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationPackage.
 	componentClass setTraitComposition: self generatedComponentTypeTrait.
 	
 	self testCreateEmptyComponentServices.
@@ -1138,7 +1166,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationPackage.
 	
 	self testCreateEmptyComponentServices.
 	self testCreateEmptyComponentParameters.
@@ -1158,7 +1186,7 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative2 [
 	self createInstanceMethod: 'testGeneratedEventA' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 	self createInstanceMethod: 'testGeneratedEventB' in: self generatedComponentEventsTrait protocol: 'events' withCode: nil.
 
-	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationTag.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationPackage.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	"Check generated methods"
@@ -1188,9 +1216,9 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative3 [
 
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationPackage.
 	
-	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationTag.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationPackage.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	self testCreateComponentServices.
@@ -1233,9 +1261,9 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative4 [
 
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationPackage.
 	
-	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationTag.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationPackage.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	self testCreateComponentServices.
@@ -1280,12 +1308,12 @@ MolComponentFactoryTest >> testMakeAComponentFromScratchAlternative5 [
 	| componentClassNameSymbol componentClass |
 	self assert: MolComponentFactory default isDynamicContractUpdateActivated.
 	
-	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationTag.
+	MolComponentFactory createComponentType: self generatedComponentTypeSymbolName in: self generationPackage.
 	
 	self testCreateEmptyComponentEvents.
 	
 	componentClassNameSymbol := self generatedComponentClass2SymbolName.
-	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationTag.
+	MolComponentFactory createComponentForType: self generatedComponentTypeTrait named: componentClassNameSymbol in: self generationPackage.
 	componentClass := self class environment at: componentClassNameSymbol.
 	
 	MolComponentFactory addProducedEvents: self generatedComponentEventsTrait in: self generatedComponentTypeTrait.
