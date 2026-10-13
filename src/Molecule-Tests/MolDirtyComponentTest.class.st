@@ -23,7 +23,7 @@ MolDirtyComponentTest >> generatedDirtyTypeImplementationSymbol [
 ]
 
 { #category : #accessing }
-MolDirtyComponentTest >> generationTag [
+MolDirtyComponentTest >> generationPackage [
 
 	^ 'Molecule-Tests-Resources - Generated'
 ]
@@ -51,7 +51,7 @@ MolDirtyComponentTest >> testDirtyTypeWithInstanceVariableInsteadOfComponentTrai
 	"Create a component using a dirty Type: a type which is not correct (potentiels bugs)"
 
 	| component |
-	MolComponentFactory createComponentForType: MolDirtyType named: self generatedDirtyTypeImplementationSymbol in: self generationTag.
+	MolComponentFactory createComponentForType: MolDirtyType named: self generatedDirtyTypeImplementationSymbol in: self generationPackage.
 	component := self class environment at: self generatedDirtyTypeImplementationSymbol.
 	
 	"Check if the ComponentType is dirty"
